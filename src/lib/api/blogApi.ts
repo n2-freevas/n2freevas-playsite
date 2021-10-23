@@ -1,4 +1,4 @@
-import Api from './Api'
+import Api from './api'
 import type {NotionPage, NotionTag} from '$lib/store/NotionModels'
 
 const api_key = 'secret_noefNNFVWANKd58NxfkoNV717LhK5D1ueYuQImgWFK0'
