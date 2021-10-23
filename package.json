@@ -20,7 +20,10 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-svelte3": "^3.2.1",
     "prettier": "^2.4.1",
+    "node-sass": "^6.0.1",
     "prettier-plugin-svelte": "^2.4.0",
+    "sass": "^1.37.5",
+    "scss": "^0.2.4",
     "svelte": "^3.34.0",
     "svelte-check": "^2.2.6",
     "svelte-preprocess": "^4.9.4",
@@ -31,6 +34,8 @@
   "dependencies": {
     "@fontsource/fira-mono": "^4.5.0",
     "@lukeed/uuid": "^2.0.0",
-    "cookie": "^0.4.1"
+    "axios": "^0.23.0",
+    "cookie": "^0.4.1",
+    "svelte-media-query": "^1.1.2"
   }
 }
