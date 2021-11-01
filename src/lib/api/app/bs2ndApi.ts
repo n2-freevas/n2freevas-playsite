@@ -10,8 +10,14 @@ export const DEFAULT_LIMIT = 48
 
 export const getUnits = async (offset?: number, limit?: number) => {
     try{
-      let res = await Api.get(`${bs2ndGetUnitsUrl}?offset=${offset}&limit=${limit}`)
-      return res.data
+      // @ts-ignore
+      let data: object[] = await Api.get(`${bs2ndGetUnitsUrl}?offset=${offset}&limit=${limit}`)
+      return data.map(unit =>{
+        return {
+          ...unit,
+          isdeck: false
+        }
+      })
     }
     catch (error) {
       throw error
@@ -23,12 +29,13 @@ export const getUnitsUsingFilter = async (
     word?: string[], elem?: string[],
     tribe?: string[], gimmick?: string[]):Promise<kotodaman[]>=> {
     try{
-      let data = await Api.post(
+      // @ts-ignore
+      let data: object[] = await Api.post(
             `${bs2ndGetUnitsUrl}?offset=${offset}&limit=${limit}`,
             {word, elem, tribe, gimmick}
         )
-      console.log(typeof data)
-      return data
+      // @ts-ignore
+      return data.map(unit =>{return {...unit,isdeck: false}})
     }
     catch (error) {
       throw error

@@ -11,4 +11,5 @@ export interface kotodaman {
     elem: elem[]
     tribe: tribe[]
     gimmick: gimmick[]
+    indeck: boolean
 }

@@ -12,6 +12,7 @@ axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 const axiosAPI = axios.create({
   baseURL: switchBaseURL(),
   headers: {
+    'authorization': 'n2freevas-api-token-Nx2gFhrRaEwEadVxxAadawS',
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*'
   },

@@ -32,12 +32,14 @@
             }
         }
         .explain-box{
+            z-index: 100;
             position: absolute;
+            margin-top:30px;
             right:0;
             opacity: 0;
             border:  solid 1px white;
             background: black;
-            padding:20px 30px;
+            padding:20px;
             display: flex;
             flex-direction: row;
             align-items: center;
