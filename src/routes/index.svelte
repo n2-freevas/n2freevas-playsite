@@ -2,7 +2,8 @@
     import HomeButton from '$lib/component/HomeButton.svelte'
     import {mainmenus} from '$lib/store/MainMenu'
     import MediaQuery from 'svelte-media-query'
-
+    import N2Clock from '$lib/component/N2Clock.svelte'
+    
     let mainmenu_array = $mainmenus
 </script>
 
@@ -26,7 +27,7 @@
         </div>
         {/if}
     </MediaQuery>
-
+    <N2Clock></N2Clock>
 </div>
 
 <slot></slot>

@@ -5,17 +5,14 @@ const bs2ndUrl = "/bakuzetsu-searcher-2nd"
 const bs2ndGetUnitUrl = bs2ndUrl + "/getunit"
 const bs2ndGetUnitsUrl = bs2ndUrl + "/getunits"
 
-
-export const DEFAULT_LIMIT = 48
-
-export const getUnits = async (offset?: number, limit?: number) => {
+export const getUnits = async (offset?: number, limit?: number):Promise<kotodaman[]> => {
     try{
       // @ts-ignore
       let data: object[] = await Api.get(`${bs2ndGetUnitsUrl}?offset=${offset}&limit=${limit}`)
+      // @ts-ignore
       return data.map(unit =>{
         return {
-          ...unit,
-          isdeck: false
+          ...unit, disable:false, indeck: false
         }
       })
     }
@@ -35,7 +32,7 @@ export const getUnitsUsingFilter = async (
             {word, elem, tribe, gimmick}
         )
       // @ts-ignore
-      return data.map(unit =>{return {...unit,isdeck: false}})
+      return data.map(unit =>{return {...unit,disable:false,indeck: false}})
     }
     catch (error) {
       throw error

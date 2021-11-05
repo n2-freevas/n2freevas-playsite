@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { kotodaman } from '$lib/model/app/Bs2ndModel';
     import { createEventDispatcher } from 'svelte';
+    import { isDeckFullStore } from '$lib/store/app/bs2ndStore'
 
 	const dispatch = createEventDispatcher();
 
@@ -8,21 +9,31 @@
     export let full: boolean = false;
 
     function kotodamanOnClickHandler(){
-        if (!kotodaman.indeck){
+        if (kotodaman.disable){
+            const obj = Object.assign({},kotodaman)
             dispatch('click', {
-                kotodaman: Object.assign({},kotodaman)
+                kotodaman: obj
             });
-            kotodaman.indeck = true
+            kotodaman.disable = false
+        }
+        else{            
+            const obj = Object.assign({},kotodaman)
+            if (!kotodaman.indeck && !$isDeckFullStore){
+                kotodaman.disable = true
+            }
+            dispatch('click', {
+                kotodaman: obj
+            });
         }
     }
 </script>
 
 <div class="kotodaman {!full ? 'no-margin': ''}" on:click={kotodamanOnClickHandler}>
     <div class='smart-info-box'>
-        <img class="{kotodaman.indeck ? 'disable' : ''}" src={kotodaman.figure} alt={kotodaman.name}>
+        <img class="{kotodaman.disable ? 'disable' : ''}" src={kotodaman.figure} alt={kotodaman.name}>
         {#if full}
         <div class='elems-tribe-box'>
-            <div class='tribe-box {kotodaman.indeck ? 'disable' : ''}'>
+            <div class='tribe-box {kotodaman.disable ? 'disable' : ''}'>
                 <p>{kotodaman.tribe[0]}</p>
             </div>
             
@@ -46,7 +57,7 @@
         {/if}
     </div>
     {#if full}
-        <p class='name {kotodaman.indeck ? 'disable' : ''}'>{kotodaman.name}</p>
+        <p class='name {kotodaman.disable ? 'disable' : ''}'>{kotodaman.name}</p>
     {/if}
     
 </div>
@@ -54,10 +65,11 @@
 <style lang="scss">
     .kotodaman{
         font-family: 'Kosugi Maru', sans-serif;
-        width:90px;
+        width:71px;
         margin:10px;
         &.no-margin{
             display: flex;
+            justify-content: center;
             align-items: center;
             width:70px;height:70px;margin:0px
         }
@@ -66,7 +78,7 @@
             flex-direction: row;
             justify-content: space-around;
             img{
-                width:70px;
+                width:60px;
                 height: auto;
                 &.disable{
                     filter:grayscale(85%)
@@ -78,8 +90,8 @@
                     position: absolute;
                     top:2px;
                     left:-10px;
-                    width:21px;
-                    height:19px;
+                    width:19px;
+                    height:17px;
                     background-color: rgb(255, 215, 38);
                     box-shadow: 1px 2px 1px white;
                     border-radius: 1px 8px;
@@ -88,8 +100,8 @@
                         background-color: rgb(136, 126, 67);
                     }
                     p{
-                        font-size: 16px;
-                        line-height: 19px;
+                        font-size: 14px;
+                        line-height: 17px;
                         text-align: center;
                         text-shadow: 1px 1px 2px black;
                     }
@@ -103,7 +115,7 @@
                         border-radius: 6px;
                         margin:0 0 2px 0;
                         border: solid 2px;
-                        &.fire{background-color: rgb(219, 70, 70);border-color: rgb(255, 199, 199);}
+                        &.fire{background-color: rgb(219, 70, 70);border-color: rgb(255, 145, 0);}
                         &.water{background-color: rgb(41, 126, 255);border-color: rgb(167, 215, 255);}
                         &.wood{background-color: rgb(105, 172, 105);border-color: rgb(175, 216, 171);}
                         &.light{background-color: rgb(255, 210, 62);border-color: rgb(255, 240, 158);}
@@ -117,10 +129,10 @@
         
         .name{
             text-align: center;
-            line-height: 12px;
-            font-size: 12px;
+            line-height: 10px;
+            font-size: 10px;
             width:100%;
-            margin:5px 0 0 0;
+            margin:3px 0 0 0;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
