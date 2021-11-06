@@ -91,7 +91,6 @@ export const decks = writable<Array<KotodamanDeckModel>>(storedDecks);
 export function setDecks(list: Array<KotodamanDeckModel>){
     decks.subscribe(decks => {
         const json = JSON.stringify(list)
-        console.log(json)
         localStorage.setItem('n2freevas-bs2nd-localstorage-decks', json)
     })
 }

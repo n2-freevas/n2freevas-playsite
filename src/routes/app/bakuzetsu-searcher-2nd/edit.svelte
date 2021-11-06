@@ -3,7 +3,7 @@
     import MediaQuery from 'svelte-media-query'
     import { onMount } from 'svelte';
     import Kotodaman from '$lib/component/bs2nd/kotodaman.svelte';
-    import { deckStore, unitListStore, isDeckFullStore, filterConditionStore, DEFAULT_LIMIT,
+    import { decks,deckStore, unitListStore, isDeckFullStore, filterConditionStore, DEFAULT_LIMIT,
             isSettingFilterCondition, isBottomOfScroll, isListLoading} from '$lib/store/app/bs2ndStore'
     import Bs2ndLoader from '$lib/component/Loader/bs2ndLoader.svelte'
     import EditCompMain from './_edit_component/main.svelte'

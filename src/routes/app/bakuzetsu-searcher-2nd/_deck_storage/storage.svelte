@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {decks, deckStore, isDeckFullStore, setDecks} from '$lib/store/app/bs2ndStore'
+    import {decks, deckStore, isDeckFullStore, setDecks, unitListStore} from '$lib/store/app/bs2ndStore'
     import easytoast from '$lib/component/toast/summon'
     import { createEventDispatcher } from 'svelte';
 
@@ -8,10 +8,7 @@
     
     function deckRegisterHandler(deckid){
         if ($isDeckFullStore){
-            console.log($deckStore)
-            console.log(Object.create($deckStore))
-            $decks[deckid- 1].list = Object.assign($deckStore)
-            console.log($decks)
+            $decks[deckid- 1].list = Object.assign([],$deckStore)
             $decks[deckid-1].deckname = '新規デッキ'
             setDecks($decks)
         }
@@ -19,7 +16,6 @@
         else{
             easytoast.errorToastPush('デッキ編成で12体揃えると<br>そのデッキを保存できます。')
         }
-        console.log($decks)
     }
     function deckNameChangeHandler(deckid, deckname){
         $decks[deckid-1].deckname = deckname
@@ -35,10 +31,17 @@
     }
 
     function deckAdoptHandler(deckid){
-        $deckStore = Object.assign($decks[deckid-1].list)
+        $deckStore = Object.assign([],$decks[deckid-1].list)
         //$deckStore = Object.assign($decks[deckid-1].list)
+        for(let i=0;i<$unitListStore.length; i++){
+            $unitListStore[i].disable = false
+            for(let j=0; j<$deckStore.length; j++){
+                if($unitListStore[i].id == $deckStore[j].id){
+                    $unitListStore[i].disable = true
+                }
+            }
+        }
         dispatch('click');
-        console.log($deckStore)
     }
 </script>
 <section id='deck-list-panel'>
