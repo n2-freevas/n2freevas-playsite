@@ -9,11 +9,7 @@ export const DEFAULT_LIMIT = 48
 /* Initialize */
 export const mainmenus = writable<boolean>(false)
 
-export const deckStore = writable<kotodaman[]>([
-    undefined,undefined,undefined,undefined,
-    undefined,undefined,undefined,undefined,
-    undefined,undefined,undefined,undefined]
-)
+export const deckStore = writable<Array<kotodaman>>(new Array(12))
 
 export const filterConditionStore = writable<kotodamanUnitFilterConditionModel>({
     offset: 0,
@@ -67,9 +63,9 @@ export const DECK_LIMIT = 5
 /* デッキはローカルストレージに永続化するため、永続化ストレージからつど呼び出す。 */
 
 let storedDecks = [
-    {deckid:1,deckname:"",list:[]},{deckid:2,deckname:"",list:[]},
-    {deckid:3,deckname:"",list:[]},{deckid:4,deckname:"",list:[]},
-    {deckid:5,deckname:"",list:[]}
+    {deckid:1,deckname:"",list:new Array(12)},{deckid:2,deckname:"",list:new Array(12)},
+    {deckid:3,deckname:"",list:new Array(12)},{deckid:4,deckname:"",list:new Array(12)},
+    {deckid:5,deckname:"",list:new Array(12)}
 ];
 
 export function getDeck(){
@@ -90,10 +86,12 @@ export function getDeck(){
 }
 getDeck()
 
-export const decks = writable<KotodamanDeckModel[]>(storedDecks);
+export const decks = writable<Array<KotodamanDeckModel>>(storedDecks);
 
-export function setDecks(list: KotodamanDeckModel[]){
+export function setDecks(list: Array<KotodamanDeckModel>){
     decks.subscribe(decks => {
-        localStorage.setItem('n2freevas-bs2nd-localstorage-decks', JSON.stringify(list))
+        const json = JSON.stringify(list)
+        console.log(json)
+        localStorage.setItem('n2freevas-bs2nd-localstorage-decks', json)
     })
 }

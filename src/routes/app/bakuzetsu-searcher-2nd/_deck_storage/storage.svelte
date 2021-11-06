@@ -4,42 +4,46 @@
     import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
-    
+    console.log($decks)
     
     function deckRegisterHandler(deckid){
-        console.log(deckid, $isDeckFullStore)
         if ($isDeckFullStore){
-            $decks[deckid-1].list = $deckStore
+            console.log($deckStore)
+            console.log(Object.create($deckStore))
+            $decks[deckid- 1].list = Object.assign($deckStore)
+            console.log($decks)
             $decks[deckid-1].deckname = '新規デッキ'
             setDecks($decks)
         }
+        
         else{
-            easytoast.errorToastPush('デッキを編成にて<br>12体揃えてください。')
+            easytoast.errorToastPush('デッキ編成で12体揃えると<br>そのデッキを保存できます。')
         }
+        console.log($decks)
     }
     function deckNameChangeHandler(deckid, deckname){
         $decks[deckid-1].deckname = deckname
         setDecks($decks)
+        easytoast.successToastPush(`デッキ名を変更しました<br>${deckname}`)
     }
 
     function deckRemoveHandler(deckid){
         $decks[deckid-1].list = []
         $decks[deckid-1].deckname = ''
         setDecks($decks)
+        easytoast.successToastPush('デッキを削除しました')
     }
 
     function deckAdoptHandler(deckid){
-        console.log($decks[deckid-1].list)
-        $deckStore = $decks[deckid-1].list
+        $deckStore = Object.assign($decks[deckid-1].list)
+        //$deckStore = Object.assign($decks[deckid-1].list)
         dispatch('click');
+        console.log($deckStore)
     }
-
-
-
 </script>
 <section id='deck-list-panel'>
     {#each $decks as d}
-        {#if d.list.length != 0}
+        {#if d.list.length != 0 && d.deckname != ''}
         <div class='deck-box'>
             <input placeholder="deck name" class='deck-name' bind:value={d.deckname} on:change={()=>{deckNameChangeHandler(d.deckid, d.deckname)}}>
             <div class='deck-thumbnail' on:click={()=>deckAdoptHandler(d.deckid)}>

@@ -3,7 +3,7 @@
     import MediaQuery from 'svelte-media-query'
     import HeaderMenuBox from '../lib/component/HeaderMenuBox.svelte'
     import HambergerMenuBox from '$lib/component/HambergerMenuBox.svelte';
-    import { SvelteToast } from '@zerodevx/svelte-toast'
+    import ToastArea from '$lib/component/toast/ToastArea.svelte'
 </script>
 
 <header>
@@ -43,13 +43,7 @@
 </header>
 
 <slot></slot>
-<div class="toast_wrap">
-    <SvelteToast />
-  </div>
-  
-  <div class="toast_wrap error_wrap">
-    <SvelteToast target="error" />
-  </div>
+<ToastArea></ToastArea>
 <style lang="scss">
     header{
         background: black;
@@ -58,9 +52,10 @@
         align-items: center;
         height:60px;
         .n2-logo{
+            padding:10px;
             img{
-                margin:10px;
-                height:40px;
+                
+                height:30px;
             }
         }
         .menu-row-list{
@@ -101,15 +96,6 @@
                 z-index:100;
             }
         }
-    }
-    .toast_wrap {
-        --toastMsgPadding: 10px 20px;
-        font-size: 0.85rem;
-    }
-    .error_wrap {
-        --toastWidth: 100%;
-        --toastMaxWidth: 500px;
-        --toastMinHeight: 1.5rem;
     }
 
 </style>

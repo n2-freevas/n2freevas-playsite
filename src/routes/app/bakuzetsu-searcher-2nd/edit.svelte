@@ -17,29 +17,34 @@
     onMount(async() =>{
         // const units = await getUnits(10,10)
         // console.log(units)
+        console.log('edit')
         $isListLoading = true
         try{
-            $unitListStore = await getUnitsUsingFilter(
-            0,
-            $filterConditionStore.limit,
-            $filterConditionStore.word,
-            $filterConditionStore.elem,
-            $filterConditionStore.tribe,
-            $filterConditionStore.gimmick)
-            if($filterConditionStore.limit < $unitListStore.length){
-                $isBottomOfScroll = true
-            }
-            isBottomOfScroll
-            for(let i=0; i<12; i++){
-                if ($deckStore[i] != undefined){
-                    for(let j=0; j<$unitListStore.length; j++){
-                        if($deckStore[i].id == $unitListStore[j].id){
-                            $unitListStore[j].indeck = true
-                            $unitListStore[j].disable = true
+            if($unitListStore.length == 0){
+                $unitListStore = await getUnitsUsingFilter(
+                    0,
+                    $filterConditionStore.limit,
+                    $filterConditionStore.word,
+                    $filterConditionStore.elem,
+                    $filterConditionStore.tribe,
+                    $filterConditionStore.gimmick
+                )
+                if($filterConditionStore.limit < $unitListStore.length){
+                    $isBottomOfScroll = true
+                }
+                isBottomOfScroll
+                for(let i=0; i<12; i++){
+                    if ($deckStore[i] != undefined){
+                        for(let j=0; j<$unitListStore.length; j++){
+                            if($deckStore[i].id == $unitListStore[j].id){
+                                $unitListStore[j].indeck = true
+                                $unitListStore[j].disable = true
+                            }
                         }
                     }
                 }
             }
+            
         }catch{
             isLoadingError = true
         }finally{
@@ -181,19 +186,36 @@
             }
         }
     }
+
+    function deckStoreReset(){
+        for(let i=0; i<12; i++){
+            let obj = $deckStore[i]
+            if(obj){
+                for(let j=0; j<$unitListStore.length; j++){
+                    if($unitListStore[j].id == obj.id){
+                        $unitListStore[j].disable = false
+                    }
+                }
+                $deckStore[i] = undefined
+            }
+        }
+        $isDeckFullStore = false
+    }
     
 </script>
 <article id='bs2nd-screen'>
     <section id='bs2nd-edit-panels'>
-        <h1>Edit</h1>
-        <section id='bs2nd-deck-edit-panel'>
-            {#each $deckStore as unit}
-                {#if unit == undefined}
-                    <div class='unit-in-deck-blank-slot'></div>
-                {:else}
-                    <Kotodaman kotodaman={unit} on:click={handleClickKotodamanInDeck}/>
-                {/if}
-            {/each}
+        <section id='bs2nd-deck-edit'>
+            <section id='bs2nd-deck-edit-panel'>
+                {#each $deckStore as unit}
+                    {#if unit == undefined}
+                        <div class='unit-in-deck-blank-slot'></div>
+                    {:else}
+                        <Kotodaman kotodaman={unit} on:click={handleClickKotodamanInDeck}/>
+                    {/if}
+                {/each}
+            </section>
+            <button on:click={deckStoreReset}>リセット</button>
         </section>
         <section id='bs2nd-show-units-panel'>
             {#each $unitListStore as unit}
@@ -233,36 +255,47 @@
     #bs2nd-screen{
         width:90vw;
         margin:0 auto;
-        height:90vh;
+        height:calc( 100vh - 120px);
         overflow: hidden;
         display: flex;
         flex-direction: row;
         justify-content: center;
+
         #bs2nd-edit-panels{
             height:100%;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
 
-
-            #bs2nd-deck-edit-panel{
-                height:225px;
-                width:300px;
-                
-                margin:10px auto 30px auto;
-                background: white;
-                border-radius: 20px;
-                display: flex;
-                flex-direction: row;
-                justify-content: space-evenly;
-                flex-wrap: wrap;
-                .unit-in-deck-blank-slot{
-                    width:50px; height:50px;
-                    border-radius: 25px;
-                    margin:10px;
-                    background-color: rgb(51, 51, 51);
+            #bs2nd-deck-edit{
+                margin:10px auto 10px auto;
+                #bs2nd-deck-edit-panel{
+                    height:225px;
+                    width:300px;
+                    margin:0 0 5px 0;
+                    background: white;
+                    border-radius: 20px;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-evenly;
+                    flex-wrap: wrap;
+                    .unit-in-deck-blank-slot{
+                        width:50px; height:50px;
+                        border-radius: 25px;
+                        margin:10px;
+                        background-color: rgb(51, 51, 51);
+                    }
+                }
+                button{
+                    width:100px;
+                    margin:0 0 0 15px;
+                    border:solid 1px white;
+                    border-radius: 10px;
+                    color:white;
+                    font-size: 12px;
                 }
             }
+            
             #bs2nd-show-units-panel{
                 flex-grow: 2;
                 overflow-y: scroll;
@@ -270,7 +303,7 @@
                 flex-direction: row;
                 justify-content: center;
                 flex-wrap: wrap;
-                margin:0 0 15px 0;
+                margin:10px 0 15px 0;
                 width:100%;
                 max-width: 400px;
                 border:solid 2px white;
@@ -305,7 +338,7 @@
                 border-right: solid 4px black;
                 background-color: black;
                 border-radius: 15px 0 0 15px;
-                top:250px;left:-59px;
+                top:200px;left:-59px;
                 width:60px;height:60px;
                 img {
                     width:40px;
@@ -321,7 +354,7 @@
             position: fixed;
             width:300px;
             height:600px;
-            bottom:50px;
+            bottom:80px;
             right:-300px;
             background: linear-gradient(45deg, rgba(black,1), rgba(black,0.7));;
             border: solid 2px white;
@@ -340,7 +373,7 @@
                 border-right: solid 4px black;
                 background-color: black;
                 border-radius: 15px 0 0 15px;
-                bottom:5px;left:-59px;
+                bottom:10px;left:-59px;
                 width:60px;height:60px;
                 img {
                     width:40px;
