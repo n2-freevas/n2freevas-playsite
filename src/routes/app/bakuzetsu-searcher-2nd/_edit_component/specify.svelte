@@ -126,5 +126,8 @@
             height: 30px;
         }
     }
+    .elem,.tribe,.gimmick{
+        cursor: pointer;
+    }
 
 </style>

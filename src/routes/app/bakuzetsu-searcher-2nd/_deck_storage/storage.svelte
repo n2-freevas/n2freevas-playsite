@@ -18,9 +18,11 @@
         }
     }
     function deckNameChangeHandler(deckid, deckname){
-        $decks[deckid-1].deckname = deckname
-        setDecks($decks)
-        easytoast.successToastPush(`デッキ名を変更しました<br>${deckname}`)
+        if(deckname != ''){
+            $decks[deckid-1].deckname = deckname
+            setDecks($decks)
+            easytoast.successToastPush(`デッキ名を変更しました<br>${deckname}`)
+        }
     }
 
     function deckRemoveHandler(deckid){
@@ -46,7 +48,7 @@
 </script>
 <section id='deck-list-panel'>
     {#each $decks as d}
-        {#if d.list.length != 0 && d.deckname != ''}
+        {#if d.list.length != 0}
         <div class='deck-box'>
             <input placeholder="deck name" class='deck-name' bind:value={d.deckname} on:change={()=>{deckNameChangeHandler(d.deckid, d.deckname)}}>
             <div class='deck-thumbnail' on:click={()=>deckAdoptHandler(d.deckid)}>

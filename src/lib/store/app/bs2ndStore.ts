@@ -1,8 +1,7 @@
 import { writable } from 'svelte/store'
-import type {
-    kotodaman, kotodamanUnitFilterConditionModel,
+import type { kotodaman, kotodamanUnitFilterConditionModel,
     KotodamanKanaModel, KotodamanElemModel, KotodamanTribeModel, KotodamanGimmickModel,
-    KotodamanDeckModel
+    KotodamanDeckModel, AdventFilterConditionModel, advent, banmenAnswer, MojiLengthConfigModel
 } from '$lib/model/app/Bs2ndModel'
 
 export const DEFAULT_LIMIT = 48
@@ -24,7 +23,7 @@ export const kanaStore = writable<KotodamanKanaModel[]>([
     {id:1,kanas:["あ","ぁ"], active:false},{id:2,kanas:["い","ぃ"], active:false},{id:3,kanas:["う","ぅ"], active:false},{id:4,kanas:["え","ぇ"], active:false},{id:5,kanas:["お","ぉ"], active:false},
     {id:6,kanas:["か","が"], active:false},{id:7,kanas:["き","ぎ"], active:false},{id:8,kanas:["く","ぐ"], active:false},{id:9,kanas:["け","げ"], active:false},{id:10,kanas:["こ","ご"], active:false},
     {id:11,kanas:["さ","ざ"], active:false},{id:12,kanas:["し","じ"], active:false},{id:13,kanas:["す","ず"], active:false},{id:14,kanas:["せ","ぜ"], active:false},{id:15,kanas:["そ","ぞ"], active:false},
-    {id:16,kanas:["た","だ"], active:false},{id:17,kanas:["ち","ぢ"], active:false},{id:18,kanas:["す","ず"], active:false},{id:19,kanas:["て","で"], active:false},{id:20,kanas:["と","ど"], active:false},
+    {id:16,kanas:["た","だ"], active:false},{id:17,kanas:["ち","ぢ"], active:false},{id:18,kanas:["つ","づ"], active:false},{id:19,kanas:["て","で"], active:false},{id:20,kanas:["と","ど"], active:false},
     {id:21,kanas:["な"], active:false},{id:22,kanas:["に"], active:false},{id:23,kanas:["ぬ"], active:false},{id:24,kanas:["ね"], active:false},{id:25,kanas:["の"], active:false},
     {id:26,kanas:["は","ば","ぱ"], active:false},{id:27,kanas:["ひ","び","ぴ"], active:false},{id:28,kanas:["ふ","ぶ","ぷ"], active:false},{id:29,kanas:["へ","べ","ぺ"], active:false},{id:30,kanas:["ほ","ぼ","ぽ"], active:false},
     {id:31,kanas:["ま"], active:false},{id:32,kanas:["み"], active:false},{id:33,kanas:["む"], active:false},{id:34,kanas:["め"], active:false},{id:35,kanas:["も"], active:false},
@@ -63,9 +62,9 @@ export const DECK_LIMIT = 5
 /* デッキはローカルストレージに永続化するため、永続化ストレージからつど呼び出す。 */
 
 let storedDecks = [
-    {deckid:1,deckname:"",list:new Array(12)},{deckid:2,deckname:"",list:new Array(12)},
-    {deckid:3,deckname:"",list:new Array(12)},{deckid:4,deckname:"",list:new Array(12)},
-    {deckid:5,deckname:"",list:new Array(12)}
+    {deckid:1,deckname:"",list:[]},{deckid:2,deckname:"",list:[]},
+    {deckid:3,deckname:"",list:[]},{deckid:4,deckname:"",list:[]},
+    {deckid:5,deckname:"",list:[]}
 ];
 
 export function getDeck(){
@@ -94,3 +93,27 @@ export function setDecks(list: Array<KotodamanDeckModel>){
         localStorage.setItem('n2freevas-bs2nd-localstorage-decks', json)
     })
 }
+
+export const adventStore = writable<advent[]>([])
+
+export const adventTargetStore = writable<advent>(undefined)
+
+export const adventBanmenStore = writable<banmenAnswer[]>([])
+
+export const adventFilterConditionStore = writable<AdventFilterConditionModel>({
+    offset: 0,
+    limit: DEFAULT_LIMIT,
+    elem:[]
+})
+
+export const adventElemStore = writable<KotodamanElemModel[]>([
+    {id:1,elem:"火",active:false},{id:2,elem:"水",active:false},{id:3,elem:"木",active:false},{id:4,elem:"光",active:false},
+    {id:5,elem:"闇",active:false},{id:6,elem:"冥",active:false},{id:7,elem:"天",active:false}
+])
+
+export const mojiLengthConfigStore = writable<MojiLengthConfigModel[]>([
+    {length:4, active:false},
+    {length:5, active:true},
+    {length:6, active:true},
+    {length:7, active:false}
+])

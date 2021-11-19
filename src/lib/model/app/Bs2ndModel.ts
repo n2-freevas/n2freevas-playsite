@@ -17,6 +17,9 @@ export const GimmickEngDict = {
     "シールドブレイカー":"shield","トゲガード":"needle","チェンジガード":"change","弱体ガード":"week",
     "ウォールブレイカー":"wall","ビリビリガード":"biribiri","ヒールブレイカー":"heal","コピーガード":"copy"
 }
+export const AdventNumDict = {
+    0:"-", 1:"初・中級", 2:"中・上級", 3:"超級", 4:"魔級", 5:"破滅級"
+}
 export interface kotodaman {
     id: number
     name: string
@@ -29,6 +32,44 @@ export interface kotodaman {
     indeck: boolean
 }
 
+export interface advent {
+    id: number,
+    newer: number,
+    name: string,
+    figure: string,
+    level: number,
+    elem:string[],
+    disable: boolean
+}
+
+export interface banmen {
+    banmen: string
+    gimmick: string
+    wave: number
+}
+
+export interface answer {
+    word: string
+    necessary: string[]
+}
+
+export interface answerListModel {
+    count: number,
+    results: answer[]
+}
+
+export interface banmenAnswer {
+    banmen : banmen
+    answer: answerListModel
+    lengths: number[]
+    active: boolean
+}
+
+export interface targetKana {
+    kana: string
+    count: number
+}
+
 export interface kotodamanUnitFilterConditionModel {
     offset: number
     limit: number
@@ -36,6 +77,12 @@ export interface kotodamanUnitFilterConditionModel {
     elem: elem[]
     tribe: tribe[]
     gimmick: gimmick[]
+}
+
+export interface AdventFilterConditionModel {
+    offset: number
+    limit: number
+    elem: elem[]
 }
 
 export interface KotodamanKanaModel {
@@ -66,4 +113,9 @@ export interface KotodamanDeckModel {
     deckid: number,
     deckname: string,
     list: kotodaman[]
+}
+
+export interface MojiLengthConfigModel {
+    length: number
+    active: boolean
 }

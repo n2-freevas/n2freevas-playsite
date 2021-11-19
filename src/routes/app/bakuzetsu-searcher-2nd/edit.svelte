@@ -3,7 +3,7 @@
     import MediaQuery from 'svelte-media-query'
     import { onMount } from 'svelte';
     import Kotodaman from '$lib/component/bs2nd/kotodaman.svelte';
-    import { decks,deckStore, unitListStore, isDeckFullStore, filterConditionStore, DEFAULT_LIMIT,
+    import { deckStore, unitListStore, isDeckFullStore, filterConditionStore, DEFAULT_LIMIT,
             isSettingFilterCondition, isBottomOfScroll, isListLoading} from '$lib/store/app/bs2ndStore'
     import Bs2ndLoader from '$lib/component/Loader/bs2ndLoader.svelte'
     import EditCompMain from './_edit_component/main.svelte'
@@ -204,6 +204,19 @@
     
 </script>
 <article id='bs2nd-screen'>
+    <MediaQuery query="(min-width: 701px)" let:matches>{#if matches}
+        <section class='panel-box'>
+            <h2>絞り込み</h2>
+            <p>本家ゲームとほぼ同じ要領で、<br>キャラの絞り込み検索ができます。</p>
+            <section id='bs2nd-units-filter-panel' class='{isUnitFilterMenuOpen ? 'open': ''}'>
+                <EditCompMain on:close={()=>{isUnitFilterMenuOpen = false}}/>
+                <div id='bs2nd-units-filter-slider-button' on:click="{()=>{isUnitFilterMenuOpen ? isUnitFilterMenuOpen=false :isUnitFilterMenuOpen=true}}">
+                    <img class='{isUnitFilterMenuOpen ? 'open': ''}' src='/img/arrow-circle-left-solid.svg' alt='⇦'>
+                </div>
+            </section>
+        </section>
+        
+    {/if}</MediaQuery>
     <section id='bs2nd-edit-panels'>
         <section id='bs2nd-deck-edit'>
             <section id='bs2nd-deck-edit-panel'>
@@ -248,20 +261,31 @@
         </div>
     </section>
     {/if}</MediaQuery>
+
+    <MediaQuery query="(min-width: 701px)" let:matches>{#if matches}
+    <section class='panel-box'>
+        <h2>デッキストレージ</h2>
+        <p>編成したデッキを保存できます。<br>デッキは、このブラウザの<br>ローカルストレージに保存されます。</p>
+        <section id='bs2nd-deck-select-panel'>
+            <Storage on:click={()=>{isDeckMenuOpen=false}}></Storage>
+        </section>
+    </section>
+    {/if}</MediaQuery>
 </article>
 
 
 <style lang="scss">
     #bs2nd-screen{
-        width:90vw;
+        
         margin:0 auto;
         height:calc( 100vh - 120px);
         overflow: hidden;
         display: flex;
         flex-direction: row;
-        justify-content: center;
+        justify-content: space-evenly;
 
         #bs2nd-edit-panels{
+            max-width:90vw;
             height:100%;
             display: flex;
             flex-direction: column;
@@ -317,14 +341,31 @@
                 }
             }
         }
+        .panel-box{
+            h2{
+                margin:0 0 5px 0;
+            }
+            p{
+                margin:0 0 25px 0;
+                font-size:12px;
+            }
+        }
         #bs2nd-deck-select-slider{
             position:fixed;
             top:50px;right:-250px;
+            border: solid 2px white;
+            border-radius: 20px 0 0 20px;
+        }
+        #bs2nd-deck-select-panel{
+            border: solid 2px white;
+            border-radius: 10px;
+        }
+        #bs2nd-deck-select-slider,#bs2nd-deck-select-panel{
             width:250px;
             height:550px;
-            background: linear-gradient(90deg, rgba(black,1), rgba(black,0.7));;
-            border: solid 2px white;
-            border-radius: 20px 0 0 10px;
+            
+            background: linear-gradient(90deg, rgba(black,1), rgba(black,0.7));
+            
             transition: .3s;
             padding:5px 0 5px 5px;
             &.open{
@@ -352,13 +393,24 @@
         }
         #bs2nd-units-filter-slider{
             position: fixed;
-            width:300px;
-            height:600px;
             bottom:80px;
             right:-300px;
-            background: linear-gradient(45deg, rgba(black,1), rgba(black,0.7));;
+            width:300px;
+            height:600px;
             border: solid 2px white;
-            border-radius: 20px 0 0 10px;
+            border-radius: 15px 0 0 15px;
+        }
+        #bs2nd-units-filter-panel{
+            width:300px;
+            height:600px;
+            border: solid 2px white;
+            border-radius: 10px;
+        } 
+        #bs2nd-units-filter-slider,#bs2nd-units-filter-panel{
+            
+            
+            background: linear-gradient(45deg, rgba(black,1), rgba(black,0.7));;
+            
 
             transition: .3s;
             padding:5px;

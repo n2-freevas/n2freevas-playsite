@@ -42,6 +42,7 @@
         flex-wrap: wrap;
         --kana-box-size: 38px;
         .kana{
+            cursor: pointer;
             border:solid 1px white;
             border-radius: 3px;
             width:var(--kana-box-size);height:var(--kana-box-size);

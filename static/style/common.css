@@ -1,8 +1,18 @@
 :root{
     --active-yellow:rgb(255, 189, 8);
+    --toastWidth:300px; /* for svelte-toast */
 }
 body{
     background: black;
     color:white;
     
 }
+
+.com_scroll-x::-webkit-scrollbar{overflow:hidden;height:2px;background:#fafafa;}
+.com_scroll-x::-webkit-scrollbar-button{display:none;}
+.com_scroll-x::-webkit-scrollbar-piece{background:#eee;}
+.com_scroll-x::-webkit-scrollbar-piece:start{background:#eee;}
+.com_scroll-x::-webkit-scrollbar-thumb{border-radius: 2px;border: solid 1px white;background:rgb(0, 0, 0);}
+
+.com_scroll-y{overflow-y: scroll;-ms-overflow-style: none;scrollbar-width: none;}
+.com_scroll-y::-webkit-scrollbar {display:none;}

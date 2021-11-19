@@ -4,6 +4,8 @@
     import HeaderMenuBox from '../lib/component/HeaderMenuBox.svelte'
     import HambergerMenuBox from '$lib/component/HambergerMenuBox.svelte';
     import ToastArea from '$lib/component/toast/ToastArea.svelte'
+    
+    let sliderOpen = false
 </script>
 
 <header>
@@ -24,13 +26,13 @@
     
     <MediaQuery query="(max-width: 700px)" let:matches>
         {#if matches}
-        <div class='hamburger-menu'>
+        <div class='hamburger-menu' on:click={()=>{sliderOpen ? sliderOpen=false : sliderOpen=true}}>
             <span class='hamburger-button'>
                 <span class='bar bar1'></span>
                 <span class='bar bar2'></span>
                 <span class='bar bar3'></span>
             </span>
-            <div class='hamburger-slider'>
+            <div class='hamburger-slider {sliderOpen ? "open": ""}'>
                 {#each $mainmenus as menu}
                     <HambergerMenuBox name={menu.name} path={menu.path} img={menu.img} explain={menu.explain}></HambergerMenuBox>
                 {/each}
@@ -45,6 +47,7 @@
 <slot></slot>
 <ToastArea></ToastArea>
 <style lang="scss">
+
     header{
         background: black;
         display: flex;
@@ -77,23 +80,25 @@
                     transform: translateY(-6px);
                     transition: transform .3s;
                 }
-                .bar2{
+                // .bar2{
                     
-                }
+                // }
                 .bar3{
                     transform: translateY(6px);
                     transition: transform .3s;
                 }
             }
             .hamburger-slider{
-                position: absolute;
-                display: none;
-                width:250px;
-                height:100vh;
-                top:0;bottom:0;
-                right:0;
-                background: blue;
+                position: fixed;
                 z-index:100;
+                width:300px;
+                top:100px;
+                right:-320px;
+                background: linear-gradient(90deg, rgba(0,0,0,1),rgba(0,0,0,0.8));
+                transition: 0.3s;
+                &.open{
+                    right:0
+                }
             }
         }
     }

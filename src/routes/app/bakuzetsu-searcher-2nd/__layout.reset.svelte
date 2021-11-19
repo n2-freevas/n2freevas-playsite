@@ -1,10 +1,23 @@
 <script lang="ts">
     import ToastArea from '$lib/component/toast/ToastArea.svelte'
-    let active = [true,false,false]
+    import { onMount } from 'svelte';
+    let active = [false,false,false]
     function touchMenuHandler(index){
         active = [false,false,false]
         active[index] = true
     }
+    onMount(()=>{
+        const path = location.pathname.split('/').slice(-1)[0]
+        if(path == 'analyze'){
+            active[1] = true
+        }
+        else if(path == 'post'){
+            active[2] = true
+        }
+        else{
+            active[0] = true
+        }
+    })
 </script>
 
 
@@ -21,6 +34,7 @@
 </section>
 
 <footer>
+    <div class='footer-icon-box'>
     <a class='{active[0]? "active":""}' href='/app/bakuzetsu-searcher-2nd/edit' on:click={()=>{touchMenuHandler(0)}}>
         <img src='/img/bs2nd/menu_edit.svg' alt='EDIT'>
         <p>EDIT</p>
@@ -33,6 +47,7 @@
         <img src='/img/bs2nd/menu_post.svg' alt='POST'>
         <p>POST</p>
     </a>
+    </div>
 </footer>
 <style lang="scss">
     header{
@@ -51,24 +66,28 @@
     }
     footer{
         position: fixed;
-        display: flex;
-        justify-content: space-around;
         bottom:0;
         width:100%;
         height:75px;
         box-shadow: 0 -1px 2px white;
         padding:10px;
-        a{
+        .footer-icon-box{
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            width:55px;
-            height:55px;
-            border-radius: 27px;
-            &.active{background: #c09300;}
-            img{height:30px;}
-            p{font-size:12px; font-weight: bold;}
+            justify-content: space-around;
+            max-width: 700px;
+            margin:0 auto;
+            a{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+                width:55px;
+                height:55px;
+                border-radius: 27px;
+                &.active{background: #c09300;}
+                img{height:30px;}
+                p{font-size:12px; font-weight: bold;}
+            }
         }
     }
 </style>

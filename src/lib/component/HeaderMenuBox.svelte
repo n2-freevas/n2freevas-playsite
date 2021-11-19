@@ -37,8 +37,7 @@
             margin-top:30px;
             right:0;
             opacity: 0;
-            border:  solid 1px white;
-            background: black;
+            background: linear-gradient(90deg, rgba(20,20,20,1),rgba(20,20,20,0.5));
             padding:20px;
             display: flex;
             flex-direction: row;
