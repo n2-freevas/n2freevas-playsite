@@ -57,7 +57,7 @@ export const mainmenus = writable<MainMenu[]>([
     {
         name: 'contact',
         path: '/contact',
-        img: '/static/img/contacts_icon.svg',
+        img: '/img/contacts_icon.svg',
         explain: '連絡先・SNSアカウントを<br>表示します。',
         submenu:[]
     },
