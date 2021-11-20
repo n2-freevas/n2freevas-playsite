@@ -36,17 +36,20 @@
 <footer>
     <div class='footer-icon-box'>
     <a class='{active[0]? "active":""}' href='/app/bakuzetsu-searcher-2nd/edit' on:click={()=>{touchMenuHandler(0)}}>
-        <img src='/img/bs2nd/menu_edit.svg' alt='EDIT'>
+        <div class='footer-icon-bg'></div>
+        <img src='/img/bs2nd/e_gray_fill.svg' alt='EDIT'>
         <p>EDIT</p>
     </a>
     <a class='{active[1]? "active":""}' href='/app/bakuzetsu-searcher-2nd/analyze' on:click={()=>{touchMenuHandler(1)}}>
-        <img src='/img/bs2nd/menu_analyze.svg' alt='ANALYZE'>
+        <div class='footer-icon-bg'></div>
+        <img src='/img/bs2nd/a_gray_fill.svg' alt='ANALYZE'>
         <p>ANALYZE</p>
     </a>
-    <a class='{active[2]? "active":""}' href='/app/bakuzetsu-searcher-2nd/post' on:click={()=>{touchMenuHandler(2)}}>
+    <!-- <a class='{active[2]? "active":""}' href='/app/bakuzetsu-searcher-2nd/post' on:click={()=>{touchMenuHandler(2)}}>
+        <div class='footer-icon-bg'></div>
         <img src='/img/bs2nd/menu_post.svg' alt='POST'>
         <p>POST</p>
-    </a>
+    </a> -->
     </div>
 </footer>
 <style lang="scss">
@@ -66,11 +69,13 @@
     }
     footer{
         position: fixed;
+        z-index:50;
         bottom:0;
         width:100%;
         height:75px;
         box-shadow: 0 -1px 2px white;
         padding:10px;
+        background: black;
         .footer-icon-box{
             display: flex;
             justify-content: space-around;
@@ -81,11 +86,24 @@
                 flex-direction: column;
                 align-items: center;
                 justify-content: space-between;
-                width:55px;
-                height:55px;
+                position: relative;
+                width:40px;
+                height:40px;
                 border-radius: 27px;
-                &.active{background: #c09300;}
-                img{height:30px;}
+                &.active{
+                    
+                    .footer-icon-bg{
+                        position: absolute;
+                        width:30px;height:30px;
+                        border:solid 2px var(--active-yellow);
+                        border-radius: 15px;
+                    }
+                    p{
+                        color:var(--active-yellow);
+                    }
+                }
+                img{height:25px;}
+                
                 p{font-size:12px; font-weight: bold;}
             }
         }

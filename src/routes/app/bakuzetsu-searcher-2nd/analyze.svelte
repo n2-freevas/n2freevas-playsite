@@ -15,7 +15,6 @@ let ispickUpAdventLoading = false
 let isBanmenSearching = false
 let isActiveAnswerBox = false
 let target_kana:targetKana[] = []
-let target_banmen:string = ""
 let answerCount:number = 0
 let answerList:answer[] = []
 
@@ -139,18 +138,17 @@ function mojiLengthButtonHandler(length){
 }
 
 async function banmenClickHandler(banmenAns:banmenAnswer){
-    if (banmenAns.answer){
-        for(let i=0; i<$adventBanmenStore.length; i++){
-            $adventBanmenStore[i].active = false
-        }
-        banmenAns.active = true
-        answerCount = banmenAns.answer.count
-        answerList = banmenAns.answer.results
-        isActiveAnswerBox = true
-    }
-    else if((banmenAns.banmen.banmen != target_banmen || !isBanmenSearching) && target_kana.length != 0){
-        isActiveAnswerBox = true
+    // デッキ未編成なら、トーストを出して終了
+    if(!isBanmenSearching){
         isBanmenSearching = true
+        answerCount = 0
+        if(target_kana.length == 0){
+            easytoast.toastPush('「EDIT」でデッキ編成すると、<br>素晴らしい機能にアクセスできます')
+            return null
+        }
+        isActiveAnswerBox = true
+        
+        //文字長フィルタの条件が変更されていないことをチェック
         let target_length = []
         for(let i=0; i<$mojiLengthConfigStore.length; i++){
             if($mojiLengthConfigStore[i].active){
@@ -158,35 +156,37 @@ async function banmenClickHandler(banmenAns:banmenAnswer){
             }
         }
         let conditionSameFlg = true
+        conditionSameFlg = (target_length.length == banmenAns.lengths.length)
         
-        conditionSameFlg = target_length.length == banmenAns.lengths.length
         target_length.forEach(tl=>{
-            conditionSameFlg = conditionSameFlg || banmenAns.lengths.includes(tl)
+            conditionSameFlg = conditionSameFlg && banmenAns.lengths.includes(tl)
         })
         
-        let result = undefined
-        if(banmenAns.answer || !conditionSameFlg){
-            result = await getSearchAnswer(banmenAns.banmen.banmen, target_kana, target_length)
-        }
-        
-        
-        for(let i=0; i<$adventBanmenStore.length; i++){
-            $adventBanmenStore[i].active = false
-            if(banmenAns.banmen.banmen == $adventBanmenStore[i].banmen.banmen){
-                $adventBanmenStore[i].answer = result
-                $adventBanmenStore[i].lengths = target_length
-                target_banmen = banmenAns.banmen.banmen
-                answerCount = $adventBanmenStore[i].answer.count
-                answerList = $adventBanmenStore[i].answer.results
-                console.log(result)
+        if (banmenAns.answer && conditionSameFlg){
+            for(let i=0; i<$adventBanmenStore.length; i++){
+                $adventBanmenStore[i].active = false
             }
+            banmenAns.active = true
+            answerCount = banmenAns.answer.count
+            answerList = banmenAns.answer.results
         }
-        
-        banmenAns.active = true
+        else{
+            let result = undefined
+            result = await getSearchAnswer(banmenAns.banmen.banmen, target_kana, target_length)
+            for(let i=0; i<$adventBanmenStore.length; i++){
+                $adventBanmenStore[i].active = false
+                if(banmenAns.banmen.banmen == $adventBanmenStore[i].banmen.banmen){
+                    $adventBanmenStore[i].answer = result
+                    $adventBanmenStore[i].lengths = target_length
+                    answerCount = $adventBanmenStore[i].answer.count
+                    answerList = $adventBanmenStore[i].answer.results
+                }
+            }
+            
+            banmenAns.active = true
+            
+        }
         isBanmenSearching = false
-    }
-    else if (target_kana.length == 0){
-        easytoast.toastPush('「EDIT」でデッキ編成すると、<br>素晴らしい機能にアクセスできます')
     }
     
 }
@@ -253,7 +253,7 @@ async function banmenClickHandler(banmenAns:banmenAnswer){
                     <img src='/img/arrow_simple_bottom.svg' alt='⬇︎'>
                 </div>
                 <div class='answer-count'>ヒット数 : {answerCount}</div>
-                <div id='answers-list'>
+                <div id='answers-list' class='com_scroll-y'>
                     {#if isBanmenSearching}
                         <div style='height:120px; margin-top:100px'>
                             <Bs2ndLoader />
@@ -387,7 +387,7 @@ async function banmenClickHandler(banmenAns:banmenAnswer){
                 position: fixed;
                 padding:15px 15px 60px 15px;
                 z-index:100;
-                bottom: -500px;
+                bottom: -520px;
                 left:0;
                 width:100vw;
                 height:480px;

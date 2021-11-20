@@ -64,7 +64,7 @@
             justify-content: space-around;
             img{
                 width:60px;
-                height: auto;
+                height: 50px;
                 &.disable{
                     filter:grayscale(85%)
                 }
@@ -95,6 +95,7 @@
             width:120px;
             img{
                 width:120px;
+                height: 100px;
             }
         }
         .name{

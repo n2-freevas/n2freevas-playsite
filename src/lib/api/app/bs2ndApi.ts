@@ -96,7 +96,6 @@ export const getSearchAnswer = async(
 ):Promise<answerListModel> =>{
   try{
     // @ts-ignore
-    console.log(banmen, target_kana, target_length)
     let data = await Api.post(
       `${bs2ndGetSearchAnswerUrl}`,
       {banmen, target_kana, target_word_length: target_length}

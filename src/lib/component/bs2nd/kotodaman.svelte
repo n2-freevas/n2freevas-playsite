@@ -79,7 +79,7 @@
             justify-content: space-around;
             img{
                 width:60px;
-                height: auto;
+                height: 50px;
                 &.disable{
                     filter:grayscale(85%)
                 }
