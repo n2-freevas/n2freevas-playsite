@@ -1,6 +1,6 @@
 <script lang='ts'>
     import { onMount } from "svelte";
-    import Viewport from 'svelte-viewport-info'
+    // import Viewport from 'svelte-viewport-info'
     import Card from '$lib/component/TCG-sim/card.svelte'
     import Hand from '$lib/component/TCG-sim/hand.svelte'
     import Deck from '$lib/component/TCG-sim/deck.svelte'
@@ -143,8 +143,8 @@
 
     deckAreaInfoStore
     function windowChangeHandler(){
-        window_width = Viewport.Width
-        window_height = Viewport.Height
+        // window_width = Viewport.Width
+        // window_height = Viewport.Height
         if(window_width < window_width_require || window_height_require > window_height){isPC = false}
         else {isPC = true}
         
@@ -161,12 +161,12 @@
             return card.id != id ? card: null
         })
         $boardListStore = [...$boardListStore, {...target,x:position.top-($cardWidth), y:position.left, flip: false, rotate:0}]
-        window.setTimeout(
-            function(){
-                $handListStore = $handListStore.filter(card => card != undefined)
-            }
-            ,300
-        )
+        // window.setTimeout(
+        //     function(){
+        //         $handListStore = $handListStore.filter(card => card != undefined)
+        //     }
+        //     ,300
+        // )
     }
     function cardBoardInFromDeck(event){
         const id = event.detail.id
@@ -255,7 +255,7 @@
 </article>
 <article id='myDeck'>
     <div id = 'deckArea-main'></div>
-    <Deck sleeve={"/img/tcg-sim/card.svg"}
+    <Deck
     on:handInFromDeck = {cardHandInFromDeck}
     on:boardInFromDeck = {cardBoardInFromDeck}
     />

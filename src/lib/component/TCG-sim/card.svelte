@@ -100,7 +100,7 @@
         flippin = flippin ? false : true
     }
 </script>
-<svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
+<!-- <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} /> -->
 
 
 <section 
