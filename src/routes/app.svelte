@@ -10,7 +10,15 @@ let apps: App[] = [
     {name:"ばくぜつさあち",
     icon:"/img/bs2nd/ba_gray.svg",
     href: "/app/bakuzetsu-searcher-2nd/edit",
-    description:"コトダマンで楽して勝ちたい人に向けたツール"}
+    description:"コトダマンで楽して勝ちたい人に向けたツール"},
+    {name:"TCGシミュ",
+    icon:"/img/tcg-sim/card_naname.svg",
+    href: "/app/tcg-simulator/game",
+    description:"トレーディングカードをインポートしてプレイ"},
+    {name:"DMダウンローダ",
+    icon:"/img/tcg-sim/card_naname.svg",
+    href: "/app/DM-Downloader/collect",
+    description:"カード画像を収集"}
 ]
 
 
@@ -20,15 +28,19 @@ let apps: App[] = [
     <div id='phone-flame'>
     <section>
         {#each apps as a}
-            <div class='app-icon'>
+            <div class='app-icon active'>
                 <a href={a.href}>
                     <img src={a.icon} alt="">
                     <div class='app-name'>{a.name}</div>
                 </a>
             </div>
         {/each}
-
-
+        <div class='app-icon'>
+        </div>
+        <div class='app-icon'>
+        </div>
+        <div class='app-icon'>
+        </div>
     </section>
     </div>
 </article>
@@ -80,7 +92,8 @@ let apps: App[] = [
             background: linear-gradient(135deg, rgba(black,1),rgba(black,1), rgba(black,0.85));
             border-radius: 10px;
             min-height:535px;
-            display: grid;
+            display: flex;
+            flex-wrap: wrap;
             grid-template-columns: repeat(auto-fill, 80px);
             justify-content: space-between;
             
@@ -88,18 +101,24 @@ let apps: App[] = [
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                margin:0 0 20px 0;
-                img{
+                margin:0 0 45px 0;
+                width:80px;
+                height:80px;
+                &.active{
                     border: solid 2px white;
-                    border-radius: 20px;
+                    border-radius: 20px;   
+                }
+                img{
+                    
                     margin:0 auto;
                     padding:10px;
-                    width:75px;
+                    height:75px;
                     cursor: pointer;
                 }
                 .app-name{
-                    margin:6px 0 0 0;
-                    font-size: 11px;
+                    margin:10px 0 0 0;
+                    font-size: 10px;
+                    text-align: center;
                 }
             }
         }

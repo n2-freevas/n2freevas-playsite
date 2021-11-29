@@ -9,10 +9,17 @@ function switchBaseURL() {
 
 // Create a instance of axios to use the same base url.
 axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
-const axiosAPI = axios.create({
+const n2AxiosAPI = axios.create({
   baseURL: switchBaseURL(),
   headers: {
     'authorization': 'n2freevas-api-token-Nx2gFhrRaEwEadVxxAadawS',
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
+  },
+})
+
+const normalAxiosAPI = axios.create({
+  headers: {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*'
   },
@@ -38,18 +45,30 @@ const axiosAPI = axios.create({
 
 
 const get = async (url, request?) => {
-  const res = await axiosAPI.get(url, { params: request })
+  const res = await n2AxiosAPI.get(url, { params: request })
   return res.data
 }
 
 const post = async (url, request) => {
-  const res = await axiosAPI.post(url, request)
+  const res = await n2AxiosAPI.post(url, request)
+  return res.data
+}
+
+const n_get = async (url, request?) => {
+  const res = await normalAxiosAPI.get(url, { params: request })
+  return res.data
+}
+
+const n_post = async (url, request) => {
+  const res = await normalAxiosAPI.post(url, request)
   return res.data
 }
 
 
 const Api = {
   get,
-  post
+  post,
+  n_get,
+  n_post
 }
 export default Api

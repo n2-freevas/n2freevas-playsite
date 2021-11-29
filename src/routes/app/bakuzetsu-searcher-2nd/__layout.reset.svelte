@@ -20,6 +20,7 @@
     })
 </script>
 
+<svelte:head><title>ばくぜつさあち | コトダマン単語 検索 | コトダマン辞書 検索</title></svelte:head>
 
 <header>
     <div class='n2-logo'>
