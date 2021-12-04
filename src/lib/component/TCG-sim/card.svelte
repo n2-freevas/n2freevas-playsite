@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { boardAreaInfoStore, handAreaInfoStore, deckAreaInfoStore,
-            } from '$lib/store/app/TCGsimStore'
+    import { boardAreaInfoStore, handAreaInfoStore, deckAreaInfoStore, boardListStore,
+             movingStore } from '$lib/store/app/TCGsimStore'
     import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
     
@@ -24,6 +24,7 @@
         console.log(id)
 		if(!moving){
             moving = true;
+            $movingStore = true
             if(onArea != 'board'){
                 rotate = 0
             }
@@ -39,25 +40,26 @@
 
     function onMouseUp(e: MouseEvent) {
         if(moving){
-            moving = false;
-            if(($boardAreaInfoStore.left + 200<e.x && e.x<$boardAreaInfoStore.right-200)
-            && ($boardAreaInfoStore.top < e.y && e.y<$boardAreaInfoStore.bottom)){
+            
+            if(($boardAreaInfoStore.left + 100<e.x && e.x<$boardAreaInfoStore.right)
+            && ($boardAreaInfoStore.top < e.y && e.y<$boardAreaInfoStore.bottom) && (onArea != 'board')){
                 dispatch('boardIn', {
                     id: id,
                     position: {
                         top: e.x - $boardAreaInfoStore.left,
                         left: e.y - $boardAreaInfoStore.top 
-                    }
+                    },
+                    flip: flippin
                 })
             }
             else if(($handAreaInfoStore.left <e.x && e.x<$handAreaInfoStore.right)
-            && ($handAreaInfoStore.top < e.y && e.y<$handAreaInfoStore.bottom)){
+            && ($handAreaInfoStore.top < e.y && e.y<$handAreaInfoStore.bottom) && (onArea != 'hand')){
                 dispatch('handIn', {
                     id: id,
                 })
             }
             else if(($deckAreaInfoStore.left <e.x && e.x<$deckAreaInfoStore.right)
-            && ($deckAreaInfoStore.top < e.y && e.y<$deckAreaInfoStore.bottom)){
+            && ($deckAreaInfoStore.top < e.y && e.y<$deckAreaInfoStore.bottom) && (onArea != 'deck')){
                 const height = $deckAreaInfoStore.bottom - $deckAreaInfoStore.top
                 const postPosition = e.y - $deckAreaInfoStore.top
                 const to = postPosition <= height/2 ? 'top':'bottom'
@@ -66,13 +68,13 @@
                     post: to
                 })
             }
-            else if(onArea != 'board'){
-                console.log('check')
-                pos_x = prev_pos_x
-                pos_y = prev_pos_y
-                rotate = prev_rotate
-            }
             else if(onArea == 'board'){
+                $boardListStore = $boardListStore.map(card=>{
+                    if(card.id == id){
+                        return {...card, x:pos_x, y:pos_y}
+                    } else { return card }
+                })
+            
                 dispatch('boardCardMove', {
                     id: id,
                     x: pos_x,
@@ -81,7 +83,13 @@
                     flip: flippin
                 })
             }
-            
+            else if(onArea == 'hand'){
+                pos_x = prev_pos_x
+                pos_y = prev_pos_y
+                rotate = prev_rotate
+            }
+            $movingStore = false;
+            moving = false;
         }
 	}
     function onMouseOver(){
@@ -92,26 +100,40 @@
     }
     function cardLeftRotate(){
         rotate -= 90
+        rotateSettin()
     }
     function cardRightRotate(){
         rotate += 90
+        rotateSettin()
+    }
+    function rotateSettin(){
+        $boardListStore = $boardListStore.map(card=>{
+            if(card.id == id){
+                return {...card, rotate:rotate}
+            } else { return card }
+        })
     }
     function cardFlip(){
         flippin = flippin ? false : true
+        $boardListStore = $boardListStore.map(card=>{
+            if(card.id == id){
+                return {...card, flip:flippin}
+            } else { return card }
+        })
     }
 </script>
-<!-- <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} /> -->
+<svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
 
 
 <section 
-    class= 'card-body {moving? 'movin':''} {noGuide? 'noGuide':''}' style='--pos_x:{pos_x}px;
+    class= 'card-body {moving? 'movin':''} {noGuide? 'noGuide':''} {onArea!='board'?'noBoard':''}' style='--pos_x:{pos_x}px;
             --pos_y:{pos_y}px;--img:{img_url};
             --rotate:{rotate}deg;'
     on:mouseenter={onMouseOver}
     on:mouseleave={onMouseLeave}
     >
 
-    <!-- {#if !noGuide} -->
+    {#if !$movingStore}
     <div class='card-guide {overing ? 'hover': ''}'>
         {#if overing && !moving}
         <button class='left-rotate' on:click={cardLeftRotate}></button>
@@ -119,7 +141,7 @@
         <button class='flip' on:click={cardFlip}></button>
         {/if}
     </div>
-    <!-- {/if} -->
+    {/if}
     <div class='card-surface {flippin? 'flippin':''}' on:mousedown={onMouseDown}>
         <div class='front'>
             <img src={img_url} alt=''>
@@ -153,12 +175,16 @@ img{
 }
 .card-body{
     position: absolute;
+    z-index: 100;
     left:var(--pos_x);
     top:var(--pos_y);
     width:var(--cw);
     height:var(--ch);
-    transition: 0.2s;
+    
     cursor: move;
+    &.noBoard{
+        transition: 0.2s;
+    }
     &.movin{
         transition: none;
         .card-surface{
@@ -180,6 +206,7 @@ img{
         -o-perspective:500;
         -ms-perspective:500;
         perspective: 500;
+        transition: 0.2s;
         .front, .back{
             transition: 0.2s;
             position: absolute;
@@ -187,6 +214,7 @@ img{
             backface-visibility: hidden;
             img{   
                 width:calc(var(--cw) - 16px);
+                z-index:10000;
             }
         }
         .back{

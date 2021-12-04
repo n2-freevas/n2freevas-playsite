@@ -23,6 +23,12 @@
     </article>
     
     <footer class={$modeStore}>
+        <a href='/app/tcg-simulator/game'>
+            <div></div>
+        </a>
+        <a href='/app/tcg-simulator/edit'>
+            <div></div>
+        </a>
     </footer>
 </div>
 <ToastArea/>
@@ -46,11 +52,6 @@
         &::-webkit-scrollbar {  /* Chrome, Safari 対応 */
             display:none;
         }
-    }
-    #tcg-all-compnents-left-side{
-        // display: flex;
-        // flex-direction: column;
-        // justify-content: space-between;
     }
     header{
         display: flex;
@@ -109,16 +110,24 @@
     }
     
     footer{
-        
         top:0;bottom:0;
         right:0;
         width:70px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
         &.light{
             background: white;
         }
         &.dark{
             background: black;
         }
-        
+        a{
+            div{
+                width:50px;
+                height:50px;
+                background: yellow;
+            }
+        }
     }
 </style>

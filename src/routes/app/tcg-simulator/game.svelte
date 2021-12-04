@@ -9,108 +9,12 @@
             deckListStore, handListStore, boardListStore}
     from '$lib/store/app/TCGsimStore'
     
+    let files
     let isPC = true
     let window_width = 0
     let window_height = 0 
     let window_width_require = 1200
     let window_height_require = 800
-
-    $boardListStore = [
-            {
-            id:1,
-            url:"/img/tcg-sim/dmex17-003-[4].jpeg",
-            burl:"/img/tcg-sim/dmr21-l02-[4].jpeg",
-            x:100,
-            y:100,
-            flip: false,
-            rotate:0}
-        ]
-    $handListStore = [
-        {id:400,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",x:0, y:0,
-        burl:"/img/tcg-sim/card.svg", rotate:0, flip:false},
-        {id:401,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",x:0, y:0,
-        burl:"/img/tcg-sim/card.svg", rotate:0, flip:false},
-        ]
-    $deckListStore=[
-        {id:2,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:3,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:4,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:5,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:6,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:7,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:8,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:9,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:10,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:11,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:12,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:13,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:14,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:15,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:16,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:17,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:18,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:19,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:20,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:21,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:22,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:23,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:24,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:25,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:26,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:27,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:28,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:29,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:30,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:31,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:32,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:33,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:34,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:35,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:36,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:37,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:38,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:39,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true},
-        {id:40,url:"/img/tcg-sim/dmbd16-011-[4].jpeg",
-        burl:"/img/tcg-sim/card.svg",rotate:110,x:0,y:0,flip:true}
-    ]
     
     function getBoardInfo(){
         const boardInfo = document.getElementById('board').getBoundingClientRect()
@@ -143,37 +47,36 @@
 
     deckAreaInfoStore
     function windowChangeHandler(){
-        // window_width = Viewport.Width
-        // window_height = Viewport.Height
-        if(window_width < window_width_require || window_height_require > window_height){isPC = false}
-        else {isPC = true}
-        
+        window_width = window.innerWidth
+        window_height = window.innerHeight
+        if (window_width < window_width_require || window_height_require > window_height){isPC = false}
         getBoardInfo()
         getHandInfo()
         getDeckInfo()
     }
     
-    function cardBoardInFromOutside(event){
+    function cardBoardInFromHand(event){
         const id = event.detail.id
         const position = event.detail.position
+        const flippin = event.detail.flip
         const target = $handListStore.filter(card => card.id == id).pop()
         $handListStore = $handListStore.map(card => {
             return card.id != id ? card: null
         })
-        $boardListStore = [...$boardListStore, {...target,x:position.top-($cardWidth), y:position.left, flip: false, rotate:0}]
-        // window.setTimeout(
-        //     function(){
-        //         $handListStore = $handListStore.filter(card => card != undefined)
-        //     }
-        //     ,300
-        // )
+        $boardListStore = [...$boardListStore, {...target,x:position.top-($cardWidth), y:position.left, flip: flippin, rotate:0}]
+        window.setTimeout(
+            function(){
+                $handListStore = $handListStore.filter(card => card != undefined)
+            }
+            ,300
+        )
     }
     function cardBoardInFromDeck(event){
         const id = event.detail.id
         const position = event.detail.position
         const target = $deckListStore.filter(card => card.id == id).pop()
         $deckListStore = $deckListStore.filter(card=>card.id != id)
-        $boardListStore = [...$boardListStore, {...target,x:position.top-($cardWidth), y:position.left, flip: false, rotate:0}]
+        $boardListStore = [...$boardListStore, {...target,x:position.top-($cardWidth), y:position.left, rotate:0}]
     }
 
     function cardBounceFromBoardToHand(event){
@@ -231,12 +134,9 @@
     })
 </script>
 
-
-<svelte:body on:viewportchanged={() => {
-    windowChangeHandler()
-  }}/>
+<svelte:window bind:innerWidth={window_width} bind:innerHeight={window_height}
+/>
 {#if isPC}
-
 <article id='board' class={$modeStore}>
     {#each $boardListStore as bs}
     <Card
@@ -251,7 +151,7 @@
 </article>
 <article id='myHand'>
     <div id='handArea-main'></div>
-    <Hand on:boardInFromHand={cardBoardInFromOutside}></Hand>
+    <Hand on:boardInFromHand={cardBoardInFromHand}></Hand>
 </article>
 <article id='myDeck'>
     <div id = 'deckArea-main'></div>
@@ -265,13 +165,16 @@
     <div class='panel'>
         <h1>SORRY!</h1>
         <p>もっと大きい画面でご利用ください。</p>
+        {#if window_width >= window_width_require && window_height_require <= window_height}
+            <p class='clear'>条件をクリアしました！リロードしてください。</p>
+        {/if}
         <!-- svelte-ignore missing-declaration -->
         <div class='device-exp'>
             <div class='device-figure'>
                 <div class='width'>{`${window_width_require}px`}<span>{` ( ${window_width}px )`}</span></div>
                 <div class='height'>{`${window_height_require}px`}<span>{` ( ${window_height}px )`}</span></div>
                 <img src='/img/tcg-sim/require_device.svg' alt='縦:横 = 400px:700px の端末でご利用ください'>
-            </div>    
+            </div>
             
         </div>
     </div>
@@ -280,9 +183,10 @@
 
 <style lang="scss">
     #board{
-        width:900px;
+        width:825px;
         height:550px;
-        margin:0 auto;
+        z-index:1;
+        margin:0 auto 0 200px;
         transform: rotateX(10deg);
         border-radius: 30px;
         position: relative;
@@ -295,6 +199,7 @@
     }
     #myHand{
         position:fixed;
+        z-index:0;
         width:100%;
         height:75px;
         bottom:0;
@@ -305,40 +210,23 @@
             left:50%;
             transform: translate(-50%, 0);
             bottom: 0;
-            &:hover{
-                border: solid 2px white;
-                border-radius: 20px;
-                &::before{
-                    position: absolute;
-                    content:'to hand';
-                    margin:10px;
-                }
-            }
+            pointer-events: none;
         }
     }
     #myDeck{
         position: fixed;
-        bottom:250px;
+        z-index:0;
+        bottom:130px;
         left:0px;
         #deckArea-main{
             position: absolute;
             width:200px;
-            height:400px;
+            height:300px;
             top:50%;
             left:-50%;
             transform: translate(0, -50%);
             bottom: 0;
-            &:hover{
-                &::before{
-                    border: solid 2px white;
-                    border-radius: 20px;
-                    width:100%;
-                    height:100%;
-                    position: absolute;
-                    content:'';
-                    margin:10px;
-                }
-            }
+            pointer-events: none;
         }
     }
     
@@ -349,36 +237,41 @@
         border-radius: 20px;
         width: 70%;
         max-width: 600px;
+        
+        .clear{
+            color:yellow
+        }
+        
         .panel{
             padding:20px;
-                .device-exp{
-                color: white;
-                position: relative;
-                max-width: 310px;
-                margin: 50px auto;
-                .device-figure{
-                    width:80%;
-                    margin:0 auto;
-                    font-size: 18px;
-                    span{
-                        font-size: 15px;
-                        line-height: 18px;
-                        
-                    }
-                    .width{
-                        position: absolute;
-                        left:50%;
-                        top:-30px;
-                        transform: translate(-50%, 0);
-                    }
-                    .height{
-                        position: absolute;
-                        top:50%;
-                        right:-55px;
-                        transform: rotate(90deg);
-                    }       
-                }   
-            }
+            .device-exp{
+            color: white;
+            position: relative;
+            max-width: 310px;
+            margin: 50px auto;
+            .device-figure{
+                width:80%;
+                margin:0 auto;
+                font-size: 18px;
+                span{
+                    font-size: 15px;
+                    line-height: 18px;
+                    
+                }
+                .width{
+                    position: absolute;
+                    left:50%;
+                    top:-30px;
+                    transform: translate(-50%, 0);
+                }
+                .height{
+                    position: absolute;
+                    top:50%;
+                    right:-55px;
+                    transform: rotate(90deg);
+                }       
+            }   
         }
     }
+}
 </style>

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    const myname = 'Taro <span style="color:#ff0000">N</span>onoyama'
+    const myname = 'Making' //'Taro <span style="color:#ff0000">N</span>onoyama'
     const mySex = 'Male'
     const myBloodType = 'A Rh+'
     const myBirthDay = new Date('1996-09-30T00:26:29+09:00')

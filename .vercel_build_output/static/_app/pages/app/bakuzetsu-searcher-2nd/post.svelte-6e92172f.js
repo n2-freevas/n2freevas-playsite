@@ -1,1 +1,0 @@
-import{S as o,i as t,s as e,A as a}from"../../../chunks/vendor-081b076b.js";function l(s){return a(async()=>{console.log("post")}),[]}class u extends o{constructor(n){super();t(this,n,l,null,e,{})}}export{u as default};

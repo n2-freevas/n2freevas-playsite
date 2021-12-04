@@ -51,7 +51,7 @@ export const getPages = async (database_id, request?) => {
     default_request = {
       "filter": {
         "property":"Open_flg",
-        "checkbox": {"equals": true}  
+        "checkbox": {"equals": true}
       },
       "sorts": [
         {

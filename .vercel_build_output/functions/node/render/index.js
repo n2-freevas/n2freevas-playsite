@@ -8855,7 +8855,7 @@ function add_attribute(name, value, boolean) {
 }
 function afterUpdate() {
 }
-var css$z = {
+var css$A = {
   code: "#svelte-announcer.svelte-1j55zn5{position:absolute;left:0;top:0;clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden;white-space:nowrap;width:1px;height:1px}",
   map: null
 };
@@ -8880,7 +8880,7 @@ var Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     $$bindings.props_1(props_1);
   if ($$props.props_2 === void 0 && $$bindings.props_2 && props_2 !== void 0)
     $$bindings.props_2(props_2);
-  $$result.css.add(css$z);
+  $$result.css.add(css$A);
   {
     stores.page.set(page2);
   }
@@ -8918,9 +8918,9 @@ function init(settings = default_settings) {
     amp: false,
     dev: false,
     entry: {
-      file: assets + "/_app/start-aaef2536.js",
+      file: assets + "/_app/start-e82d5726.js",
       css: [assets + "/_app/assets/start-61d1577b.css", assets + "/_app/assets/vendor-42482fb6.css"],
-      js: [assets + "/_app/start-aaef2536.js", assets + "/_app/chunks/vendor-081b076b.js"]
+      js: [assets + "/_app/start-e82d5726.js", assets + "/_app/chunks/vendor-cd26605b.js"]
     },
     fetched: void 0,
     floc: false,
@@ -9025,6 +9025,13 @@ var manifest = {
     },
     {
       type: "page",
+      pattern: /^\/app\/tcg-simulator\/edit\/?$/,
+      params: empty,
+      a: ["src/routes/app/tcg-simulator/__layout.reset.svelte", "src/routes/app/tcg-simulator/edit.svelte"],
+      b: []
+    },
+    {
+      type: "page",
       pattern: /^\/app\/tcg-simulator\/game\/?$/,
       params: empty,
       a: ["src/routes/app/tcg-simulator/__layout.reset.svelte", "src/routes/app/tcg-simulator/game.svelte"],
@@ -9077,7 +9084,7 @@ var module_lookup = {
     return analyze;
   }),
   "src/routes/app/bakuzetsu-searcher-2nd/edit.svelte": () => Promise.resolve().then(function() {
-    return edit;
+    return edit$1;
   }),
   "src/routes/app/bakuzetsu-searcher-2nd/post.svelte": () => Promise.resolve().then(function() {
     return post;
@@ -9088,6 +9095,9 @@ var module_lookup = {
   "src/routes/app/tcg-simulator/__layout.reset.svelte": () => Promise.resolve().then(function() {
     return __layout_reset;
   }),
+  "src/routes/app/tcg-simulator/edit.svelte": () => Promise.resolve().then(function() {
+    return edit;
+  }),
   "src/routes/app/tcg-simulator/game.svelte": () => Promise.resolve().then(function() {
     return game;
   }),
@@ -9095,7 +9105,7 @@ var module_lookup = {
     return app;
   })
 };
-var metadata_lookup = { "src/routes/__layout.svelte": { "entry": "pages/__layout.svelte-60babef2.js", "css": ["assets/pages/__layout.svelte-c6104550.css", "assets/vendor-42482fb6.css", "assets/ToastArea-00e911a5.css"], "js": ["pages/__layout.svelte-60babef2.js", "chunks/vendor-081b076b.js", "chunks/MainMenu-618d49d0.js", "chunks/ToastArea-c267bbc2.js"], "styles": [] }, ".svelte-kit/build/components/error.svelte": { "entry": "error.svelte-5e9574d9.js", "css": ["assets/vendor-42482fb6.css"], "js": ["error.svelte-5e9574d9.js", "chunks/vendor-081b076b.js"], "styles": [] }, "src/routes/index.svelte": { "entry": "pages/index.svelte-913e38bc.js", "css": ["assets/pages/index.svelte-7ded9e66.css", "assets/vendor-42482fb6.css"], "js": ["pages/index.svelte-913e38bc.js", "chunks/vendor-081b076b.js", "chunks/MainMenu-618d49d0.js"], "styles": [] }, "src/routes/introduce/index.svelte": { "entry": "pages/introduce/index.svelte-3f695cdc.js", "css": ["assets/pages/introduce/index.svelte-627fe975.css", "assets/vendor-42482fb6.css"], "js": ["pages/introduce/index.svelte-3f695cdc.js", "chunks/vendor-081b076b.js"], "styles": [] }, "src/routes/contact.svelte": { "entry": "pages/contact.svelte-dc59d1ec.js", "css": ["assets/pages/contact.svelte-297997af.css", "assets/vendor-42482fb6.css"], "js": ["pages/contact.svelte-dc59d1ec.js", "chunks/vendor-081b076b.js"], "styles": [] }, "src/routes/blog/list.svelte": { "entry": "pages/blog/list.svelte-e72fc64a.js", "css": ["assets/pages/blog/list.svelte-44f394b5.css", "assets/vendor-42482fb6.css"], "js": ["pages/blog/list.svelte-e72fc64a.js", "chunks/vendor-081b076b.js", "chunks/blogApi-42a86245.js", "chunks/api-b360e1be.js"], "styles": [] }, "src/routes/blog/page.svelte": { "entry": "pages/blog/page.svelte-0d2a5ea6.js", "css": ["assets/vendor-42482fb6.css"], "js": ["pages/blog/page.svelte-0d2a5ea6.js", "chunks/vendor-081b076b.js", "chunks/blogApi-42a86245.js", "chunks/api-b360e1be.js"], "styles": [] }, "src/routes/show/index.svelte": { "entry": "pages/show/index.svelte-3aedd2ab.js", "css": ["assets/pages/show/index.svelte-e2989a52.css", "assets/vendor-42482fb6.css", "assets/bs2ndLoader-8a29ed63.css"], "js": ["pages/show/index.svelte-3aedd2ab.js", "chunks/vendor-081b076b.js", "chunks/bs2ndLoader-145c5527.js"], "styles": [] }, "src/routes/app/bakuzetsu-searcher-2nd/__layout.reset.svelte": { "entry": "pages/app/bakuzetsu-searcher-2nd/__layout.reset.svelte-625cbf85.js", "css": ["assets/pages/app/bakuzetsu-searcher-2nd/__layout.reset.svelte-d62b57c2.css", "assets/vendor-42482fb6.css", "assets/ToastArea-00e911a5.css"], "js": ["pages/app/bakuzetsu-searcher-2nd/__layout.reset.svelte-625cbf85.js", "chunks/vendor-081b076b.js", "chunks/ToastArea-c267bbc2.js"], "styles": [] }, "src/routes/app/bakuzetsu-searcher-2nd/analyze.svelte": { "entry": "pages/app/bakuzetsu-searcher-2nd/analyze.svelte-ae28f433.js", "css": ["assets/pages/app/bakuzetsu-searcher-2nd/analyze.svelte-29b42ed3.css", "assets/vendor-42482fb6.css", "assets/bs2ndLoader-8a29ed63.css"], "js": ["pages/app/bakuzetsu-searcher-2nd/analyze.svelte-ae28f433.js", "chunks/vendor-081b076b.js", "chunks/summon-4c60e270.js", "chunks/api-b360e1be.js", "chunks/bs2ndLoader-145c5527.js"], "styles": [] }, "src/routes/app/bakuzetsu-searcher-2nd/edit.svelte": { "entry": "pages/app/bakuzetsu-searcher-2nd/edit.svelte-98ba1c89.js", "css": ["assets/pages/app/bakuzetsu-searcher-2nd/edit.svelte-0fbbe2cb.css", "assets/vendor-42482fb6.css", "assets/bs2ndLoader-8a29ed63.css"], "js": ["pages/app/bakuzetsu-searcher-2nd/edit.svelte-98ba1c89.js", "chunks/vendor-081b076b.js", "chunks/summon-4c60e270.js", "chunks/api-b360e1be.js", "chunks/bs2ndLoader-145c5527.js"], "styles": [] }, "src/routes/app/bakuzetsu-searcher-2nd/post.svelte": { "entry": "pages/app/bakuzetsu-searcher-2nd/post.svelte-6e92172f.js", "css": ["assets/vendor-42482fb6.css"], "js": ["pages/app/bakuzetsu-searcher-2nd/post.svelte-6e92172f.js", "chunks/vendor-081b076b.js"], "styles": [] }, "src/routes/app/DM-Downloader/collect.svelte": { "entry": "pages/app/DM-Downloader/collect.svelte-185f3a18.js", "css": ["assets/vendor-42482fb6.css"], "js": ["pages/app/DM-Downloader/collect.svelte-185f3a18.js", "chunks/vendor-081b076b.js", "chunks/api-b360e1be.js"], "styles": [] }, "src/routes/app/tcg-simulator/__layout.reset.svelte": { "entry": "pages/app/tcg-simulator/__layout.reset.svelte-e9f4ea9c.js", "css": ["assets/pages/app/tcg-simulator/__layout.reset.svelte-b45a6d21.css", "assets/vendor-42482fb6.css", "assets/ToastArea-00e911a5.css"], "js": ["pages/app/tcg-simulator/__layout.reset.svelte-e9f4ea9c.js", "chunks/vendor-081b076b.js", "chunks/ToastArea-c267bbc2.js", "chunks/TCGsimStore-efdd8d9c.js"], "styles": [] }, "src/routes/app/tcg-simulator/game.svelte": { "entry": "pages/app/tcg-simulator/game.svelte-47dcba06.js", "css": ["assets/pages/app/tcg-simulator/game.svelte-6890c9bd.css", "assets/vendor-42482fb6.css"], "js": ["pages/app/tcg-simulator/game.svelte-47dcba06.js", "chunks/vendor-081b076b.js", "chunks/TCGsimStore-efdd8d9c.js"], "styles": [] }, "src/routes/app.svelte": { "entry": "pages/app.svelte-e4bbc89c.js", "css": ["assets/pages/app.svelte-f9f78e1b.css", "assets/vendor-42482fb6.css"], "js": ["pages/app.svelte-e4bbc89c.js", "chunks/vendor-081b076b.js"], "styles": [] } };
+var metadata_lookup = { "src/routes/__layout.svelte": { "entry": "pages/__layout.svelte-388f8596.js", "css": ["assets/pages/__layout.svelte-c6104550.css", "assets/vendor-42482fb6.css", "assets/ToastArea-00e911a5.css"], "js": ["pages/__layout.svelte-388f8596.js", "chunks/vendor-cd26605b.js", "chunks/MainMenu-9e2659a3.js", "chunks/ToastArea-bde0df2b.js"], "styles": [] }, ".svelte-kit/build/components/error.svelte": { "entry": "error.svelte-9ad5eac8.js", "css": ["assets/vendor-42482fb6.css"], "js": ["error.svelte-9ad5eac8.js", "chunks/vendor-cd26605b.js"], "styles": [] }, "src/routes/index.svelte": { "entry": "pages/index.svelte-a6a92e60.js", "css": ["assets/pages/index.svelte-7ded9e66.css", "assets/vendor-42482fb6.css"], "js": ["pages/index.svelte-a6a92e60.js", "chunks/vendor-cd26605b.js", "chunks/MainMenu-9e2659a3.js"], "styles": [] }, "src/routes/introduce/index.svelte": { "entry": "pages/introduce/index.svelte-d7967b11.js", "css": ["assets/pages/introduce/index.svelte-627fe975.css", "assets/vendor-42482fb6.css"], "js": ["pages/introduce/index.svelte-d7967b11.js", "chunks/vendor-cd26605b.js"], "styles": [] }, "src/routes/contact.svelte": { "entry": "pages/contact.svelte-f5fbed3e.js", "css": ["assets/pages/contact.svelte-297997af.css", "assets/vendor-42482fb6.css"], "js": ["pages/contact.svelte-f5fbed3e.js", "chunks/vendor-cd26605b.js"], "styles": [] }, "src/routes/blog/list.svelte": { "entry": "pages/blog/list.svelte-7348812e.js", "css": ["assets/pages/blog/list.svelte-44f394b5.css", "assets/vendor-42482fb6.css"], "js": ["pages/blog/list.svelte-7348812e.js", "chunks/vendor-cd26605b.js", "chunks/api-275c89af.js"], "styles": [] }, "src/routes/blog/page.svelte": { "entry": "pages/blog/page.svelte-ff79a071.js", "css": ["assets/vendor-42482fb6.css"], "js": ["pages/blog/page.svelte-ff79a071.js", "chunks/vendor-cd26605b.js"], "styles": [] }, "src/routes/show/index.svelte": { "entry": "pages/show/index.svelte-c0987365.js", "css": ["assets/pages/show/index.svelte-e2989a52.css", "assets/vendor-42482fb6.css", "assets/bs2ndLoader-8a29ed63.css"], "js": ["pages/show/index.svelte-c0987365.js", "chunks/vendor-cd26605b.js", "chunks/bs2ndLoader-078618be.js"], "styles": [] }, "src/routes/app/bakuzetsu-searcher-2nd/__layout.reset.svelte": { "entry": "pages/app/bakuzetsu-searcher-2nd/__layout.reset.svelte-72401d69.js", "css": ["assets/pages/app/bakuzetsu-searcher-2nd/__layout.reset.svelte-d62b57c2.css", "assets/vendor-42482fb6.css", "assets/ToastArea-00e911a5.css"], "js": ["pages/app/bakuzetsu-searcher-2nd/__layout.reset.svelte-72401d69.js", "chunks/vendor-cd26605b.js", "chunks/ToastArea-bde0df2b.js"], "styles": [] }, "src/routes/app/bakuzetsu-searcher-2nd/analyze.svelte": { "entry": "pages/app/bakuzetsu-searcher-2nd/analyze.svelte-2c888323.js", "css": ["assets/pages/app/bakuzetsu-searcher-2nd/analyze.svelte-29b42ed3.css", "assets/vendor-42482fb6.css", "assets/bs2ndLoader-8a29ed63.css"], "js": ["pages/app/bakuzetsu-searcher-2nd/analyze.svelte-2c888323.js", "chunks/vendor-cd26605b.js", "chunks/summon-6d9e565d.js", "chunks/api-275c89af.js", "chunks/bs2ndLoader-078618be.js"], "styles": [] }, "src/routes/app/bakuzetsu-searcher-2nd/edit.svelte": { "entry": "pages/app/bakuzetsu-searcher-2nd/edit.svelte-6593f541.js", "css": ["assets/pages/app/bakuzetsu-searcher-2nd/edit.svelte-0fbbe2cb.css", "assets/vendor-42482fb6.css", "assets/bs2ndLoader-8a29ed63.css"], "js": ["pages/app/bakuzetsu-searcher-2nd/edit.svelte-6593f541.js", "chunks/vendor-cd26605b.js", "chunks/summon-6d9e565d.js", "chunks/api-275c89af.js", "chunks/bs2ndLoader-078618be.js"], "styles": [] }, "src/routes/app/bakuzetsu-searcher-2nd/post.svelte": { "entry": "pages/app/bakuzetsu-searcher-2nd/post.svelte-5527c911.js", "css": ["assets/vendor-42482fb6.css"], "js": ["pages/app/bakuzetsu-searcher-2nd/post.svelte-5527c911.js", "chunks/vendor-cd26605b.js"], "styles": [] }, "src/routes/app/DM-Downloader/collect.svelte": { "entry": "pages/app/DM-Downloader/collect.svelte-c610ad34.js", "css": ["assets/vendor-42482fb6.css"], "js": ["pages/app/DM-Downloader/collect.svelte-c610ad34.js", "chunks/vendor-cd26605b.js", "chunks/api-275c89af.js"], "styles": [] }, "src/routes/app/tcg-simulator/__layout.reset.svelte": { "entry": "pages/app/tcg-simulator/__layout.reset.svelte-bc5e0f19.js", "css": ["assets/pages/app/tcg-simulator/__layout.reset.svelte-73878397.css", "assets/vendor-42482fb6.css", "assets/ToastArea-00e911a5.css"], "js": ["pages/app/tcg-simulator/__layout.reset.svelte-bc5e0f19.js", "chunks/vendor-cd26605b.js", "chunks/ToastArea-bde0df2b.js", "chunks/TCGsimStore-4e993a22.js"], "styles": [] }, "src/routes/app/tcg-simulator/edit.svelte": { "entry": "pages/app/tcg-simulator/edit.svelte-2f978490.js", "css": ["assets/pages/app/tcg-simulator/edit.svelte-d6139e6a.css", "assets/vendor-42482fb6.css", "assets/deck-28461604.css"], "js": ["pages/app/tcg-simulator/edit.svelte-2f978490.js", "chunks/vendor-cd26605b.js", "chunks/TCGsimStore-4e993a22.js", "chunks/deck-4b33b201.js"], "styles": [] }, "src/routes/app/tcg-simulator/game.svelte": { "entry": "pages/app/tcg-simulator/game.svelte-d1a4376e.js", "css": ["assets/pages/app/tcg-simulator/game.svelte-d520b168.css", "assets/vendor-42482fb6.css", "assets/deck-28461604.css"], "js": ["pages/app/tcg-simulator/game.svelte-d1a4376e.js", "chunks/vendor-cd26605b.js", "chunks/deck-4b33b201.js", "chunks/TCGsimStore-4e993a22.js"], "styles": [] }, "src/routes/app.svelte": { "entry": "pages/app.svelte-659cbdfd.js", "css": ["assets/pages/app.svelte-f9f78e1b.css", "assets/vendor-42482fb6.css"], "js": ["pages/app.svelte-659cbdfd.js", "chunks/vendor-cd26605b.js"], "styles": [] } };
 async function load_component(file) {
   const { entry, css: css2, js, styles } = metadata_lookup[file];
   return {
@@ -9219,7 +9229,7 @@ var MediaQuery = create_ssr_component(($$result, $$props, $$bindings, slots) => 
     $$bindings.query(query);
   return `${slots.default ? slots.default({ matches }) : ``}`;
 });
-var css$y = {
+var css$z = {
   code: ".menu-box.svelte-8jba9e.svelte-8jba9e{position:relative;display:inline-block}.menu-box.svelte-8jba9e .menu-name.svelte-8jba9e{border-radius:20px;padding:5px 20px}.menu-box.svelte-8jba9e .menu-name.svelte-8jba9e:hover{background:white}.menu-box.svelte-8jba9e .menu-name:hover p.svelte-8jba9e{color:black}.menu-box.svelte-8jba9e .explain-box.svelte-8jba9e{z-index:100;position:absolute;margin-top:30px;right:0;opacity:0;background:linear-gradient(90deg, #141414, rgba(20, 20, 20, 0.5));padding:20px;display:flex;flex-direction:row;align-items:center;transition:0.2s}.menu-box.svelte-8jba9e .explain-box.open.svelte-8jba9e{opacity:1}.menu-box.svelte-8jba9e .explain-box img.svelte-8jba9e{width:50px}.menu-box.svelte-8jba9e .explain-box p.svelte-8jba9e{padding:20px;width:300px;color:white}",
   map: null
 };
@@ -9236,13 +9246,13 @@ var HeaderMenuBox = create_ssr_component(($$result, $$props, $$bindings, slots) 
     $$bindings.img(img);
   if ($$props.explain === void 0 && $$bindings.explain && explain !== void 0)
     $$bindings.explain(explain);
-  $$result.css.add(css$y);
+  $$result.css.add(css$z);
   return `<div class="${"menu-box svelte-8jba9e"}"><div class="${"menu-name svelte-8jba9e"}"><a${add_attribute("href", path, 0)}><p class="${"svelte-8jba9e"}">${escape(name)}</p></a></div>
     <div class="${"explain-box " + escape("") + " svelte-8jba9e"}"><img${add_attribute("src", img, 0)} alt="${""}" class="${"svelte-8jba9e"}">
         <p class="${"svelte-8jba9e"}"><!-- HTML_TAG_START -->${explain}<!-- HTML_TAG_END --></p></div>
 </div>`;
 });
-var css$x = {
+var css$y = {
   code: ".menu-box.svelte-13vu3ny.svelte-13vu3ny{padding:15px 10px;display:flex;height:100px;flex-direction:row}.menu-box.svelte-13vu3ny img.icon.svelte-13vu3ny{margin:0 10px;height:50px}.menu-box.svelte-13vu3ny img.arrow.svelte-13vu3ny{transform:rotate(-90deg);height:15px;margin:auto 0}.menu-box.svelte-13vu3ny .text.svelte-13vu3ny{padding:0 5px;width:230px}.menu-box.svelte-13vu3ny .text .name.svelte-13vu3ny{font-size:13px;margin:0 0 5px 0}.menu-box.svelte-13vu3ny .text .explain.svelte-13vu3ny{font-size:10px}",
   map: null
 };
@@ -9259,7 +9269,7 @@ var HambergerMenuBox = create_ssr_component(($$result, $$props, $$bindings, slot
     $$bindings.img(img);
   if ($$props.explain === void 0 && $$bindings.explain && explain !== void 0)
     $$bindings.explain(explain);
-  $$result.css.add(css$x);
+  $$result.css.add(css$y);
   return `<a${add_attribute("href", path, 0)}><div class="${"menu-box svelte-13vu3ny"}"><img class="${"icon svelte-13vu3ny"}"${add_attribute("src", img, 0)} alt="${""}">
         <div class="${"text svelte-13vu3ny"}"><p class="${"name svelte-13vu3ny"}">${escape(name)}</p>
             <p class="${"explain svelte-13vu3ny"}"><!-- HTML_TAG_START -->${explain}<!-- HTML_TAG_END --></p></div>
@@ -9417,7 +9427,7 @@ function tweened(value, defaults2 = {}) {
     subscribe: store.subscribe
   };
 }
-var css$w = {
+var css$x = {
   code: "._toastItem.svelte-j9nwjb{width:var(--toastWidth, 16rem);height:var(--toastHeight, auto);min-height:var(--toastMinHeight, 3.5rem);margin:var(--toastMargin, 0 0 0.5rem 0);padding:var(--toastPadding, 0);background:var(--toastBackground, rgba(66, 66, 66, 0.9));color:var(--toastColor, #fff);box-shadow:var(--toastBoxShadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06));border:var(--toastBorder, none);border-radius:var(--toastBorderRadius, 0.125rem);position:relative;display:flex;flex-direction:row;align-items:center;overflow:hidden;will-change:transform, opacity;-webkit-tap-highlight-color:transparent}._toastMsg.svelte-j9nwjb{padding:var(--toastMsgPadding, 0.75rem 0.5rem);flex:1 1 0%}.pe.svelte-j9nwjb,._toastMsg.svelte-j9nwjb a{pointer-events:auto}._toastBtn.svelte-j9nwjb{width:2rem;height:100%;font:1rem sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;outline:none}._toastBar.svelte-j9nwjb{top:var(--toastBarTop, auto);right:var(--toastBarRight, auto);bottom:var(--toastBarBottom, 0);left:var(--toastBarLeft, 0);height:var(--toastBarHeight, 6px);width:var(--toastBarWidth, 100%);position:absolute;display:block;-webkit-appearance:none;-moz-appearance:none;appearance:none;border:none;background:transparent;pointer-events:none}._toastBar.svelte-j9nwjb::-webkit-progress-bar{background:transparent}._toastBar.svelte-j9nwjb::-webkit-progress-value{background:var(--toastProgressBackground, var(--toastBarBackground, rgba(33, 150, 243, 0.75)))}._toastBar.svelte-j9nwjb::-moz-progress-bar{background:var(--toastProgressBackground, var(--toastBarBackground, rgba(33, 150, 243, 0.75)))}",
   map: null
 };
@@ -9447,7 +9457,7 @@ var ToastItem = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   });
   if ($$props.item === void 0 && $$bindings.item && item !== void 0)
     $$bindings.item(item);
-  $$result.css.add(css$w);
+  $$result.css.add(css$x);
   {
     if (typeof item.progress !== "undefined") {
       item.next = item.progress;
@@ -9464,7 +9474,7 @@ var ToastItem = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   ${item.dismissable ? `<div class="${"_toastBtn pe svelte-j9nwjb"}" role="${"button"}" tabindex="${"-1"}">\u2715</div>` : ``}
   <progress class="${"_toastBar svelte-j9nwjb"}"${add_attribute("value", $progress, 0)}></progress></div>`;
 });
-var css$v = {
+var css$w = {
   code: "._toastContainer.svelte-7xr3c1{top:var(--toastContainerTop, 1.5rem);right:var(--toastContainerRight, 2rem);bottom:var(--toastContainerBottom, auto);left:var(--toastContainerLeft, auto);position:fixed;margin:0;padding:0;list-style-type:none;pointer-events:none;z-index:9999}",
   map: null
 };
@@ -9479,7 +9489,7 @@ var SvelteToast = create_ssr_component(($$result, $$props, $$bindings, slots) =>
     $$bindings.options(options2);
   if ($$props.target === void 0 && $$bindings.target && target !== void 0)
     $$bindings.target(target);
-  $$result.css.add(css$v);
+  $$result.css.add(css$w);
   {
     toast._init(target, options2);
   }
@@ -9488,25 +9498,25 @@ var SvelteToast = create_ssr_component(($$result, $$props, $$bindings, slots) =>
   return `<ul class="${"_toastContainer svelte-7xr3c1"}">${each(items, (item) => `<li${add_attribute("style", getCss(item.theme), 0)}>${validate_component(ToastItem, "ToastItem").$$render($$result, { item }, {}, {})}
     </li>`)}</ul>`;
 });
-var css$u = {
+var css$v = {
   code: ".toast_wrap.svelte-dznte4{--toastMsgPadding:10px 20px;font-size:0.85rem}.error_wrap.svelte-dznte4{--toastWidth:100%;--toastMaxWidth:500px;--toastMinHeight:1.5rem}",
   map: null
 };
 var ToastArea = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  $$result.css.add(css$u);
+  $$result.css.add(css$v);
   return `<div class="${"toast_wrap svelte-dznte4"}">${validate_component(SvelteToast, "SvelteToast").$$render($$result, {}, {}, {})}</div>
 
 <div class="${"toast_wrap error_wrap svelte-dznte4"}">${validate_component(SvelteToast, "SvelteToast").$$render($$result, { target: "error" }, {}, {})}
 </div>`;
 });
-var css$t = {
+var css$u = {
   code: "header.svelte-1qqhg8r.svelte-1qqhg8r{background:black;display:flex;justify-content:space-between;align-items:center;height:60px}header.svelte-1qqhg8r .n2-logo.svelte-1qqhg8r{padding:10px}header.svelte-1qqhg8r .n2-logo img.svelte-1qqhg8r{height:30px}header.svelte-1qqhg8r .menu-row-list.svelte-1qqhg8r{margin:0 20px}header.svelte-1qqhg8r .hamburger-menu.svelte-1qqhg8r{position:relative;padding:10px}header.svelte-1qqhg8r .hamburger-menu .hamburger-button .bar.svelte-1qqhg8r{display:block;background-color:#fff;height:4px;width:30px;border-radius:1px}header.svelte-1qqhg8r .hamburger-menu .hamburger-button .bar1.svelte-1qqhg8r{transform:translateY(-6px);transition:transform 0.3s}header.svelte-1qqhg8r .hamburger-menu .hamburger-button .bar3.svelte-1qqhg8r{transform:translateY(6px);transition:transform 0.3s}header.svelte-1qqhg8r .hamburger-menu .hamburger-slider.svelte-1qqhg8r{position:fixed;z-index:100;width:300px;top:100px;right:-320px;background:linear-gradient(90deg, black, rgba(0, 0, 0, 0.8));transition:0.3s}header.svelte-1qqhg8r .hamburger-menu .hamburger-slider.open.svelte-1qqhg8r{right:0}",
   map: null
 };
 var _layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $mainmenus, $$unsubscribe_mainmenus;
   $$unsubscribe_mainmenus = subscribe(mainmenus, (value) => $mainmenus = value);
-  $$result.css.add(css$t);
+  $$result.css.add(css$u);
   $$unsubscribe_mainmenus();
   return `<header class="${"svelte-1qqhg8r"}"><div class="${"n2-logo svelte-1qqhg8r"}"><a href="${"/"}"><img src="${"/img/n2-icon-white.svg"}" alt="${""}" class="${"svelte-1qqhg8r"}"></a></div>
     ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
@@ -9563,7 +9573,7 @@ var error = /* @__PURE__ */ Object.freeze({
   "default": Error$1,
   load
 });
-var css$s = {
+var css$t = {
   code: ".homebutton-box.svelte-10fykjs.svelte-10fykjs{position:relative;width:100px;height:100px;background:white;border-radius:15px;margin:15px;transition:0.5s}.homebutton-box.focus.svelte-10fykjs.svelte-10fykjs{border-radius:0px}.homebutton-box.svelte-10fykjs .icons.svelte-10fykjs{position:absolute;display:flex;flex-direction:column;justify-content:space-around;--topval:10px;top:var(--topval);left:var(--topval);width:calc(100% - var(--topval) * 2);height:calc(100% - var(--topval) * 2)}.homebutton-box.svelte-10fykjs .icons img.svelte-10fykjs{height:60%;margin:0 auto}.homebutton-box.svelte-10fykjs .icons h1.svelte-10fykjs{text-align:center;font-size:14px;color:white}.homebutton-box.svelte-10fykjs .homebutton_background.svelte-10fykjs{position:absolute;--positioning:5px;top:var(--positioning);left:var(--positioning);width:calc(100% - var(--positioning) * 2);height:calc(100% - var(--positioning) * 2);background:black;border-radius:25px;transition:0.5s}.homebutton-box.svelte-10fykjs .homebutton_background.focus.svelte-10fykjs{transform:rotate(45deg);background:red;border-radius:0px}.homebutton-box.svelte-10fykjs .hover_area.svelte-10fykjs{position:absolute;top:0;left:0;width:100%;height:100%}",
   map: null
 };
@@ -9577,7 +9587,7 @@ var HomeButton = create_ssr_component(($$result, $$props, $$bindings, slots) => 
     $$bindings.icon_url(icon_url);
   if ($$props.explain === void 0 && $$bindings.explain && explain !== void 0)
     $$bindings.explain(explain);
-  $$result.css.add(css$s);
+  $$result.css.add(css$t);
   return `<div class="${"homebutton-box " + escape("") + " svelte-10fykjs"}"><a${add_attribute("href", path, 0)}><div class="${"homebutton_background " + escape("") + " svelte-10fykjs"}"></div>
         <div class="${"icons svelte-10fykjs"}"><img${add_attribute("src", icon_url, 0)} alt="${escape(explain) + "\u30DC\u30BF\u30F3"}" class="${"svelte-10fykjs"}">
             <h1 class="${"svelte-10fykjs"}">${escape(explain)}</h1></div>
@@ -9585,12 +9595,12 @@ var HomeButton = create_ssr_component(($$result, $$props, $$bindings, slots) => 
     
 </div>`;
 });
-var css$r = {
+var css$s = {
   code: "#bg_clock.svelte-gfjuk8.svelte-gfjuk8{position:absolute;overflow:hidden;height:100%;width:100%;top:0;left:0;z-index:-1}#bg_clock.svelte-gfjuk8 #clockbody.svelte-gfjuk8{position:absolute;top:40vh;left:25vw;width:120vw;height:120vw;-webkit-animation:svelte-gfjuk8-clockrotate 60s cubic-bezier(1, 0, 0.95, 0.38) infinite;animation:svelte-gfjuk8-clockrotate 60s cubic-bezier(1, 0, 0.95, 0.38) infinite;transition:1s}@keyframes svelte-gfjuk8-clockslide{0%{left:25vw;transform:rotate(0deg)}100%{left:-200%;transform:rotate(-270deg)}}@-webkit-keyframes svelte-gfjuk8-clockslide{0%{left:25vw;-webkit-transform:rotate(0deg)}100%{left:-200%;-webkit-transform:rotate(-270deg)}}#bg_clock.svelte-gfjuk8 #clockbody img.svelte-gfjuk8{width:100%}@keyframes svelte-gfjuk8-clockrotate{0%{transform:rotate(0deg)}2%{transform:rotate(7deg)}4%{transform:rotate(14deg)}6%{transform:rotate(21deg)}8%{transform:rotate(28deg)}10%{transform:rotate(36deg)}12%{transform:rotate(43deg)}14%{transform:rotate(50deg)}16%{transform:rotate(57deg)}18%{transform:rotate(64deg)}20%{transform:rotate(72deg)}22%{transform:rotate(79deg)}24%{transform:rotate(86deg)}26%{transform:rotate(93deg)}28%{transform:rotate(100deg)}30%{transform:rotate(108deg)}32%{transform:rotate(115deg)}34%{transform:rotate(122deg)}36%{transform:rotate(129deg)}38%{transform:rotate(136deg)}40%{transform:rotate(144deg)}42%{transform:rotate(151deg)}44%{transform:rotate(158deg)}46%{transform:rotate(165deg)}48%{transform:rotate(172deg)}50%{transform:rotate(180deg)}52%{transform:rotate(187deg)}54%{transform:rotate(194deg)}56%{transform:rotate(201deg)}58%{transform:rotate(208deg)}60%{transform:rotate(216deg)}62%{transform:rotate(223deg)}64%{transform:rotate(230deg)}66%{transform:rotate(237deg)}68%{transform:rotate(244deg)}70%{transform:rotate(252deg)}72%{transform:rotate(259deg)}74%{transform:rotate(266deg)}76%{transform:rotate(273deg)}78%{transform:rotate(280deg)}80%{transform:rotate(288deg)}82%{transform:rotate(295deg)}84%{transform:rotate(302deg)}86%{transform:rotate(309deg)}88%{transform:rotate(316deg)}90%{transform:rotate(324deg)}92%{transform:rotate(331deg)}94%{transform:rotate(338deg)}96%{transform:rotate(345deg)}98%{transform:rotate(352deg)}100%{transform:rotate(360deg)}}@-webkit-keyframes svelte-gfjuk8-clockrotate{0%{-webkit-transform:rotate(0deg)}2%{-webkit-transform:rotate(7deg)}4%{-webkit-transform:rotate(14deg)}6%{-webkit-transform:rotate(21deg)}8%{-webkit-transform:rotate(28deg)}10%{-webkit-transform:rotate(36deg)}12%{-webkit-transform:rotate(43deg)}14%{-webkit-transform:rotate(50deg)}16%{-webkit-transform:rotate(57deg)}18%{-webkit-transform:rotate(64deg)}20%{-webkit-transform:rotate(72deg)}22%{-webkit-transform:rotate(79deg)}24%{-webkit-transform:rotate(86deg)}26%{-webkit-transform:rotate(93deg)}28%{-webkit-transform:rotate(100deg)}30%{-webkit-transform:rotate(108deg)}32%{-webkit-transform:rotate(115deg)}34%{-webkit-transform:rotate(122deg)}36%{-webkit-transform:rotate(129deg)}38%{-webkit-transform:rotate(136deg)}40%{-webkit-transform:rotate(144deg)}42%{-webkit-transform:rotate(151deg)}44%{-webkit-transform:rotate(158deg)}46%{-webkit-transform:rotate(165deg)}48%{-webkit-transform:rotate(172deg)}50%{-webkit-transform:rotate(180deg)}52%{-webkit-transform:rotate(187deg)}54%{-webkit-transform:rotate(194deg)}56%{-webkit-transform:rotate(201deg)}58%{-webkit-transform:rotate(208deg)}60%{-webkit-transform:rotate(216deg)}62%{-webkit-transform:rotate(223deg)}64%{-webkit-transform:rotate(230deg)}66%{-webkit-transform:rotate(237deg)}68%{-webkit-transform:rotate(244deg)}70%{-webkit-transform:rotate(252deg)}72%{-webkit-transform:rotate(259deg)}74%{-webkit-transform:rotate(266deg)}76%{-webkit-transform:rotate(273deg)}78%{-webkit-transform:rotate(280deg)}80%{-webkit-transform:rotate(288deg)}82%{-webkit-transform:rotate(295deg)}84%{-webkit-transform:rotate(302deg)}86%{-webkit-transform:rotate(309deg)}88%{-webkit-transform:rotate(316deg)}90%{-webkit-transform:rotate(324deg)}92%{-webkit-transform:rotate(331deg)}94%{-webkit-transform:rotate(338deg)}96%{-webkit-transform:rotate(345deg)}98%{-webkit-transform:rotate(352deg)}100%{-webkit-transform:rotate(360deg)}}@keyframes svelte-gfjuk8-clockspin{0%{transform:rotate(0deg)}100%{transform:rotate(720deg)}}@-webkit-keyframes svelte-gfjuk8-clockspin{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(720deg)}}#bg_clock.svelte-gfjuk8 #clockbody img.time.svelte-gfjuk8{position:absolute;width:10%;animation:svelte-gfjuk8-wheelrotate 10s linear infinite;-webkit-animation:svelte-gfjuk8-wheelrotate 10s linear infinite}#bg_clock.svelte-gfjuk8 #clockbody img#insidewheel.svelte-gfjuk8{position:absolute;width:25%;animation:svelte-gfjuk8-wheelrotate 10s linear infinite reverse;-webkit-animation:svelte-gfjuk8-wheelrotate 10s linear infinite reverse;top:37.5%;left:37.5%}.time-3.svelte-gfjuk8.svelte-gfjuk8{top:45%;left:63.5%}.time-2.svelte-gfjuk8.svelte-gfjuk8{top:35.75%;left:61.021%}.time-1.svelte-gfjuk8.svelte-gfjuk8{top:28.979%;left:54.25%}.time-12.svelte-gfjuk8.svelte-gfjuk8{top:26.5%;left:45%}.time-11.svelte-gfjuk8.svelte-gfjuk8{top:28.979%;left:35.75%}.time-10.svelte-gfjuk8.svelte-gfjuk8{top:35.75%;left:28.979%}.time-9.svelte-gfjuk8.svelte-gfjuk8{top:45%;left:26.5%}.time-8.svelte-gfjuk8.svelte-gfjuk8{top:54.25%;left:28.979%}.time-7.svelte-gfjuk8.svelte-gfjuk8{top:61.021%;left:35.75%}.time-6.svelte-gfjuk8.svelte-gfjuk8{top:63.5%;left:45%}.time-5.svelte-gfjuk8.svelte-gfjuk8{top:61.021%;left:54.25%}.time-4.svelte-gfjuk8.svelte-gfjuk8{top:54.25%;left:61.021%}#bg_clock.svelte-gfjuk8 #clockbody img.time-2.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-4.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-6.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-8.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-10.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-12.svelte-gfjuk8{animation-direction:reverse;-webkit-animation-direction:reverse}@keyframes svelte-gfjuk8-wheelrotate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}@-webkit-keyframes svelte-gfjuk8-wheelrotate{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg)}}@media screen and (min-width: 600px){}@media screen and (min-width: 700px){#bg_clock.svelte-gfjuk8 #clockbody.svelte-gfjuk8{top:35vh;left:50vw;height:850px;width:850px}#bg_clock.svelte-gfjuk8 #clockbody img.svelte-gfjuk8{width:850px}#bg_clock.svelte-gfjuk8 img.time.svelte-gfjuk8{width:85px}}",
   map: null
 };
 var N2Clock = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  $$result.css.add(css$r);
+  $$result.css.add(css$s);
   return `<div id="${"bg_clock"}" class="${"svelte-gfjuk8"}"><div id="${"clockbody"}" class="${"svelte-gfjuk8"}">
         <img class="${"time time-1 svelte-gfjuk8"}" src="${"/img/n2_clock/time-1.svg"}" alt="${""}">\u3000
         <img class="${"time time-2 svelte-gfjuk8"}" src="${"/img/n2_clock/time-2.svg"}" alt="${""}">
@@ -9608,7 +9618,7 @@ var N2Clock = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         <img src="${"/img/n2_clock/clock_body.svg"}" alt="${""}" class="${"svelte-gfjuk8"}"></div>    
 </div>`;
 });
-var css$q = {
+var css$r = {
   code: "#menu_box.svelte-9tmjw9{max-height:700px;max-width:500px;margin:0 auto}.icon_box.svelte-9tmjw9{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:space-around;border:solid 1px white;max-width:400px;padding:20px 10px;margin:100px 30px}",
   map: null
 };
@@ -9616,7 +9626,7 @@ var Routes = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $mainmenus, $$unsubscribe_mainmenus;
   $$unsubscribe_mainmenus = subscribe(mainmenus, (value) => $mainmenus = value);
   let mainmenu_array = $mainmenus;
-  $$result.css.add(css$q);
+  $$result.css.add(css$r);
   $$unsubscribe_mainmenus();
   return `<div id="${"menu_box"}" class="${"svelte-9tmjw9"}">${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
     default: ({ matches }) => `${matches ? `<div class="${"icon_box svelte-9tmjw9"}">${each(mainmenu_array, (menu) => `${validate_component(HomeButton, "HomeButton").$$render($$result, {
@@ -9641,11 +9651,11 @@ var index$2 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": Routes
 });
-var css$p = {
+var css$q = {
   code: "#introduce-box.svelte-muuo5r.svelte-muuo5r{position:relative;width:80%;max-width:700px;margin:30px auto 0 auto;height:700px}#introduce-box.svelte-muuo5r #introduce-text.svelte-muuo5r{padding:30px}#introduce-box.svelte-muuo5r #introduce-text div.svelte-muuo5r{margin:5px}#introduce-box.svelte-muuo5r #introduce-text h1.svelte-muuo5r{margin:10px 0}#introduce-box.svelte-muuo5r #introduce-text .job.svelte-muuo5r{margin:10px 5px;font-size:16px}#introduce-box.svelte-muuo5r #introduce-text .birthday .birthday-count.svelte-muuo5r{display:inline;font-size:13px}#introduce-box.svelte-muuo5r .image.svelte-muuo5r{z-index:-1;position:absolute;filter:blur(2px);background-image:var(--url);background-position:center;width:100%;height:100%}",
   map: null
 };
-var myname = 'Taro <span style="color:#ff0000">N</span>onoyama';
+var myname = "Making";
 var mySex = "Male";
 var myBloodType = "A Rh+";
 var Introduce = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -9658,7 +9668,7 @@ var Introduce = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   const backgroundIllust = [
     "https://lh3.googleusercontent.com/bcvBUbA1fI0nUqannPAJxes6L1JmFm4VdhfjCwq6fkvqgoBHlGoVJhMk-L20s5zscQZe8FO9d3x4u757Gk35od1rhy8wbOlOEHDt0GULdy7Af2oI_TMadzt4mohs-okGaJoaYaxq27I9HXPCNyoO_cv5nSEM2WlUNF_KKNMW-Hv-0RJkpREnBwzn-HPzuP9lXk5VVIhIcNEwspqsh4n_byo-SlBOOnDX6YDSI_iPzQOftJTfIoZupSXt7yT0eTX4X3G4iU7l0oJd72Mm72_4xAgAw9Ogoyy2wOx_f9TY3hLZWqO1n94DOM0GxWtE-YbfX_LxLRbAzbIUk4IGhl0eNUNfY-w-zg6DjNe0EgQ0MlgBbQH7GDUa-0va2ppQwNTdU_nJIlBBlFa5MCEaBrc3WJZuN1uC7Od7bgY2w3l9_zTajyvYMDRK40k0jlJjqUov2v5QmbAOwVap49VF1bNQrqZsKN-KaCuVeBZHOsA33U28f7qE5Pw2V1g0nUvcYGjBgSyIjX0d-4abQnpNO_AAP5mKUhiMHPAxc1SJne8b_AQMPQNk0qAdO_-I68Eb1nN2LdKyk2Ca4YWqGb2OTQyyewAaxnYhPY9tTXCMxU18r2NVuJWDmrzXaNab3s_rjdMwn1zW5sxrJEpqFu2Av7wPWQ5PRbbPBZVVid_jh8slBbZLULwQ7qLRbn3L-opMCJzUq748fEL2GXe1wWK1G87Fw_I=s700-no"
   ];
-  $$result.css.add(css$p);
+  $$result.css.add(css$q);
   return `<section id="${"introduce-box"}" class="${"svelte-muuo5r"}"><div class="${"image svelte-muuo5r"}" style="${"--url:url(" + escape(backgroundIllust[0]) + ")"}"></div>
     <div id="${"introduce-text"}" class="${"svelte-muuo5r"}"><h1 class="${"svelte-muuo5r"}"><!-- HTML_TAG_START -->${myname}<!-- HTML_TAG_END --></h1>
         <div class="${"job svelte-muuo5r"}">${escape(myJob.join(", "))}</div>
@@ -9673,12 +9683,12 @@ var index$1 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": Introduce
 });
-var css$o = {
+var css$p = {
   code: "article.svelte-11yu7j3{width:90%;max-width:700px;margin:0 auto}",
   map: null
 };
 var Contact = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  $$result.css.add(css$o);
+  $$result.css.add(css$p);
   return `<article class="${"svelte-11yu7j3"}">
 
 </article>`;
@@ -9707,7 +9717,7 @@ import_axios.default.create({
     "Access-Control-Allow-Origin": "*"
   }
 });
-var css$n = {
+var css$o = {
   code: ".items.svelte-wqwzll.svelte-wqwzll.svelte-wqwzll{margin:20px 0px;border:solid 1px black;display:flex;flex-direction:row;justify-content:space-between;height:175px}.items.svelte-wqwzll .info_container.svelte-wqwzll.svelte-wqwzll{padding:20px 40px;width:50%;display:flex;flex-direction:column;justify-content:space-between}.items.svelte-wqwzll .info_container.svelte-wqwzll h3.svelte-wqwzll{font-size:25px;color:black}.items.svelte-wqwzll .thumbnail_container.svelte-wqwzll.svelte-wqwzll{overflow:hidden;width:50%;max-width:432px}.items_phone.svelte-wqwzll.svelte-wqwzll.svelte-wqwzll{margin:20px 0px;border:solid 1px black;display:flex;flex-direction:column;justify-content:space-between}.items_phone.svelte-wqwzll .info_container.svelte-wqwzll.svelte-wqwzll{padding:15px 30px}.items_phone.svelte-wqwzll .info_container.svelte-wqwzll h3.svelte-wqwzll{font-size:20px;color:black;margin:10px 0}.items_phone.svelte-wqwzll .thumbnail_container.svelte-wqwzll.svelte-wqwzll{overflow:hidden;width:100%;height:200px}.tag_container.svelte-wqwzll.svelte-wqwzll.svelte-wqwzll{display:flex;flex-direction:row;flex-wrap:wrap}.tag_container.svelte-wqwzll .tag_box.svelte-wqwzll.svelte-wqwzll{margin:5px;padding:5px 10px;border-radius:2px;background:#858585;font-size:13px}.tag_container.svelte-wqwzll .tag_box.default.svelte-wqwzll.svelte-wqwzll{background:black;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.gray.svelte-wqwzll.svelte-wqwzll{background:#525252;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.brown.svelte-wqwzll.svelte-wqwzll{background:#613c1a;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.orange.svelte-wqwzll.svelte-wqwzll{background:#b95a00;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.yellow.svelte-wqwzll.svelte-wqwzll{background:#e4a700;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.green.svelte-wqwzll.svelte-wqwzll{background:#135e00;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.blue.svelte-wqwzll.svelte-wqwzll{background:#000a9b;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.purple.svelte-wqwzll.svelte-wqwzll{background:#3d008d;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.pink.svelte-wqwzll.svelte-wqwzll{background:#a80076;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.red.svelte-wqwzll.svelte-wqwzll{background:#880000;border:solid 1px #880000}",
   map: null
 };
@@ -9724,7 +9734,7 @@ var List_item = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     $$bindings.title(title);
   if ($$props.thumbnail === void 0 && $$bindings.thumbnail && thumbnail !== void 0)
     $$bindings.thumbnail(thumbnail);
-  $$result.css.add(css$n);
+  $$result.css.add(css$o);
   return `${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
     default: ({ matches }) => `${matches ? `<div class="${"items_phone svelte-wqwzll"}"><div class="${"info_container svelte-wqwzll"}"><a href="${"/blog/page?page_id=" + escape(id)}"><h3 class="${"svelte-wqwzll"}"><!-- HTML_TAG_START -->${title}<!-- HTML_TAG_END --></h3></a>
         <div class="${"tag_container svelte-wqwzll"}">${each(tags, (tag) => `<div class="${"tag_box " + escape(tag.tag_color) + " svelte-wqwzll"}">${escape(tag.tag_name)}
@@ -9739,14 +9749,14 @@ ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min
     <div class="${"thumbnail_container svelte-wqwzll"}"><a href="${"/blog/page?page_id=" + escape(id)}"><img${add_attribute("src", thumbnail, 0)} alt="${escape(title) + "\u306E\u753B\u50CF"}"></a></div></div>` : ``}`
   })}`;
 });
-var css$m = {
+var css$n = {
   code: "h2.svelte-13h619c{color:black}.background.svelte-13h619c{padding:30px 20px;width:100%;height:100%;background:white}",
   map: null
 };
 var List = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $notion_pages, $$unsubscribe_notion_pages;
   $$unsubscribe_notion_pages = subscribe(notion_pages, (value) => $notion_pages = value);
-  $$result.css.add(css$m);
+  $$result.css.add(css$n);
   $$unsubscribe_notion_pages();
   return `<div class="${"background svelte-13h619c"}"><section class="${"title"}"><h2 class="${"svelte-13h619c"}">BLOG LIST</h2></section>
 <section class="${"blog_list"}">${each($notion_pages, (page2) => `${validate_component(List_item, "ListItem").$$render($$result, {
@@ -9774,7 +9784,7 @@ var page = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": Page
 });
-var css$l = {
+var css$m = {
   code: ".loader.svelte-w1xkbb.svelte-w1xkbb{position:relative;width:100%;height:var(--loader-height)}.loader.svelte-w1xkbb .fulcrum.svelte-w1xkbb{position:absolute;left:50%;height:100%}.loader.svelte-w1xkbb .fulcrum .wire.svelte-w1xkbb{position:absolute;height:var(--wire_length_px);border:solid 1px var(--color);transform-origin:top}.loader.svelte-w1xkbb .fulcrum .wire.animate.svelte-w1xkbb{-webkit-animation:svelte-w1xkbb-penduluming ease-in-out var(--periodic_time_sec) infinite;animation:svelte-w1xkbb-penduluming ease-in-out var(--periodic_time_sec) infinite}.loader.svelte-w1xkbb .fulcrum .wire .weight.svelte-w1xkbb{position:absolute;bottom:calc(-1 * var(--weight_size_px) / 2);left:calc(-1 * var(--weight_size_px) / 2);width:var(--weight_size_px);height:var(--weight_size_px);border-radius:calc(var(--weight_size_px) / 2);background:var(--color)}@keyframes svelte-w1xkbb-penduluming{0%{transform:rotate(30deg)}50%{transform:rotate(-30deg)}100%{transform:rotate(30deg)}}",
   map: null
 };
@@ -9816,13 +9826,13 @@ var PendulumLoader = create_ssr_component(($$result, $$props, $$bindings, slots)
     $$bindings.color(color);
   if ($$props.is_animate === void 0 && $$bindings.is_animate && is_animate !== void 0)
     $$bindings.is_animate(is_animate);
-  $$result.css.add(css$l);
+  $$result.css.add(css$m);
   return `<div class="${"loader svelte-w1xkbb"}" style="${"--loader-height: " + escape(`${initial_length + increase_length * numof_pendulum + initial_size}px`) + ";"}"><div class="${"fulcrum svelte-w1xkbb"}">${each(pendulums_args, (args) => `
             <div class="${"wire " + escape(is_animate ? "animate" : "") + " svelte-w1xkbb"}" style="${"--wire_length_px: " + escape(args.wire_length) + "; --periodic_time_sec: " + escape(args.periodic_time) + "; --color: " + escape(color) + ";"}"><div class="${"weight svelte-w1xkbb"}" style="${"--weight_size_px: " + escape(args.weight_size) + ";"}"></div>
             </div>`)}</div>
 </div>`;
 });
-var css$k = {
+var css$l = {
   code: ".loader.svelte-1prbtiu.svelte-1prbtiu{position:relative;width:100%;height:var(--loader-height)}.loader.svelte-1prbtiu .fulcrum.svelte-1prbtiu{position:absolute;width:100%;height:100%;left:0}.loader.svelte-1prbtiu .fulcrum .rect.svelte-1prbtiu{position:absolute;bottom:0;left:calc(50% + var(--interval));width:var(--width);height:0;border:solid 1px var(--color)}.loader.svelte-1prbtiu .fulcrum .rect.animate.svelte-1prbtiu{-webkit-animation:svelte-1prbtiu-rect_growth ease-in-out 3s var(--growth_delay) infinite;animation:svelte-1prbtiu-rect_growth ease-in-out 3s var(--growth_delay) infinite}@keyframes svelte-1prbtiu-rect_growth{0%{height:0}20%{height:var(--max_height)}40%{height:0}100%{height:0}}",
   map: null
 };
@@ -9859,11 +9869,11 @@ var RectWaveLoader = create_ssr_component(($$result, $$props, $$bindings, slots)
     $$bindings.color(color);
   if ($$props.is_animate === void 0 && $$bindings.is_animate && is_animate !== void 0)
     $$bindings.is_animate(is_animate);
-  $$result.css.add(css$k);
+  $$result.css.add(css$l);
   return `<div class="${"loader svelte-1prbtiu"}" style="${"--loader-height: " + escape(`${77 + max_height}px`) + ";"}"><div class="${"fulcrum " + escape(is_animate ? "animate" : "") + " svelte-1prbtiu"}" style="${"--base_width:" + escape(`${base_rect_width}px`) + "; --max_height:" + escape(`${max_height}px`) + ";"}">${each(rectangle_args, (args) => `<div class="${"rect " + escape(is_animate ? "animate" : "") + " svelte-1prbtiu"}" style="${"--width:" + escape(args.rect_width) + "; --color: " + escape(color) + "; --interval: " + escape(args.interval_position) + "; --growth_delay: " + escape(args.growth_delay)}"></div>`)}</div>
 </div>`;
 });
-var css$j = {
+var css$k = {
   code: ".loader.svelte-8rpapr.svelte-8rpapr{position:relative;width:100%;height:var(--loader_height)}.loader.svelte-8rpapr .fulcrum.svelte-8rpapr{position:absolute;width:100%;height:100%}.loader.svelte-8rpapr .fulcrum .petals.svelte-8rpapr{position:absolute;top:calc(50% - var(--size) / 2);left:calc(50% - var(--size) / 2);width:var(--size);height:var(--size);transform:rotate(0);transform-origin:50% 50%}.loader.svelte-8rpapr .fulcrum .petals.animate.svelte-8rpapr{animation:svelte-8rpapr-cycle linear var(--speed) infinite}@keyframes svelte-8rpapr-cycle{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}.loader.svelte-8rpapr .fulcrum .petal.svelte-8rpapr{position:absolute;top:0;transform:rotate(var(--angle));width:var(--size);height:var(--size);border-radius:calc(var(--size) / 2);border:solid 1px var(--color)}.loader.svelte-8rpapr .fulcrum .petal.animate.svelte-8rpapr{animation:svelte-8rpapr-flowering ease-in-out 2s var(--delay) infinite}@keyframes svelte-8rpapr-flowering{0%{transform:translate(0, 0)}40%{transform:translate(var(--move_x), var(--move_y))}80%{transform:translate(0, 0)}100%{transform:translate(0, 0)}}",
   map: null
 };
@@ -9920,12 +9930,12 @@ var RoundFloweringLoader = create_ssr_component(($$result, $$props, $$bindings, 
     $$bindings.small_round_spin_speed(small_round_spin_speed);
   if ($$props.large_round_spin_speed === void 0 && $$bindings.large_round_spin_speed && large_round_spin_speed !== void 0)
     $$bindings.large_round_spin_speed(large_round_spin_speed);
-  $$result.css.add(css$j);
+  $$result.css.add(css$k);
   return `<div class="${"loader svelte-8rpapr"}" style="${"--loader_height:" + escape(`${large_petal_stroke * 2 + large_round_size}px`) + "; --color:" + escape(color) + ";"}"><div class="${"fulcrum svelte-8rpapr"}"><div class="${"petals " + escape(is_animate ? "animate" : "") + " svelte-8rpapr"}" style="${"--size:" + escape(`${small_round_size}px`) + "; --speed:" + escape(small_round_spin_speed)}">${each(small_flowering_args, (arg) => `<div class="${"petal " + escape(is_animate ? "animate" : "") + " svelte-8rpapr"}" style="${"--size:" + escape(`${small_round_size}px`) + "; --move_x:" + escape(arg.flower_petal_x) + "; --move_y:" + escape(arg.flower_petal_y) + "; --delay:" + escape(`${small_stroke_delay}s`)}"></div>`)}</div>
         <div class="${"petals " + escape(is_animate ? "animate" : "") + " svelte-8rpapr"}" style="${"--size:" + escape(`${large_round_size}px`) + "; --speed:" + escape(large_round_spin_speed)}">${each(large_flowering_args, (arg) => `<div class="${"petal " + escape(is_animate ? "animate" : "") + " svelte-8rpapr"}" style="${"--size:" + escape(`${large_round_size}px`) + "; --move_x: " + escape(arg.flower_petal_x) + "; --move_y: " + escape(arg.flower_petal_y) + "; --delay:" + escape(`${large_stroke_delay}s`)}"></div>`)}</div></div>
 </div>`;
 });
-var css$i = {
+var css$j = {
   code: ".loader.svelte-v9q609.svelte-v9q609{width:100%;height:100%}.loader.svelte-v9q609 .kotodama-box.svelte-v9q609{--size:30px;display:flex;flex-direction:row;justify-content:center;flex-wrap:wrap;align-items:center;max-width:150px;height:100%;margin:0 auto}.loader.svelte-v9q609 .kotodama-box .kotodama.svelte-v9q609{position:relative;width:var(--size);height:var(--size);margin:3px}.loader.svelte-v9q609 .kotodama-box .kotodama img.svelte-v9q609{position:absolute;bottom:0;left:0;width:var(--size);height:var(--size);animation:svelte-v9q609-popinkotodama linear 1.3s var(--delay) infinite}@keyframes svelte-v9q609-popinkotodama{0%{bottom:0}20%{bottom:var(--size)}40%{bottom:0;height:var(--size)}43%{bottom:0;height:calc(var(--size) / 3)}46%{bottom:0;height:var(--size)}}",
   map: null
 };
@@ -9933,7 +9943,7 @@ var Bs2ndLoader = create_ssr_component(($$result, $$props, $$bindings, slots) =>
   let { popindelay = 0.15 } = $$props;
   if ($$props.popindelay === void 0 && $$bindings.popindelay && popindelay !== void 0)
     $$bindings.popindelay(popindelay);
-  $$result.css.add(css$i);
+  $$result.css.add(css$j);
   return `<div class="${"loader svelte-v9q609"}"><div class="${"kotodama-box svelte-v9q609"}"><div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay}s`) + ";"}" src="${"/img/bs2nd/ba_gray.png"}" alt="${"\u3070"}" class="${"svelte-v9q609"}"></div>
         <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 2}s`) + ";"}" src="${"/img/bs2nd/ku_gray.png"}" alt="${"\u304F"}" class="${"svelte-v9q609"}"></div>
         <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 3}s`) + ";"}" src="${"/img/bs2nd/ze_gray.png"}" alt="${"\u305C"}" class="${"svelte-v9q609"}"></div>
@@ -9943,7 +9953,7 @@ var Bs2ndLoader = create_ssr_component(($$result, $$props, $$bindings, slots) =>
         <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 7}s`) + ";"}" src="${"/img/bs2nd/chi_gray.png"}" alt="${"\u3061"}" class="${"svelte-v9q609"}"></div></div>
 </div>`;
 });
-var css$h = {
+var css$i = {
   code: ".loader-animation-box.svelte-yop039{padding:30px 0;border:solid 1px white;min-height:290px;width:100%;height:100%}",
   map: null
 };
@@ -9954,11 +9964,11 @@ var Show_item = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     $$bindings.name(name);
   if ($$props.component === void 0 && $$bindings.component && component !== void 0)
     $$bindings.component(component);
-  $$result.css.add(css$h);
+  $$result.css.add(css$i);
   return `<div class="${"loader-animation-box svelte-yop039"}">${validate_component(component || missing_component, "svelte:component").$$render($$result, {}, {}, {})}</div>
 <p>${escape(name)}</p>`;
 });
-var css$g = {
+var css$h = {
   code: ".loader.svelte-1o1dzs3.svelte-1o1dzs3{width:100%;height:100%}.loader.svelte-1o1dzs3 .board.svelte-1o1dzs3{display:flex;flex-direction:row;justify-content:space-around;width:100%;height:100%}.loader.svelte-1o1dzs3 .board .dot_area.svelte-1o1dzs3{padding:5px;flex-basis:var(--dot_area_width);display:flex;flex-direction:row;justify-content:center;flex-wrap:wrap}.loader.svelte-1o1dzs3 .board .dot_area .dot.svelte-1o1dzs3,.loader.svelte-1o1dzs3 .board .dot_area .blank.svelte-1o1dzs3{flex-basis:32%;width:var(--dot_size);height:var(--dot_size)}.loader.svelte-1o1dzs3 .board .dot_area .dot.svelte-1o1dzs3{background:var(--color)}",
   map: null
 };
@@ -9994,12 +10004,12 @@ var DotStringLoader = create_ssr_component(($$result, $$props, $$bindings, slots
     $$bindings.dot_size(dot_size);
   if ($$props.input === void 0 && $$bindings.input && input !== void 0)
     $$bindings.input(input);
-  $$result.css.add(css$g);
+  $$result.css.add(css$h);
   return `<div class="${"loader svelte-1o1dzs3"}"><div class="${"board svelte-1o1dzs3"}" style="${"--color:" + escape(color) + "; --dot_area_width:" + escape(Math.floor(100 / input_tostr.length)) + "%; --dot_size:" + escape(`${dot_size}px`)}">${each(dot_args, (args) => `<div class="${"dot_area svelte-1o1dzs3"}">${each(args.dots, (dot) => `${dot == 0 ? `<div class="${"blank svelte-1o1dzs3"}"></div>` : `<div class="${"dot svelte-1o1dzs3"}"></div>`}`)}
             </div>`)}</div>
 </div>`;
 });
-var css$f = {
+var css$g = {
   code: ".show-room.svelte-7jgice.svelte-7jgice{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:space-around}.show-room.svelte-7jgice .show-box.svelte-7jgice{flex-basis:40%}.show-room.svelte-7jgice .show-box-phone.svelte-7jgice{flex-basis:90%}",
   map: null
 };
@@ -10023,7 +10033,7 @@ var Show = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       component: DotStringLoader
     }
   ];
-  $$result.css.add(css$f);
+  $$result.css.add(css$g);
   return `<section class="${"show-room svelte-7jgice"}">${each(show_item_args, (arg) => `${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
     default: ({ matches }) => `${matches ? `<div class="${"show-box-phone svelte-7jgice"}">${validate_component(Show_item, "ShowItem").$$render($$result, { name: arg.name, component: arg.component }, {}, {})}
         </div>` : ``}
@@ -10042,12 +10052,12 @@ var index = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": Show
 });
-var css$e = {
+var css$f = {
   code: "header.svelte-yl89mf.svelte-yl89mf.svelte-yl89mf{display:flex;justify-content:space-between;height:40px}header.svelte-yl89mf .n2-logo.svelte-yl89mf.svelte-yl89mf{padding:10px}header.svelte-yl89mf .n2-logo img.svelte-yl89mf.svelte-yl89mf{height:20px}#base.svelte-yl89mf.svelte-yl89mf.svelte-yl89mf{background:black}footer.svelte-yl89mf.svelte-yl89mf.svelte-yl89mf{position:fixed;z-index:50;bottom:0;width:100%;height:75px;box-shadow:0 -1px 2px white;padding:10px;background:black}footer.svelte-yl89mf .footer-icon-box.svelte-yl89mf.svelte-yl89mf{display:flex;justify-content:space-around;max-width:700px;margin:0 auto}footer.svelte-yl89mf .footer-icon-box a.svelte-yl89mf.svelte-yl89mf{display:flex;flex-direction:column;align-items:center;justify-content:space-between;position:relative;width:40px;height:40px;border-radius:27px}footer.svelte-yl89mf .footer-icon-box a.active .footer-icon-bg.svelte-yl89mf.svelte-yl89mf{position:absolute;width:30px;height:30px;border:solid 2px var(--active-yellow);border-radius:15px}footer.svelte-yl89mf .footer-icon-box a.active p.svelte-yl89mf.svelte-yl89mf{color:var(--active-yellow)}footer.svelte-yl89mf .footer-icon-box a.svelte-yl89mf img.svelte-yl89mf{height:25px}footer.svelte-yl89mf .footer-icon-box a p.svelte-yl89mf.svelte-yl89mf{font-size:12px;font-weight:bold}",
   map: null
 };
 var _layout_reset$1 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  $$result.css.add(css$e);
+  $$result.css.add(css$f);
   return `${$$result.head += `${$$result.title = `<title>\u3070\u304F\u305C\u3064\u3055\u3042\u3061 | \u30B3\u30C8\u30C0\u30DE\u30F3\u5358\u8A9E \u691C\u7D22 | \u30B3\u30C8\u30C0\u30DE\u30F3\u8F9E\u66F8 \u691C\u7D22</title>`, ""}<meta name="${"google-site-verification"}" content="${"3OjGMRDR5lkfKidGxk6ZUvUpS8GTtV2Hs8mCtnf8m3M"}" data-svelte="svelte-s74sy5">`, ""}
 
 <header class="${"svelte-yl89mf"}"><div class="${"n2-logo svelte-yl89mf"}"><a href="${"/"}" class="${"svelte-yl89mf"}"><img src="${"/img/n2-icon-white.svg"}" alt="${""}" class="${"svelte-yl89mf"}"></a></div></header>
@@ -10244,7 +10254,7 @@ var AdventNumDict = {
   4: "\u9B54\u7D1A",
   5: "\u7834\u6EC5\u7D1A"
 };
-var css$d = {
+var css$e = {
   code: '.advent.svelte-xvmnbq.svelte-xvmnbq{font-family:"Kosugi Maru", sans-serif;width:71px;margin:10px}.advent.svelte-xvmnbq .smart-info-box.svelte-xvmnbq{display:flex;flex-direction:row;justify-content:space-around}.advent.svelte-xvmnbq .smart-info-box img.svelte-xvmnbq{width:60px;height:50px}.advent.svelte-xvmnbq .smart-info-box img.disable.svelte-xvmnbq{filter:grayscale(85%)}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box.svelte-xvmnbq{position:relative}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box.svelte-xvmnbq{height:100%;display:flex;flex-direction:column-reverse}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box .elem.svelte-xvmnbq{width:11px;height:11px;border-radius:6px;margin:0 0 2px 0;border:solid 2px}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box .elem.fire.svelte-xvmnbq{background-color:#db4646;border-color:#ff9100}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box .elem.water.svelte-xvmnbq{background-color:#297eff;border-color:#a7d7ff}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box .elem.wood.svelte-xvmnbq{background-color:#69ac69;border-color:#afd8ab}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box .elem.light.svelte-xvmnbq{background-color:#ffd23e;border-color:#fff09e}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box .elem.dark.svelte-xvmnbq{background-color:#9255a5;border-color:#d0acff}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box .elem.hell.svelte-xvmnbq{background-color:#311f04;border-color:#d6a609}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box .elem.heaven.svelte-xvmnbq{background-color:#faf3f8;border-color:#ffaff8}.advent.scaleup.svelte-xvmnbq.svelte-xvmnbq{width:120px}.advent.scaleup.svelte-xvmnbq img.svelte-xvmnbq{width:120px;height:100px}.advent.svelte-xvmnbq .name.svelte-xvmnbq{text-align:center;line-height:10px;font-size:10px;width:100%;margin:3px 0 0 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.advent.svelte-xvmnbq .name.disable.svelte-xvmnbq{color:gray}',
   map: null
 };
@@ -10256,7 +10266,7 @@ var Advent = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     $$bindings.advent(advent);
   if ($$props.full === void 0 && $$bindings.full && full !== void 0)
     $$bindings.full(full);
-  $$result.css.add(css$d);
+  $$result.css.add(css$e);
   return `<div class="${"advent " + escape(!full ? "scaleup" : "") + " svelte-xvmnbq"}"><div class="${"smart-info-box svelte-xvmnbq"}"><img class="${escape(null_to_empty(advent.disable ? "disable" : "")) + " svelte-xvmnbq"}"${add_attribute("src", advent.figure, 0)}${add_attribute("alt", advent.name, 0)}>
         ${full ? `<div class="${"elems-tribe-box svelte-xvmnbq"}"><div class="${"elems-box svelte-xvmnbq"}">${advent.elem.includes("\u706B") ? `<div class="${"elem fire svelte-xvmnbq"}"></div>` : ``}
                 ${advent.elem.includes("\u6C34") ? `<div class="${"elem water svelte-xvmnbq"}"></div>` : ``}
@@ -10285,7 +10295,7 @@ var InfiniteScroll = create_ssr_component(($$result, $$props, $$bindings, slots)
     $$bindings.hasMore(hasMore);
   return `<div style="${"width:0px"}"${add_attribute("this", component, 0)}></div>`;
 });
-var css$c = {
+var css$d = {
   code: "button.svelte-1r971ov.svelte-1r971ov{font-size:14px;width:70px;color:white;border:solid 2px white;border-radius:5px}article.svelte-1r971ov.svelte-1r971ov{height:calc(100vh - 150px);overflow-y:scroll}article.svelte-1r971ov section.svelte-1r971ov{margin:0 auto;width:90vw;max-width:700px}article.svelte-1r971ov #elem-filter-box.svelte-1r971ov{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:right}article.svelte-1r971ov #elem-filter-box .elem.svelte-1r971ov{width:25px;font-size:12px;font-weight:900;text-align:center;margin:5px;border-radius:5px;border:solid 2px #929292;padding:3px}article.svelte-1r971ov #elem-filter-box .elem div.svelte-1r971ov{width:25px;height:25px;margin:0 auto;border-radius:12px}article.svelte-1r971ov #elem-filter-box .elem.active.fire.svelte-1r971ov{border-color:red;color:red;text-shadow:2px 1px 0px #ff7300}article.svelte-1r971ov #elem-filter-box .elem.active.water.svelte-1r971ov{border-color:#2c80ff;color:#2c80ff;text-shadow:2px 1px 0px #a2bfff}article.svelte-1r971ov #elem-filter-box .elem.active.wood.svelte-1r971ov{border-color:#35af00;color:#35af00;text-shadow:2px 1px 0px #2e7300}article.svelte-1r971ov #elem-filter-box .elem.active.light.svelte-1r971ov{border-color:#fff4c3;color:#ffe883;text-shadow:2px 1px 0px #ffc400}article.svelte-1r971ov #elem-filter-box .elem.active.dark.svelte-1r971ov{border-color:#c83eff;color:#c83eff;text-shadow:2px 1px 0px #db81ff}article.svelte-1r971ov #elem-filter-box .elem.active.hell.svelte-1r971ov{border-color:#ffc400;color:#3d2d00;text-shadow:2px 1px 0px #ffc400}article.svelte-1r971ov #elem-filter-box .elem.active.heaven.svelte-1r971ov{border-color:#ffb4f5;color:#f1dade;text-shadow:2px 1px 0px #ff5fea}article.svelte-1r971ov #elem-filter-box button.svelte-1r971ov{--green:#6fffcf;color:var(--green);border:solid 2px var(--green);margin:0 0 0 15px}article.svelte-1r971ov #advent-list-box.svelte-1r971ov{width:90vw}article.svelte-1r971ov #advent-list-box p.svelte-1r971ov{font-size:11px}article.svelte-1r971ov #advent-list-box #advent-list.svelte-1r971ov{max-width:700px;margin:0 auto 10px auto;height:170px;display:flex;flex-direction:column;justify-content:start;flex-wrap:wrap;overflow-x:scroll}article.svelte-1r971ov #advent-detail-box.svelte-1r971ov{margin:30px auto;width:90vw}article.svelte-1r971ov #advent-detail-box #advent-overview.svelte-1r971ov{display:flex}article.svelte-1r971ov #advent-detail-box #advent-overview #advent-overview-text.svelte-1r971ov{display:flex;flex-direction:column;justify-content:center}article.svelte-1r971ov #advent-detail-box #advent-overview #advent-overview-text h5.svelte-1r971ov{margin:5px 0}article.svelte-1r971ov #advent-detail-box #banmen-list.svelte-1r971ov{margin:10px 0 400px 0}article.svelte-1r971ov #advent-detail-box #banmen-list #banmen-moj-length-config-box.svelte-1r971ov{margin:10px 0 20px 0;max-width:350px;display:flex;justify-content:space-between}article.svelte-1r971ov #advent-detail-box #banmen-list #banmen-moj-length-config-box button.active.svelte-1r971ov{color:var(--active-yellow);border-color:var(--active-yellow)}article.svelte-1r971ov #advent-detail-box #banmen-list .banmen.svelte-1r971ov{display:flex;justify-content:space-between;align-items:center;font-size:20px;font-weight:bold;letter-spacing:3px;border-bottom:solid 1px white;padding:0 0 5px 0;margin:0 0 15px 0}article.svelte-1r971ov #advent-detail-box #banmen-list .banmen img.svelte-1r971ov{width:8px;height:15px;margin:0 20px 0 0;transition:0.5s}article.svelte-1r971ov #advent-detail-box #banmen-list .banmen.active.svelte-1r971ov{color:var(--active-yellow)}article.svelte-1r971ov #advent-detail-box #banmen-list .banmen.active img.svelte-1r971ov{transform:rotate(90deg)}article.svelte-1r971ov #advent-detail-box #answers-box.svelte-1r971ov{position:fixed;padding:15px 15px 60px 15px;z-index:100;bottom:-520px;left:0;width:100vw;height:480px;background:linear-gradient(225deg, black, rgba(0, 0, 0, 0.8));border-top:solid 2px white;transition:0.3s}article.svelte-1r971ov #advent-detail-box #answers-box.active.svelte-1r971ov{bottom:0}article.svelte-1r971ov #advent-detail-box #answers-box .answer-count.svelte-1r971ov{max-width:650px;margin:0 auto 20px auto}article.svelte-1r971ov #advent-detail-box #answers-box #answer-box-close-button.svelte-1r971ov{position:absolute;top:-30px;right:50px;width:80px;height:30px;border:solid 1px white;border-bottom:solid 2px black;border-radius:7px 7px 0 0;background:black}article.svelte-1r971ov #advent-detail-box #answers-box #answer-box-close-button-tap-area.svelte-1r971ov{position:absolute;top:-30px;right:50px;width:80px;height:100px;padding:15px 30px}article.svelte-1r971ov #advent-detail-box #answers-box #answers-list.svelte-1r971ov{width:90vw;max-width:650px;margin:0 auto;color:white;height:100%;overflow-y:scroll;display:flex;justify-content:left;flex-wrap:wrap}article.svelte-1r971ov #advent-detail-box #answers-box #answers-list .ans-box.svelte-1r971ov{width:160px;padding:0 0 0 15px;border-left:solid 3px white;margin:10px 0}article.svelte-1r971ov #advent-detail-box #answers-box #answers-list .ans-box .answer-word.svelte-1r971ov{font-size:18px}article.svelte-1r971ov #advent-detail-box #answers-box #answers-list .ans-box .answer-nessesary.svelte-1r971ov{font-size:12px}",
   map: null
 };
@@ -10306,7 +10316,7 @@ var Analyze = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_deckStore = subscribe(deckStore, (value) => value);
   let answerCount = 0;
   let answerList = [];
-  $$result.css.add(css$c);
+  $$result.css.add(css$d);
   $$unsubscribe_adventBanmenStore();
   $$unsubscribe_mojiLengthConfigStore();
   $$unsubscribe_adventTargetStore();
@@ -10343,7 +10353,7 @@ var analyze = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": Analyze
 });
-var css$b = {
+var css$c = {
   code: '.kotodaman.svelte-1xo4c4s.svelte-1xo4c4s{font-family:"Kosugi Maru", sans-serif;width:71px;margin:10px}.kotodaman.no-margin.svelte-1xo4c4s.svelte-1xo4c4s{display:flex;justify-content:center;align-items:center;width:70px;height:70px;margin:0px}.kotodaman.svelte-1xo4c4s .smart-info-box.svelte-1xo4c4s{display:flex;flex-direction:row;justify-content:space-around}.kotodaman.svelte-1xo4c4s .smart-info-box img.svelte-1xo4c4s{width:60px;height:50px}.kotodaman.svelte-1xo4c4s .smart-info-box img.disable.svelte-1xo4c4s{filter:grayscale(85%)}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box.svelte-1xo4c4s{position:relative}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .tribe-box.svelte-1xo4c4s{position:absolute;top:2px;left:-10px;width:19px;height:17px;background-color:#ffd726;box-shadow:1px 2px 1px white;border-radius:1px 8px}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .tribe-box.disable.svelte-1xo4c4s{color:#b6b6b6;background-color:#887e43}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .tribe-box p.svelte-1xo4c4s{font-size:14px;line-height:17px;text-align:center;text-shadow:1px 1px 2px black}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box.svelte-1xo4c4s{height:100%;display:flex;flex-direction:column-reverse}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box .elem.svelte-1xo4c4s{width:11px;height:11px;border-radius:6px;margin:0 0 2px 0;border:solid 2px}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box .elem.fire.svelte-1xo4c4s{background-color:#db4646;border-color:#ff9100}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box .elem.water.svelte-1xo4c4s{background-color:#297eff;border-color:#a7d7ff}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box .elem.wood.svelte-1xo4c4s{background-color:#69ac69;border-color:#afd8ab}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box .elem.light.svelte-1xo4c4s{background-color:#ffd23e;border-color:#fff09e}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box .elem.dark.svelte-1xo4c4s{background-color:#9255a5;border-color:#d0acff}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box .elem.hell.svelte-1xo4c4s{background-color:#311f04;border-color:#d6a609}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box .elem.heaven.svelte-1xo4c4s{background-color:#faf3f8;border-color:#ffaff8}.kotodaman.svelte-1xo4c4s .name.svelte-1xo4c4s{text-align:center;line-height:10px;font-size:10px;width:100%;margin:3px 0 0 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.kotodaman.svelte-1xo4c4s .name.disable.svelte-1xo4c4s{color:gray}',
   map: null
 };
@@ -10357,7 +10367,7 @@ var Kotodaman = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     $$bindings.kotodaman(kotodaman);
   if ($$props.full === void 0 && $$bindings.full && full !== void 0)
     $$bindings.full(full);
-  $$result.css.add(css$b);
+  $$result.css.add(css$c);
   $$unsubscribe_isDeckFullStore();
   return `<div class="${"kotodaman " + escape(!full ? "no-margin" : "") + " svelte-1xo4c4s"}"><div class="${"smart-info-box svelte-1xo4c4s"}"><img class="${escape(null_to_empty(kotodaman.disable ? "disable" : "")) + " svelte-1xo4c4s"}"${add_attribute("src", kotodaman.figure, 0)}${add_attribute("alt", kotodaman.name, 0)}>
         ${full ? `<div class="${"elems-tribe-box svelte-1xo4c4s"}"><div class="${"tribe-box " + escape(kotodaman.disable ? "disable" : "") + " svelte-1xo4c4s"}"><p class="${"svelte-1xo4c4s"}">${escape(kotodaman.tribe[0])}</p></div>
@@ -10373,7 +10383,7 @@ var Kotodaman = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     
 </div>`;
 });
-var css$a = {
+var css$b = {
   code: '#specify-filter-box.svelte-z4r2ey.svelte-z4r2ey{width:100%;display:flex;flex-direction:column;justify-content:space-evenly;font-family:"Kosugi Maru", sans-serif}h3.svelte-z4r2ey.svelte-z4r2ey{margin:10px 0 0 0}#elem-box.svelte-z4r2ey.svelte-z4r2ey,#tribe-box.svelte-z4r2ey.svelte-z4r2ey,#gimmick-box.svelte-z4r2ey.svelte-z4r2ey{width:100%;display:flex;flex-direction:row;flex-wrap:wrap;justify-content:center;margin:0 0 10px 0}.elem.svelte-z4r2ey.svelte-z4r2ey{width:50px;font-size:18px;font-weight:900;text-align:center;margin:5px;border-radius:5px;border:solid 2px white;padding:3px}.elem.active.fire.svelte-z4r2ey.svelte-z4r2ey{border-color:red;color:red;text-shadow:2px 1px 0px #ff7300}.elem.active.water.svelte-z4r2ey.svelte-z4r2ey{border-color:#2c80ff;color:#2c80ff;text-shadow:2px 1px 0px #a2bfff}.elem.active.wood.svelte-z4r2ey.svelte-z4r2ey{border-color:#35af00;color:#35af00;text-shadow:2px 1px 0px #2e7300}.elem.active.light.svelte-z4r2ey.svelte-z4r2ey{border-color:#fff4c3;color:#ffe883;text-shadow:2px 1px 0px #ffc400}.elem.active.dark.svelte-z4r2ey.svelte-z4r2ey{border-color:#c83eff;color:#c83eff;text-shadow:2px 1px 0px #db81ff}.elem.active.hell.svelte-z4r2ey.svelte-z4r2ey{border-color:#ffc400;color:#3d2d00;text-shadow:2px 1px 0px #ffc400}.elem.active.heaven.svelte-z4r2ey.svelte-z4r2ey{border-color:#ffb4f5;color:#f1dade;text-shadow:2px 1px 0px #ff5fea}.elem.long.svelte-z4r2ey.svelte-z4r2ey{width:70px}.tribe.svelte-z4r2ey.svelte-z4r2ey{width:50px;height:35px;margin:5px;border-radius:5px;text-align:center;justify-content:space-around;line-height:30px;border:solid 2px white}.tribe.blank.svelte-z4r2ey.svelte-z4r2ey{border:none}.tribe.active.svelte-z4r2ey.svelte-z4r2ey{border:solid 2px var(--active-yellow);color:var(--active-yellow)}.gimmick.svelte-z4r2ey.svelte-z4r2ey{width:50px;height:40px;margin:5px;justify-content:space-around;border-radius:5px;border:solid 2px white;padding:3px}.gimmick.active.svelte-z4r2ey.svelte-z4r2ey{border:solid 2px var(--active-yellow)}.gimmick.svelte-z4r2ey img.svelte-z4r2ey{margin:0 auto;height:30px}.elem.svelte-z4r2ey.svelte-z4r2ey,.tribe.svelte-z4r2ey.svelte-z4r2ey,.gimmick.svelte-z4r2ey.svelte-z4r2ey{cursor:pointer}',
   map: null
 };
@@ -10384,7 +10394,7 @@ var Specify = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_gimmickStore = subscribe(gimmickStore, (value) => $gimmickStore = value);
   $$unsubscribe_tribeStore = subscribe(tribeStore, (value) => $tribeStore = value);
   $$unsubscribe_elemStore = subscribe(elemStore, (value) => $elemStore = value);
-  $$result.css.add(css$a);
+  $$result.css.add(css$b);
   $$unsubscribe_gimmickStore();
   $$unsubscribe_tribeStore();
   $$unsubscribe_elemStore();
@@ -10397,21 +10407,21 @@ var Specify = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     <section id="${"gimmick-box"}" class="${"svelte-z4r2ey"}">${each($gimmickStore, (gs) => `<div class="${"gimmick " + escape(gs.active ? "active" : "") + " svelte-z4r2ey"}"><img${add_attribute("src", `/img/bs2nd/${GimmickEngDict[gs.gimmick]}.svg`, 0)}${add_attribute("alt", gs.gimmick, 0)} class="${"svelte-z4r2ey"}"></div>`)}</section>
 </article>`;
 });
-var css$9 = {
+var css$a = {
   code: '#kana-filter-box.svelte-1dnb1gp.svelte-1dnb1gp{width:100%;font-family:"Kosugi Maru", sans-serif}#kana-filter-box.svelte-1dnb1gp p.svelte-1dnb1gp{margin:10px 0 0 0;font-size:10px}#kana-box.svelte-1dnb1gp.svelte-1dnb1gp{display:flex;justify-content:space-around;flex-wrap:wrap;--kana-box-size:38px}#kana-box.svelte-1dnb1gp .kana.svelte-1dnb1gp{cursor:pointer;border:solid 1px white;border-radius:3px;width:var(--kana-box-size);height:var(--kana-box-size);margin:2px 5px;line-height:var(--kana-box-size);text-align:center}#kana-box.svelte-1dnb1gp .kana.active.svelte-1dnb1gp{border-color:var(--active-yellow);color:var(--active-yellow)}#kana-box.svelte-1dnb1gp .kana-blank.svelte-1dnb1gp{width:var(--kana-box-size);height:var(--kana-box-size);margin:2px}',
   map: null
 };
 var Kana = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $kanaStore, $$unsubscribe_kanaStore;
   $$unsubscribe_kanaStore = subscribe(kanaStore, (value) => $kanaStore = value);
-  $$result.css.add(css$9);
+  $$result.css.add(css$a);
   $$unsubscribe_kanaStore();
   return `<article id="${"kana-filter-box"}" class="${"svelte-1dnb1gp"}"><section id="${"kana-box"}" class="${"svelte-1dnb1gp"}">${each($kanaStore, (k) => `${k.kanas[0] != "" ? `<div class="${"kana " + escape(k.active ? "active" : "") + " svelte-1dnb1gp"}">${escape(k.kanas[0])}
                 </div>` : `<div class="${"kana-blank svelte-1dnb1gp"}"></div>`}`)}</section>
     <p class="${"svelte-1dnb1gp"}">* \u6FC1\u97F3\u3084\u4FC3\u97F3\u306A\u3069\u306F\u3001\u5168\u3066\u305D\u306E\u76F4\u97F3\u306B\u542B\u307E\u308C\u307E\u3059\u3002</p>
 </article>`;
 });
-var css$8 = {
+var css$9 = {
   code: "#bs2nd-edit-filter-panel.svelte-lv4ubr.svelte-lv4ubr.svelte-lv4ubr{padding:5px;width:100%;height:100%;position:relative}#bs2nd-edit-filter-panel.svelte-lv4ubr .tabbox.svelte-lv4ubr.svelte-lv4ubr{margin-bottom:10px;padding:10px;border:1px solid #dee2e6;border-radius:0 0 0.5rem 0.5rem;border-top:0}#bs2nd-edit-filter-panel.svelte-lv4ubr ul.svelte-lv4ubr.svelte-lv4ubr{display:flex;flex-wrap:wrap;padding-left:0;margin:0 0;list-style:none;border-bottom:1px solid #dee2e6}#bs2nd-edit-filter-panel.svelte-lv4ubr li.svelte-lv4ubr.svelte-lv4ubr{width:50%;text-align:center;margin-bottom:-1px}#bs2nd-edit-filter-panel.svelte-lv4ubr span.svelte-lv4ubr.svelte-lv4ubr{border:1px solid transparent;border-top-left-radius:0.25rem;border-top-right-radius:0.25rem;display:block;padding:0.5rem 1rem;cursor:pointer;transition:0.3s}#bs2nd-edit-filter-panel.svelte-lv4ubr span.svelte-lv4ubr.svelte-lv4ubr:hover{border-color:#e9ecef #e9ecef #dee2e6}#bs2nd-edit-filter-panel.svelte-lv4ubr li.active.svelte-lv4ubr>span.svelte-lv4ubr{border-color:#dee2e6 #dee2e6 #fff}#bs2nd-edit-filter-panel.svelte-lv4ubr #filter-execute-box.svelte-lv4ubr.svelte-lv4ubr{position:absolute;bottom:25px;width:100%;text-align:center}#bs2nd-edit-filter-panel.svelte-lv4ubr #filter-execute-box button.svelte-lv4ubr.svelte-lv4ubr{margin:0 10px;border:solid 1px white;border-radius:5px;color:white;width:110px;height:35px}",
   map: null
 };
@@ -10446,7 +10456,7 @@ var Main = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     { label: "50\u97F3", value: 2, component: Kana }
   ];
   let activeTabs = 1;
-  $$result.css.add(css$8);
+  $$result.css.add(css$9);
   $$unsubscribe_gimmickStore();
   $$unsubscribe_tribeStore();
   $$unsubscribe_elemStore();
@@ -10465,7 +10475,7 @@ var Main = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         <button id="${"reset-button"}" class="${"svelte-lv4ubr"}">\u30EA\u30BB\u30C3\u30C8</button></section>
 </article>`;
 });
-var css$7 = {
+var css$8 = {
   code: '#deck-list-panel.svelte-zpytjz.svelte-zpytjz{font-family:"Kosugi Maru", sans-serif;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-between}#deck-list-panel.svelte-zpytjz .deck-box.svelte-zpytjz{width:100%;height:100px;position:relative}#deck-list-panel.svelte-zpytjz .deck-box .deck-name.svelte-zpytjz{position:absolute;color:white;background:none;border:none;z-index:15;width:150px;font-size:15px;top:20px;left:10px}#deck-list-panel.svelte-zpytjz .deck-box .deck-name.svelte-zpytjz:focus{outline:none;border:solid 1px var(--active-yellow);border-radius:5px}#deck-list-panel.svelte-zpytjz .deck-box .deck-thumbnail.svelte-zpytjz{position:absolute;top:10px;right:0;width:70%;height:80px}#deck-list-panel.svelte-zpytjz .deck-box .deck-thumbnail .deck-img.svelte-zpytjz{position:absolute;width:100%;height:inherit;background-image:var(--url);background-size:cover;background-position:50% 30%;background-repeat:no-repeat;background-blend-mode:screen}#deck-list-panel.svelte-zpytjz .deck-box .deck-thumbnail .deck-img-blank.svelte-zpytjz{position:absolute;right:40px;top:20px;width:auto;height:40px;background-image:var(--url-blank)}#deck-list-panel.svelte-zpytjz .deck-box .deck-thumbnail .deck-img-filter.svelte-zpytjz{position:absolute;width:100%;height:100%;background:linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0))}#deck-list-panel.svelte-zpytjz .deck-box .deck-list.svelte-zpytjz{position:absolute;z-index:10;left:10px;bottom:0px;width:180px;display:flex;flex-direction:row;flex-wrap:wrap-reverse}#deck-list-panel.svelte-zpytjz .deck-box .deck-list img.svelte-zpytjz{width:25px;margin:0 3px 0 0}#deck-list-panel.svelte-zpytjz .deck-box .deck-delete-button.svelte-zpytjz{position:absolute;bottom:0;right:10px}#deck-list-panel.svelte-zpytjz .deck-box .deck-delete-button img.svelte-zpytjz{width:30px}',
   map: null
 };
@@ -10480,7 +10490,7 @@ var Storage = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_isDeckFullStore = subscribe(isDeckFullStore, (value) => value);
   createEventDispatcher();
   console.log($decks);
-  $$result.css.add(css$7);
+  $$result.css.add(css$8);
   $$unsubscribe_unitListStore();
   $$unsubscribe_deckStore();
   $$unsubscribe_decks();
@@ -10495,11 +10505,11 @@ var Storage = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         </div>`}`)}
 </section>`;
 });
-var css$6 = {
+var css$7 = {
   code: "#bs2nd-screen.svelte-18a0dkd.svelte-18a0dkd{margin:0 auto;height:calc(100vh - 120px);overflow:hidden;display:flex;flex-direction:row;justify-content:space-evenly}#bs2nd-screen.svelte-18a0dkd #bs2nd-edit-panels.svelte-18a0dkd{max-width:90vw;height:100%;display:flex;flex-direction:column;justify-content:space-around}#bs2nd-screen.svelte-18a0dkd #bs2nd-edit-panels #bs2nd-deck-edit.svelte-18a0dkd{margin:10px auto 10px auto}#bs2nd-screen.svelte-18a0dkd #bs2nd-edit-panels #bs2nd-deck-edit #bs2nd-deck-edit-panel.svelte-18a0dkd{height:225px;width:300px;margin:0 0 5px 0;background:white;border-radius:20px;display:flex;flex-direction:row;justify-content:space-evenly;flex-wrap:wrap}#bs2nd-screen.svelte-18a0dkd #bs2nd-edit-panels #bs2nd-deck-edit #bs2nd-deck-edit-panel .unit-in-deck-blank-slot.svelte-18a0dkd{width:50px;height:50px;border-radius:25px;margin:10px;background-color:#333333}#bs2nd-screen.svelte-18a0dkd #bs2nd-edit-panels #bs2nd-deck-edit button.svelte-18a0dkd{width:100px;margin:0 0 0 15px;border:solid 1px white;border-radius:10px;color:white;font-size:12px}#bs2nd-screen.svelte-18a0dkd #bs2nd-edit-panels #bs2nd-show-units-panel.svelte-18a0dkd{flex-grow:2;overflow-y:scroll;display:flex;flex-direction:row;justify-content:center;flex-wrap:wrap;margin:10px 0 15px 0;width:100%;max-width:400px;border:solid 2px white;border-radius:20px;padding:25px 0 200px 0}#bs2nd-screen.svelte-18a0dkd #bs2nd-edit-panels #bs2nd-show-units-panel.svelte-18a0dkd::-webkit-scrollbar{width:5px}#bs2nd-screen.svelte-18a0dkd #bs2nd-edit-panels #bs2nd-show-units-panel.svelte-18a0dkd::-webkit-scrollbar-thumb{border-radius:2px}#bs2nd-screen.svelte-18a0dkd .panel-box h2.svelte-18a0dkd{margin:0 0 5px 0}#bs2nd-screen.svelte-18a0dkd .panel-box p.svelte-18a0dkd{margin:0 0 25px 0;font-size:12px}#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-slider.svelte-18a0dkd{position:fixed;top:50px;right:-250px;border:solid 2px white;border-radius:20px 0 0 20px}#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-panel.svelte-18a0dkd{border:solid 2px white;border-radius:10px}#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-slider.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-panel.svelte-18a0dkd{width:250px;height:550px;background:linear-gradient(90deg, black, rgba(0, 0, 0, 0.7));transition:0.3s;padding:5px 0 5px 5px}#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-slider.open.svelte-18a0dkd{right:-3px}#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-slider #bs2nd-deck-select-slider-button.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-panel #bs2nd-deck-select-slider-button.svelte-18a0dkd{position:absolute;border-top:solid 2px white;border-left:solid 2px white;border-bottom:solid 2px white;border-right:solid 4px black;background-color:black;border-radius:15px 0 0 15px;top:200px;left:-59px;width:60px;height:60px}#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-slider #bs2nd-deck-select-slider-button img.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-panel #bs2nd-deck-select-slider-button img.svelte-18a0dkd{width:40px;margin:8px auto;transition:0.5s 0.3s}#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-slider #bs2nd-deck-select-slider-button img.open.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-panel #bs2nd-deck-select-slider-button img.open.svelte-18a0dkd{transform:rotate(180deg)}#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-slider.svelte-18a0dkd{position:fixed;bottom:80px;right:-300px;width:300px;height:600px;border:solid 2px white;border-radius:15px 0 0 15px}#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-panel.svelte-18a0dkd{width:300px;height:600px;border:solid 2px white;border-radius:10px}#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-slider.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-panel.svelte-18a0dkd{background:linear-gradient(45deg, black, rgba(0, 0, 0, 0.7));transition:0.3s;padding:5px}#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-slider.open.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-panel.open.svelte-18a0dkd{right:0}#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-slider #bs2nd-units-filter-slider-button.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-panel #bs2nd-units-filter-slider-button.svelte-18a0dkd{position:absolute;border-top:solid 2px white;border-left:solid 2px white;border-bottom:solid 2px white;border-right:solid 4px black;background-color:black;border-radius:15px 0 0 15px;bottom:10px;left:-59px;width:60px;height:60px}#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-slider #bs2nd-units-filter-slider-button img.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-panel #bs2nd-units-filter-slider-button img.svelte-18a0dkd{width:40px;margin:8px auto;transition:0.5s 0.3s}#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-slider #bs2nd-units-filter-slider-button img.open.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-panel #bs2nd-units-filter-slider-button img.open.svelte-18a0dkd{transform:rotate(180deg)}",
   map: null
 };
-var Edit = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+var Edit$1 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $$unsubscribe_isDeckFullStore;
   let $deckStore, $$unsubscribe_deckStore;
   let $unitListStore, $$unsubscribe_unitListStore;
@@ -10512,7 +10522,7 @@ var Edit = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_isListLoading = subscribe(isListLoading, (value) => $isListLoading = value);
   $$unsubscribe_isBottomOfScroll = subscribe(isBottomOfScroll, (value) => value);
   $$unsubscribe_filterConditionStore = subscribe(filterConditionStore, (value) => value);
-  $$result.css.add(css$6);
+  $$result.css.add(css$7);
   $$unsubscribe_isDeckFullStore();
   $$unsubscribe_deckStore();
   $$unsubscribe_unitListStore();
@@ -10552,10 +10562,10 @@ var Edit = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   })}
 </article>`;
 });
-var edit = /* @__PURE__ */ Object.freeze({
+var edit$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
-  "default": Edit
+  "default": Edit$1
 });
 var Post = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   return ``;
@@ -10576,42 +10586,32 @@ var collect = /* @__PURE__ */ Object.freeze({
 var cardWidth = readable(90);
 readable(110);
 var modeStore = writable("dark");
+var movingStore = writable(false);
+var exDeckListStore = writable([]);
 var deckListStore = writable([]);
 var handListStore = writable([]);
 var boardListStore = writable([]);
-var boardAreaInfoStore = writable({
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0
-});
-var handAreaInfoStore = writable({
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0
-});
-var deckAreaInfoStore = writable({
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0
-});
-var css$5 = {
-  code: '@charset "UTF-8";:root{--header-height:40px;--cw:90px;--ch:110px}#tcg-all-compnents.svelte-no22cg.svelte-no22cg{display:flex;justify-content:space-between;top:0;left:0;right:0;bottom:0;overflow-y:scroll;-ms-overflow-style:none;scrollbar-width:none}#tcg-all-compnents.svelte-no22cg.svelte-no22cg::-webkit-scrollbar{display:none}header.svelte-no22cg.svelte-no22cg{display:flex;justify-content:space-between;height:var(--header-height)}header.svelte-no22cg .n2-logo.svelte-no22cg{padding:10px}header.svelte-no22cg .n2-logo img.svelte-no22cg{height:20px}header.svelte-no22cg .color-config.svelte-no22cg{margin:0 20px 0 0;display:flex;align-items:center}header.svelte-no22cg .color-config button.svelte-no22cg{width:25px;height:25px;margin:0 7px;border-radius:7px}header.svelte-no22cg .color-config .light.svelte-no22cg{background:white}header.svelte-no22cg .color-config .dark.svelte-no22cg{background:darkblue}#screen.svelte-no22cg.svelte-no22cg{display:flex;flex-direction:column;justify-content:center;width:calc(100vw - 70px);height:calc(100vh - 40px)}#screen.svelte-no22cg #base.svelte-no22cg{width:1100px;height:760px;margin:0 auto;-moz-perspective:500;-webkit-perspective:500;-o-perspective:500;-ms-perspective:500;perspective:500}#screen.svelte-no22cg #base.light.svelte-no22cg{background:white;background:radial-gradient(circle at bottom, white 0%, #ffecc0 100%)}#screen.svelte-no22cg #base.dark.svelte-no22cg{background:#24186e;background:radial-gradient(circle at bottom, #24186e 0%, black 100%)}footer.svelte-no22cg.svelte-no22cg{top:0;bottom:0;right:0;width:70px}footer.light.svelte-no22cg.svelte-no22cg{background:white}footer.dark.svelte-no22cg.svelte-no22cg{background:black}',
+var unshuffleDeckListStore = writable([]);
+var unshuffleExDeckListStore = writable([]);
+var boardAreaInfoStore = writable({ top: 0, left: 0, right: 0, bottom: 0 });
+var handAreaInfoStore = writable({ top: 0, left: 0, right: 0, bottom: 0 });
+var deckAreaInfoStore = writable({ top: 0, left: 0, right: 0, bottom: 0 });
+var css$6 = {
+  code: '@charset "UTF-8";:root{--header-height:40px;--cw:90px;--ch:110px}#tcg-all-compnents.svelte-s84rdq.svelte-s84rdq{display:flex;justify-content:space-between;top:0;left:0;right:0;bottom:0;overflow-y:scroll;-ms-overflow-style:none;scrollbar-width:none}#tcg-all-compnents.svelte-s84rdq.svelte-s84rdq::-webkit-scrollbar{display:none}header.svelte-s84rdq.svelte-s84rdq{display:flex;justify-content:space-between;height:var(--header-height)}header.svelte-s84rdq .n2-logo.svelte-s84rdq{padding:10px}header.svelte-s84rdq .n2-logo img.svelte-s84rdq{height:20px}header.svelte-s84rdq .color-config.svelte-s84rdq{margin:0 20px 0 0;display:flex;align-items:center}header.svelte-s84rdq .color-config button.svelte-s84rdq{width:25px;height:25px;margin:0 7px;border-radius:7px}header.svelte-s84rdq .color-config .light.svelte-s84rdq{background:white}header.svelte-s84rdq .color-config .dark.svelte-s84rdq{background:darkblue}#screen.svelte-s84rdq.svelte-s84rdq{display:flex;flex-direction:column;justify-content:center;width:calc(100vw - 70px);height:calc(100vh - 40px)}#screen.svelte-s84rdq #base.svelte-s84rdq{width:1100px;height:760px;margin:0 auto;-moz-perspective:500;-webkit-perspective:500;-o-perspective:500;-ms-perspective:500;perspective:500}#screen.svelte-s84rdq #base.light.svelte-s84rdq{background:white;background:radial-gradient(circle at bottom, white 0%, #ffecc0 100%)}#screen.svelte-s84rdq #base.dark.svelte-s84rdq{background:#24186e;background:radial-gradient(circle at bottom, #24186e 0%, black 100%)}footer.svelte-s84rdq.svelte-s84rdq{top:0;bottom:0;right:0;width:70px;display:flex;flex-direction:column;justify-content:space-around}footer.light.svelte-s84rdq.svelte-s84rdq{background:white}footer.dark.svelte-s84rdq.svelte-s84rdq{background:black}footer.svelte-s84rdq a div.svelte-s84rdq{width:50px;height:50px;background:yellow}',
   map: null
 };
 var _layout_reset = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $modeStore, $$unsubscribe_modeStore;
   $$unsubscribe_modeStore = subscribe(modeStore, (value) => $modeStore = value);
-  $$result.css.add(css$5);
+  $$result.css.add(css$6);
   $$unsubscribe_modeStore();
-  return `<header class="${"svelte-no22cg"}"><div class="${"n2-logo svelte-no22cg"}"><a href="${"/"}"><img src="${"/img/n2-icon-white.svg"}" alt="${""}" class="${"svelte-no22cg"}"></a></div>
-    <div class="${"color-config svelte-no22cg"}"><button class="${"light svelte-no22cg"}"></button>
-        <button class="${"dark svelte-no22cg"}"></button></div></header>
-<div id="${"tcg-all-compnents"}" class="${"svelte-no22cg"}"><article id="${"screen"}" class="${"svelte-no22cg"}"><section id="${"base"}" class="${escape(null_to_empty($modeStore)) + " svelte-no22cg"}">${slots.default ? slots.default({}) : ``}</section></article>
+  return `<header class="${"svelte-s84rdq"}"><div class="${"n2-logo svelte-s84rdq"}"><a href="${"/"}"><img src="${"/img/n2-icon-white.svg"}" alt="${""}" class="${"svelte-s84rdq"}"></a></div>
+    <div class="${"color-config svelte-s84rdq"}"><button class="${"light svelte-s84rdq"}"></button>
+        <button class="${"dark svelte-s84rdq"}"></button></div></header>
+<div id="${"tcg-all-compnents"}" class="${"svelte-s84rdq"}"><article id="${"screen"}" class="${"svelte-s84rdq"}"><section id="${"base"}" class="${escape(null_to_empty($modeStore)) + " svelte-s84rdq"}">${slots.default ? slots.default({}) : ``}</section></article>
     
-    <footer class="${escape(null_to_empty($modeStore)) + " svelte-no22cg"}"></footer></div>
+    <footer class="${escape(null_to_empty($modeStore)) + " svelte-s84rdq"}"><a href="${"/app/tcg-simulator/game"}"><div class="${"svelte-s84rdq"}"></div></a>
+        <a href="${"/app/tcg-simulator/edit"}"><div class="${"svelte-s84rdq"}"></div></a></footer></div>
 ${validate_component(ToastArea, "ToastArea").$$render($$result, {}, {}, {})}`;
 });
 var __layout_reset = /* @__PURE__ */ Object.freeze({
@@ -10619,14 +10619,18 @@ var __layout_reset = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": _layout_reset
 });
-var css$4 = {
-  code: ":root{--guide-color:#ffbb00}img.svelte-r9fsf6.svelte-r9fsf6{-webkit-user-drag:none;border-radius:5px}.card-body.svelte-r9fsf6.svelte-r9fsf6{position:absolute;left:var(--pos_x);top:var(--pos_y);width:var(--cw);height:var(--ch);transition:0.2s;cursor:move}.card-body.movin.svelte-r9fsf6.svelte-r9fsf6{transition:none}.card-body.movin.svelte-r9fsf6 .card-surface.svelte-r9fsf6{filter:grayscale(100%) blur(2px)}.card-body.noGuide.svelte-r9fsf6 .card-surface.svelte-r9fsf6{filter:none}.card-body.svelte-r9fsf6 .card-surface.svelte-r9fsf6{position:absolute;transform:rotate(var(--rotate));transition:0.2s;width:100%;height:100%;-moz-perspective:500;-webkit-perspective:500;-o-perspective:500;-ms-perspective:500;perspective:500}.card-body.svelte-r9fsf6 .card-surface .front.svelte-r9fsf6,.card-body.svelte-r9fsf6 .card-surface .back.svelte-r9fsf6{transition:0.2s;position:absolute;left:8px;backface-visibility:hidden}.card-body.svelte-r9fsf6 .card-surface .front img.svelte-r9fsf6,.card-body.svelte-r9fsf6 .card-surface .back img.svelte-r9fsf6{width:calc(var(--cw) - 16px)}.card-body.svelte-r9fsf6 .card-surface .back.svelte-r9fsf6{transform:rotateY(-180deg)}.card-body.svelte-r9fsf6 .card-surface.flippin .front.svelte-r9fsf6{transform:rotateY(-180deg)}.card-body.svelte-r9fsf6 .card-surface.flippin .back.svelte-r9fsf6{transform:rotateY(0deg)}.card-body.svelte-r9fsf6 .card-guide.svelte-r9fsf6{position:absolute;--scaleup-width:10px;--scaleup-height:50px;left:calc(-1 * var(--scaleup-width) / 2);top:calc(-1 * var(--scaleup-height) / 2);width:calc(var(--cw) + var(--scaleup-width));height:calc(var(--ch) + var(--scaleup-height));border-radius:10px}.card-body.svelte-r9fsf6 .card-guide.hover.svelte-r9fsf6{border:solid 2px var(--guide-color)}.card-body.svelte-r9fsf6 .card-guide.hover button.svelte-r9fsf6{opacity:0.6;padding:0;position:absolute;--b-width:50%;--b-height:25px;--b-width-long:60px;--b-height-long:70px;--b-bradius:8px;width:var(--b-width);height:var(--b-height);background-color:var(--guide-color)}.card-body.svelte-r9fsf6 .card-guide.hover button.left-rotate.svelte-r9fsf6{top:0;left:0}.card-body.svelte-r9fsf6 .card-guide.hover button.right-rotate.svelte-r9fsf6{top:0;right:0}.card-body.svelte-r9fsf6 .card-guide.hover button.flip.svelte-r9fsf6{bottom:0;left:0;right:0;width:100%;height:var(--b-height)}.card-body.svelte-r9fsf6 .card-shadow.svelte-r9fsf6{position:absolute;--scaleup-width:20px;--scaleup-height:50px;left:calc(-1 * var(--scaleup-width) / 2);top:calc(-1 * var(--scaleup-height) * 2);width:calc(var(--cw) + var(--scaleup-width));height:calc(var(--ch) + var(--scaleup-height))}",
+var css$5 = {
+  code: ":root{--guide-color:#ffbb00}img.svelte-e02kpp.svelte-e02kpp{-webkit-user-drag:none;border-radius:5px}.card-body.svelte-e02kpp.svelte-e02kpp{position:absolute;z-index:100;left:var(--pos_x);top:var(--pos_y);width:var(--cw);height:var(--ch);cursor:move}.card-body.noBoard.svelte-e02kpp.svelte-e02kpp{transition:0.2s}.card-body.movin.svelte-e02kpp.svelte-e02kpp{transition:none}.card-body.movin.svelte-e02kpp .card-surface.svelte-e02kpp{filter:grayscale(100%) blur(2px)}.card-body.noGuide.svelte-e02kpp .card-surface.svelte-e02kpp{filter:none}.card-body.svelte-e02kpp .card-surface.svelte-e02kpp{position:absolute;transform:rotate(var(--rotate));transition:0.2s;width:100%;height:100%;-moz-perspective:500;-webkit-perspective:500;-o-perspective:500;-ms-perspective:500;perspective:500;transition:0.2s}.card-body.svelte-e02kpp .card-surface .front.svelte-e02kpp,.card-body.svelte-e02kpp .card-surface .back.svelte-e02kpp{transition:0.2s;position:absolute;left:8px;backface-visibility:hidden}.card-body.svelte-e02kpp .card-surface .front img.svelte-e02kpp,.card-body.svelte-e02kpp .card-surface .back img.svelte-e02kpp{width:calc(var(--cw) - 16px);z-index:10000}.card-body.svelte-e02kpp .card-surface .back.svelte-e02kpp{transform:rotateY(-180deg)}.card-body.svelte-e02kpp .card-surface.flippin .front.svelte-e02kpp{transform:rotateY(-180deg)}.card-body.svelte-e02kpp .card-surface.flippin .back.svelte-e02kpp{transform:rotateY(0deg)}.card-body.svelte-e02kpp .card-guide.svelte-e02kpp{position:absolute;--scaleup-width:10px;--scaleup-height:50px;left:calc(-1 * var(--scaleup-width) / 2);top:calc(-1 * var(--scaleup-height) / 2);width:calc(var(--cw) + var(--scaleup-width));height:calc(var(--ch) + var(--scaleup-height));border-radius:10px}.card-body.svelte-e02kpp .card-guide.hover.svelte-e02kpp{border:solid 2px var(--guide-color)}.card-body.svelte-e02kpp .card-guide.hover button.svelte-e02kpp{opacity:0.6;padding:0;position:absolute;--b-width:50%;--b-height:25px;--b-width-long:60px;--b-height-long:70px;--b-bradius:8px;width:var(--b-width);height:var(--b-height);background-color:var(--guide-color)}.card-body.svelte-e02kpp .card-guide.hover button.left-rotate.svelte-e02kpp{top:0;left:0}.card-body.svelte-e02kpp .card-guide.hover button.right-rotate.svelte-e02kpp{top:0;right:0}.card-body.svelte-e02kpp .card-guide.hover button.flip.svelte-e02kpp{bottom:0;left:0;right:0;width:100%;height:var(--b-height)}.card-body.svelte-e02kpp .card-shadow.svelte-e02kpp{position:absolute;--scaleup-width:20px;--scaleup-height:50px;left:calc(-1 * var(--scaleup-width) / 2);top:calc(-1 * var(--scaleup-height) * 2);width:calc(var(--cw) + var(--scaleup-width));height:calc(var(--ch) + var(--scaleup-height))}",
   map: null
 };
 var Card = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let $$unsubscribe_boardListStore;
+  let $movingStore, $$unsubscribe_movingStore;
   let $$unsubscribe_deckAreaInfoStore;
   let $$unsubscribe_handAreaInfoStore;
   let $$unsubscribe_boardAreaInfoStore;
+  $$unsubscribe_boardListStore = subscribe(boardListStore, (value) => value);
+  $$unsubscribe_movingStore = subscribe(movingStore, (value) => $movingStore = value);
   $$unsubscribe_deckAreaInfoStore = subscribe(deckAreaInfoStore, (value) => value);
   $$unsubscribe_handAreaInfoStore = subscribe(handAreaInfoStore, (value) => value);
   $$unsubscribe_boardAreaInfoStore = subscribe(boardAreaInfoStore, (value) => value);
@@ -10658,25 +10662,81 @@ var Card = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     $$bindings.noGuide(noGuide);
   if ($$props.flippin === void 0 && $$bindings.flippin && flippin !== void 0)
     $$bindings.flippin(flippin);
-  $$result.css.add(css$4);
+  $$result.css.add(css$5);
+  $$unsubscribe_boardListStore();
+  $$unsubscribe_movingStore();
   $$unsubscribe_deckAreaInfoStore();
   $$unsubscribe_handAreaInfoStore();
   $$unsubscribe_boardAreaInfoStore();
   return `
 
 
-<section class="${"card-body " + escape("") + " " + escape(noGuide ? "noGuide" : "") + " svelte-r9fsf6"}" style="${"--pos_x:" + escape(pos_x) + "px; --pos_y:" + escape(pos_y) + "px;--img:" + escape(img_url) + "; --rotate:" + escape(rotate) + "deg;"}">
-    <div class="${"card-guide " + escape("") + " svelte-r9fsf6"}">${``}</div>
-    
-    <div class="${"card-surface " + escape(flippin ? "flippin" : "") + " svelte-r9fsf6"}"><div class="${"front svelte-r9fsf6"}"><img${add_attribute("src", img_url, 0)} alt="${""}" class="${"svelte-r9fsf6"}"></div>
-        <div class="${"back svelte-r9fsf6"}"><img${add_attribute("src", sleeve_url, 0)} alt="${""}" class="${"svelte-r9fsf6"}"></div></div>
+<section class="${"card-body " + escape("") + " " + escape(noGuide ? "noGuide" : "") + " " + escape(onArea != "board" ? "noBoard" : "") + " svelte-e02kpp"}" style="${"--pos_x:" + escape(pos_x) + "px; --pos_y:" + escape(pos_y) + "px;--img:" + escape(img_url) + "; --rotate:" + escape(rotate) + "deg;"}">${!$movingStore ? `<div class="${"card-guide " + escape("") + " svelte-e02kpp"}">${``}</div>` : ``}
+    <div class="${"card-surface " + escape(flippin ? "flippin" : "") + " svelte-e02kpp"}"><div class="${"front svelte-e02kpp"}"><img${add_attribute("src", img_url, 0)} alt="${""}" class="${"svelte-e02kpp"}"></div>
+        <div class="${"back svelte-e02kpp"}"><img${add_attribute("src", sleeve_url, 0)} alt="${""}" class="${"svelte-e02kpp"}"></div></div>
 
     ${``}
     
 </section>`;
 });
+var css$4 = {
+  code: "#deckArea.svelte-1kk6kdi.svelte-1kk6kdi{position:relative}#deckArea.light.svelte-1kk6kdi.svelte-1kk6kdi{--deck-bg-color-top:#0a2ea5;--deck-bg-color-center:#324892;--deck-bg-color-bottom:#130069}#deckArea.dark.svelte-1kk6kdi.svelte-1kk6kdi{--deck-bg-color-top:#0a2ea5;--deck-bg-color-center:#83a0ff;--deck-bg-color-bottom:#130069}#deckPiling.svelte-1kk6kdi.svelte-1kk6kdi{position:relative;width:var(--ch);height:var(--cw)}#deckPiling.svelte-1kk6kdi .deckbottom.svelte-1kk6kdi{position:absolute;--round-len:300px;width:calc(var(--round-len) / 2);height:var(--round-len);top:-90px;left:0;overflow:hidden}#deckPiling.svelte-1kk6kdi .deckbottom .round.svelte-1kk6kdi{position:absolute;right:0;width:var(--round-len);height:var(--round-len);border-radius:200px;overflow:hidden}#deckPiling.svelte-1kk6kdi .deckbottom .round .round-top.svelte-1kk6kdi,#deckPiling.svelte-1kk6kdi .deckbottom .round .round-center.svelte-1kk6kdi,#deckPiling.svelte-1kk6kdi .deckbottom .round .round-bottom.svelte-1kk6kdi{position:absolute;width:var(--round-len);height:calc(var(--round-len) / 3)}#deckPiling.svelte-1kk6kdi .deckbottom .round .round-top.svelte-1kk6kdi{top:0;background:var(--deck-bg-color-top)}#deckPiling.svelte-1kk6kdi .deckbottom .round .round-center.svelte-1kk6kdi{top:50%;transform:translate(0, -50%);background:var(--deck-bg-color-center)}#deckPiling.svelte-1kk6kdi .deckbottom .round .round-bottom.svelte-1kk6kdi{bottom:0;background:var(--deck-bg-color-bottom)}",
+  map: null
+};
+var Deck = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let $deckListStore, $$unsubscribe_deckListStore;
+  let $modeStore, $$unsubscribe_modeStore;
+  $$unsubscribe_deckListStore = subscribe(deckListStore, (value) => $deckListStore = value);
+  $$unsubscribe_modeStore = subscribe(modeStore, (value) => $modeStore = value);
+  createEventDispatcher();
+  $$result.css.add(css$4);
+  $$unsubscribe_deckListStore();
+  $$unsubscribe_modeStore();
+  return `<section id="${"deckArea"}" class="${escape(null_to_empty($modeStore)) + " svelte-1kk6kdi"}"><section id="${"deckPiling"}" class="${"svelte-1kk6kdi"}"><div class="${"deckbottom svelte-1kk6kdi"}"><div class="${"round svelte-1kk6kdi"}"><div class="${"round-top svelte-1kk6kdi"}"></div>
+                <div class="${"round-center svelte-1kk6kdi"}"></div>
+                <div class="${"round-bottom svelte-1kk6kdi"}"></div></div></div>
+        ${each($deckListStore, (d, i) => `${validate_component(Card, "Card").$$render($$result, {
+    id: d.id,
+    pos_x: d.x + i * -0.5 + 25,
+    pos_y: d.y + i * -0.8 + 10,
+    flippin: d.flip,
+    onArea: "deck",
+    img_url: d.url,
+    sleeve_url: d.burl,
+    noGuide: true
+  }, {}, {})}`)}</section>
+</section>`;
+});
 var css$3 = {
-  code: "#handArea.svelte-1x1auw9.svelte-1x1auw9{position:absolute;margin:0 auto;width:500px;height:75px;left:calc(50% - 250px);bottom:0}#handArea.svelte-1x1auw9 #handArea-bg.svelte-1x1auw9{overflow:hidden;width:inherit;height:inherit}#handArea.svelte-1x1auw9 #handArea-bg #handArea-bg-radius.svelte-1x1auw9{position:relative;margin:0 auto;width:inherit;height:500px;border-radius:250px}#handArea.svelte-1x1auw9 #handArea-bg #handArea-bg-radius.light.svelte-1x1auw9{background:yellow}#handArea.svelte-1x1auw9 #handArea-bg #handArea-bg-radius.dark.svelte-1x1auw9{background:purple}",
+  code: ":root{--card-width:85px;--card-margin:5px}img.svelte-ds7p2u{border-radius:10px;width:var(--card-width);margin:var(--card-margin)}#deck.svelte-ds7p2u,#exdeck.svelte-ds7p2u{display:flex;width:calc(var(--card-width) * 10 + var(--card-margin) * 20);margin:0 auto;flex-wrap:wrap}",
+  map: null
+};
+var Edit = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let $$unsubscribe_exDeckListStore;
+  let $$unsubscribe_deckListStore;
+  let $unshuffleDeckListStore, $$unsubscribe_unshuffleDeckListStore;
+  let $unshuffleExDeckListStore, $$unsubscribe_unshuffleExDeckListStore;
+  $$unsubscribe_exDeckListStore = subscribe(exDeckListStore, (value) => value);
+  $$unsubscribe_deckListStore = subscribe(deckListStore, (value) => value);
+  $$unsubscribe_unshuffleDeckListStore = subscribe(unshuffleDeckListStore, (value) => $unshuffleDeckListStore = value);
+  $$unsubscribe_unshuffleExDeckListStore = subscribe(unshuffleExDeckListStore, (value) => $unshuffleExDeckListStore = value);
+  $$result.css.add(css$3);
+  $$unsubscribe_exDeckListStore();
+  $$unsubscribe_deckListStore();
+  $$unsubscribe_unshuffleDeckListStore();
+  $$unsubscribe_unshuffleExDeckListStore();
+  return `<input type="${"file"}" webkitdirectory>
+<section id="${"deck"}" class="${"svelte-ds7p2u"}">${each($unshuffleDeckListStore, (d) => `<img${add_attribute("src", d.url, 0)} alt="${""}" class="${"svelte-ds7p2u"}">`)}</section>
+<section id="${"exdeck"}" class="${"svelte-ds7p2u"}">${each($unshuffleExDeckListStore, (e) => `<img${add_attribute("src", e.url, 0)} alt="${""}" class="${"svelte-ds7p2u"}">`)}
+</section>`;
+});
+var edit = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": Edit
+});
+var css$2 = {
+  code: "#handArea.svelte-11la4tw.svelte-11la4tw{position:absolute;margin:0 auto;width:500px;height:75px;left:calc(50% - 250px);bottom:0}#handArea.light.svelte-11la4tw.svelte-11la4tw{--hand-bg-color:#0a2ea5}#handArea.dark.svelte-11la4tw.svelte-11la4tw{--hand-bg-color:#081081}#handArea.svelte-11la4tw #handArea-bg.svelte-11la4tw{overflow:hidden;width:inherit;height:inherit}#handArea.svelte-11la4tw #handArea-bg #handArea-bg-radius.svelte-11la4tw{position:relative;margin:0 auto;width:inherit;height:500px;border-radius:250px}#handArea.svelte-11la4tw #handArea-bg #handArea-bg-radius.light.svelte-11la4tw{background:yellow}#handArea.svelte-11la4tw #handArea-bg #handArea-bg-radius.dark.svelte-11la4tw{background:var(--hand-bg-color)}",
   map: null
 };
 var handLineupGuideRadius = 250;
@@ -10691,7 +10751,7 @@ var Hand = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_cardWidth = subscribe(cardWidth, (value) => $cardWidth = value);
   $$unsubscribe_modeStore = subscribe(modeStore, (value) => $modeStore = value);
   createEventDispatcher();
-  $$result.css.add(css$3);
+  $$result.css.add(css$2);
   {
     {
       let hand = $handListStore;
@@ -10729,7 +10789,7 @@ var Hand = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_handListStore();
   $$unsubscribe_cardWidth();
   $$unsubscribe_modeStore();
-  return `<section id="${"handArea"}" class="${"svelte-1x1auw9"}"><div id="${"handArea-bg"}" class="${"svelte-1x1auw9"}"><div id="${"handArea-bg-radius"}" class="${escape(null_to_empty($modeStore)) + " svelte-1x1auw9"}"></div></div>
+  return `<section id="${"handArea"}" class="${escape(null_to_empty($modeStore)) + " svelte-11la4tw"}"><div id="${"handArea-bg"}" class="${"svelte-11la4tw"}"><div id="${"handArea-bg-radius"}" class="${escape(null_to_empty($modeStore)) + " svelte-11la4tw"}"></div></div>
     ${each($handListStore, (h) => `${h ? `${validate_component(Card, "Card").$$render($$result, {
     id: h.id,
     pos_x: h.x,
@@ -10742,435 +10802,27 @@ var Hand = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   }, {}, {})}` : ``}`)}
 </section>`;
 });
-var css$2 = {
-  code: "#deckArea.svelte-xml8qn.svelte-xml8qn{position:relative}#deckUI.svelte-xml8qn.svelte-xml8qn{z-index:20;position:absolute;top:-200px}#deckUI.svelte-xml8qn .deckUI-button.svelte-xml8qn{top:0;left:0;position:absolute;transform:rotate(vaar(--deg))}#deckUI.svelte-xml8qn .deckUI-button img.svelte-xml8qn{width:500px;height:500px}#deckPiling.svelte-xml8qn.svelte-xml8qn{position:relative;width:var(--ch);height:var(--cw)}#deckPiling.svelte-xml8qn .deckbottom.svelte-xml8qn{position:absolute;width:100px;height:200px;top:-40px;left:0;overflow:hidden}#deckPiling.svelte-xml8qn .deckbottom .round.svelte-xml8qn{position:absolute;right:0;width:200px;height:200px;border-radius:100px;background:red}",
-  map: null
-};
-var Deck = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $deckListStore, $$unsubscribe_deckListStore;
-  $$unsubscribe_deckListStore = subscribe(deckListStore, (value) => $deckListStore = value);
-  createEventDispatcher();
-  $$result.css.add(css$2);
-  $$unsubscribe_deckListStore();
-  return `<section id="${"deckArea"}" class="${"svelte-xml8qn"}"><section id="${"deckUI"}" class="${"svelte-xml8qn"}"><div class="${"deckUI-button svelte-xml8qn"}" style="${"--deg:" + escape(0) + "deg"}"><img src="${"/img/tcg-sim/ellipse.svg"}" alt="${""}" class="${"svelte-xml8qn"}"></div></section>
-    <section id="${"deckPiling"}" class="${"svelte-xml8qn"}"><div class="${"deckbottom svelte-xml8qn"}"><div class="${"round svelte-xml8qn"}"></div></div>
-        ${each($deckListStore, (d, i) => `${validate_component(Card, "Card").$$render($$result, {
-    id: d.id,
-    pos_x: d.x + i * -0.5,
-    pos_y: d.y + i * -0.8,
-    flippin: d.flip,
-    onArea: "deck",
-    img_url: d.url,
-    sleeve_url: d.burl,
-    noGuide: true
-  }, {}, {})}`)}</section>
-</section>`;
-});
 var css$1 = {
-  code: '#board.svelte-10xn2tj.svelte-10xn2tj{width:900px;height:550px;margin:0 auto;transform:rotateX(10deg);border-radius:30px;position:relative}#board.light.svelte-10xn2tj.svelte-10xn2tj{background:radial-gradient(ellipse, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 70%, rgba(0, 0, 0, 0.2) 100%)}#board.dark.svelte-10xn2tj.svelte-10xn2tj{background:radial-gradient(ellipse, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.4) 70%, rgba(255, 255, 255, 0.1) 100%)}#myHand.svelte-10xn2tj.svelte-10xn2tj{position:fixed;width:100%;height:75px;bottom:0}#myHand.svelte-10xn2tj #handArea-main.svelte-10xn2tj{position:absolute;width:500px;height:180px;left:50%;transform:translate(-50%, 0);bottom:0}#myHand.svelte-10xn2tj #handArea-main.svelte-10xn2tj:hover{border:solid 2px white;border-radius:20px}#myHand.svelte-10xn2tj #handArea-main.svelte-10xn2tj:hover::before{position:absolute;content:"to hand";margin:10px}#myDeck.svelte-10xn2tj.svelte-10xn2tj{position:fixed;bottom:250px;left:0px}#myDeck.svelte-10xn2tj #deckArea-main.svelte-10xn2tj{position:absolute;width:200px;height:400px;top:50%;left:-50%;transform:translate(0, -50%);bottom:0}#myDeck.svelte-10xn2tj #deckArea-main.svelte-10xn2tj:hover::before{border:solid 2px white;border-radius:20px;width:100%;height:100%;position:absolute;content:"";margin:10px}#is-not-PC-alert.svelte-10xn2tj.svelte-10xn2tj{margin:100px 20px;background:black;border:solid 1px white;border-radius:20px;width:70%;max-width:600px}#is-not-PC-alert.svelte-10xn2tj .panel.svelte-10xn2tj{padding:20px}#is-not-PC-alert.svelte-10xn2tj .panel .device-exp.svelte-10xn2tj{color:white;position:relative;max-width:310px;margin:50px auto}#is-not-PC-alert.svelte-10xn2tj .panel .device-exp .device-figure.svelte-10xn2tj{width:80%;margin:0 auto;font-size:18px}#is-not-PC-alert.svelte-10xn2tj .panel .device-exp .device-figure span.svelte-10xn2tj{font-size:15px;line-height:18px}#is-not-PC-alert.svelte-10xn2tj .panel .device-exp .device-figure .width.svelte-10xn2tj{position:absolute;left:50%;top:-30px;transform:translate(-50%, 0)}#is-not-PC-alert.svelte-10xn2tj .panel .device-exp .device-figure .height.svelte-10xn2tj{position:absolute;top:50%;right:-55px;transform:rotate(90deg)}',
+  code: "#board.svelte-wvq7x7.svelte-wvq7x7{width:825px;height:550px;z-index:1;margin:0 auto 0 200px;transform:rotateX(10deg);border-radius:30px;position:relative}#board.light.svelte-wvq7x7.svelte-wvq7x7{background:radial-gradient(ellipse, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 70%, rgba(0, 0, 0, 0.2) 100%)}#board.dark.svelte-wvq7x7.svelte-wvq7x7{background:radial-gradient(ellipse, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.4) 70%, rgba(255, 255, 255, 0.1) 100%)}#myHand.svelte-wvq7x7.svelte-wvq7x7{position:fixed;z-index:0;width:100%;height:75px;bottom:0}#myHand.svelte-wvq7x7 #handArea-main.svelte-wvq7x7{position:absolute;width:500px;height:180px;left:50%;transform:translate(-50%, 0);bottom:0;pointer-events:none}#myDeck.svelte-wvq7x7.svelte-wvq7x7{position:fixed;z-index:0;bottom:130px;left:0px}#myDeck.svelte-wvq7x7 #deckArea-main.svelte-wvq7x7{position:absolute;width:200px;height:300px;top:50%;left:-50%;transform:translate(0, -50%);bottom:0;pointer-events:none}#is-not-PC-alert.svelte-wvq7x7.svelte-wvq7x7{margin:100px 20px;background:black;border:solid 1px white;border-radius:20px;width:70%;max-width:600px}#is-not-PC-alert.svelte-wvq7x7 .clear.svelte-wvq7x7{color:yellow}#is-not-PC-alert.svelte-wvq7x7 .panel.svelte-wvq7x7{padding:20px}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp.svelte-wvq7x7{color:white;position:relative;max-width:310px;margin:50px auto}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp .device-figure.svelte-wvq7x7{width:80%;margin:0 auto;font-size:18px}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp .device-figure span.svelte-wvq7x7{font-size:15px;line-height:18px}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp .device-figure .width.svelte-wvq7x7{position:absolute;left:50%;top:-30px;transform:translate(-50%, 0)}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp .device-figure .height.svelte-wvq7x7{position:absolute;top:50%;right:-55px;transform:rotate(90deg)}",
   map: null
 };
 var Game = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $deckListStore, $$unsubscribe_deckListStore;
+  let $$unsubscribe_deckListStore;
   let $boardListStore, $$unsubscribe_boardListStore;
-  let $handListStore, $$unsubscribe_handListStore;
+  let $$unsubscribe_handListStore;
   let $$unsubscribe_cardWidth;
   let $$unsubscribe_deckAreaInfoStore;
   let $$unsubscribe_handAreaInfoStore;
   let $$unsubscribe_boardAreaInfoStore;
   let $modeStore, $$unsubscribe_modeStore;
-  $$unsubscribe_deckListStore = subscribe(deckListStore, (value) => $deckListStore = value);
+  $$unsubscribe_deckListStore = subscribe(deckListStore, (value) => value);
   $$unsubscribe_boardListStore = subscribe(boardListStore, (value) => $boardListStore = value);
-  $$unsubscribe_handListStore = subscribe(handListStore, (value) => $handListStore = value);
+  $$unsubscribe_handListStore = subscribe(handListStore, (value) => value);
   $$unsubscribe_cardWidth = subscribe(cardWidth, (value) => value);
   $$unsubscribe_deckAreaInfoStore = subscribe(deckAreaInfoStore, (value) => value);
   $$unsubscribe_handAreaInfoStore = subscribe(handAreaInfoStore, (value) => value);
   $$unsubscribe_boardAreaInfoStore = subscribe(boardAreaInfoStore, (value) => value);
   $$unsubscribe_modeStore = subscribe(modeStore, (value) => $modeStore = value);
-  set_store_value(boardListStore, $boardListStore = [
-    {
-      id: 1,
-      url: "/img/tcg-sim/dmex17-003-[4].jpeg",
-      burl: "/img/tcg-sim/dmr21-l02-[4].jpeg",
-      x: 100,
-      y: 100,
-      flip: false,
-      rotate: 0
-    }
-  ], $boardListStore);
-  set_store_value(handListStore, $handListStore = [
-    {
-      id: 400,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      x: 0,
-      y: 0,
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 0,
-      flip: false
-    },
-    {
-      id: 401,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      x: 0,
-      y: 0,
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 0,
-      flip: false
-    }
-  ], $handListStore);
-  set_store_value(deckListStore, $deckListStore = [
-    {
-      id: 2,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 3,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 4,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 5,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 6,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 7,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 8,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 9,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 10,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 11,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 12,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 13,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 14,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 15,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 16,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 17,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 18,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 19,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 20,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 21,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 22,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 23,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 24,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 25,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 26,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 27,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 28,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 29,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 30,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 31,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 32,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 33,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 34,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 35,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 36,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 37,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 38,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 39,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    },
-    {
-      id: 40,
-      url: "/img/tcg-sim/dmbd16-011-[4].jpeg",
-      burl: "/img/tcg-sim/card.svg",
-      rotate: 110,
-      x: 0,
-      y: 0,
-      flip: true
-    }
-  ], $deckListStore);
   $$result.css.add(css$1);
   $$unsubscribe_deckListStore();
   $$unsubscribe_boardListStore();
@@ -11181,7 +10833,7 @@ var Game = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_boardAreaInfoStore();
   $$unsubscribe_modeStore();
   return `
-${`<article id="${"board"}" class="${escape(null_to_empty($modeStore)) + " svelte-10xn2tj"}">${each($boardListStore, (bs) => `${validate_component(Card, "Card").$$render($$result, {
+${`<article id="${"board"}" class="${escape(null_to_empty($modeStore)) + " svelte-wvq7x7"}">${each($boardListStore, (bs) => `${validate_component(Card, "Card").$$render($$result, {
     id: bs.id,
     pos_x: bs.x,
     pos_y: bs.y,
@@ -11190,9 +10842,9 @@ ${`<article id="${"board"}" class="${escape(null_to_empty($modeStore)) + " svelt
     img_url: bs.url,
     sleeve_url: bs.burl
   }, {}, {})}`)}</article>
-<article id="${"myHand"}" class="${"svelte-10xn2tj"}"><div id="${"handArea-main"}" class="${"svelte-10xn2tj"}"></div>
+<article id="${"myHand"}" class="${"svelte-wvq7x7"}"><div id="${"handArea-main"}" class="${"svelte-wvq7x7"}"></div>
     ${validate_component(Hand, "Hand").$$render($$result, {}, {}, {})}</article>
-<article id="${"myDeck"}" class="${"svelte-10xn2tj"}"><div id="${"deckArea-main"}" class="${"svelte-10xn2tj"}"></div>
+<article id="${"myDeck"}" class="${"svelte-wvq7x7"}"><div id="${"deckArea-main"}" class="${"svelte-wvq7x7"}"></div>
     ${validate_component(Deck, "Deck").$$render($$result, {}, {}, {})}</article>`}`;
 });
 var game = /* @__PURE__ */ Object.freeze({

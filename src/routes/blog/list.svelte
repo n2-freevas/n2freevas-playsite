@@ -1,14 +1,14 @@
 <script lang='ts'>
     import {notion_pages} from '$lib/store/NotionModels'
-    import { getPages } from '$lib/api/blogApi'
+    import {getPage} from '$lib/api/blogApi'
     import { onMount } from 'svelte';
     import ListItem from './_list_item.svelte'
     
     let db_id = '9defcc2aa743412397eb6d24d167d230'
     
     onMount(async () => {
-        $notion_pages  = await getPages(db_id)
-        console.log($notion_pages)
+        const page = getPage()
+        console.log(page)    
     })
 </script>
 

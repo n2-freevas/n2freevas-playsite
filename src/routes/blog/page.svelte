@@ -1,5 +1,4 @@
 <script lang="ts">
-    import {getPage} from '$lib/api/blogApi'
     import { onMount } from 'svelte';
     
     let page_id

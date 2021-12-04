@@ -9,7 +9,6 @@
     const handLineupGuideRadius = 250
 
     function handLineupGuideFunction(x: number){
-        //console.log(Math.pow(handLineupGuideRadius,2), Math.pow(x,2))
         return -1 * (Math.sqrt(Math.pow(handLineupGuideRadius,2) - Math.pow(x,2)))
     }
     $:{
@@ -49,7 +48,7 @@
         dispatch('boardInFromHand', event.detail)
     }
 </script>
-<section id='handArea'>
+<section id='handArea' class={$modeStore}>
     <div id='handArea-bg'>
         <div id='handArea-bg-radius' class='{$modeStore}' on:click={()=> {$handListStore = $handListStore}}></div>
     </div>
@@ -70,6 +69,8 @@
     height:75px;
     left:calc(50% - 250px);
     bottom:0;
+    &.light{--hand-bg-color: #0a2ea5;}
+    &.dark{--hand-bg-color: #081081;}
     #handArea-bg{
         overflow: hidden;
         width:inherit;
@@ -85,7 +86,7 @@
                 background:yellow;
             }
             &.dark{
-                background:purple;
+                background:var(--hand-bg-color);
             }
         }
     }    
