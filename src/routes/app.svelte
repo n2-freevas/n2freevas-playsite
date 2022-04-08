@@ -7,18 +7,30 @@ interface App {
     description: string
 }
 let apps: App[] = [
-    {name:"ばくぜつさあち",
-    icon:"/img/bs2nd/ba_gray.svg",
-    href: "/app/bakuzetsu-searcher-2nd/edit",
-    description:"コトダマンで楽して勝ちたい人に向けたツール"},
-    {name:"TCGシミュ",
-    icon:"/img/tcg-sim/card_naname.svg",
-    href: "/app/tcg-simulator/game",
-    description:"トレーディングカードをインポートしてプレイ"},
-    {name:"DMダウンローダ",
-    icon:"/img/tcg-sim/card_naname.svg",
-    href: "/app/DM-Downloader/collect",
-    description:"カード画像を収集"}
+    {
+        name:"ばくぜつさあち",
+        icon:"/img/bs2nd/ba_gray.svg",
+        href: "/app/bakuzetsu-searcher-2nd/edit",
+        description:"コトダマンで楽して勝ちたい人に向けたツール"
+    },
+    {
+        name:"Webダメカン",
+        icon:"/img/tcg-sim/card_naname.svg",
+        href: "/app/pokemon-card-game-effector/game",
+        description:"ポケカのダメカンをWebでやっちゃう。"
+    },
+    {
+        name:"TCGシミュ",
+        icon:"/img/tcg-sim/card_naname.svg",
+        href: "/app/tcg-simulator/game",
+        description:"トレーディングカードをインポートしてプレイ"
+    },
+    {
+        name:"DMダウンローダ",
+        icon:"/img/tcg-sim/card_naname.svg",
+        href: "/app/DM-Downloader/collect",
+        description:"カード画像を収集"
+    }
 ]
 
 
