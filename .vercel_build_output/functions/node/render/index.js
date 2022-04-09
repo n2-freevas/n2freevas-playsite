@@ -1,32 +1,426 @@
 var __create = Object.create;
 var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key2, value) => key2 in obj ? __defProp(obj, key2, { enumerable: true, configurable: true, writable: true, value }) : obj[key2] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[Object.keys(fn)[0]])(fn = 0)), res;
+  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
 };
 var __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[Object.keys(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
 var __export = (target, all) => {
-  __markAsModule(target);
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
-var __reExport = (target, module2, desc) => {
-  if (module2 && typeof module2 === "object" || typeof module2 === "function") {
-    for (let key of __getOwnPropNames(module2))
-      if (!__hasOwnProp.call(target, key) && key !== "default")
-        __defProp(target, key, { get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable });
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key2 of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key2) && key2 !== except)
+        __defProp(to, key2, { get: () => from[key2], enumerable: !(desc = __getOwnPropDesc(from, key2)) || desc.enumerable });
   }
-  return target;
+  return to;
 };
-var __toModule = (module2) => {
-  return __reExport(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", module2 && module2.__esModule && "default" in module2 ? { get: () => module2.default, enumerable: true } : { value: module2, enumerable: true })), module2);
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __accessCheck = (obj, member, msg) => {
+  if (!member.has(obj))
+    throw TypeError("Cannot " + msg);
 };
+var __privateGet = (obj, member, getter) => {
+  __accessCheck(obj, member, "read from private field");
+  return getter ? getter.call(obj) : member.get(obj);
+};
+var __privateAdd = (obj, member, value) => {
+  if (member.has(obj))
+    throw TypeError("Cannot add the same private member more than once");
+  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+};
+var __privateSet = (obj, member, value, setter) => {
+  __accessCheck(obj, member, "write to private field");
+  setter ? setter.call(obj, value) : member.set(obj, value);
+  return value;
+};
+
+// node_modules/@sveltejs/kit/dist/chunks/multipart-parser.js
+var multipart_parser_exports = {};
+__export(multipart_parser_exports, {
+  toFormData: () => toFormData
+});
+function _fileName(headerValue) {
+  const m2 = headerValue.match(/\bfilename=("(.*?)"|([^()<>@,;:\\"/[\]?={}\s\t]+))($|;\s)/i);
+  if (!m2) {
+    return;
+  }
+  const match = m2[2] || m2[3] || "";
+  let filename = match.slice(match.lastIndexOf("\\") + 1);
+  filename = filename.replace(/%22/g, '"');
+  filename = filename.replace(/&#(\d{4});/g, (m3, code) => {
+    return String.fromCharCode(code);
+  });
+  return filename;
+}
+async function toFormData(Body2, ct) {
+  if (!/multipart/i.test(ct)) {
+    throw new TypeError("Failed to fetch");
+  }
+  const m2 = ct.match(/boundary=(?:"([^"]+)"|([^;]+))/i);
+  if (!m2) {
+    throw new TypeError("no or bad content-type header, no multipart boundary");
+  }
+  const parser = new MultipartParser(m2[1] || m2[2]);
+  let headerField;
+  let headerValue;
+  let entryValue;
+  let entryName;
+  let contentType;
+  let filename;
+  const entryChunks = [];
+  const formData = new FormData2();
+  const onPartData = (ui8a) => {
+    entryValue += decoder.decode(ui8a, { stream: true });
+  };
+  const appendToFile = (ui8a) => {
+    entryChunks.push(ui8a);
+  };
+  const appendFileToFormData = () => {
+    const file = new File(entryChunks, filename, { type: contentType });
+    formData.append(entryName, file);
+  };
+  const appendEntryToFormData = () => {
+    formData.append(entryName, entryValue);
+  };
+  const decoder = new TextDecoder("utf-8");
+  decoder.decode();
+  parser.onPartBegin = function() {
+    parser.onPartData = onPartData;
+    parser.onPartEnd = appendEntryToFormData;
+    headerField = "";
+    headerValue = "";
+    entryValue = "";
+    entryName = "";
+    contentType = "";
+    filename = null;
+    entryChunks.length = 0;
+  };
+  parser.onHeaderField = function(ui8a) {
+    headerField += decoder.decode(ui8a, { stream: true });
+  };
+  parser.onHeaderValue = function(ui8a) {
+    headerValue += decoder.decode(ui8a, { stream: true });
+  };
+  parser.onHeaderEnd = function() {
+    headerValue += decoder.decode();
+    headerField = headerField.toLowerCase();
+    if (headerField === "content-disposition") {
+      const m3 = headerValue.match(/\bname=("([^"]*)"|([^()<>@,;:\\"/[\]?={}\s\t]+))/i);
+      if (m3) {
+        entryName = m3[2] || m3[3] || "";
+      }
+      filename = _fileName(headerValue);
+      if (filename) {
+        parser.onPartData = appendToFile;
+        parser.onPartEnd = appendFileToFormData;
+      }
+    } else if (headerField === "content-type") {
+      contentType = headerValue;
+    }
+    headerValue = "";
+    headerField = "";
+  };
+  for await (const chunk of Body2) {
+    parser.write(chunk);
+  }
+  parser.end();
+  return formData;
+}
+var import_node_worker_threads, s, S, f, F, LF, CR, SPACE, HYPHEN, COLON, A, Z, lower, noop, MultipartParser;
+var init_multipart_parser = __esm({
+  "node_modules/@sveltejs/kit/dist/chunks/multipart-parser.js"() {
+    import_node_worker_threads = require("worker_threads");
+    init_install_fetch();
+    globalThis.DOMException || (() => {
+      const port = new import_node_worker_threads.MessageChannel().port1;
+      const ab = new ArrayBuffer(0);
+      try {
+        port.postMessage(ab, [ab, ab]);
+      } catch (err) {
+        return err.constructor;
+      }
+    })();
+    s = 0;
+    S = {
+      START_BOUNDARY: s++,
+      HEADER_FIELD_START: s++,
+      HEADER_FIELD: s++,
+      HEADER_VALUE_START: s++,
+      HEADER_VALUE: s++,
+      HEADER_VALUE_ALMOST_DONE: s++,
+      HEADERS_ALMOST_DONE: s++,
+      PART_DATA_START: s++,
+      PART_DATA: s++,
+      END: s++
+    };
+    f = 1;
+    F = {
+      PART_BOUNDARY: f,
+      LAST_BOUNDARY: f *= 2
+    };
+    LF = 10;
+    CR = 13;
+    SPACE = 32;
+    HYPHEN = 45;
+    COLON = 58;
+    A = 97;
+    Z = 122;
+    lower = (c) => c | 32;
+    noop = () => {
+    };
+    MultipartParser = class {
+      constructor(boundary) {
+        this.index = 0;
+        this.flags = 0;
+        this.onHeaderEnd = noop;
+        this.onHeaderField = noop;
+        this.onHeadersEnd = noop;
+        this.onHeaderValue = noop;
+        this.onPartBegin = noop;
+        this.onPartData = noop;
+        this.onPartEnd = noop;
+        this.boundaryChars = {};
+        boundary = "\r\n--" + boundary;
+        const ui8a = new Uint8Array(boundary.length);
+        for (let i2 = 0; i2 < boundary.length; i2++) {
+          ui8a[i2] = boundary.charCodeAt(i2);
+          this.boundaryChars[ui8a[i2]] = true;
+        }
+        this.boundary = ui8a;
+        this.lookbehind = new Uint8Array(this.boundary.length + 8);
+        this.state = S.START_BOUNDARY;
+      }
+      write(data) {
+        let i2 = 0;
+        const length_ = data.length;
+        let previousIndex = this.index;
+        let { lookbehind, boundary, boundaryChars, index, state, flags } = this;
+        const boundaryLength = this.boundary.length;
+        const boundaryEnd = boundaryLength - 1;
+        const bufferLength = data.length;
+        let c;
+        let cl;
+        const mark = (name) => {
+          this[name + "Mark"] = i2;
+        };
+        const clear = (name) => {
+          delete this[name + "Mark"];
+        };
+        const callback = (callbackSymbol, start, end, ui8a) => {
+          if (start === void 0 || start !== end) {
+            this[callbackSymbol](ui8a && ui8a.subarray(start, end));
+          }
+        };
+        const dataCallback = (name, clear2) => {
+          const markSymbol = name + "Mark";
+          if (!(markSymbol in this)) {
+            return;
+          }
+          if (clear2) {
+            callback(name, this[markSymbol], i2, data);
+            delete this[markSymbol];
+          } else {
+            callback(name, this[markSymbol], data.length, data);
+            this[markSymbol] = 0;
+          }
+        };
+        for (i2 = 0; i2 < length_; i2++) {
+          c = data[i2];
+          switch (state) {
+            case S.START_BOUNDARY:
+              if (index === boundary.length - 2) {
+                if (c === HYPHEN) {
+                  flags |= F.LAST_BOUNDARY;
+                } else if (c !== CR) {
+                  return;
+                }
+                index++;
+                break;
+              } else if (index - 1 === boundary.length - 2) {
+                if (flags & F.LAST_BOUNDARY && c === HYPHEN) {
+                  state = S.END;
+                  flags = 0;
+                } else if (!(flags & F.LAST_BOUNDARY) && c === LF) {
+                  index = 0;
+                  callback("onPartBegin");
+                  state = S.HEADER_FIELD_START;
+                } else {
+                  return;
+                }
+                break;
+              }
+              if (c !== boundary[index + 2]) {
+                index = -2;
+              }
+              if (c === boundary[index + 2]) {
+                index++;
+              }
+              break;
+            case S.HEADER_FIELD_START:
+              state = S.HEADER_FIELD;
+              mark("onHeaderField");
+              index = 0;
+            case S.HEADER_FIELD:
+              if (c === CR) {
+                clear("onHeaderField");
+                state = S.HEADERS_ALMOST_DONE;
+                break;
+              }
+              index++;
+              if (c === HYPHEN) {
+                break;
+              }
+              if (c === COLON) {
+                if (index === 1) {
+                  return;
+                }
+                dataCallback("onHeaderField", true);
+                state = S.HEADER_VALUE_START;
+                break;
+              }
+              cl = lower(c);
+              if (cl < A || cl > Z) {
+                return;
+              }
+              break;
+            case S.HEADER_VALUE_START:
+              if (c === SPACE) {
+                break;
+              }
+              mark("onHeaderValue");
+              state = S.HEADER_VALUE;
+            case S.HEADER_VALUE:
+              if (c === CR) {
+                dataCallback("onHeaderValue", true);
+                callback("onHeaderEnd");
+                state = S.HEADER_VALUE_ALMOST_DONE;
+              }
+              break;
+            case S.HEADER_VALUE_ALMOST_DONE:
+              if (c !== LF) {
+                return;
+              }
+              state = S.HEADER_FIELD_START;
+              break;
+            case S.HEADERS_ALMOST_DONE:
+              if (c !== LF) {
+                return;
+              }
+              callback("onHeadersEnd");
+              state = S.PART_DATA_START;
+              break;
+            case S.PART_DATA_START:
+              state = S.PART_DATA;
+              mark("onPartData");
+            case S.PART_DATA:
+              previousIndex = index;
+              if (index === 0) {
+                i2 += boundaryEnd;
+                while (i2 < bufferLength && !(data[i2] in boundaryChars)) {
+                  i2 += boundaryLength;
+                }
+                i2 -= boundaryEnd;
+                c = data[i2];
+              }
+              if (index < boundary.length) {
+                if (boundary[index] === c) {
+                  if (index === 0) {
+                    dataCallback("onPartData", true);
+                  }
+                  index++;
+                } else {
+                  index = 0;
+                }
+              } else if (index === boundary.length) {
+                index++;
+                if (c === CR) {
+                  flags |= F.PART_BOUNDARY;
+                } else if (c === HYPHEN) {
+                  flags |= F.LAST_BOUNDARY;
+                } else {
+                  index = 0;
+                }
+              } else if (index - 1 === boundary.length) {
+                if (flags & F.PART_BOUNDARY) {
+                  index = 0;
+                  if (c === LF) {
+                    flags &= ~F.PART_BOUNDARY;
+                    callback("onPartEnd");
+                    callback("onPartBegin");
+                    state = S.HEADER_FIELD_START;
+                    break;
+                  }
+                } else if (flags & F.LAST_BOUNDARY) {
+                  if (c === HYPHEN) {
+                    callback("onPartEnd");
+                    state = S.END;
+                    flags = 0;
+                  } else {
+                    index = 0;
+                  }
+                } else {
+                  index = 0;
+                }
+              }
+              if (index > 0) {
+                lookbehind[index - 1] = c;
+              } else if (previousIndex > 0) {
+                const _lookbehind = new Uint8Array(lookbehind.buffer, lookbehind.byteOffset, lookbehind.byteLength);
+                callback("onPartData", 0, previousIndex, _lookbehind);
+                previousIndex = 0;
+                mark("onPartData");
+                i2--;
+              }
+              break;
+            case S.END:
+              break;
+            default:
+              throw new Error(`Unexpected state entered: ${state}`);
+          }
+        }
+        dataCallback("onHeaderField");
+        dataCallback("onHeaderValue");
+        dataCallback("onPartData");
+        this.index = index;
+        this.state = state;
+        this.flags = flags;
+      }
+      end() {
+        if (this.state === S.HEADER_FIELD_START && this.index === 0 || this.state === S.PART_DATA && this.index === this.boundary.length) {
+          this.onPartEnd();
+        } else if (this.state !== S.END) {
+          throw new Error("MultipartParser.end(): stream ended unexpectedly");
+        }
+      }
+    };
+  }
+});
 
 // node_modules/@sveltejs/kit/dist/install-fetch.js
 function dataUriToBuffer(uri) {
@@ -40,16 +434,16 @@ function dataUriToBuffer(uri) {
   }
   const meta = uri.substring(5, firstComma).split(";");
   let charset = "";
-  let base64 = false;
+  let base642 = false;
   const type = meta[0] || "text/plain";
   let typeFull = type;
-  for (let i = 1; i < meta.length; i++) {
-    if (meta[i] === "base64") {
-      base64 = true;
+  for (let i2 = 1; i2 < meta.length; i2++) {
+    if (meta[i2] === "base64") {
+      base642 = true;
     } else {
-      typeFull += `;${meta[i]}`;
-      if (meta[i].indexOf("charset=") === 0) {
-        charset = meta[i].substring(8);
+      typeFull += `;${meta[i2]}`;
+      if (meta[i2].indexOf("charset=") === 0) {
+        charset = meta[i2].substring(8);
       }
     }
   }
@@ -57,7 +451,7 @@ function dataUriToBuffer(uri) {
     typeFull += ";charset=US-ASCII";
     charset = "US-ASCII";
   }
-  const encoding = base64 ? "base64" : "ascii";
+  const encoding = base642 ? "base64" : "ascii";
   const data = unescape(uri.substring(firstComma + 1));
   const buffer = Buffer.from(data, encoding);
   buffer.type = type;
@@ -66,16 +460,16 @@ function dataUriToBuffer(uri) {
   return buffer;
 }
 async function* toIterator(parts, clone2 = true) {
-  for (let part of parts) {
+  for (const part of parts) {
     if ("stream" in part) {
       yield* part.stream();
     } else if (ArrayBuffer.isView(part)) {
       if (clone2) {
         let position = part.byteOffset;
-        let end = part.byteOffset + part.byteLength;
+        const end = part.byteOffset + part.byteLength;
         while (position !== end) {
-          const size = Math.min(end - position, POOL_SIZE);
-          const chunk = part.buffer.slice(position, position + size);
+          const size2 = Math.min(end - position, POOL_SIZE);
+          const chunk = part.buffer.slice(position, position + size2);
           position += chunk.byteLength;
           yield new Uint8Array(chunk);
         }
@@ -93,40 +487,18 @@ async function* toIterator(parts, clone2 = true) {
     }
   }
 }
-function isFormData(object) {
-  return typeof object === "object" && typeof object.append === "function" && typeof object.set === "function" && typeof object.get === "function" && typeof object.getAll === "function" && typeof object.delete === "function" && typeof object.keys === "function" && typeof object.values === "function" && typeof object.entries === "function" && typeof object.constructor === "function" && object[NAME] === "FormData";
-}
-function getHeader(boundary, name, field) {
-  let header = "";
-  header += `${dashes}${boundary}${carriage}`;
-  header += `Content-Disposition: form-data; name="${name}"`;
-  if (isBlob(field)) {
-    header += `; filename="${field.name}"${carriage}`;
-    header += `Content-Type: ${field.type || "application/octet-stream"}`;
-  }
-  return `${header}${carriage.repeat(2)}`;
-}
-async function* formDataIterator(form, boundary) {
-  for (const [name, value] of form) {
-    yield getHeader(boundary, name, value);
-    if (isBlob(value)) {
-      yield* value.stream();
-    } else {
-      yield value;
-    }
-    yield carriage;
-  }
-  yield getFooter(boundary);
-}
-function getFormDataLength(form, boundary) {
-  let length = 0;
-  for (const [name, value] of form) {
-    length += Buffer.byteLength(getHeader(boundary, name, value));
-    length += isBlob(value) ? value.size : Buffer.byteLength(String(value));
-    length += carriageLength;
-  }
-  length += Buffer.byteLength(getFooter(boundary));
-  return length;
+function formDataToBlob(F2, B = Blob$1) {
+  var b = `${r()}${r()}`.replace(/\./g, "").slice(-28).padStart(32, "-"), c = [], p = `--${b}\r
+Content-Disposition: form-data; name="`;
+  F2.forEach((v, n) => typeof v == "string" ? c.push(p + e(n) + `"\r
+\r
+${v.replace(/\r(?!\n)|(?<!\r)\n/g, "\r\n")}\r
+`) : c.push(p + e(n) + `"; filename="${e(v.name, 1)}"\r
+Content-Type: ${v.type || "application/octet-stream"}\r
+\r
+`, v, "\r\n"));
+  c.push(`--${b}--`);
+  return new B(c, { type: "multipart/form-data; boundary=" + b });
 }
 async function consumeBody(data) {
   if (data[INTERNALS$2].disturbed) {
@@ -136,17 +508,11 @@ async function consumeBody(data) {
   if (data[INTERNALS$2].error) {
     throw data[INTERNALS$2].error;
   }
-  let { body } = data;
+  const { body } = data;
   if (body === null) {
     return Buffer.alloc(0);
   }
-  if (isBlob(body)) {
-    body = import_stream.default.Readable.from(body.stream());
-  }
-  if (Buffer.isBuffer(body)) {
-    return body;
-  }
-  if (!(body instanceof import_stream.default)) {
+  if (!(body instanceof import_node_stream.default)) {
     return Buffer.alloc(0);
   }
   const accum = [];
@@ -179,9 +545,9 @@ async function consumeBody(data) {
   }
 }
 function fromRawHeaders(headers = []) {
-  return new Headers(headers.reduce((result, value, index2, array) => {
-    if (index2 % 2 === 0) {
-      result.push(array.slice(index2, index2 + 2));
+  return new Headers2(headers.reduce((result, value, index, array) => {
+    if (index % 2 === 0) {
+      result.push(array.slice(index, index + 2));
     }
     return result;
   }, []).filter(([name, value]) => {
@@ -194,26 +560,151 @@ function fromRawHeaders(headers = []) {
     }
   }));
 }
-async function fetch(url, options_) {
-  return new Promise((resolve2, reject) => {
-    const request = new Request(url, options_);
-    const options2 = getNodeRequestOptions(request);
-    if (!supportedSchemas.has(options2.protocol)) {
-      throw new TypeError(`node-fetch cannot load ${url}. URL scheme "${options2.protocol.replace(/:$/, "")}" is not supported.`);
+function stripURLForUseAsAReferrer(url, originOnly = false) {
+  if (url == null) {
+    return "no-referrer";
+  }
+  url = new URL(url);
+  if (/^(about|blob|data):$/.test(url.protocol)) {
+    return "no-referrer";
+  }
+  url.username = "";
+  url.password = "";
+  url.hash = "";
+  if (originOnly) {
+    url.pathname = "";
+    url.search = "";
+  }
+  return url;
+}
+function validateReferrerPolicy(referrerPolicy) {
+  if (!ReferrerPolicy.has(referrerPolicy)) {
+    throw new TypeError(`Invalid referrerPolicy: ${referrerPolicy}`);
+  }
+  return referrerPolicy;
+}
+function isOriginPotentiallyTrustworthy(url) {
+  if (/^(http|ws)s:$/.test(url.protocol)) {
+    return true;
+  }
+  const hostIp = url.host.replace(/(^\[)|(]$)/g, "");
+  const hostIPVersion = (0, import_net.isIP)(hostIp);
+  if (hostIPVersion === 4 && /^127\./.test(hostIp)) {
+    return true;
+  }
+  if (hostIPVersion === 6 && /^(((0+:){7})|(::(0+:){0,6}))0*1$/.test(hostIp)) {
+    return true;
+  }
+  if (/^(.+\.)*localhost$/.test(url.host)) {
+    return false;
+  }
+  if (url.protocol === "file:") {
+    return true;
+  }
+  return false;
+}
+function isUrlPotentiallyTrustworthy(url) {
+  if (/^about:(blank|srcdoc)$/.test(url)) {
+    return true;
+  }
+  if (url.protocol === "data:") {
+    return true;
+  }
+  if (/^(blob|filesystem):$/.test(url.protocol)) {
+    return true;
+  }
+  return isOriginPotentiallyTrustworthy(url);
+}
+function determineRequestsReferrer(request, { referrerURLCallback, referrerOriginCallback } = {}) {
+  if (request.referrer === "no-referrer" || request.referrerPolicy === "") {
+    return null;
+  }
+  const policy = request.referrerPolicy;
+  if (request.referrer === "about:client") {
+    return "no-referrer";
+  }
+  const referrerSource = request.referrer;
+  let referrerURL = stripURLForUseAsAReferrer(referrerSource);
+  let referrerOrigin = stripURLForUseAsAReferrer(referrerSource, true);
+  if (referrerURL.toString().length > 4096) {
+    referrerURL = referrerOrigin;
+  }
+  if (referrerURLCallback) {
+    referrerURL = referrerURLCallback(referrerURL);
+  }
+  if (referrerOriginCallback) {
+    referrerOrigin = referrerOriginCallback(referrerOrigin);
+  }
+  const currentURL = new URL(request.url);
+  switch (policy) {
+    case "no-referrer":
+      return "no-referrer";
+    case "origin":
+      return referrerOrigin;
+    case "unsafe-url":
+      return referrerURL;
+    case "strict-origin":
+      if (isUrlPotentiallyTrustworthy(referrerURL) && !isUrlPotentiallyTrustworthy(currentURL)) {
+        return "no-referrer";
+      }
+      return referrerOrigin.toString();
+    case "strict-origin-when-cross-origin":
+      if (referrerURL.origin === currentURL.origin) {
+        return referrerURL;
+      }
+      if (isUrlPotentiallyTrustworthy(referrerURL) && !isUrlPotentiallyTrustworthy(currentURL)) {
+        return "no-referrer";
+      }
+      return referrerOrigin;
+    case "same-origin":
+      if (referrerURL.origin === currentURL.origin) {
+        return referrerURL;
+      }
+      return "no-referrer";
+    case "origin-when-cross-origin":
+      if (referrerURL.origin === currentURL.origin) {
+        return referrerURL;
+      }
+      return referrerOrigin;
+    case "no-referrer-when-downgrade":
+      if (isUrlPotentiallyTrustworthy(referrerURL) && !isUrlPotentiallyTrustworthy(currentURL)) {
+        return "no-referrer";
+      }
+      return referrerURL;
+    default:
+      throw new TypeError(`Invalid referrerPolicy: ${policy}`);
+  }
+}
+function parseReferrerPolicyFromHeader(headers) {
+  const policyTokens = (headers.get("referrer-policy") || "").split(/[,\s]+/);
+  let policy = "";
+  for (const token of policyTokens) {
+    if (token && ReferrerPolicy.has(token)) {
+      policy = token;
     }
-    if (options2.protocol === "data:") {
-      const data = dataUriToBuffer$1(request.url);
-      const response2 = new Response(data, { headers: { "Content-Type": data.typeFull } });
+  }
+  return policy;
+}
+async function fetch2(url, options_) {
+  return new Promise((resolve2, reject) => {
+    const request = new Request2(url, options_);
+    const { parsedURL, options } = getNodeRequestOptions(request);
+    if (!supportedSchemas.has(parsedURL.protocol)) {
+      throw new TypeError(`node-fetch cannot load ${url}. URL scheme "${parsedURL.protocol.replace(/:$/, "")}" is not supported.`);
+    }
+    if (parsedURL.protocol === "data:") {
+      const data = dataUriToBuffer(request.url);
+      const response2 = new Response2(data, { headers: { "Content-Type": data.typeFull } });
       resolve2(response2);
       return;
     }
-    const send = (options2.protocol === "https:" ? import_https.default : import_http.default).request;
+    const send = (parsedURL.protocol === "https:" ? import_node_https.default : import_node_http.default).request;
     const { signal } = request;
     let response = null;
     const abort = () => {
       const error2 = new AbortError("The operation was aborted.");
       reject(error2);
-      if (request.body && request.body instanceof import_stream.default.Readable) {
+      if (request.body && request.body instanceof import_node_stream.default.Readable) {
         request.body.destroy(error2);
       }
       if (!response || !response.body) {
@@ -229,7 +720,7 @@ async function fetch(url, options_) {
       abort();
       finalize();
     };
-    const request_ = send(options2);
+    const request_ = send(parsedURL, options);
     if (signal) {
       signal.addEventListener("abort", abortAndFinalize);
     }
@@ -247,13 +738,13 @@ async function fetch(url, options_) {
       response.body.destroy(error2);
     });
     if (process.version < "v14") {
-      request_.on("socket", (s2) => {
+      request_.on("socket", (s3) => {
         let endedWithEventsCount;
-        s2.prependListener("end", () => {
-          endedWithEventsCount = s2._eventsCount;
+        s3.prependListener("end", () => {
+          endedWithEventsCount = s3._eventsCount;
         });
-        s2.prependListener("close", (hadError) => {
-          if (response && endedWithEventsCount < s2._eventsCount && !hadError) {
+        s3.prependListener("close", (hadError) => {
+          if (response && endedWithEventsCount < s3._eventsCount && !hadError) {
             const error2 = new Error("Premature close");
             error2.code = "ERR_STREAM_PREMATURE_CLOSE";
             response.body.emit("error", error2);
@@ -287,17 +778,19 @@ async function fetch(url, options_) {
               return;
             }
             const requestOptions = {
-              headers: new Headers(request.headers),
+              headers: new Headers2(request.headers),
               follow: request.follow,
               counter: request.counter + 1,
               agent: request.agent,
               compress: request.compress,
               method: request.method,
-              body: request.body,
+              body: clone(request),
               signal: request.signal,
-              size: request.size
+              size: request.size,
+              referrer: request.referrer,
+              referrerPolicy: request.referrerPolicy
             };
-            if (response_.statusCode !== 303 && request.body && options_.body instanceof import_stream.default.Readable) {
+            if (response_.statusCode !== 303 && request.body && options_.body instanceof import_node_stream.default.Readable) {
               reject(new FetchError("Cannot follow redirect with body being a readable stream", "unsupported-redirect"));
               finalize();
               return;
@@ -307,7 +800,11 @@ async function fetch(url, options_) {
               requestOptions.body = void 0;
               requestOptions.headers.delete("content-length");
             }
-            resolve2(fetch(new Request(locationURL, requestOptions)));
+            const responseReferrerPolicy = parseReferrerPolicyFromHeader(headers);
+            if (responseReferrerPolicy) {
+              requestOptions.referrerPolicy = responseReferrerPolicy;
+            }
+            resolve2(fetch2(new Request2(locationURL, requestOptions)));
             finalize();
             return;
           }
@@ -320,7 +817,7 @@ async function fetch(url, options_) {
           signal.removeEventListener("abort", abortAndFinalize);
         });
       }
-      let body = (0, import_stream.pipeline)(response_, new import_stream.PassThrough(), reject);
+      let body = (0, import_node_stream.pipeline)(response_, new import_node_stream.PassThrough(), reject);
       if (process.version < "v12.10") {
         response_.on("aborted", abortAndFinalize);
       }
@@ -335,36 +832,36 @@ async function fetch(url, options_) {
       };
       const codings = headers.get("Content-Encoding");
       if (!request.compress || request.method === "HEAD" || codings === null || response_.statusCode === 204 || response_.statusCode === 304) {
-        response = new Response(body, responseOptions);
+        response = new Response2(body, responseOptions);
         resolve2(response);
         return;
       }
       const zlibOptions = {
-        flush: import_zlib.default.Z_SYNC_FLUSH,
-        finishFlush: import_zlib.default.Z_SYNC_FLUSH
+        flush: import_node_zlib.default.Z_SYNC_FLUSH,
+        finishFlush: import_node_zlib.default.Z_SYNC_FLUSH
       };
       if (codings === "gzip" || codings === "x-gzip") {
-        body = (0, import_stream.pipeline)(body, import_zlib.default.createGunzip(zlibOptions), reject);
-        response = new Response(body, responseOptions);
+        body = (0, import_node_stream.pipeline)(body, import_node_zlib.default.createGunzip(zlibOptions), reject);
+        response = new Response2(body, responseOptions);
         resolve2(response);
         return;
       }
       if (codings === "deflate" || codings === "x-deflate") {
-        const raw = (0, import_stream.pipeline)(response_, new import_stream.PassThrough(), reject);
+        const raw = (0, import_node_stream.pipeline)(response_, new import_node_stream.PassThrough(), reject);
         raw.once("data", (chunk) => {
-          body = (chunk[0] & 15) === 8 ? (0, import_stream.pipeline)(body, import_zlib.default.createInflate(), reject) : (0, import_stream.pipeline)(body, import_zlib.default.createInflateRaw(), reject);
-          response = new Response(body, responseOptions);
+          body = (chunk[0] & 15) === 8 ? (0, import_node_stream.pipeline)(body, import_node_zlib.default.createInflate(), reject) : (0, import_node_stream.pipeline)(body, import_node_zlib.default.createInflateRaw(), reject);
+          response = new Response2(body, responseOptions);
           resolve2(response);
         });
         return;
       }
       if (codings === "br") {
-        body = (0, import_stream.pipeline)(body, import_zlib.default.createBrotliDecompress(), reject);
-        response = new Response(body, responseOptions);
+        body = (0, import_node_stream.pipeline)(body, import_node_zlib.default.createBrotliDecompress(), reject);
+        response = new Response2(body, responseOptions);
         resolve2(response);
         return;
       }
-      response = new Response(body, responseOptions);
+      response = new Response2(body, responseOptions);
       resolve2(response);
     });
     writeToStream(request_, request);
@@ -400,27 +897,48 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {
     });
   });
 }
-var import_http, import_https, import_zlib, import_stream, import_util, import_crypto, import_url, commonjsGlobal, src, dataUriToBuffer$1, ponyfill_es2018, POOL_SIZE$1, POOL_SIZE, _Blob, Blob2, Blob$1, FetchBaseError, FetchError, NAME, isURLSearchParameters, isBlob, isAbortSignal, carriage, dashes, carriageLength, getFooter, getBoundary, INTERNALS$2, Body, clone, extractContentType, getTotalBytes, writeToStream, validateHeaderName, validateHeaderValue, Headers, redirectStatus, isRedirect, INTERNALS$1, Response, getSearch, INTERNALS, isRequest, Request, getNodeRequestOptions, AbortError, supportedSchemas;
+function installFetch() {
+  Object.defineProperties(globalThis, {
+    fetch: {
+      enumerable: true,
+      configurable: true,
+      value: fetch2
+    },
+    Response: {
+      enumerable: true,
+      configurable: true,
+      value: Response2
+    },
+    Request: {
+      enumerable: true,
+      configurable: true,
+      value: Request2
+    },
+    Headers: {
+      enumerable: true,
+      configurable: true,
+      value: Headers2
+    }
+  });
+}
+var import_node_http, import_node_https, import_node_zlib, import_node_stream, import_node_util, import_node_url, import_net, commonjsGlobal, ponyfill_es2018, POOL_SIZE$1, POOL_SIZE, _parts, _type, _size, _a, _Blob, Blob, Blob$1, _lastModified, _name, _a2, _File, File, t, i, h, r, m, f2, e, x, _d, _a3, FormData2, FetchBaseError, FetchError, NAME, isURLSearchParameters, isBlob, isAbortSignal, INTERNALS$2, Body, clone, getNonSpecFormDataBoundary, extractContentType, getTotalBytes, writeToStream, validateHeaderName, validateHeaderValue, Headers2, redirectStatus, isRedirect, INTERNALS$1, Response2, getSearch, ReferrerPolicy, DEFAULT_REFERRER_POLICY, INTERNALS, isRequest, Request2, getNodeRequestOptions, AbortError, supportedSchemas;
 var init_install_fetch = __esm({
   "node_modules/@sveltejs/kit/dist/install-fetch.js"() {
-    init_shims();
-    import_http = __toModule(require("http"));
-    import_https = __toModule(require("https"));
-    import_zlib = __toModule(require("zlib"));
-    import_stream = __toModule(require("stream"));
-    import_util = __toModule(require("util"));
-    import_crypto = __toModule(require("crypto"));
-    import_url = __toModule(require("url"));
+    import_node_http = __toESM(require("http"), 1);
+    import_node_https = __toESM(require("https"), 1);
+    import_node_zlib = __toESM(require("zlib"), 1);
+    import_node_stream = __toESM(require("stream"), 1);
+    import_node_util = require("util");
+    import_node_url = require("url");
+    import_net = require("net");
     commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
-    src = dataUriToBuffer;
-    dataUriToBuffer$1 = src;
     ponyfill_es2018 = { exports: {} };
     (function(module2, exports) {
       (function(global2, factory) {
         factory(exports);
       })(commonjsGlobal, function(exports2) {
         const SymbolPolyfill = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? Symbol : (description) => `Symbol(${description})`;
-        function noop2() {
+        function noop4() {
           return void 0;
         }
         function getGlobals() {
@@ -434,10 +952,10 @@ var init_install_fetch = __esm({
           return void 0;
         }
         const globals = getGlobals();
-        function typeIsObject(x) {
-          return typeof x === "object" && x !== null || typeof x === "function";
+        function typeIsObject(x2) {
+          return typeof x2 === "object" && x2 !== null || typeof x2 === "function";
         }
-        const rethrowAssertionErrorRejection = noop2;
+        const rethrowAssertionErrorRejection = noop4;
         const originalPromise = Promise;
         const originalPromiseThen = Promise.prototype.then;
         const originalPromiseResolve = Promise.resolve.bind(originalPromise);
@@ -477,15 +995,15 @@ var init_install_fetch = __esm({
           const resolvedPromise = promiseResolvedWith(void 0);
           return (fn) => PerformPromiseThen(resolvedPromise, fn);
         })();
-        function reflectCall(F, V, args) {
-          if (typeof F !== "function") {
+        function reflectCall(F2, V, args) {
+          if (typeof F2 !== "function") {
             throw new TypeError("Argument is not a function");
           }
-          return Function.prototype.apply.call(F, V, args);
+          return Function.prototype.apply.call(F2, V, args);
         }
-        function promiseCall(F, V, args) {
+        function promiseCall(F2, V, args) {
           try {
-            return promiseResolvedWith(reflectCall(F, V, args));
+            return promiseResolvedWith(reflectCall(F2, V, args));
           } catch (value) {
             return promiseRejectedWith(value);
           }
@@ -542,20 +1060,20 @@ var init_install_fetch = __esm({
             return element;
           }
           forEach(callback) {
-            let i = this._cursor;
+            let i2 = this._cursor;
             let node = this._front;
             let elements = node._elements;
-            while (i !== elements.length || node._next !== void 0) {
-              if (i === elements.length) {
+            while (i2 !== elements.length || node._next !== void 0) {
+              if (i2 === elements.length) {
                 node = node._next;
                 elements = node._elements;
-                i = 0;
+                i2 = 0;
                 if (elements.length === 0) {
                   break;
                 }
               }
-              callback(elements[i]);
-              ++i;
+              callback(elements[i2]);
+              ++i2;
             }
           }
           peek() {
@@ -629,71 +1147,71 @@ var init_install_fetch = __esm({
         const ErrorSteps = SymbolPolyfill("[[ErrorSteps]]");
         const CancelSteps = SymbolPolyfill("[[CancelSteps]]");
         const PullSteps = SymbolPolyfill("[[PullSteps]]");
-        const NumberIsFinite = Number.isFinite || function(x) {
-          return typeof x === "number" && isFinite(x);
+        const NumberIsFinite = Number.isFinite || function(x2) {
+          return typeof x2 === "number" && isFinite(x2);
         };
         const MathTrunc = Math.trunc || function(v) {
           return v < 0 ? Math.ceil(v) : Math.floor(v);
         };
-        function isDictionary(x) {
-          return typeof x === "object" || typeof x === "function";
+        function isDictionary(x2) {
+          return typeof x2 === "object" || typeof x2 === "function";
         }
         function assertDictionary(obj, context) {
           if (obj !== void 0 && !isDictionary(obj)) {
             throw new TypeError(`${context} is not an object.`);
           }
         }
-        function assertFunction(x, context) {
-          if (typeof x !== "function") {
+        function assertFunction(x2, context) {
+          if (typeof x2 !== "function") {
             throw new TypeError(`${context} is not a function.`);
           }
         }
-        function isObject(x) {
-          return typeof x === "object" && x !== null || typeof x === "function";
+        function isObject(x2) {
+          return typeof x2 === "object" && x2 !== null || typeof x2 === "function";
         }
-        function assertObject(x, context) {
-          if (!isObject(x)) {
+        function assertObject(x2, context) {
+          if (!isObject(x2)) {
             throw new TypeError(`${context} is not an object.`);
           }
         }
-        function assertRequiredArgument(x, position, context) {
-          if (x === void 0) {
+        function assertRequiredArgument(x2, position, context) {
+          if (x2 === void 0) {
             throw new TypeError(`Parameter ${position} is required in '${context}'.`);
           }
         }
-        function assertRequiredField(x, field, context) {
-          if (x === void 0) {
+        function assertRequiredField(x2, field, context) {
+          if (x2 === void 0) {
             throw new TypeError(`${field} is required in '${context}'.`);
           }
         }
         function convertUnrestrictedDouble(value) {
           return Number(value);
         }
-        function censorNegativeZero(x) {
-          return x === 0 ? 0 : x;
+        function censorNegativeZero(x2) {
+          return x2 === 0 ? 0 : x2;
         }
-        function integerPart(x) {
-          return censorNegativeZero(MathTrunc(x));
+        function integerPart(x2) {
+          return censorNegativeZero(MathTrunc(x2));
         }
         function convertUnsignedLongLongWithEnforceRange(value, context) {
           const lowerBound = 0;
           const upperBound = Number.MAX_SAFE_INTEGER;
-          let x = Number(value);
-          x = censorNegativeZero(x);
-          if (!NumberIsFinite(x)) {
+          let x2 = Number(value);
+          x2 = censorNegativeZero(x2);
+          if (!NumberIsFinite(x2)) {
             throw new TypeError(`${context} is not a finite number`);
           }
-          x = integerPart(x);
-          if (x < lowerBound || x > upperBound) {
+          x2 = integerPart(x2);
+          if (x2 < lowerBound || x2 > upperBound) {
             throw new TypeError(`${context} is outside the accepted range of ${lowerBound} to ${upperBound}, inclusive`);
           }
-          if (!NumberIsFinite(x) || x === 0) {
+          if (!NumberIsFinite(x2) || x2 === 0) {
             return 0;
           }
-          return x;
+          return x2;
         }
-        function assertReadableStream(x, context) {
-          if (!IsReadableStream(x)) {
+        function assertReadableStream(x2, context) {
+          if (!IsReadableStream(x2)) {
             throw new TypeError(`${context} is not a ReadableStream.`);
           }
         }
@@ -766,7 +1284,7 @@ var init_install_fetch = __esm({
             const readRequest = {
               _chunkSteps: (chunk) => resolvePromise({ value: chunk, done: false }),
               _closeSteps: () => resolvePromise({ value: void 0, done: true }),
-              _errorSteps: (e) => rejectPromise(e)
+              _errorSteps: (e2) => rejectPromise(e2)
             };
             ReadableStreamDefaultReaderRead(this, readRequest);
             return promise;
@@ -796,14 +1314,14 @@ var init_install_fetch = __esm({
             configurable: true
           });
         }
-        function IsReadableStreamDefaultReader(x) {
-          if (!typeIsObject(x)) {
+        function IsReadableStreamDefaultReader(x2) {
+          if (!typeIsObject(x2)) {
             return false;
           }
-          if (!Object.prototype.hasOwnProperty.call(x, "_readRequests")) {
+          if (!Object.prototype.hasOwnProperty.call(x2, "_readRequests")) {
             return false;
           }
-          return x instanceof ReadableStreamDefaultReader;
+          return x2 instanceof ReadableStreamDefaultReader;
         }
         function ReadableStreamDefaultReaderRead(reader, readRequest) {
           const stream = reader._ownerReadableStream;
@@ -914,30 +1432,30 @@ var init_install_fetch = __esm({
           iterator._asyncIteratorImpl = impl;
           return iterator;
         }
-        function IsReadableStreamAsyncIterator(x) {
-          if (!typeIsObject(x)) {
+        function IsReadableStreamAsyncIterator(x2) {
+          if (!typeIsObject(x2)) {
             return false;
           }
-          if (!Object.prototype.hasOwnProperty.call(x, "_asyncIteratorImpl")) {
+          if (!Object.prototype.hasOwnProperty.call(x2, "_asyncIteratorImpl")) {
             return false;
           }
           try {
-            return x._asyncIteratorImpl instanceof ReadableStreamAsyncIteratorImpl;
-          } catch (_a) {
+            return x2._asyncIteratorImpl instanceof ReadableStreamAsyncIteratorImpl;
+          } catch (_a4) {
             return false;
           }
         }
         function streamAsyncIteratorBrandCheckException(name) {
           return new TypeError(`ReadableStreamAsyncIterator.${name} can only be used on a ReadableSteamAsyncIterator`);
         }
-        const NumberIsNaN = Number.isNaN || function(x) {
-          return x !== x;
+        const NumberIsNaN = Number.isNaN || function(x2) {
+          return x2 !== x2;
         };
         function CreateArrayFromList(elements) {
           return elements.slice();
         }
-        function CopyDataBlockBytes(dest, destOffset, src2, srcOffset, n) {
-          new Uint8Array(dest).set(new Uint8Array(src2, srcOffset, n), destOffset);
+        function CopyDataBlockBytes(dest, destOffset, src, srcOffset, n) {
+          new Uint8Array(dest).set(new Uint8Array(src, srcOffset, n), destOffset);
         }
         function TransferArrayBuffer(O) {
           return O;
@@ -978,12 +1496,12 @@ var init_install_fetch = __esm({
           }
           return pair.value;
         }
-        function EnqueueValueWithSize(container, value, size) {
-          if (!IsNonNegativeNumber(size) || size === Infinity) {
+        function EnqueueValueWithSize(container, value, size2) {
+          if (!IsNonNegativeNumber(size2) || size2 === Infinity) {
             throw new RangeError("Size must be a finite, non-NaN, non-negative number.");
           }
-          container._queue.push({ value, size });
-          container._queueTotalSize += size;
+          container._queue.push({ value, size: size2 });
+          container._queueTotalSize += size2;
         }
         function PeekQueueValue(container) {
           const pair = container._queue.peek();
@@ -1095,11 +1613,11 @@ var init_install_fetch = __esm({
             }
             ReadableByteStreamControllerEnqueue(this, chunk);
           }
-          error(e = void 0) {
+          error(e2 = void 0) {
             if (!IsReadableByteStreamController(this)) {
               throw byteStreamControllerBrandCheckException("error");
             }
-            ReadableByteStreamControllerError(this, e);
+            ReadableByteStreamControllerError(this, e2);
           }
           [CancelSteps](reason) {
             ReadableByteStreamControllerClearPendingPullIntos(this);
@@ -1111,10 +1629,10 @@ var init_install_fetch = __esm({
           [PullSteps](readRequest) {
             const stream = this._controlledReadableByteStream;
             if (this._queueTotalSize > 0) {
-              const entry = this._queue.shift();
-              this._queueTotalSize -= entry.byteLength;
+              const entry20 = this._queue.shift();
+              this._queueTotalSize -= entry20.byteLength;
               ReadableByteStreamControllerHandleQueueDrain(this);
-              const view = new Uint8Array(entry.buffer, entry.byteOffset, entry.byteLength);
+              const view = new Uint8Array(entry20.buffer, entry20.byteOffset, entry20.byteLength);
               readRequest._chunkSteps(view);
               return;
             }
@@ -1156,23 +1674,23 @@ var init_install_fetch = __esm({
             configurable: true
           });
         }
-        function IsReadableByteStreamController(x) {
-          if (!typeIsObject(x)) {
+        function IsReadableByteStreamController(x2) {
+          if (!typeIsObject(x2)) {
             return false;
           }
-          if (!Object.prototype.hasOwnProperty.call(x, "_controlledReadableByteStream")) {
+          if (!Object.prototype.hasOwnProperty.call(x2, "_controlledReadableByteStream")) {
             return false;
           }
-          return x instanceof ReadableByteStreamController;
+          return x2 instanceof ReadableByteStreamController;
         }
-        function IsReadableStreamBYOBRequest(x) {
-          if (!typeIsObject(x)) {
+        function IsReadableStreamBYOBRequest(x2) {
+          if (!typeIsObject(x2)) {
             return false;
           }
-          if (!Object.prototype.hasOwnProperty.call(x, "_associatedReadableByteStreamController")) {
+          if (!Object.prototype.hasOwnProperty.call(x2, "_associatedReadableByteStreamController")) {
             return false;
           }
-          return x instanceof ReadableStreamBYOBRequest;
+          return x2 instanceof ReadableStreamBYOBRequest;
         }
         function ReadableByteStreamControllerCallPullIfNeeded(controller) {
           const shouldPull = ReadableByteStreamControllerShouldCallPull(controller);
@@ -1191,8 +1709,8 @@ var init_install_fetch = __esm({
               controller._pullAgain = false;
               ReadableByteStreamControllerCallPullIfNeeded(controller);
             }
-          }, (e) => {
-            ReadableByteStreamControllerError(controller, e);
+          }, (e2) => {
+            ReadableByteStreamControllerError(controller, e2);
           });
         }
         function ReadableByteStreamControllerClearPendingPullIntos(controller) {
@@ -1250,8 +1768,8 @@ var init_install_fetch = __esm({
           }
           return ready;
         }
-        function ReadableByteStreamControllerFillHeadPullIntoDescriptor(controller, size, pullIntoDescriptor) {
-          pullIntoDescriptor.bytesFilled += size;
+        function ReadableByteStreamControllerFillHeadPullIntoDescriptor(controller, size2, pullIntoDescriptor) {
+          pullIntoDescriptor.bytesFilled += size2;
         }
         function ReadableByteStreamControllerHandleQueueDrain(controller) {
           if (controller._queueTotalSize === 0 && controller._closeRequested) {
@@ -1317,9 +1835,9 @@ var init_install_fetch = __esm({
               return;
             }
             if (controller._closeRequested) {
-              const e = new TypeError("Insufficient bytes to fill elements in the given buffer");
-              ReadableByteStreamControllerError(controller, e);
-              readIntoRequest._errorSteps(e);
+              const e2 = new TypeError("Insufficient bytes to fill elements in the given buffer");
+              ReadableByteStreamControllerError(controller, e2);
+              readIntoRequest._errorSteps(e2);
               return;
             }
           }
@@ -1406,9 +1924,9 @@ var init_install_fetch = __esm({
           if (controller._pendingPullIntos.length > 0) {
             const firstPendingPullInto = controller._pendingPullIntos.peek();
             if (firstPendingPullInto.bytesFilled > 0) {
-              const e = new TypeError("Insufficient bytes to fill elements in the given buffer");
-              ReadableByteStreamControllerError(controller, e);
-              throw e;
+              const e2 = new TypeError("Insufficient bytes to fill elements in the given buffer");
+              ReadableByteStreamControllerError(controller, e2);
+              throw e2;
             }
           }
           ReadableByteStreamControllerClearAlgorithms(controller);
@@ -1434,6 +1952,9 @@ var init_install_fetch = __esm({
             if (ReadableStreamGetNumReadRequests(stream) === 0) {
               ReadableByteStreamControllerEnqueueChunkToQueue(controller, transferredBuffer, byteOffset, byteLength);
             } else {
+              if (controller._pendingPullIntos.length > 0) {
+                ReadableByteStreamControllerShiftPendingPullInto(controller);
+              }
               const transferredView = new Uint8Array(transferredBuffer, byteOffset, byteLength);
               ReadableStreamFulfillReadRequest(stream, transferredView, false);
             }
@@ -1445,7 +1966,7 @@ var init_install_fetch = __esm({
           }
           ReadableByteStreamControllerCallPullIfNeeded(controller);
         }
-        function ReadableByteStreamControllerError(controller, e) {
+        function ReadableByteStreamControllerError(controller, e2) {
           const stream = controller._controlledReadableByteStream;
           if (stream._state !== "readable") {
             return;
@@ -1453,7 +1974,7 @@ var init_install_fetch = __esm({
           ReadableByteStreamControllerClearPendingPullIntos(controller);
           ResetQueue(controller);
           ReadableByteStreamControllerClearAlgorithms(controller);
-          ReadableStreamError(stream, e);
+          ReadableStreamError(stream, e2);
         }
         function ReadableByteStreamControllerGetBYOBRequest(controller) {
           if (controller._byobRequest === null && controller._pendingPullIntos.length > 0) {
@@ -1514,8 +2035,9 @@ var init_install_fetch = __esm({
           if (firstDescriptor.bytesFilled + view.byteLength > firstDescriptor.byteLength) {
             throw new RangeError("The region specified by view is larger than byobRequest");
           }
+          const viewByteLength = view.byteLength;
           firstDescriptor.buffer = TransferArrayBuffer(view.buffer);
-          ReadableByteStreamControllerRespondInternal(controller, view.byteLength);
+          ReadableByteStreamControllerRespondInternal(controller, viewByteLength);
         }
         function SetUpReadableByteStreamController(stream, controller, startAlgorithm, pullAlgorithm, cancelAlgorithm, highWaterMark, autoAllocateChunkSize) {
           controller._controlledReadableByteStream = stream;
@@ -1536,8 +2058,8 @@ var init_install_fetch = __esm({
           uponPromise(promiseResolvedWith(startResult), () => {
             controller._started = true;
             ReadableByteStreamControllerCallPullIfNeeded(controller);
-          }, (r) => {
-            ReadableByteStreamControllerError(controller, r);
+          }, (r2) => {
+            ReadableByteStreamControllerError(controller, r2);
           });
         }
         function SetUpReadableByteStreamControllerFromUnderlyingSource(stream, underlyingByteSource, highWaterMark) {
@@ -1653,7 +2175,7 @@ var init_install_fetch = __esm({
             const readIntoRequest = {
               _chunkSteps: (chunk) => resolvePromise({ value: chunk, done: false }),
               _closeSteps: (chunk) => resolvePromise({ value: chunk, done: true }),
-              _errorSteps: (e) => rejectPromise(e)
+              _errorSteps: (e2) => rejectPromise(e2)
             };
             ReadableStreamBYOBReaderRead(this, view, readIntoRequest);
             return promise;
@@ -1683,14 +2205,14 @@ var init_install_fetch = __esm({
             configurable: true
           });
         }
-        function IsReadableStreamBYOBReader(x) {
-          if (!typeIsObject(x)) {
+        function IsReadableStreamBYOBReader(x2) {
+          if (!typeIsObject(x2)) {
             return false;
           }
-          if (!Object.prototype.hasOwnProperty.call(x, "_readIntoRequests")) {
+          if (!Object.prototype.hasOwnProperty.call(x2, "_readIntoRequests")) {
             return false;
           }
-          return x instanceof ReadableStreamBYOBReader;
+          return x2 instanceof ReadableStreamBYOBReader;
         }
         function ReadableStreamBYOBReaderRead(reader, view, readIntoRequest) {
           const stream = reader._ownerReadableStream;
@@ -1715,19 +2237,19 @@ var init_install_fetch = __esm({
           return highWaterMark;
         }
         function ExtractSizeAlgorithm(strategy) {
-          const { size } = strategy;
-          if (!size) {
+          const { size: size2 } = strategy;
+          if (!size2) {
             return () => 1;
           }
-          return size;
+          return size2;
         }
         function convertQueuingStrategy(init2, context) {
           assertDictionary(init2, context);
           const highWaterMark = init2 === null || init2 === void 0 ? void 0 : init2.highWaterMark;
-          const size = init2 === null || init2 === void 0 ? void 0 : init2.size;
+          const size2 = init2 === null || init2 === void 0 ? void 0 : init2.size;
           return {
             highWaterMark: highWaterMark === void 0 ? void 0 : convertUnrestrictedDouble(highWaterMark),
-            size: size === void 0 ? void 0 : convertQueuingStrategySize(size, `${context} has member 'size' that`)
+            size: size2 === void 0 ? void 0 : convertQueuingStrategySize(size2, `${context} has member 'size' that`)
           };
         }
         function convertQueuingStrategySize(fn, context) {
@@ -1765,8 +2287,8 @@ var init_install_fetch = __esm({
           assertFunction(fn, context);
           return (chunk, controller) => promiseCall(fn, original, [chunk, controller]);
         }
-        function assertWritableStream(x, context) {
-          if (!IsWritableStream(x)) {
+        function assertWritableStream(x2, context) {
+          if (!IsWritableStream(x2)) {
             throw new TypeError(`${context} is not a WritableStream.`);
           }
         }
@@ -1776,7 +2298,7 @@ var init_install_fetch = __esm({
           }
           try {
             return typeof value.aborted === "boolean";
-          } catch (_a) {
+          } catch (_a4) {
             return false;
           }
         }
@@ -1873,14 +2395,14 @@ var init_install_fetch = __esm({
           stream._pendingAbortRequest = void 0;
           stream._backpressure = false;
         }
-        function IsWritableStream(x) {
-          if (!typeIsObject(x)) {
+        function IsWritableStream(x2) {
+          if (!typeIsObject(x2)) {
             return false;
           }
-          if (!Object.prototype.hasOwnProperty.call(x, "_writableStreamController")) {
+          if (!Object.prototype.hasOwnProperty.call(x2, "_writableStreamController")) {
             return false;
           }
-          return x instanceof WritableStream;
+          return x2 instanceof WritableStream;
         }
         function IsWritableStreamLocked(stream) {
           if (stream._writer === void 0) {
@@ -1889,12 +2411,12 @@ var init_install_fetch = __esm({
           return true;
         }
         function WritableStreamAbort(stream, reason) {
-          var _a;
+          var _a4;
           if (stream._state === "closed" || stream._state === "errored") {
             return promiseResolvedWith(void 0);
           }
           stream._writableStreamController._abortReason = reason;
-          (_a = stream._writableStreamController._abortController) === null || _a === void 0 ? void 0 : _a.abort();
+          (_a4 = stream._writableStreamController._abortController) === null || _a4 === void 0 ? void 0 : _a4.abort();
           const state = stream._state;
           if (state === "closed" || state === "errored") {
             return promiseResolvedWith(void 0);
@@ -2181,14 +2703,14 @@ var init_install_fetch = __esm({
             configurable: true
           });
         }
-        function IsWritableStreamDefaultWriter(x) {
-          if (!typeIsObject(x)) {
+        function IsWritableStreamDefaultWriter(x2) {
+          if (!typeIsObject(x2)) {
             return false;
           }
-          if (!Object.prototype.hasOwnProperty.call(x, "_ownerWritableStream")) {
+          if (!Object.prototype.hasOwnProperty.call(x2, "_ownerWritableStream")) {
             return false;
           }
-          return x instanceof WritableStreamDefaultWriter;
+          return x2 instanceof WritableStreamDefaultWriter;
         }
         function WritableStreamDefaultWriterAbort(writer, reason) {
           const stream = writer._ownerWritableStream;
@@ -2283,7 +2805,7 @@ var init_install_fetch = __esm({
             }
             return this._abortController.signal;
           }
-          error(e = void 0) {
+          error(e2 = void 0) {
             if (!IsWritableStreamDefaultController(this)) {
               throw defaultControllerBrandCheckException$2("error");
             }
@@ -2291,7 +2813,7 @@ var init_install_fetch = __esm({
             if (state !== "writable") {
               return;
             }
-            WritableStreamDefaultControllerError(this, e);
+            WritableStreamDefaultControllerError(this, e2);
           }
           [AbortSteps](reason) {
             const result = this._abortAlgorithm(reason);
@@ -2303,6 +2825,8 @@ var init_install_fetch = __esm({
           }
         }
         Object.defineProperties(WritableStreamDefaultController.prototype, {
+          abortReason: { enumerable: true },
+          signal: { enumerable: true },
           error: { enumerable: true }
         });
         if (typeof SymbolPolyfill.toStringTag === "symbol") {
@@ -2311,14 +2835,14 @@ var init_install_fetch = __esm({
             configurable: true
           });
         }
-        function IsWritableStreamDefaultController(x) {
-          if (!typeIsObject(x)) {
+        function IsWritableStreamDefaultController(x2) {
+          if (!typeIsObject(x2)) {
             return false;
           }
-          if (!Object.prototype.hasOwnProperty.call(x, "_controlledWritableStream")) {
+          if (!Object.prototype.hasOwnProperty.call(x2, "_controlledWritableStream")) {
             return false;
           }
-          return x instanceof WritableStreamDefaultController;
+          return x2 instanceof WritableStreamDefaultController;
         }
         function SetUpWritableStreamDefaultController(stream, controller, startAlgorithm, writeAlgorithm, closeAlgorithm, abortAlgorithm, highWaterMark, sizeAlgorithm) {
           controller._controlledWritableStream = stream;
@@ -2341,9 +2865,9 @@ var init_install_fetch = __esm({
           uponPromise(startPromise, () => {
             controller._started = true;
             WritableStreamDefaultControllerAdvanceQueueIfNeeded(controller);
-          }, (r) => {
+          }, (r2) => {
             controller._started = true;
-            WritableStreamDealWithRejection(stream, r);
+            WritableStreamDealWithRejection(stream, r2);
           });
         }
         function SetUpWritableStreamDefaultControllerFromUnderlyingSink(stream, underlyingSink, highWaterMark, sizeAlgorithm) {
@@ -2567,7 +3091,7 @@ var init_install_fetch = __esm({
           try {
             new ctor();
             return true;
-          } catch (_a) {
+          } catch (_a4) {
             return false;
           }
         }
@@ -2640,7 +3164,7 @@ var init_install_fetch = __esm({
                 return newPromise((resolveRead, rejectRead) => {
                   ReadableStreamDefaultReaderRead(reader, {
                     _chunkSteps: (chunk) => {
-                      currentWrite = PerformPromiseThen(WritableStreamDefaultWriterWrite(writer, chunk), void 0, noop2);
+                      currentWrite = PerformPromiseThen(WritableStreamDefaultWriterWrite(writer, chunk), void 0, noop4);
                       resolveRead(false);
                     },
                     _closeSteps: () => resolveRead(true),
@@ -2764,11 +3288,11 @@ var init_install_fetch = __esm({
             }
             return ReadableStreamDefaultControllerEnqueue(this, chunk);
           }
-          error(e = void 0) {
+          error(e2 = void 0) {
             if (!IsReadableStreamDefaultController(this)) {
               throw defaultControllerBrandCheckException$1("error");
             }
-            ReadableStreamDefaultControllerError(this, e);
+            ReadableStreamDefaultControllerError(this, e2);
           }
           [CancelSteps](reason) {
             ResetQueue(this);
@@ -2805,14 +3329,14 @@ var init_install_fetch = __esm({
             configurable: true
           });
         }
-        function IsReadableStreamDefaultController(x) {
-          if (!typeIsObject(x)) {
+        function IsReadableStreamDefaultController(x2) {
+          if (!typeIsObject(x2)) {
             return false;
           }
-          if (!Object.prototype.hasOwnProperty.call(x, "_controlledReadableStream")) {
+          if (!Object.prototype.hasOwnProperty.call(x2, "_controlledReadableStream")) {
             return false;
           }
-          return x instanceof ReadableStreamDefaultController;
+          return x2 instanceof ReadableStreamDefaultController;
         }
         function ReadableStreamDefaultControllerCallPullIfNeeded(controller) {
           const shouldPull = ReadableStreamDefaultControllerShouldCallPull(controller);
@@ -2831,8 +3355,8 @@ var init_install_fetch = __esm({
               controller._pullAgain = false;
               ReadableStreamDefaultControllerCallPullIfNeeded(controller);
             }
-          }, (e) => {
-            ReadableStreamDefaultControllerError(controller, e);
+          }, (e2) => {
+            ReadableStreamDefaultControllerError(controller, e2);
           });
         }
         function ReadableStreamDefaultControllerShouldCallPull(controller) {
@@ -2892,14 +3416,14 @@ var init_install_fetch = __esm({
           }
           ReadableStreamDefaultControllerCallPullIfNeeded(controller);
         }
-        function ReadableStreamDefaultControllerError(controller, e) {
+        function ReadableStreamDefaultControllerError(controller, e2) {
           const stream = controller._controlledReadableStream;
           if (stream._state !== "readable") {
             return;
           }
           ResetQueue(controller);
           ReadableStreamDefaultControllerClearAlgorithms(controller);
-          ReadableStreamError(stream, e);
+          ReadableStreamError(stream, e2);
         }
         function ReadableStreamDefaultControllerGetDesiredSize(controller) {
           const state = controller._controlledReadableStream._state;
@@ -2942,8 +3466,8 @@ var init_install_fetch = __esm({
           uponPromise(promiseResolvedWith(startResult), () => {
             controller._started = true;
             ReadableStreamDefaultControllerCallPullIfNeeded(controller);
-          }, (r) => {
-            ReadableStreamDefaultControllerError(controller, r);
+          }, (r2) => {
+            ReadableStreamDefaultControllerError(controller, r2);
           });
         }
         function SetUpReadableStreamDefaultControllerFromUnderlyingSource(stream, underlyingSource, highWaterMark, sizeAlgorithm) {
@@ -2974,6 +3498,7 @@ var init_install_fetch = __esm({
         function ReadableStreamDefaultTee(stream, cloneForBranch2) {
           const reader = AcquireReadableStreamDefaultReader(stream);
           let reading = false;
+          let readAgain = false;
           let canceled1 = false;
           let canceled2 = false;
           let reason1;
@@ -2986,13 +3511,14 @@ var init_install_fetch = __esm({
           });
           function pullAlgorithm() {
             if (reading) {
+              readAgain = true;
               return promiseResolvedWith(void 0);
             }
             reading = true;
             const readRequest = {
               _chunkSteps: (chunk) => {
                 queueMicrotask(() => {
-                  reading = false;
+                  readAgain = false;
                   const chunk1 = chunk;
                   const chunk2 = chunk;
                   if (!canceled1) {
@@ -3000,6 +3526,10 @@ var init_install_fetch = __esm({
                   }
                   if (!canceled2) {
                     ReadableStreamDefaultControllerEnqueue(branch2._readableStreamController, chunk2);
+                  }
+                  reading = false;
+                  if (readAgain) {
+                    pullAlgorithm();
                   }
                 });
               },
@@ -3046,9 +3576,9 @@ var init_install_fetch = __esm({
           }
           branch1 = CreateReadableStream(startAlgorithm, pullAlgorithm, cancel1Algorithm);
           branch2 = CreateReadableStream(startAlgorithm, pullAlgorithm, cancel2Algorithm);
-          uponRejection(reader._closedPromise, (r) => {
-            ReadableStreamDefaultControllerError(branch1._readableStreamController, r);
-            ReadableStreamDefaultControllerError(branch2._readableStreamController, r);
+          uponRejection(reader._closedPromise, (r2) => {
+            ReadableStreamDefaultControllerError(branch1._readableStreamController, r2);
+            ReadableStreamDefaultControllerError(branch2._readableStreamController, r2);
             if (!canceled1 || !canceled2) {
               resolveCancelPromise(void 0);
             }
@@ -3058,6 +3588,8 @@ var init_install_fetch = __esm({
         function ReadableByteStreamTee(stream) {
           let reader = AcquireReadableStreamDefaultReader(stream);
           let reading = false;
+          let readAgainForBranch1 = false;
+          let readAgainForBranch2 = false;
           let canceled1 = false;
           let canceled2 = false;
           let reason1;
@@ -3069,12 +3601,12 @@ var init_install_fetch = __esm({
             resolveCancelPromise = resolve2;
           });
           function forwardReaderError(thisReader) {
-            uponRejection(thisReader._closedPromise, (r) => {
+            uponRejection(thisReader._closedPromise, (r2) => {
               if (thisReader !== reader) {
                 return;
               }
-              ReadableByteStreamControllerError(branch1._readableStreamController, r);
-              ReadableByteStreamControllerError(branch2._readableStreamController, r);
+              ReadableByteStreamControllerError(branch1._readableStreamController, r2);
+              ReadableByteStreamControllerError(branch2._readableStreamController, r2);
               if (!canceled1 || !canceled2) {
                 resolveCancelPromise(void 0);
               }
@@ -3089,7 +3621,8 @@ var init_install_fetch = __esm({
             const readRequest = {
               _chunkSteps: (chunk) => {
                 queueMicrotask(() => {
-                  reading = false;
+                  readAgainForBranch1 = false;
+                  readAgainForBranch2 = false;
                   const chunk1 = chunk;
                   let chunk2 = chunk;
                   if (!canceled1 && !canceled2) {
@@ -3107,6 +3640,12 @@ var init_install_fetch = __esm({
                   }
                   if (!canceled2) {
                     ReadableByteStreamControllerEnqueue(branch2._readableStreamController, chunk2);
+                  }
+                  reading = false;
+                  if (readAgainForBranch1) {
+                    pull1Algorithm();
+                  } else if (readAgainForBranch2) {
+                    pull2Algorithm();
                   }
                 });
               },
@@ -3145,7 +3684,8 @@ var init_install_fetch = __esm({
             const readIntoRequest = {
               _chunkSteps: (chunk) => {
                 queueMicrotask(() => {
-                  reading = false;
+                  readAgainForBranch1 = false;
+                  readAgainForBranch2 = false;
                   const byobCanceled = forBranch2 ? canceled2 : canceled1;
                   const otherCanceled = forBranch2 ? canceled1 : canceled2;
                   if (!otherCanceled) {
@@ -3164,6 +3704,12 @@ var init_install_fetch = __esm({
                     ReadableByteStreamControllerEnqueue(otherBranch._readableStreamController, clonedChunk);
                   } else if (!byobCanceled) {
                     ReadableByteStreamControllerRespondWithNewView(byobBranch._readableStreamController, chunk);
+                  }
+                  reading = false;
+                  if (readAgainForBranch1) {
+                    pull1Algorithm();
+                  } else if (readAgainForBranch2) {
+                    pull2Algorithm();
                   }
                 });
               },
@@ -3197,6 +3743,7 @@ var init_install_fetch = __esm({
           }
           function pull1Algorithm() {
             if (reading) {
+              readAgainForBranch1 = true;
               return promiseResolvedWith(void 0);
             }
             reading = true;
@@ -3210,6 +3757,7 @@ var init_install_fetch = __esm({
           }
           function pull2Algorithm() {
             if (reading) {
+              readAgainForBranch2 = true;
               return promiseResolvedWith(void 0);
             }
             reading = true;
@@ -3284,9 +3832,9 @@ var init_install_fetch = __esm({
           }
           return type;
         }
-        function convertReaderOptions(options2, context) {
-          assertDictionary(options2, context);
-          const mode = options2 === null || options2 === void 0 ? void 0 : options2.mode;
+        function convertReaderOptions(options, context) {
+          assertDictionary(options, context);
+          const mode = options === null || options === void 0 ? void 0 : options.mode;
           return {
             mode: mode === void 0 ? void 0 : convertReadableStreamReaderMode(mode, `${context} has member 'mode' that`)
           };
@@ -3298,17 +3846,17 @@ var init_install_fetch = __esm({
           }
           return mode;
         }
-        function convertIteratorOptions(options2, context) {
-          assertDictionary(options2, context);
-          const preventCancel = options2 === null || options2 === void 0 ? void 0 : options2.preventCancel;
+        function convertIteratorOptions(options, context) {
+          assertDictionary(options, context);
+          const preventCancel = options === null || options === void 0 ? void 0 : options.preventCancel;
           return { preventCancel: Boolean(preventCancel) };
         }
-        function convertPipeOptions(options2, context) {
-          assertDictionary(options2, context);
-          const preventAbort = options2 === null || options2 === void 0 ? void 0 : options2.preventAbort;
-          const preventCancel = options2 === null || options2 === void 0 ? void 0 : options2.preventCancel;
-          const preventClose = options2 === null || options2 === void 0 ? void 0 : options2.preventClose;
-          const signal = options2 === null || options2 === void 0 ? void 0 : options2.signal;
+        function convertPipeOptions(options, context) {
+          assertDictionary(options, context);
+          const preventAbort = options === null || options === void 0 ? void 0 : options.preventAbort;
+          const preventCancel = options === null || options === void 0 ? void 0 : options.preventCancel;
+          const preventClose = options === null || options === void 0 ? void 0 : options.preventClose;
+          const signal = options === null || options === void 0 ? void 0 : options.signal;
           if (signal !== void 0) {
             assertAbortSignal(signal, `${context} has member 'signal' that`);
           }
@@ -3326,13 +3874,13 @@ var init_install_fetch = __esm({
         }
         function convertReadableWritablePair(pair, context) {
           assertDictionary(pair, context);
-          const readable2 = pair === null || pair === void 0 ? void 0 : pair.readable;
-          assertRequiredField(readable2, "readable", "ReadableWritablePair");
-          assertReadableStream(readable2, `${context} has member 'readable' that`);
-          const writable2 = pair === null || pair === void 0 ? void 0 : pair.writable;
-          assertRequiredField(writable2, "writable", "ReadableWritablePair");
-          assertWritableStream(writable2, `${context} has member 'writable' that`);
-          return { readable: readable2, writable: writable2 };
+          const readable3 = pair === null || pair === void 0 ? void 0 : pair.readable;
+          assertRequiredField(readable3, "readable", "ReadableWritablePair");
+          assertReadableStream(readable3, `${context} has member 'readable' that`);
+          const writable3 = pair === null || pair === void 0 ? void 0 : pair.writable;
+          assertRequiredField(writable3, "writable", "ReadableWritablePair");
+          assertWritableStream(writable3, `${context} has member 'writable' that`);
+          return { readable: readable3, writable: writable3 };
         }
         class ReadableStream2 {
           constructor(rawUnderlyingSource = {}, rawStrategy = {}) {
@@ -3375,8 +3923,8 @@ var init_install_fetch = __esm({
             if (!IsReadableStream(this)) {
               throw streamBrandCheckException$1("getReader");
             }
-            const options2 = convertReaderOptions(rawOptions, "First parameter");
-            if (options2.mode === void 0) {
+            const options = convertReaderOptions(rawOptions, "First parameter");
+            if (options.mode === void 0) {
               return AcquireReadableStreamDefaultReader(this);
             }
             return AcquireReadableStreamBYOBReader(this);
@@ -3387,14 +3935,14 @@ var init_install_fetch = __esm({
             }
             assertRequiredArgument(rawTransform, 1, "pipeThrough");
             const transform = convertReadableWritablePair(rawTransform, "First parameter");
-            const options2 = convertPipeOptions(rawOptions, "Second parameter");
+            const options = convertPipeOptions(rawOptions, "Second parameter");
             if (IsReadableStreamLocked(this)) {
               throw new TypeError("ReadableStream.prototype.pipeThrough cannot be used on a locked ReadableStream");
             }
             if (IsWritableStreamLocked(transform.writable)) {
               throw new TypeError("ReadableStream.prototype.pipeThrough cannot be used on a locked WritableStream");
             }
-            const promise = ReadableStreamPipeTo(this, transform.writable, options2.preventClose, options2.preventAbort, options2.preventCancel, options2.signal);
+            const promise = ReadableStreamPipeTo(this, transform.writable, options.preventClose, options.preventAbort, options.preventCancel, options.signal);
             setPromiseIsHandledToTrue(promise);
             return transform.readable;
           }
@@ -3408,11 +3956,11 @@ var init_install_fetch = __esm({
             if (!IsWritableStream(destination)) {
               return promiseRejectedWith(new TypeError(`ReadableStream.prototype.pipeTo's first argument must be a WritableStream`));
             }
-            let options2;
+            let options;
             try {
-              options2 = convertPipeOptions(rawOptions, "Second parameter");
-            } catch (e) {
-              return promiseRejectedWith(e);
+              options = convertPipeOptions(rawOptions, "Second parameter");
+            } catch (e2) {
+              return promiseRejectedWith(e2);
             }
             if (IsReadableStreamLocked(this)) {
               return promiseRejectedWith(new TypeError("ReadableStream.prototype.pipeTo cannot be used on a locked ReadableStream"));
@@ -3420,7 +3968,7 @@ var init_install_fetch = __esm({
             if (IsWritableStreamLocked(destination)) {
               return promiseRejectedWith(new TypeError("ReadableStream.prototype.pipeTo cannot be used on a locked WritableStream"));
             }
-            return ReadableStreamPipeTo(this, destination, options2.preventClose, options2.preventAbort, options2.preventCancel, options2.signal);
+            return ReadableStreamPipeTo(this, destination, options.preventClose, options.preventAbort, options.preventCancel, options.signal);
           }
           tee() {
             if (!IsReadableStream(this)) {
@@ -3433,8 +3981,8 @@ var init_install_fetch = __esm({
             if (!IsReadableStream(this)) {
               throw streamBrandCheckException$1("values");
             }
-            const options2 = convertIteratorOptions(rawOptions, "First parameter");
-            return AcquireReadableStreamAsyncIterator(this, options2.preventCancel);
+            const options = convertIteratorOptions(rawOptions, "First parameter");
+            return AcquireReadableStreamAsyncIterator(this, options.preventCancel);
           }
         }
         Object.defineProperties(ReadableStream2.prototype, {
@@ -3479,14 +4027,14 @@ var init_install_fetch = __esm({
           stream._storedError = void 0;
           stream._disturbed = false;
         }
-        function IsReadableStream(x) {
-          if (!typeIsObject(x)) {
+        function IsReadableStream(x2) {
+          if (!typeIsObject(x2)) {
             return false;
           }
-          if (!Object.prototype.hasOwnProperty.call(x, "_readableStreamController")) {
+          if (!Object.prototype.hasOwnProperty.call(x2, "_readableStreamController")) {
             return false;
           }
-          return x instanceof ReadableStream2;
+          return x2 instanceof ReadableStream2;
         }
         function IsReadableStreamLocked(stream) {
           if (stream._reader === void 0) {
@@ -3511,7 +4059,7 @@ var init_install_fetch = __esm({
             reader._readIntoRequests = new SimpleQueue();
           }
           const sourceCancelPromise = stream._readableStreamController[CancelSteps](reason);
-          return transformPromiseWith(sourceCancelPromise, noop2);
+          return transformPromiseWith(sourceCancelPromise, noop4);
         }
         function ReadableStreamClose(stream) {
           stream._state = "closed";
@@ -3527,22 +4075,22 @@ var init_install_fetch = __esm({
             reader._readRequests = new SimpleQueue();
           }
         }
-        function ReadableStreamError(stream, e) {
+        function ReadableStreamError(stream, e2) {
           stream._state = "errored";
-          stream._storedError = e;
+          stream._storedError = e2;
           const reader = stream._reader;
           if (reader === void 0) {
             return;
           }
-          defaultReaderClosedPromiseReject(reader, e);
+          defaultReaderClosedPromiseReject(reader, e2);
           if (IsReadableStreamDefaultReader(reader)) {
             reader._readRequests.forEach((readRequest) => {
-              readRequest._errorSteps(e);
+              readRequest._errorSteps(e2);
             });
             reader._readRequests = new SimpleQueue();
           } else {
             reader._readIntoRequests.forEach((readIntoRequest) => {
-              readIntoRequest._errorSteps(e);
+              readIntoRequest._errorSteps(e2);
             });
             reader._readIntoRequests = new SimpleQueue();
           }
@@ -3566,10 +4114,10 @@ var init_install_fetch = __esm({
           configurable: true
         });
         class ByteLengthQueuingStrategy {
-          constructor(options2) {
-            assertRequiredArgument(options2, 1, "ByteLengthQueuingStrategy");
-            options2 = convertQueuingStrategyInit(options2, "First parameter");
-            this._byteLengthQueuingStrategyHighWaterMark = options2.highWaterMark;
+          constructor(options) {
+            assertRequiredArgument(options, 1, "ByteLengthQueuingStrategy");
+            options = convertQueuingStrategyInit(options, "First parameter");
+            this._byteLengthQueuingStrategyHighWaterMark = options.highWaterMark;
           }
           get highWaterMark() {
             if (!IsByteLengthQueuingStrategy(this)) {
@@ -3597,14 +4145,14 @@ var init_install_fetch = __esm({
         function byteLengthBrandCheckException(name) {
           return new TypeError(`ByteLengthQueuingStrategy.prototype.${name} can only be used on a ByteLengthQueuingStrategy`);
         }
-        function IsByteLengthQueuingStrategy(x) {
-          if (!typeIsObject(x)) {
+        function IsByteLengthQueuingStrategy(x2) {
+          if (!typeIsObject(x2)) {
             return false;
           }
-          if (!Object.prototype.hasOwnProperty.call(x, "_byteLengthQueuingStrategyHighWaterMark")) {
+          if (!Object.prototype.hasOwnProperty.call(x2, "_byteLengthQueuingStrategyHighWaterMark")) {
             return false;
           }
-          return x instanceof ByteLengthQueuingStrategy;
+          return x2 instanceof ByteLengthQueuingStrategy;
         }
         const countSizeFunction = () => {
           return 1;
@@ -3614,10 +4162,10 @@ var init_install_fetch = __esm({
           configurable: true
         });
         class CountQueuingStrategy {
-          constructor(options2) {
-            assertRequiredArgument(options2, 1, "CountQueuingStrategy");
-            options2 = convertQueuingStrategyInit(options2, "First parameter");
-            this._countQueuingStrategyHighWaterMark = options2.highWaterMark;
+          constructor(options) {
+            assertRequiredArgument(options, 1, "CountQueuingStrategy");
+            options = convertQueuingStrategyInit(options, "First parameter");
+            this._countQueuingStrategyHighWaterMark = options.highWaterMark;
           }
           get highWaterMark() {
             if (!IsCountQueuingStrategy(this)) {
@@ -3645,14 +4193,14 @@ var init_install_fetch = __esm({
         function countBrandCheckException(name) {
           return new TypeError(`CountQueuingStrategy.prototype.${name} can only be used on a CountQueuingStrategy`);
         }
-        function IsCountQueuingStrategy(x) {
-          if (!typeIsObject(x)) {
+        function IsCountQueuingStrategy(x2) {
+          if (!typeIsObject(x2)) {
             return false;
           }
-          if (!Object.prototype.hasOwnProperty.call(x, "_countQueuingStrategyHighWaterMark")) {
+          if (!Object.prototype.hasOwnProperty.call(x2, "_countQueuingStrategyHighWaterMark")) {
             return false;
           }
-          return x instanceof CountQueuingStrategy;
+          return x2 instanceof CountQueuingStrategy;
         }
         function convertTransformer(original, context) {
           assertDictionary(original, context);
@@ -3762,22 +4310,22 @@ var init_install_fetch = __esm({
           TransformStreamSetBackpressure(stream, true);
           stream._transformStreamController = void 0;
         }
-        function IsTransformStream(x) {
-          if (!typeIsObject(x)) {
+        function IsTransformStream(x2) {
+          if (!typeIsObject(x2)) {
             return false;
           }
-          if (!Object.prototype.hasOwnProperty.call(x, "_transformStreamController")) {
+          if (!Object.prototype.hasOwnProperty.call(x2, "_transformStreamController")) {
             return false;
           }
-          return x instanceof TransformStream;
+          return x2 instanceof TransformStream;
         }
-        function TransformStreamError(stream, e) {
-          ReadableStreamDefaultControllerError(stream._readable._readableStreamController, e);
-          TransformStreamErrorWritableAndUnblockWrite(stream, e);
+        function TransformStreamError(stream, e2) {
+          ReadableStreamDefaultControllerError(stream._readable._readableStreamController, e2);
+          TransformStreamErrorWritableAndUnblockWrite(stream, e2);
         }
-        function TransformStreamErrorWritableAndUnblockWrite(stream, e) {
+        function TransformStreamErrorWritableAndUnblockWrite(stream, e2) {
           TransformStreamDefaultControllerClearAlgorithms(stream._transformStreamController);
-          WritableStreamDefaultControllerErrorIfNeeded(stream._writable._writableStreamController, e);
+          WritableStreamDefaultControllerErrorIfNeeded(stream._writable._writableStreamController, e2);
           if (stream._backpressure) {
             TransformStreamSetBackpressure(stream, false);
           }
@@ -3833,14 +4381,14 @@ var init_install_fetch = __esm({
             configurable: true
           });
         }
-        function IsTransformStreamDefaultController(x) {
-          if (!typeIsObject(x)) {
+        function IsTransformStreamDefaultController(x2) {
+          if (!typeIsObject(x2)) {
             return false;
           }
-          if (!Object.prototype.hasOwnProperty.call(x, "_controlledTransformStream")) {
+          if (!Object.prototype.hasOwnProperty.call(x2, "_controlledTransformStream")) {
             return false;
           }
-          return x instanceof TransformStreamDefaultController;
+          return x2 instanceof TransformStreamDefaultController;
         }
         function SetUpTransformStreamDefaultController(stream, controller, transformAlgorithm, flushAlgorithm) {
           controller._controlledTransformStream = stream;
@@ -3879,8 +4427,8 @@ var init_install_fetch = __esm({
           }
           try {
             ReadableStreamDefaultControllerEnqueue(readableController, chunk);
-          } catch (e) {
-            TransformStreamErrorWritableAndUnblockWrite(stream, e);
+          } catch (e2) {
+            TransformStreamErrorWritableAndUnblockWrite(stream, e2);
             throw stream._readable._storedError;
           }
           const backpressure = ReadableStreamDefaultControllerHasBackpressure(readableController);
@@ -3888,14 +4436,14 @@ var init_install_fetch = __esm({
             TransformStreamSetBackpressure(stream, true);
           }
         }
-        function TransformStreamDefaultControllerError(controller, e) {
-          TransformStreamError(controller._controlledTransformStream, e);
+        function TransformStreamDefaultControllerError(controller, e2) {
+          TransformStreamError(controller._controlledTransformStream, e2);
         }
         function TransformStreamDefaultControllerPerformTransform(controller, chunk) {
           const transformPromise = controller._transformAlgorithm(chunk);
-          return transformPromiseWith(transformPromise, void 0, (r) => {
-            TransformStreamError(controller._controlledTransformStream, r);
-            throw r;
+          return transformPromiseWith(transformPromise, void 0, (r2) => {
+            TransformStreamError(controller._controlledTransformStream, r2);
+            throw r2;
           });
         }
         function TransformStreamDefaultControllerTerminate(controller) {
@@ -3910,10 +4458,10 @@ var init_install_fetch = __esm({
           if (stream._backpressure) {
             const backpressureChangePromise = stream._backpressureChangePromise;
             return transformPromiseWith(backpressureChangePromise, () => {
-              const writable2 = stream._writable;
-              const state = writable2._state;
+              const writable3 = stream._writable;
+              const state = writable3._state;
               if (state === "erroring") {
-                throw writable2._storedError;
+                throw writable3._storedError;
               }
               return TransformStreamDefaultControllerPerformTransform(controller, chunk);
             });
@@ -3925,18 +4473,18 @@ var init_install_fetch = __esm({
           return promiseResolvedWith(void 0);
         }
         function TransformStreamDefaultSinkCloseAlgorithm(stream) {
-          const readable2 = stream._readable;
+          const readable3 = stream._readable;
           const controller = stream._transformStreamController;
           const flushPromise = controller._flushAlgorithm();
           TransformStreamDefaultControllerClearAlgorithms(controller);
           return transformPromiseWith(flushPromise, () => {
-            if (readable2._state === "errored") {
-              throw readable2._storedError;
+            if (readable3._state === "errored") {
+              throw readable3._storedError;
             }
-            ReadableStreamDefaultControllerClose(readable2._readableStreamController);
-          }, (r) => {
-            TransformStreamError(stream, r);
-            throw readable2._storedError;
+            ReadableStreamDefaultControllerClose(readable3._readableStreamController);
+          }, (r2) => {
+            TransformStreamError(stream, r2);
+            throw readable3._storedError;
           });
         }
         function TransformStreamDefaultSourcePullAlgorithm(stream) {
@@ -3968,15 +4516,25 @@ var init_install_fetch = __esm({
     POOL_SIZE$1 = 65536;
     if (!globalThis.ReadableStream) {
       try {
-        Object.assign(globalThis, require("stream/web"));
+        const process2 = require("process");
+        const { emitWarning } = process2;
+        try {
+          process2.emitWarning = () => {
+          };
+          Object.assign(globalThis, require("stream/web"));
+          process2.emitWarning = emitWarning;
+        } catch (error2) {
+          process2.emitWarning = emitWarning;
+          throw error2;
+        }
       } catch (error2) {
         Object.assign(globalThis, ponyfill_es2018.exports);
       }
     }
     try {
-      const { Blob: Blob3 } = require("buffer");
-      if (Blob3 && !Blob3.prototype.stream) {
-        Blob3.prototype.stream = function name(params) {
+      const { Blob: Blob2 } = require("buffer");
+      if (Blob2 && !Blob2.prototype.stream) {
+        Blob2.prototype.stream = function name(params) {
           let position = 0;
           const blob = this;
           return new ReadableStream({
@@ -3996,41 +4554,50 @@ var init_install_fetch = __esm({
     } catch (error2) {
     }
     POOL_SIZE = 65536;
-    _Blob = class Blob {
-      #parts = [];
-      #type = "";
-      #size = 0;
-      constructor(blobParts = [], options2 = {}) {
-        let size = 0;
-        const parts = blobParts.map((element) => {
+    _Blob = (_a = class {
+      constructor(blobParts = [], options = {}) {
+        __privateAdd(this, _parts, []);
+        __privateAdd(this, _type, "");
+        __privateAdd(this, _size, 0);
+        if (typeof blobParts !== "object" || blobParts === null) {
+          throw new TypeError("Failed to construct 'Blob': The provided value cannot be converted to a sequence.");
+        }
+        if (typeof blobParts[Symbol.iterator] !== "function") {
+          throw new TypeError("Failed to construct 'Blob': The object must have a callable @@iterator property.");
+        }
+        if (typeof options !== "object" && typeof options !== "function") {
+          throw new TypeError("Failed to construct 'Blob': parameter 2 cannot convert to dictionary.");
+        }
+        if (options === null)
+          options = {};
+        const encoder2 = new TextEncoder();
+        for (const element of blobParts) {
           let part;
           if (ArrayBuffer.isView(element)) {
             part = new Uint8Array(element.buffer.slice(element.byteOffset, element.byteOffset + element.byteLength));
           } else if (element instanceof ArrayBuffer) {
             part = new Uint8Array(element.slice(0));
-          } else if (element instanceof Blob) {
+          } else if (element instanceof _a) {
             part = element;
           } else {
-            part = new TextEncoder().encode(element);
+            part = encoder2.encode(element);
           }
-          size += ArrayBuffer.isView(part) ? part.byteLength : part.size;
-          return part;
-        });
-        const type = options2.type === void 0 ? "" : String(options2.type);
-        this.#type = /[^\u0020-\u007E]/.test(type) ? "" : type;
-        this.#size = size;
-        this.#parts = parts;
+          __privateSet(this, _size, __privateGet(this, _size) + (ArrayBuffer.isView(part) ? part.byteLength : part.size));
+          __privateGet(this, _parts).push(part);
+        }
+        const type = options.type === void 0 ? "" : String(options.type);
+        __privateSet(this, _type, /^[\x20-\x7E]*$/.test(type) ? type : "");
       }
       get size() {
-        return this.#size;
+        return __privateGet(this, _size);
       }
       get type() {
-        return this.#type;
+        return __privateGet(this, _type);
       }
       async text() {
         const decoder = new TextDecoder();
         let str = "";
-        for await (let part of toIterator(this.#parts, false)) {
+        for await (const part of toIterator(__privateGet(this, _parts), false)) {
           str += decoder.decode(part, { stream: true });
         }
         str += decoder.decode();
@@ -4039,54 +4606,58 @@ var init_install_fetch = __esm({
       async arrayBuffer() {
         const data = new Uint8Array(this.size);
         let offset = 0;
-        for await (const chunk of toIterator(this.#parts, false)) {
+        for await (const chunk of toIterator(__privateGet(this, _parts), false)) {
           data.set(chunk, offset);
           offset += chunk.length;
         }
         return data.buffer;
       }
       stream() {
-        const it = toIterator(this.#parts, true);
-        return new ReadableStream({
+        const it = toIterator(__privateGet(this, _parts), true);
+        return new globalThis.ReadableStream({
           type: "bytes",
           async pull(ctrl) {
             const chunk = await it.next();
             chunk.done ? ctrl.close() : ctrl.enqueue(chunk.value);
+          },
+          async cancel() {
+            await it.return();
           }
         });
       }
       slice(start = 0, end = this.size, type = "") {
-        const { size } = this;
-        let relativeStart = start < 0 ? Math.max(size + start, 0) : Math.min(start, size);
-        let relativeEnd = end < 0 ? Math.max(size + end, 0) : Math.min(end, size);
+        const { size: size2 } = this;
+        let relativeStart = start < 0 ? Math.max(size2 + start, 0) : Math.min(start, size2);
+        let relativeEnd = end < 0 ? Math.max(size2 + end, 0) : Math.min(end, size2);
         const span = Math.max(relativeEnd - relativeStart, 0);
-        const parts = this.#parts;
+        const parts = __privateGet(this, _parts);
         const blobParts = [];
         let added = 0;
         for (const part of parts) {
           if (added >= span) {
             break;
           }
-          const size2 = ArrayBuffer.isView(part) ? part.byteLength : part.size;
-          if (relativeStart && size2 <= relativeStart) {
-            relativeStart -= size2;
-            relativeEnd -= size2;
+          const size3 = ArrayBuffer.isView(part) ? part.byteLength : part.size;
+          if (relativeStart && size3 <= relativeStart) {
+            relativeStart -= size3;
+            relativeEnd -= size3;
           } else {
             let chunk;
             if (ArrayBuffer.isView(part)) {
-              chunk = part.subarray(relativeStart, Math.min(size2, relativeEnd));
+              chunk = part.subarray(relativeStart, Math.min(size3, relativeEnd));
               added += chunk.byteLength;
             } else {
-              chunk = part.slice(relativeStart, Math.min(size2, relativeEnd));
+              chunk = part.slice(relativeStart, Math.min(size3, relativeEnd));
               added += chunk.size;
             }
+            relativeEnd -= size3;
             blobParts.push(chunk);
             relativeStart = 0;
           }
         }
-        const blob = new Blob([], { type: String(type).toLowerCase() });
-        blob.#size = span;
-        blob.#parts = blobParts;
+        const blob = new _a([], { type: String(type).toLowerCase() });
+        __privateSet(blob, _size, span);
+        __privateSet(blob, _parts, blobParts);
         return blob;
       }
       get [Symbol.toStringTag]() {
@@ -4095,14 +4666,122 @@ var init_install_fetch = __esm({
       static [Symbol.hasInstance](object) {
         return object && typeof object === "object" && typeof object.constructor === "function" && (typeof object.stream === "function" || typeof object.arrayBuffer === "function") && /^(Blob|File)$/.test(object[Symbol.toStringTag]);
       }
-    };
+    }, _parts = new WeakMap(), _type = new WeakMap(), _size = new WeakMap(), _a);
     Object.defineProperties(_Blob.prototype, {
       size: { enumerable: true },
       type: { enumerable: true },
       slice: { enumerable: true }
     });
-    Blob2 = _Blob;
-    Blob$1 = Blob2;
+    Blob = _Blob;
+    Blob$1 = Blob;
+    _File = (_a2 = class extends Blob$1 {
+      constructor(fileBits, fileName, options = {}) {
+        if (arguments.length < 2) {
+          throw new TypeError(`Failed to construct 'File': 2 arguments required, but only ${arguments.length} present.`);
+        }
+        super(fileBits, options);
+        __privateAdd(this, _lastModified, 0);
+        __privateAdd(this, _name, "");
+        if (options === null)
+          options = {};
+        const lastModified = options.lastModified === void 0 ? Date.now() : Number(options.lastModified);
+        if (!Number.isNaN(lastModified)) {
+          __privateSet(this, _lastModified, lastModified);
+        }
+        __privateSet(this, _name, String(fileName));
+      }
+      get name() {
+        return __privateGet(this, _name);
+      }
+      get lastModified() {
+        return __privateGet(this, _lastModified);
+      }
+      get [Symbol.toStringTag]() {
+        return "File";
+      }
+    }, _lastModified = new WeakMap(), _name = new WeakMap(), _a2);
+    File = _File;
+    ({ toStringTag: t, iterator: i, hasInstance: h } = Symbol);
+    r = Math.random;
+    m = "append,set,get,getAll,delete,keys,values,entries,forEach,constructor".split(",");
+    f2 = (a, b, c) => (a += "", /^(Blob|File)$/.test(b && b[t]) ? [(c = c !== void 0 ? c + "" : b[t] == "File" ? b.name : "blob", a), b.name !== c || b[t] == "blob" ? new File([b], c, b) : b] : [a, b + ""]);
+    e = (c, f3) => (f3 ? c : c.replace(/\r?\n|\r/g, "\r\n")).replace(/\n/g, "%0A").replace(/\r/g, "%0D").replace(/"/g, "%22");
+    x = (n, a, e2) => {
+      if (a.length < e2) {
+        throw new TypeError(`Failed to execute '${n}' on 'FormData': ${e2} arguments required, but only ${a.length} present.`);
+      }
+    };
+    FormData2 = (_a3 = class {
+      constructor(...a) {
+        __privateAdd(this, _d, []);
+        if (a.length)
+          throw new TypeError(`Failed to construct 'FormData': parameter 1 is not of type 'HTMLFormElement'.`);
+      }
+      get [t]() {
+        return "FormData";
+      }
+      [i]() {
+        return this.entries();
+      }
+      static [h](o) {
+        return o && typeof o === "object" && o[t] === "FormData" && !m.some((m2) => typeof o[m2] != "function");
+      }
+      append(...a) {
+        x("append", arguments, 2);
+        __privateGet(this, _d).push(f2(...a));
+      }
+      delete(a) {
+        x("delete", arguments, 1);
+        a += "";
+        __privateSet(this, _d, __privateGet(this, _d).filter(([b]) => b !== a));
+      }
+      get(a) {
+        x("get", arguments, 1);
+        a += "";
+        for (var b = __privateGet(this, _d), l = b.length, c = 0; c < l; c++)
+          if (b[c][0] === a)
+            return b[c][1];
+        return null;
+      }
+      getAll(a, b) {
+        x("getAll", arguments, 1);
+        b = [];
+        a += "";
+        __privateGet(this, _d).forEach((c) => c[0] === a && b.push(c[1]));
+        return b;
+      }
+      has(a) {
+        x("has", arguments, 1);
+        a += "";
+        return __privateGet(this, _d).some((b) => b[0] === a);
+      }
+      forEach(a, b) {
+        x("forEach", arguments, 1);
+        for (var [c, d] of this)
+          a.call(b, d, c, this);
+      }
+      set(...a) {
+        x("set", arguments, 2);
+        var b = [], c = true;
+        a = f2(...a);
+        __privateGet(this, _d).forEach((d) => {
+          d[0] === a[0] ? c && (c = !b.push(a)) : b.push(d);
+        });
+        c && b.push(a);
+        __privateSet(this, _d, b);
+      }
+      *entries() {
+        yield* __privateGet(this, _d);
+      }
+      *keys() {
+        for (var [a] of this)
+          yield a;
+      }
+      *values() {
+        for (var [, a] of this)
+          yield a;
+      }
+    }, _d = new WeakMap(), _a3);
     FetchBaseError = class extends Error {
       constructor(message, type) {
         super(message);
@@ -4130,20 +4809,15 @@ var init_install_fetch = __esm({
       return typeof object === "object" && typeof object.append === "function" && typeof object.delete === "function" && typeof object.get === "function" && typeof object.getAll === "function" && typeof object.has === "function" && typeof object.set === "function" && typeof object.sort === "function" && object[NAME] === "URLSearchParams";
     };
     isBlob = (object) => {
-      return typeof object === "object" && typeof object.arrayBuffer === "function" && typeof object.type === "string" && typeof object.stream === "function" && typeof object.constructor === "function" && /^(Blob|File)$/.test(object[NAME]);
+      return object && typeof object === "object" && typeof object.arrayBuffer === "function" && typeof object.type === "string" && typeof object.stream === "function" && typeof object.constructor === "function" && /^(Blob|File)$/.test(object[NAME]);
     };
     isAbortSignal = (object) => {
       return typeof object === "object" && (object[NAME] === "AbortSignal" || object[NAME] === "EventTarget");
     };
-    carriage = "\r\n";
-    dashes = "-".repeat(2);
-    carriageLength = Buffer.byteLength(carriage);
-    getFooter = (boundary) => `${dashes}${boundary}${dashes}${carriage.repeat(2)}`;
-    getBoundary = () => (0, import_crypto.randomBytes)(8).toString("hex");
     INTERNALS$2 = Symbol("Body internals");
     Body = class {
       constructor(body, {
-        size = 0
+        size: size2 = 0
       } = {}) {
         let boundary = null;
         if (body === null) {
@@ -4154,26 +4828,33 @@ var init_install_fetch = __esm({
           ;
         else if (Buffer.isBuffer(body))
           ;
-        else if (import_util.types.isAnyArrayBuffer(body)) {
+        else if (import_node_util.types.isAnyArrayBuffer(body)) {
           body = Buffer.from(body);
         } else if (ArrayBuffer.isView(body)) {
           body = Buffer.from(body.buffer, body.byteOffset, body.byteLength);
-        } else if (body instanceof import_stream.default)
+        } else if (body instanceof import_node_stream.default)
           ;
-        else if (isFormData(body)) {
-          boundary = `NodeFetchFormDataBoundary${getBoundary()}`;
-          body = import_stream.default.Readable.from(formDataIterator(body, boundary));
+        else if (body instanceof FormData2) {
+          body = formDataToBlob(body);
+          boundary = body.type.split("=")[1];
         } else {
           body = Buffer.from(String(body));
         }
+        let stream = body;
+        if (Buffer.isBuffer(body)) {
+          stream = import_node_stream.default.Readable.from(body);
+        } else if (isBlob(body)) {
+          stream = import_node_stream.default.Readable.from(body.stream());
+        }
         this[INTERNALS$2] = {
           body,
+          stream,
           boundary,
           disturbed: false,
           error: null
         };
-        this.size = size;
-        if (body instanceof import_stream.default) {
+        this.size = size2;
+        if (body instanceof import_node_stream.default) {
           body.on("error", (error_) => {
             const error2 = error_ instanceof FetchBaseError ? error_ : new FetchError(`Invalid response body while trying to fetch ${this.url}: ${error_.message}`, "system", error_);
             this[INTERNALS$2].error = error2;
@@ -4181,7 +4862,7 @@ var init_install_fetch = __esm({
         }
       }
       get body() {
-        return this[INTERNALS$2].body;
+        return this[INTERNALS$2].stream;
       }
       get bodyUsed() {
         return this[INTERNALS$2].disturbed;
@@ -4189,6 +4870,19 @@ var init_install_fetch = __esm({
       async arrayBuffer() {
         const { buffer, byteOffset, byteLength } = await consumeBody(this);
         return buffer.slice(byteOffset, byteOffset + byteLength);
+      }
+      async formData() {
+        const ct = this.headers.get("content-type");
+        if (ct.startsWith("application/x-www-form-urlencoded")) {
+          const formData = new FormData2();
+          const parameters = new URLSearchParams(await this.text());
+          for (const [name, value] of parameters) {
+            formData.append(name, value);
+          }
+          return formData;
+        }
+        const { toFormData: toFormData2 } = await Promise.resolve().then(() => (init_multipart_parser(), multipart_parser_exports));
+        return toFormData2(this.body, ct);
       }
       async blob() {
         const ct = this.headers && this.headers.get("content-type") || this[INTERNALS$2].body && this[INTERNALS$2].body.type || "";
@@ -4209,6 +4903,7 @@ var init_install_fetch = __esm({
         return consumeBody(this);
       }
     };
+    Body.prototype.buffer = (0, import_node_util.deprecate)(Body.prototype.buffer, "Please use 'response.arrayBuffer()' instead of 'response.buffer()'", "node-fetch#buffer");
     Object.defineProperties(Body.prototype, {
       body: { enumerable: true },
       bodyUsed: { enumerable: true },
@@ -4220,20 +4915,21 @@ var init_install_fetch = __esm({
     clone = (instance, highWaterMark) => {
       let p1;
       let p2;
-      let { body } = instance;
+      let { body } = instance[INTERNALS$2];
       if (instance.bodyUsed) {
         throw new Error("cannot clone body after it is used");
       }
-      if (body instanceof import_stream.default && typeof body.getBoundary !== "function") {
-        p1 = new import_stream.PassThrough({ highWaterMark });
-        p2 = new import_stream.PassThrough({ highWaterMark });
+      if (body instanceof import_node_stream.default && typeof body.getBoundary !== "function") {
+        p1 = new import_node_stream.PassThrough({ highWaterMark });
+        p2 = new import_node_stream.PassThrough({ highWaterMark });
         body.pipe(p1);
         body.pipe(p2);
-        instance[INTERNALS$2].body = p1;
+        instance[INTERNALS$2].stream = p1;
         body = p2;
       }
       return body;
     };
+    getNonSpecFormDataBoundary = (0, import_node_util.deprecate)((body) => body.getBoundary(), "form-data doesn't follow the spec and requires special treatment. Use alternative package", "https://github.com/node-fetch/node-fetch/issues/1167");
     extractContentType = (body, request) => {
       if (body === null) {
         return null;
@@ -4247,22 +4943,22 @@ var init_install_fetch = __esm({
       if (isBlob(body)) {
         return body.type || null;
       }
-      if (Buffer.isBuffer(body) || import_util.types.isAnyArrayBuffer(body) || ArrayBuffer.isView(body)) {
+      if (Buffer.isBuffer(body) || import_node_util.types.isAnyArrayBuffer(body) || ArrayBuffer.isView(body)) {
         return null;
       }
-      if (body && typeof body.getBoundary === "function") {
-        return `multipart/form-data;boundary=${body.getBoundary()}`;
-      }
-      if (isFormData(body)) {
+      if (body instanceof FormData2) {
         return `multipart/form-data; boundary=${request[INTERNALS$2].boundary}`;
       }
-      if (body instanceof import_stream.default) {
+      if (body && typeof body.getBoundary === "function") {
+        return `multipart/form-data;boundary=${getNonSpecFormDataBoundary(body)}`;
+      }
+      if (body instanceof import_node_stream.default) {
         return null;
       }
       return "text/plain;charset=UTF-8";
     };
     getTotalBytes = (request) => {
-      const { body } = request;
+      const { body } = request[INTERNALS$2];
       if (body === null) {
         return 0;
       }
@@ -4275,48 +4971,40 @@ var init_install_fetch = __esm({
       if (body && typeof body.getLengthSync === "function") {
         return body.hasKnownLength && body.hasKnownLength() ? body.getLengthSync() : null;
       }
-      if (isFormData(body)) {
-        return getFormDataLength(request[INTERNALS$2].boundary);
-      }
       return null;
     };
     writeToStream = (dest, { body }) => {
       if (body === null) {
         dest.end();
-      } else if (isBlob(body)) {
-        import_stream.default.Readable.from(body.stream()).pipe(dest);
-      } else if (Buffer.isBuffer(body)) {
-        dest.write(body);
-        dest.end();
       } else {
         body.pipe(dest);
       }
     };
-    validateHeaderName = typeof import_http.default.validateHeaderName === "function" ? import_http.default.validateHeaderName : (name) => {
+    validateHeaderName = typeof import_node_http.default.validateHeaderName === "function" ? import_node_http.default.validateHeaderName : (name) => {
       if (!/^[\^`\-\w!#$%&'*+.|~]+$/.test(name)) {
         const error2 = new TypeError(`Header name must be a valid HTTP token [${name}]`);
         Object.defineProperty(error2, "code", { value: "ERR_INVALID_HTTP_TOKEN" });
         throw error2;
       }
     };
-    validateHeaderValue = typeof import_http.default.validateHeaderValue === "function" ? import_http.default.validateHeaderValue : (name, value) => {
+    validateHeaderValue = typeof import_node_http.default.validateHeaderValue === "function" ? import_node_http.default.validateHeaderValue : (name, value) => {
       if (/[^\t\u0020-\u007E\u0080-\u00FF]/.test(value)) {
         const error2 = new TypeError(`Invalid character in header content ["${name}"]`);
         Object.defineProperty(error2, "code", { value: "ERR_INVALID_CHAR" });
         throw error2;
       }
     };
-    Headers = class extends URLSearchParams {
+    Headers2 = class extends URLSearchParams {
       constructor(init2) {
         let result = [];
-        if (init2 instanceof Headers) {
+        if (init2 instanceof Headers2) {
           const raw = init2.raw();
           for (const [name, values] of Object.entries(raw)) {
             result.push(...values.map((value) => [name, value]));
           }
         } else if (init2 == null)
           ;
-        else if (typeof init2 === "object" && !import_util.types.isBoxedPrimitive(init2)) {
+        else if (typeof init2 === "object" && !import_node_util.types.isBoxedPrimitive(init2)) {
           const method = init2[Symbol.iterator];
           if (method == null) {
             result.push(...Object.entries(init2));
@@ -4325,7 +5013,7 @@ var init_install_fetch = __esm({
               throw new TypeError("Header pairs must be iterable");
             }
             result = [...init2].map((pair) => {
-              if (typeof pair !== "object" || import_util.types.isBoxedPrimitive(pair)) {
+              if (typeof pair !== "object" || import_node_util.types.isBoxedPrimitive(pair)) {
                 throw new TypeError("Each header pair must be an iterable object");
               }
               return [...pair];
@@ -4409,51 +5097,51 @@ var init_install_fetch = __esm({
         return this.entries();
       }
       raw() {
-        return [...this.keys()].reduce((result, key) => {
-          result[key] = this.getAll(key);
+        return [...this.keys()].reduce((result, key2) => {
+          result[key2] = this.getAll(key2);
           return result;
         }, {});
       }
       [Symbol.for("nodejs.util.inspect.custom")]() {
-        return [...this.keys()].reduce((result, key) => {
-          const values = this.getAll(key);
-          if (key === "host") {
-            result[key] = values[0];
+        return [...this.keys()].reduce((result, key2) => {
+          const values = this.getAll(key2);
+          if (key2 === "host") {
+            result[key2] = values[0];
           } else {
-            result[key] = values.length > 1 ? values : values[0];
+            result[key2] = values.length > 1 ? values : values[0];
           }
           return result;
         }, {});
       }
     };
-    Object.defineProperties(Headers.prototype, ["get", "entries", "forEach", "values"].reduce((result, property) => {
+    Object.defineProperties(Headers2.prototype, ["get", "entries", "forEach", "values"].reduce((result, property) => {
       result[property] = { enumerable: true };
       return result;
     }, {}));
-    redirectStatus = new Set([301, 302, 303, 307, 308]);
+    redirectStatus = /* @__PURE__ */ new Set([301, 302, 303, 307, 308]);
     isRedirect = (code) => {
       return redirectStatus.has(code);
     };
     INTERNALS$1 = Symbol("Response internals");
-    Response = class extends Body {
-      constructor(body = null, options2 = {}) {
-        super(body, options2);
-        const status = options2.status != null ? options2.status : 200;
-        const headers = new Headers(options2.headers);
+    Response2 = class extends Body {
+      constructor(body = null, options = {}) {
+        super(body, options);
+        const status = options.status != null ? options.status : 200;
+        const headers = new Headers2(options.headers);
         if (body !== null && !headers.has("Content-Type")) {
-          const contentType = extractContentType(body);
+          const contentType = extractContentType(body, this);
           if (contentType) {
             headers.append("Content-Type", contentType);
           }
         }
         this[INTERNALS$1] = {
           type: "default",
-          url: options2.url,
+          url: options.url,
           status,
-          statusText: options2.statusText || "",
+          statusText: options.statusText || "",
           headers,
-          counter: options2.counter,
-          highWaterMark: options2.highWaterMark
+          counter: options.counter,
+          highWaterMark: options.highWaterMark
         };
       }
       get type() {
@@ -4481,7 +5169,7 @@ var init_install_fetch = __esm({
         return this[INTERNALS$1].highWaterMark;
       }
       clone() {
-        return new Response(clone(this, this.highWaterMark), {
+        return new Response2(clone(this, this.highWaterMark), {
           type: this.type,
           url: this.url,
           status: this.status,
@@ -4489,14 +5177,15 @@ var init_install_fetch = __esm({
           headers: this.headers,
           ok: this.ok,
           redirected: this.redirected,
-          size: this.size
+          size: this.size,
+          highWaterMark: this.highWaterMark
         });
       }
       static redirect(url, status = 302) {
         if (!isRedirect(status)) {
           throw new RangeError('Failed to execute "redirect" on "response": Invalid status code');
         }
-        return new Response(null, {
+        return new Response2(null, {
           headers: {
             location: new URL(url).toString()
           },
@@ -4504,7 +5193,7 @@ var init_install_fetch = __esm({
         });
       }
       static error() {
-        const response = new Response(null, { status: 0, statusText: "" });
+        const response = new Response2(null, { status: 0, statusText: "" });
         response[INTERNALS$1].type = "error";
         return response;
       }
@@ -4512,7 +5201,7 @@ var init_install_fetch = __esm({
         return "Response";
       }
     };
-    Object.defineProperties(Response.prototype, {
+    Object.defineProperties(Response2.prototype, {
       type: { enumerable: true },
       url: { enumerable: true },
       status: { enumerable: true },
@@ -4530,11 +5219,23 @@ var init_install_fetch = __esm({
       const hash2 = parsedURL.hash || (parsedURL.href[lastOffset] === "#" ? "#" : "");
       return parsedURL.href[lastOffset - hash2.length] === "?" ? "?" : "";
     };
+    ReferrerPolicy = /* @__PURE__ */ new Set([
+      "",
+      "no-referrer",
+      "no-referrer-when-downgrade",
+      "same-origin",
+      "origin",
+      "strict-origin",
+      "origin-when-cross-origin",
+      "strict-origin-when-cross-origin",
+      "unsafe-url"
+    ]);
+    DEFAULT_REFERRER_POLICY = "strict-origin-when-cross-origin";
     INTERNALS = Symbol("Request internals");
     isRequest = (object) => {
       return typeof object === "object" && typeof object[INTERNALS] === "object";
     };
-    Request = class extends Body {
+    Request2 = class extends Body {
       constructor(input, init2 = {}) {
         let parsedURL;
         if (isRequest(input)) {
@@ -4542,6 +5243,9 @@ var init_install_fetch = __esm({
         } else {
           parsedURL = new URL(input);
           input = {};
+        }
+        if (parsedURL.username !== "" || parsedURL.password !== "") {
+          throw new TypeError(`${parsedURL} is an url with embedded credentails.`);
         }
         let method = init2.method || input.method || "GET";
         method = method.toUpperCase();
@@ -4552,11 +5256,11 @@ var init_install_fetch = __esm({
         super(inputBody, {
           size: init2.size || input.size || 0
         });
-        const headers = new Headers(init2.headers || input.headers || {});
+        const headers = new Headers2(init2.headers || input.headers || {});
         if (inputBody !== null && !headers.has("Content-Type")) {
           const contentType = extractContentType(inputBody, this);
           if (contentType) {
-            headers.append("Content-Type", contentType);
+            headers.set("Content-Type", contentType);
           }
         }
         let signal = isRequest(input) ? input.signal : null;
@@ -4566,12 +5270,22 @@ var init_install_fetch = __esm({
         if (signal != null && !isAbortSignal(signal)) {
           throw new TypeError("Expected signal to be an instanceof AbortSignal or EventTarget");
         }
+        let referrer = init2.referrer == null ? input.referrer : init2.referrer;
+        if (referrer === "") {
+          referrer = "no-referrer";
+        } else if (referrer) {
+          const parsedReferrer = new URL(referrer);
+          referrer = /^about:(\/\/)?client$/.test(parsedReferrer) ? "client" : parsedReferrer;
+        } else {
+          referrer = void 0;
+        }
         this[INTERNALS] = {
           method,
           redirect: init2.redirect || input.redirect || "follow",
           headers,
           parsedURL,
-          signal
+          signal,
+          referrer
         };
         this.follow = init2.follow === void 0 ? input.follow === void 0 ? 20 : input.follow : init2.follow;
         this.compress = init2.compress === void 0 ? input.compress === void 0 ? true : input.compress : init2.compress;
@@ -4579,12 +5293,13 @@ var init_install_fetch = __esm({
         this.agent = init2.agent || input.agent;
         this.highWaterMark = init2.highWaterMark || input.highWaterMark || 16384;
         this.insecureHTTPParser = init2.insecureHTTPParser || input.insecureHTTPParser || false;
+        this.referrerPolicy = init2.referrerPolicy || input.referrerPolicy || "";
       }
       get method() {
         return this[INTERNALS].method;
       }
       get url() {
-        return (0, import_url.format)(this[INTERNALS].parsedURL);
+        return (0, import_node_url.format)(this[INTERNALS].parsedURL);
       }
       get headers() {
         return this[INTERNALS].headers;
@@ -4595,24 +5310,44 @@ var init_install_fetch = __esm({
       get signal() {
         return this[INTERNALS].signal;
       }
+      get referrer() {
+        if (this[INTERNALS].referrer === "no-referrer") {
+          return "";
+        }
+        if (this[INTERNALS].referrer === "client") {
+          return "about:client";
+        }
+        if (this[INTERNALS].referrer) {
+          return this[INTERNALS].referrer.toString();
+        }
+        return void 0;
+      }
+      get referrerPolicy() {
+        return this[INTERNALS].referrerPolicy;
+      }
+      set referrerPolicy(referrerPolicy) {
+        this[INTERNALS].referrerPolicy = validateReferrerPolicy(referrerPolicy);
+      }
       clone() {
-        return new Request(this);
+        return new Request2(this);
       }
       get [Symbol.toStringTag]() {
         return "Request";
       }
     };
-    Object.defineProperties(Request.prototype, {
+    Object.defineProperties(Request2.prototype, {
       method: { enumerable: true },
       url: { enumerable: true },
       headers: { enumerable: true },
       redirect: { enumerable: true },
       clone: { enumerable: true },
-      signal: { enumerable: true }
+      signal: { enumerable: true },
+      referrer: { enumerable: true },
+      referrerPolicy: { enumerable: true }
     });
     getNodeRequestOptions = (request) => {
       const { parsedURL } = request[INTERNALS];
-      const headers = new Headers(request[INTERNALS].headers);
+      const headers = new Headers2(request[INTERNALS].headers);
       if (!headers.has("Accept")) {
         headers.set("Accept", "*/*");
       }
@@ -4629,6 +5364,17 @@ var init_install_fetch = __esm({
       if (contentLengthValue) {
         headers.set("Content-Length", contentLengthValue);
       }
+      if (request.referrerPolicy === "") {
+        request.referrerPolicy = DEFAULT_REFERRER_POLICY;
+      }
+      if (request.referrer && request.referrer !== "no-referrer") {
+        request[INTERNALS].referrer = determineRequestsReferrer(request);
+      } else {
+        request[INTERNALS].referrer = "no-referrer";
+      }
+      if (request[INTERNALS].referrer instanceof URL) {
+        headers.set("Referer", request.referrer);
+      }
       if (!headers.has("User-Agent")) {
         headers.set("User-Agent", "node-fetch");
       }
@@ -4643,49 +5389,1364 @@ var init_install_fetch = __esm({
         headers.set("Connection", "close");
       }
       const search = getSearch(parsedURL);
-      const requestOptions = {
+      const options = {
         path: parsedURL.pathname + search,
-        pathname: parsedURL.pathname,
-        hostname: parsedURL.hostname,
-        protocol: parsedURL.protocol,
-        port: parsedURL.port,
-        hash: parsedURL.hash,
-        search: parsedURL.search,
-        query: parsedURL.query,
-        href: parsedURL.href,
         method: request.method,
         headers: headers[Symbol.for("nodejs.util.inspect.custom")](),
         insecureHTTPParser: request.insecureHTTPParser,
         agent
       };
-      return requestOptions;
+      return {
+        parsedURL,
+        options
+      };
     };
     AbortError = class extends FetchBaseError {
       constructor(message, type = "aborted") {
         super(message, type);
       }
     };
-    supportedSchemas = new Set(["data:", "http:", "https:"]);
+    supportedSchemas = /* @__PURE__ */ new Set(["data:", "http:", "https:"]);
   }
 });
 
-// node_modules/@sveltejs/adapter-vercel/files/shims.js
-var init_shims = __esm({
-  "node_modules/@sveltejs/adapter-vercel/files/shims.js"() {
-    init_install_fetch();
+// .svelte-kit/output/server/chunks/index-2e97bc70.js
+function noop2() {
+}
+function assign(tar, src) {
+  for (const k in src)
+    tar[k] = src[k];
+  return tar;
+}
+function run(fn) {
+  return fn();
+}
+function blank_object() {
+  return /* @__PURE__ */ Object.create(null);
+}
+function run_all(fns) {
+  fns.forEach(run);
+}
+function safe_not_equal(a, b) {
+  return a != a ? b == b : a !== b || (a && typeof a === "object" || typeof a === "function");
+}
+function subscribe(store, ...callbacks) {
+  if (store == null) {
+    return noop2;
+  }
+  const unsub = store.subscribe(...callbacks);
+  return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
+}
+function null_to_empty(value) {
+  return value == null ? "" : value;
+}
+function set_store_value(store, ret, value) {
+  store.set(value);
+  return ret;
+}
+function run_tasks(now2) {
+  tasks.forEach((task) => {
+    if (!task.c(now2)) {
+      tasks.delete(task);
+      task.f();
+    }
+  });
+  if (tasks.size !== 0)
+    raf(run_tasks);
+}
+function loop(callback) {
+  let task;
+  if (tasks.size === 0)
+    raf(run_tasks);
+  return {
+    promise: new Promise((fulfill) => {
+      tasks.add(task = { c: callback, f: fulfill });
+    }),
+    abort() {
+      tasks.delete(task);
+    }
+  };
+}
+function custom_event(type, detail, bubbles = false) {
+  const e2 = document.createEvent("CustomEvent");
+  e2.initCustomEvent(type, bubbles, false, detail);
+  return e2;
+}
+function set_current_component(component) {
+  current_component = component;
+}
+function get_current_component() {
+  if (!current_component)
+    throw new Error("Function called outside component initialization");
+  return current_component;
+}
+function onDestroy(fn) {
+  get_current_component().$$.on_destroy.push(fn);
+}
+function createEventDispatcher() {
+  const component = get_current_component();
+  return (type, detail) => {
+    const callbacks = component.$$.callbacks[type];
+    if (callbacks) {
+      const event = custom_event(type, detail);
+      callbacks.slice().forEach((fn) => {
+        fn.call(component, event);
+      });
+    }
+  };
+}
+function setContext(key2, context) {
+  get_current_component().$$.context.set(key2, context);
+}
+function escape(html) {
+  return String(html).replace(/["'&<>]/g, (match) => escaped[match]);
+}
+function escape_attribute_value(value) {
+  return typeof value === "string" ? escape(value) : value;
+}
+function each(items, fn) {
+  let str = "";
+  for (let i2 = 0; i2 < items.length; i2 += 1) {
+    str += fn(items[i2], i2);
+  }
+  return str;
+}
+function validate_component(component, name) {
+  if (!component || !component.$$render) {
+    if (name === "svelte:component")
+      name += " this={...}";
+    throw new Error(`<${name}> is not a valid SSR component. You may need to review your build config to ensure that dependencies are compiled, rather than imported as pre-compiled modules`);
+  }
+  return component;
+}
+function create_ssr_component(fn) {
+  function $$render(result, props, bindings, slots, context) {
+    const parent_component = current_component;
+    const $$ = {
+      on_destroy,
+      context: new Map(context || (parent_component ? parent_component.$$.context : [])),
+      on_mount: [],
+      before_update: [],
+      after_update: [],
+      callbacks: blank_object()
+    };
+    set_current_component({ $$ });
+    const html = fn(result, props, bindings, slots);
+    set_current_component(parent_component);
+    return html;
+  }
+  return {
+    render: (props = {}, { $$slots = {}, context = /* @__PURE__ */ new Map() } = {}) => {
+      on_destroy = [];
+      const result = { title: "", head: "", css: /* @__PURE__ */ new Set() };
+      const html = $$render(result, props, {}, $$slots, context);
+      run_all(on_destroy);
+      return {
+        html,
+        css: {
+          code: Array.from(result.css).map((css37) => css37.code).join("\n"),
+          map: null
+        },
+        head: result.title + result.head
+      };
+    },
+    $$render
+  };
+}
+function add_attribute(name, value, boolean) {
+  if (value == null || boolean && !value)
+    return "";
+  const assignment = boolean && value === true ? "" : `="${escape_attribute_value(value.toString())}"`;
+  return ` ${name}${assignment}`;
+}
+var identity, is_client, now, raf, tasks, current_component, escaped, missing_component, on_destroy;
+var init_index_2e97bc70 = __esm({
+  ".svelte-kit/output/server/chunks/index-2e97bc70.js"() {
+    identity = (x2) => x2;
+    is_client = typeof window !== "undefined";
+    now = is_client ? () => window.performance.now() : () => Date.now();
+    raf = is_client ? (cb) => requestAnimationFrame(cb) : noop2;
+    tasks = /* @__PURE__ */ new Set();
+    Promise.resolve();
+    escaped = {
+      '"': "&quot;",
+      "'": "&#39;",
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;"
+    };
+    missing_component = {
+      $$render: () => ""
+    };
+  }
+});
+
+// .svelte-kit/output/server/chunks/hooks-1c45ba0b.js
+var hooks_1c45ba0b_exports = {};
+var init_hooks_1c45ba0b = __esm({
+  ".svelte-kit/output/server/chunks/hooks-1c45ba0b.js"() {
+  }
+});
+
+// .svelte-kit/output/server/chunks/index-96622166.js
+function readable2(value, start) {
+  return {
+    subscribe: writable2(value, start).subscribe
+  };
+}
+function writable2(value, start = noop2) {
+  let stop;
+  const subscribers = /* @__PURE__ */ new Set();
+  function set(new_value) {
+    if (safe_not_equal(value, new_value)) {
+      value = new_value;
+      if (stop) {
+        const run_queue = !subscriber_queue2.length;
+        for (const subscriber of subscribers) {
+          subscriber[1]();
+          subscriber_queue2.push(subscriber, value);
+        }
+        if (run_queue) {
+          for (let i2 = 0; i2 < subscriber_queue2.length; i2 += 2) {
+            subscriber_queue2[i2][0](subscriber_queue2[i2 + 1]);
+          }
+          subscriber_queue2.length = 0;
+        }
+      }
+    }
+  }
+  function update(fn) {
+    set(fn(value));
+  }
+  function subscribe2(run2, invalidate = noop2) {
+    const subscriber = [run2, invalidate];
+    subscribers.add(subscriber);
+    if (subscribers.size === 1) {
+      stop = start(set) || noop2;
+    }
+    run2(value);
+    return () => {
+      subscribers.delete(subscriber);
+      if (subscribers.size === 0) {
+        stop();
+        stop = null;
+      }
+    };
+  }
+  return { set, update, subscribe: subscribe2 };
+}
+var subscriber_queue2;
+var init_index_96622166 = __esm({
+  ".svelte-kit/output/server/chunks/index-96622166.js"() {
+    init_index_2e97bc70();
+    subscriber_queue2 = [];
+  }
+});
+
+// .svelte-kit/output/server/chunks/MainMenu-4783409c.js
+var mainmenus;
+var init_MainMenu_4783409c = __esm({
+  ".svelte-kit/output/server/chunks/MainMenu-4783409c.js"() {
+    init_index_96622166();
+    mainmenus = writable2([
+      {
+        name: "profile",
+        path: "/introduce",
+        img: "/img/profile_icon.svg",
+        explain: "Taro Nonoyama\u306E<br>\u30D7\u30ED\u30D5\u30A3\u30FC\u30EB\u3092\u8868\u793A\u3057\u307E\u3059\u3002",
+        submenu: []
+      },
+      {
+        name: "blog",
+        path: "/blog/list",
+        img: "/img/blog_icon.svg",
+        explain: "\u30D6\u30ED\u30B0\u3092\u8868\u793A\u3057\u307E\u3059<br> (Powered by Notion API)",
+        submenu: []
+      },
+      {
+        name: "portfolio",
+        path: "/portfolio",
+        img: "/img/portfolio_icon.svg",
+        explain: "\u30DD\u30FC\u30C8\u30D5\u30A9\u30EA\u30AA\u3092\u8868\u793A\u3057\u3001<br>\u30AF\u30EA\u30A8\u30A4\u30C6\u30A3\u30D6\u306E\u30D2\u30F3\u30C8\u3092\u63D0\u793A\u3057\u307E\u3059\u3002",
+        submenu: []
+      },
+      {
+        name: "app",
+        path: "/app",
+        img: "/img/app_icon.svg",
+        explain: "\u5236\u4F5C\u3057\u305FWeb\u30A2\u30D7\u30EA\u306E<br>\u4E00\u89A7\u3092\u8868\u793A\u3057\u307E\u3059\u3002",
+        submenu: [
+          {
+            name: "\u3070\u304F\u305C\u3064\u3055\u3042\u3061",
+            path: "/app/bakuzetsu-searcher-2nd/home",
+            img: "",
+            explain: "",
+            root: "app > \u3070\u304F\u305C\u3064\u3055\u3042\u3061 > ",
+            submenu: []
+          }
+        ]
+      },
+      {
+        name: "contact",
+        path: "/contact",
+        img: "/img/contacts_icon.svg",
+        explain: "\u9023\u7D61\u5148\u30FBSNS\u30A2\u30AB\u30A6\u30F3\u30C8\u3092<br>\u8868\u793A\u3057\u307E\u3059\u3002",
+        submenu: []
+      },
+      {
+        name: "bonus",
+        path: "/show",
+        img: "/img/app_icon.svg",
+        explain: "\u30AA\u30DE\u30B1",
+        submenu: []
+      }
+    ]);
+  }
+});
+
+// .svelte-kit/output/server/chunks/MediaQuery-021992e5.js
+var MediaQuery;
+var init_MediaQuery_021992e5 = __esm({
+  ".svelte-kit/output/server/chunks/MediaQuery-021992e5.js"() {
+    init_index_2e97bc70();
+    MediaQuery = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { query } = $$props;
+      let matches = false;
+      if ($$props.query === void 0 && $$bindings.query && query !== void 0)
+        $$bindings.query(query);
+      return `${slots.default ? slots.default({ matches }) : ``}`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/chunks/ToastArea-32d9fee1.js
+function is_date(obj) {
+  return Object.prototype.toString.call(obj) === "[object Date]";
+}
+function get_interpolator(a, b) {
+  if (a === b || a !== a)
+    return () => a;
+  const type = typeof a;
+  if (type !== typeof b || Array.isArray(a) !== Array.isArray(b)) {
+    throw new Error("Cannot interpolate values of different type");
+  }
+  if (Array.isArray(a)) {
+    const arr = b.map((bi, i2) => {
+      return get_interpolator(a[i2], bi);
+    });
+    return (t2) => arr.map((fn) => fn(t2));
+  }
+  if (type === "object") {
+    if (!a || !b)
+      throw new Error("Object cannot be null");
+    if (is_date(a) && is_date(b)) {
+      a = a.getTime();
+      b = b.getTime();
+      const delta = b - a;
+      return (t2) => new Date(a + t2 * delta);
+    }
+    const keys = Object.keys(b);
+    const interpolators = {};
+    keys.forEach((key2) => {
+      interpolators[key2] = get_interpolator(a[key2], b[key2]);
+    });
+    return (t2) => {
+      const result = {};
+      keys.forEach((key2) => {
+        result[key2] = interpolators[key2](t2);
+      });
+      return result;
+    };
+  }
+  if (type === "number") {
+    const delta = b - a;
+    return (t2) => a + t2 * delta;
+  }
+  throw new Error(`Cannot interpolate ${type} values`);
+}
+function tweened(value, defaults2 = {}) {
+  const store = writable2(value);
+  let task;
+  let target_value = value;
+  function set(new_value, opts) {
+    if (value == null) {
+      store.set(value = new_value);
+      return Promise.resolve();
+    }
+    target_value = new_value;
+    let previous_task = task;
+    let started = false;
+    let { delay = 0, duration = 400, easing = identity, interpolate = get_interpolator } = assign(assign({}, defaults2), opts);
+    if (duration === 0) {
+      if (previous_task) {
+        previous_task.abort();
+        previous_task = null;
+      }
+      store.set(value = target_value);
+      return Promise.resolve();
+    }
+    const start = now() + delay;
+    let fn;
+    task = loop((now2) => {
+      if (now2 < start)
+        return true;
+      if (!started) {
+        fn = interpolate(value, new_value);
+        if (typeof duration === "function")
+          duration = duration(value, new_value);
+        started = true;
+      }
+      if (previous_task) {
+        previous_task.abort();
+        previous_task = null;
+      }
+      const elapsed = now2 - start;
+      if (elapsed > duration) {
+        store.set(value = new_value);
+        return false;
+      }
+      store.set(value = fn(easing(elapsed / duration)));
+      return true;
+    });
+    return task.promise;
+  }
+  return {
+    set,
+    update: (fn, opts) => set(fn(target_value, value), opts),
+    subscribe: store.subscribe
+  };
+}
+var defaults, createToast, toast, css$2, ToastItem, css$1, SvelteToast, css, ToastArea;
+var init_ToastArea_32d9fee1 = __esm({
+  ".svelte-kit/output/server/chunks/ToastArea-32d9fee1.js"() {
+    init_index_2e97bc70();
+    init_index_96622166();
+    defaults = {
+      duration: 4e3,
+      initial: 1,
+      next: 0,
+      pausable: false,
+      dismissable: true,
+      reversed: false,
+      intro: { x: 256 },
+      theme: {}
+    };
+    createToast = () => {
+      const { subscribe: subscribe2, update } = writable2([]);
+      let count = 0;
+      const options = {};
+      const _obj = (obj) => obj instanceof Object;
+      const push = (msg, opts = {}) => {
+        const param = __spreadValues({ target: "default" }, _obj(msg) ? msg : __spreadProps(__spreadValues({}, opts), { msg }));
+        const conf = options[param.target] || {};
+        const entry20 = __spreadProps(__spreadValues(__spreadValues(__spreadValues({}, defaults), conf), param), {
+          theme: __spreadValues(__spreadValues({}, conf.theme), param.theme),
+          id: ++count
+        });
+        update((n) => entry20.reversed ? [...n, entry20] : [entry20, ...n]);
+        return count;
+      };
+      const pop = (id) => {
+        update((n) => {
+          if (!n.length || id === 0)
+            return [];
+          if (_obj(id))
+            return n.filter((i2) => id(i2));
+          const target = id || Math.max(...n.map((i2) => i2.id));
+          return n.filter((i2) => i2.id !== target);
+        });
+      };
+      const set = (id, opts = {}) => {
+        const param = _obj(id) ? __spreadValues({}, id) : __spreadProps(__spreadValues({}, opts), { id });
+        update((n) => {
+          const idx = n.findIndex((i2) => i2.id === param.id);
+          if (idx > -1) {
+            n[idx] = __spreadValues(__spreadValues({}, n[idx]), param);
+          }
+          return n;
+        });
+      };
+      const _init = (target = "default", opts = {}) => {
+        options[target] = opts;
+        return options;
+      };
+      return { subscribe: subscribe2, push, pop, set, _init };
+    };
+    toast = createToast();
+    css$2 = {
+      code: "._toastItem.svelte-j9nwjb{width:var(--toastWidth, 16rem);height:var(--toastHeight, auto);min-height:var(--toastMinHeight, 3.5rem);margin:var(--toastMargin, 0 0 0.5rem 0);padding:var(--toastPadding, 0);background:var(--toastBackground, rgba(66, 66, 66, 0.9));color:var(--toastColor, #fff);box-shadow:var(--toastBoxShadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06));border:var(--toastBorder, none);border-radius:var(--toastBorderRadius, 0.125rem);position:relative;display:flex;flex-direction:row;align-items:center;overflow:hidden;will-change:transform, opacity;-webkit-tap-highlight-color:transparent}._toastMsg.svelte-j9nwjb{padding:var(--toastMsgPadding, 0.75rem 0.5rem);flex:1 1 0%}.pe.svelte-j9nwjb,._toastMsg.svelte-j9nwjb a{pointer-events:auto}._toastBtn.svelte-j9nwjb{width:2rem;height:100%;font:1rem sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;outline:none}._toastBar.svelte-j9nwjb{top:var(--toastBarTop, auto);right:var(--toastBarRight, auto);bottom:var(--toastBarBottom, 0);left:var(--toastBarLeft, 0);height:var(--toastBarHeight, 6px);width:var(--toastBarWidth, 100%);position:absolute;display:block;-webkit-appearance:none;-moz-appearance:none;appearance:none;border:none;background:transparent;pointer-events:none}._toastBar.svelte-j9nwjb::-webkit-progress-bar{background:transparent}._toastBar.svelte-j9nwjb::-webkit-progress-value{background:var(--toastProgressBackground, var(--toastBarBackground, rgba(33, 150, 243, 0.75)))}._toastBar.svelte-j9nwjb::-moz-progress-bar{background:var(--toastProgressBackground, var(--toastBarBackground, rgba(33, 150, 243, 0.75)))}",
+      map: null
+    };
+    ToastItem = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $progress, $$unsubscribe_progress;
+      let { item } = $$props;
+      const progress = tweened(item.initial, { duration: item.duration, easing: identity });
+      $$unsubscribe_progress = subscribe(progress, (value) => $progress = value);
+      const close = () => toast.pop(item.id);
+      const autoclose = () => {
+        if ($progress === 1 || $progress === 0) {
+          close();
+        }
+      };
+      let next = item.initial;
+      const getProps = () => {
+        const { props = {}, sendIdTo } = item.component;
+        if (sendIdTo) {
+          props[sendIdTo] = item.id;
+        }
+        return props;
+      };
+      onDestroy(() => {
+        if (typeof item.onpop === "function") {
+          item.onpop(item.id);
+        }
+      });
+      if ($$props.item === void 0 && $$bindings.item && item !== void 0)
+        $$bindings.item(item);
+      $$result.css.add(css$2);
+      {
+        if (typeof item.progress !== "undefined") {
+          item.next = item.progress;
+        }
+      }
+      {
+        if (next !== item.next) {
+          next = item.next;
+          progress.set(next).then(autoclose);
+        }
+      }
+      $$unsubscribe_progress();
+      return `<div class="${["_toastItem svelte-j9nwjb", item.pausable ? "pe" : ""].join(" ").trim()}"><div role="${"status"}" class="${["_toastMsg svelte-j9nwjb", item.component ? "pe" : ""].join(" ").trim()}">${item.component ? `${validate_component(item.component.src || missing_component, "svelte:component").$$render($$result, Object.assign(getProps()), {}, {})}` : `<!-- HTML_TAG_START -->${item.msg}<!-- HTML_TAG_END -->`}</div>
+  ${item.dismissable ? `<div class="${"_toastBtn pe svelte-j9nwjb"}" role="${"button"}" tabindex="${"-1"}">\u2715</div>` : ``}
+  <progress class="${"_toastBar svelte-j9nwjb"}"${add_attribute("value", $progress, 0)}></progress></div>`;
+    });
+    css$1 = {
+      code: "._toastContainer.svelte-7xr3c1{top:var(--toastContainerTop, 1.5rem);right:var(--toastContainerRight, 2rem);bottom:var(--toastContainerBottom, auto);left:var(--toastContainerLeft, auto);position:fixed;margin:0;padding:0;list-style-type:none;pointer-events:none;z-index:9999}",
+      map: null
+    };
+    SvelteToast = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $toast, $$unsubscribe_toast;
+      $$unsubscribe_toast = subscribe(toast, (value) => $toast = value);
+      let { options = {} } = $$props;
+      let { target = "default" } = $$props;
+      let items;
+      const getCss = (theme) => Object.keys(theme).reduce((a, c) => `${a}${c}:${theme[c]};`, "");
+      if ($$props.options === void 0 && $$bindings.options && options !== void 0)
+        $$bindings.options(options);
+      if ($$props.target === void 0 && $$bindings.target && target !== void 0)
+        $$bindings.target(target);
+      $$result.css.add(css$1);
+      {
+        toast._init(target, options);
+      }
+      items = $toast.filter((i2) => i2.target === target);
+      $$unsubscribe_toast();
+      return `<ul class="${"_toastContainer svelte-7xr3c1"}">${each(items, (item) => {
+        return `<li${add_attribute("style", getCss(item.theme), 0)}>${validate_component(ToastItem, "ToastItem").$$render($$result, { item }, {}, {})}
+    </li>`;
+      })}</ul>`;
+    });
+    css = {
+      code: ".toast_wrap.svelte-dznte4{--toastMsgPadding:10px 20px;font-size:0.85rem}.error_wrap.svelte-dznte4{--toastWidth:100%;--toastMaxWidth:500px;--toastMinHeight:1.5rem}",
+      map: null
+    };
+    ToastArea = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      $$result.css.add(css);
+      return `<div class="${"toast_wrap svelte-dznte4"}">${validate_component(SvelteToast, "SvelteToast").$$render($$result, {}, {}, {})}</div>
+
+<div class="${"toast_wrap error_wrap svelte-dznte4"}">${validate_component(SvelteToast, "SvelteToast").$$render($$result, { target: "error" }, {}, {})}
+</div>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/__layout.svelte.js
+var layout_svelte_exports = {};
+__export(layout_svelte_exports, {
+  default: () => _layout
+});
+var css$22, HeaderMenuBox, css$12, HambergerMenuBox, css2, _layout;
+var init_layout_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/__layout.svelte.js"() {
+    init_index_2e97bc70();
+    init_MainMenu_4783409c();
+    init_MediaQuery_021992e5();
+    init_ToastArea_32d9fee1();
+    init_index_96622166();
+    css$22 = {
+      code: ".menu-box.svelte-fl8s9g.svelte-fl8s9g{position:relative;display:inline-block}.menu-box.svelte-fl8s9g .menu-name.svelte-fl8s9g{border-radius:20px;padding:5px 20px}.menu-box.svelte-fl8s9g .menu-name.svelte-fl8s9g:hover{background:white}.menu-box.svelte-fl8s9g .menu-name:hover p.svelte-fl8s9g{color:black}.menu-box.svelte-fl8s9g .explain-box.svelte-fl8s9g{z-index:100;position:absolute;margin-top:30px;right:0;opacity:0;background:linear-gradient(90deg, rgb(20, 20, 20), rgba(20, 20, 20, 0.5));padding:20px;display:flex;flex-direction:row;align-items:center;transition:0.2s}.menu-box.svelte-fl8s9g .explain-box.open.svelte-fl8s9g{opacity:1}.menu-box.svelte-fl8s9g .explain-box img.svelte-fl8s9g{width:50px}.menu-box.svelte-fl8s9g .explain-box p.svelte-fl8s9g{padding:20px;width:300px;color:white}",
+      map: null
+    };
+    HeaderMenuBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { name } = $$props;
+      let { path } = $$props;
+      let { img } = $$props;
+      let { explain } = $$props;
+      if ($$props.name === void 0 && $$bindings.name && name !== void 0)
+        $$bindings.name(name);
+      if ($$props.path === void 0 && $$bindings.path && path !== void 0)
+        $$bindings.path(path);
+      if ($$props.img === void 0 && $$bindings.img && img !== void 0)
+        $$bindings.img(img);
+      if ($$props.explain === void 0 && $$bindings.explain && explain !== void 0)
+        $$bindings.explain(explain);
+      $$result.css.add(css$22);
+      return `<div class="${"menu-box svelte-fl8s9g"}"><div class="${"menu-name svelte-fl8s9g"}"><a${add_attribute("href", path, 0)}><p class="${"svelte-fl8s9g"}">${escape(name)}</p></a></div>
+    <div class="${"explain-box " + escape("") + " svelte-fl8s9g"}"><img${add_attribute("src", img, 0)} alt="${""}" class="${"svelte-fl8s9g"}">
+        <p class="${"svelte-fl8s9g"}"><!-- HTML_TAG_START -->${explain}<!-- HTML_TAG_END --></p></div>
+</div>`;
+    });
+    css$12 = {
+      code: ".menu-box.svelte-13vu3ny.svelte-13vu3ny{padding:15px 10px;display:flex;height:100px;flex-direction:row}.menu-box.svelte-13vu3ny img.icon.svelte-13vu3ny{margin:0 10px;height:50px}.menu-box.svelte-13vu3ny img.arrow.svelte-13vu3ny{transform:rotate(-90deg);height:15px;margin:auto 0}.menu-box.svelte-13vu3ny .text.svelte-13vu3ny{padding:0 5px;width:230px}.menu-box.svelte-13vu3ny .text .name.svelte-13vu3ny{font-size:13px;margin:0 0 5px 0}.menu-box.svelte-13vu3ny .text .explain.svelte-13vu3ny{font-size:10px}",
+      map: null
+    };
+    HambergerMenuBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { name } = $$props;
+      let { path } = $$props;
+      let { img } = $$props;
+      let { explain } = $$props;
+      if ($$props.name === void 0 && $$bindings.name && name !== void 0)
+        $$bindings.name(name);
+      if ($$props.path === void 0 && $$bindings.path && path !== void 0)
+        $$bindings.path(path);
+      if ($$props.img === void 0 && $$bindings.img && img !== void 0)
+        $$bindings.img(img);
+      if ($$props.explain === void 0 && $$bindings.explain && explain !== void 0)
+        $$bindings.explain(explain);
+      $$result.css.add(css$12);
+      return `<a${add_attribute("href", path, 0)}><div class="${"menu-box svelte-13vu3ny"}"><img class="${"icon svelte-13vu3ny"}"${add_attribute("src", img, 0)} alt="${""}">
+        <div class="${"text svelte-13vu3ny"}"><p class="${"name svelte-13vu3ny"}">${escape(name)}</p>
+            <p class="${"explain svelte-13vu3ny"}"><!-- HTML_TAG_START -->${explain}<!-- HTML_TAG_END --></p></div>
+        <img class="${"arrow svelte-13vu3ny"}" src="${"/img/arrow-osha.svg"}" alt="${">"}"></div>
+</a>`;
+    });
+    css2 = {
+      code: "header.svelte-16nqr66.svelte-16nqr66{background:black;display:flex;justify-content:space-between;align-items:center;height:60px}header.svelte-16nqr66 .n2-logo.svelte-16nqr66{padding:10px}header.svelte-16nqr66 .n2-logo img.svelte-16nqr66{height:30px}header.svelte-16nqr66 .menu-row-list.svelte-16nqr66{margin:0 20px}header.svelte-16nqr66 .hamburger-menu.svelte-16nqr66{position:relative;padding:10px}header.svelte-16nqr66 .hamburger-menu .hamburger-button .bar.svelte-16nqr66{display:block;background-color:#fff;height:4px;width:30px;border-radius:1px}header.svelte-16nqr66 .hamburger-menu .hamburger-button .bar1.svelte-16nqr66{transform:translateY(-6px);transition:transform 0.3s}header.svelte-16nqr66 .hamburger-menu .hamburger-button .bar3.svelte-16nqr66{transform:translateY(6px);transition:transform 0.3s}header.svelte-16nqr66 .hamburger-menu .hamburger-slider.svelte-16nqr66{position:fixed;z-index:100;width:300px;top:100px;right:-320px;background:linear-gradient(90deg, rgb(0, 0, 0), rgba(0, 0, 0, 0.8));transition:0.3s}header.svelte-16nqr66 .hamburger-menu .hamburger-slider.open.svelte-16nqr66{right:0}",
+      map: null
+    };
+    _layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $mainmenus, $$unsubscribe_mainmenus;
+      $$unsubscribe_mainmenus = subscribe(mainmenus, (value) => $mainmenus = value);
+      $$result.css.add(css2);
+      $$unsubscribe_mainmenus();
+      return `<header class="${"svelte-16nqr66"}"><div class="${"n2-logo svelte-16nqr66"}"><a href="${"/"}"><img src="${"/img/n2-icon-white.svg"}" alt="${""}" class="${"svelte-16nqr66"}"></a></div>
+    ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
+        default: ({ matches }) => {
+          return `${matches ? `<div class="${"menu-row-list svelte-16nqr66"}">${each($mainmenus, (menu) => {
+            return `${validate_component(HeaderMenuBox, "HeaderMenuBox").$$render($$result, {
+              name: menu.name,
+              path: menu.path,
+              img: menu.img,
+              explain: menu.explain
+            }, {}, {})}`;
+          })}</div>` : ``}`;
+        }
+      })}
+    
+    ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
+        default: ({ matches }) => {
+          return `${matches ? `<div class="${"hamburger-menu svelte-16nqr66"}"><span class="${"hamburger-button"}"><span class="${"bar bar1 svelte-16nqr66"}"></span>
+                <span class="${"bar bar2 svelte-16nqr66"}"></span>
+                <span class="${"bar bar3 svelte-16nqr66"}"></span></span>
+            <div class="${"hamburger-slider " + escape("") + " svelte-16nqr66"}">${each($mainmenus, (menu) => {
+            return `${validate_component(HambergerMenuBox, "HambergerMenuBox").$$render($$result, {
+              name: menu.name,
+              path: menu.path,
+              img: menu.img,
+              explain: menu.explain
+            }, {}, {})}`;
+          })}</div></div>` : ``}`;
+        }
+      })}</header>
+
+${slots.default ? slots.default({}) : ``}
+${validate_component(ToastArea, "ToastArea").$$render($$result, {}, {}, {})}`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/0.js
+var __exports = {};
+__export(__exports, {
+  css: () => css3,
+  entry: () => entry,
+  js: () => js,
+  module: () => layout_svelte_exports
+});
+var entry, js, css3;
+var init__ = __esm({
+  ".svelte-kit/output/server/nodes/0.js"() {
+    init_layout_svelte();
+    entry = "pages/__layout.svelte-6823595a.js";
+    js = ["pages/__layout.svelte-6823595a.js", "chunks/index-4741d8af.js", "chunks/MainMenu-ef41ec5e.js", "chunks/index-1f66f3ef.js", "chunks/MediaQuery-e124c5d0.js", "chunks/ToastArea-d8ce3583.js", "chunks/SvelteToast.svelte_svelte_type_style_lang-4f8ef653.js"];
+    css3 = ["assets/pages/__layout.svelte-0c51f9c5.css", "assets/ToastArea-00e911a5.css", "assets/SvelteToast.svelte_svelte_type_style_lang-00aa1808.css"];
+  }
+});
+
+// .svelte-kit/output/server/entries/fallbacks/error.svelte.js
+var error_svelte_exports = {};
+__export(error_svelte_exports, {
+  default: () => Error2,
+  load: () => load
+});
+function load({ error: error2, status }) {
+  return { props: { error: error2, status } };
+}
+var Error2;
+var init_error_svelte = __esm({
+  ".svelte-kit/output/server/entries/fallbacks/error.svelte.js"() {
+    init_index_2e97bc70();
+    Error2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { status } = $$props;
+      let { error: error2 } = $$props;
+      if ($$props.status === void 0 && $$bindings.status && status !== void 0)
+        $$bindings.status(status);
+      if ($$props.error === void 0 && $$bindings.error && error2 !== void 0)
+        $$bindings.error(error2);
+      return `<h1>${escape(status)}</h1>
+
+<pre>${escape(error2.message)}</pre>
+
+
+
+${error2.frame ? `<pre>${escape(error2.frame)}</pre>` : ``}
+${error2.stack ? `<pre>${escape(error2.stack)}</pre>` : ``}`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/1.js
+var __exports2 = {};
+__export(__exports2, {
+  css: () => css4,
+  entry: () => entry2,
+  js: () => js2,
+  module: () => error_svelte_exports
+});
+var entry2, js2, css4;
+var init__2 = __esm({
+  ".svelte-kit/output/server/nodes/1.js"() {
+    init_error_svelte();
+    entry2 = "error.svelte-79b8e67a.js";
+    js2 = ["error.svelte-79b8e67a.js", "chunks/index-4741d8af.js"];
+    css4 = [];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/index.svelte.js
+var index_svelte_exports = {};
+__export(index_svelte_exports, {
+  default: () => Routes
+});
+var css$23, HomeButton, css$13, N2Clock, css5, Routes;
+var init_index_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/index.svelte.js"() {
+    init_index_2e97bc70();
+    init_MainMenu_4783409c();
+    init_MediaQuery_021992e5();
+    init_index_96622166();
+    css$23 = {
+      code: ".homebutton-box.svelte-10fykjs.svelte-10fykjs{position:relative;width:100px;height:100px;background:white;border-radius:15px;margin:15px;transition:0.5s}.homebutton-box.focus.svelte-10fykjs.svelte-10fykjs{border-radius:0px}.homebutton-box.svelte-10fykjs .icons.svelte-10fykjs{position:absolute;display:flex;flex-direction:column;justify-content:space-around;--topval:10px;top:var(--topval);left:var(--topval);width:calc(100% - var(--topval) * 2);height:calc(100% - var(--topval) * 2)}.homebutton-box.svelte-10fykjs .icons img.svelte-10fykjs{height:60%;margin:0 auto}.homebutton-box.svelte-10fykjs .icons h1.svelte-10fykjs{text-align:center;font-size:14px;color:white}.homebutton-box.svelte-10fykjs .homebutton_background.svelte-10fykjs{position:absolute;--positioning:5px;top:var(--positioning);left:var(--positioning);width:calc(100% - var(--positioning) * 2);height:calc(100% - var(--positioning) * 2);background:black;border-radius:25px;transition:0.5s}.homebutton-box.svelte-10fykjs .homebutton_background.focus.svelte-10fykjs{transform:rotate(45deg);background:red;border-radius:0px}.homebutton-box.svelte-10fykjs .hover_area.svelte-10fykjs{position:absolute;top:0;left:0;width:100%;height:100%}",
+      map: null
+    };
+    HomeButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { path } = $$props;
+      let { icon_url } = $$props;
+      let { explain } = $$props;
+      if ($$props.path === void 0 && $$bindings.path && path !== void 0)
+        $$bindings.path(path);
+      if ($$props.icon_url === void 0 && $$bindings.icon_url && icon_url !== void 0)
+        $$bindings.icon_url(icon_url);
+      if ($$props.explain === void 0 && $$bindings.explain && explain !== void 0)
+        $$bindings.explain(explain);
+      $$result.css.add(css$23);
+      return `<div class="${"homebutton-box " + escape("") + " svelte-10fykjs"}"><a${add_attribute("href", path, 0)}><div class="${"homebutton_background " + escape("") + " svelte-10fykjs"}"></div>
+        <div class="${"icons svelte-10fykjs"}"><img${add_attribute("src", icon_url, 0)} alt="${escape(explain) + "\u30DC\u30BF\u30F3"}" class="${"svelte-10fykjs"}">
+            <h1 class="${"svelte-10fykjs"}">${escape(explain)}</h1></div>
+        <div class="${"hover_area svelte-10fykjs"}"></div></a>
+    
+</div>`;
+    });
+    css$13 = {
+      code: "#bg_clock.svelte-gfjuk8.svelte-gfjuk8{position:absolute;overflow:hidden;height:100%;width:100%;top:0;left:0;z-index:-1}#bg_clock.svelte-gfjuk8 #clockbody.svelte-gfjuk8{position:absolute;top:40vh;left:25vw;width:120vw;height:120vw;-webkit-animation:svelte-gfjuk8-clockrotate 60s cubic-bezier(1, 0, 0.95, 0.38) infinite;animation:svelte-gfjuk8-clockrotate 60s cubic-bezier(1, 0, 0.95, 0.38) infinite;transition:1s}@keyframes svelte-gfjuk8-clockslide{0%{left:25vw;transform:rotate(0deg)}100%{left:-200%;transform:rotate(-270deg)}}@-webkit-keyframes svelte-gfjuk8-clockslide{0%{left:25vw;-webkit-transform:rotate(0deg)}100%{left:-200%;-webkit-transform:rotate(-270deg)}}#bg_clock.svelte-gfjuk8 #clockbody img.svelte-gfjuk8{width:100%}@keyframes svelte-gfjuk8-clockrotate{0%{transform:rotate(0deg)}2%{transform:rotate(7deg)}4%{transform:rotate(14deg)}6%{transform:rotate(21deg)}8%{transform:rotate(28deg)}10%{transform:rotate(36deg)}12%{transform:rotate(43deg)}14%{transform:rotate(50deg)}16%{transform:rotate(57deg)}18%{transform:rotate(64deg)}20%{transform:rotate(72deg)}22%{transform:rotate(79deg)}24%{transform:rotate(86deg)}26%{transform:rotate(93deg)}28%{transform:rotate(100deg)}30%{transform:rotate(108deg)}32%{transform:rotate(115deg)}34%{transform:rotate(122deg)}36%{transform:rotate(129deg)}38%{transform:rotate(136deg)}40%{transform:rotate(144deg)}42%{transform:rotate(151deg)}44%{transform:rotate(158deg)}46%{transform:rotate(165deg)}48%{transform:rotate(172deg)}50%{transform:rotate(180deg)}52%{transform:rotate(187deg)}54%{transform:rotate(194deg)}56%{transform:rotate(201deg)}58%{transform:rotate(208deg)}60%{transform:rotate(216deg)}62%{transform:rotate(223deg)}64%{transform:rotate(230deg)}66%{transform:rotate(237deg)}68%{transform:rotate(244deg)}70%{transform:rotate(252deg)}72%{transform:rotate(259deg)}74%{transform:rotate(266deg)}76%{transform:rotate(273deg)}78%{transform:rotate(280deg)}80%{transform:rotate(288deg)}82%{transform:rotate(295deg)}84%{transform:rotate(302deg)}86%{transform:rotate(309deg)}88%{transform:rotate(316deg)}90%{transform:rotate(324deg)}92%{transform:rotate(331deg)}94%{transform:rotate(338deg)}96%{transform:rotate(345deg)}98%{transform:rotate(352deg)}100%{transform:rotate(360deg)}}@-webkit-keyframes svelte-gfjuk8-clockrotate{0%{-webkit-transform:rotate(0deg)}2%{-webkit-transform:rotate(7deg)}4%{-webkit-transform:rotate(14deg)}6%{-webkit-transform:rotate(21deg)}8%{-webkit-transform:rotate(28deg)}10%{-webkit-transform:rotate(36deg)}12%{-webkit-transform:rotate(43deg)}14%{-webkit-transform:rotate(50deg)}16%{-webkit-transform:rotate(57deg)}18%{-webkit-transform:rotate(64deg)}20%{-webkit-transform:rotate(72deg)}22%{-webkit-transform:rotate(79deg)}24%{-webkit-transform:rotate(86deg)}26%{-webkit-transform:rotate(93deg)}28%{-webkit-transform:rotate(100deg)}30%{-webkit-transform:rotate(108deg)}32%{-webkit-transform:rotate(115deg)}34%{-webkit-transform:rotate(122deg)}36%{-webkit-transform:rotate(129deg)}38%{-webkit-transform:rotate(136deg)}40%{-webkit-transform:rotate(144deg)}42%{-webkit-transform:rotate(151deg)}44%{-webkit-transform:rotate(158deg)}46%{-webkit-transform:rotate(165deg)}48%{-webkit-transform:rotate(172deg)}50%{-webkit-transform:rotate(180deg)}52%{-webkit-transform:rotate(187deg)}54%{-webkit-transform:rotate(194deg)}56%{-webkit-transform:rotate(201deg)}58%{-webkit-transform:rotate(208deg)}60%{-webkit-transform:rotate(216deg)}62%{-webkit-transform:rotate(223deg)}64%{-webkit-transform:rotate(230deg)}66%{-webkit-transform:rotate(237deg)}68%{-webkit-transform:rotate(244deg)}70%{-webkit-transform:rotate(252deg)}72%{-webkit-transform:rotate(259deg)}74%{-webkit-transform:rotate(266deg)}76%{-webkit-transform:rotate(273deg)}78%{-webkit-transform:rotate(280deg)}80%{-webkit-transform:rotate(288deg)}82%{-webkit-transform:rotate(295deg)}84%{-webkit-transform:rotate(302deg)}86%{-webkit-transform:rotate(309deg)}88%{-webkit-transform:rotate(316deg)}90%{-webkit-transform:rotate(324deg)}92%{-webkit-transform:rotate(331deg)}94%{-webkit-transform:rotate(338deg)}96%{-webkit-transform:rotate(345deg)}98%{-webkit-transform:rotate(352deg)}100%{-webkit-transform:rotate(360deg)}}@keyframes svelte-gfjuk8-clockspin{0%{transform:rotate(0deg)}100%{transform:rotate(720deg)}}@-webkit-keyframes svelte-gfjuk8-clockspin{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(720deg)}}#bg_clock.svelte-gfjuk8 #clockbody img.time.svelte-gfjuk8{position:absolute;width:10%;animation:svelte-gfjuk8-wheelrotate 10s linear infinite;-webkit-animation:svelte-gfjuk8-wheelrotate 10s linear infinite}#bg_clock.svelte-gfjuk8 #clockbody img#insidewheel.svelte-gfjuk8{position:absolute;width:25%;animation:svelte-gfjuk8-wheelrotate 10s linear infinite reverse;-webkit-animation:svelte-gfjuk8-wheelrotate 10s linear infinite reverse;top:37.5%;left:37.5%}.time-3.svelte-gfjuk8.svelte-gfjuk8{top:45%;left:63.5%}.time-2.svelte-gfjuk8.svelte-gfjuk8{top:35.75%;left:61.021%}.time-1.svelte-gfjuk8.svelte-gfjuk8{top:28.979%;left:54.25%}.time-12.svelte-gfjuk8.svelte-gfjuk8{top:26.5%;left:45%}.time-11.svelte-gfjuk8.svelte-gfjuk8{top:28.979%;left:35.75%}.time-10.svelte-gfjuk8.svelte-gfjuk8{top:35.75%;left:28.979%}.time-9.svelte-gfjuk8.svelte-gfjuk8{top:45%;left:26.5%}.time-8.svelte-gfjuk8.svelte-gfjuk8{top:54.25%;left:28.979%}.time-7.svelte-gfjuk8.svelte-gfjuk8{top:61.021%;left:35.75%}.time-6.svelte-gfjuk8.svelte-gfjuk8{top:63.5%;left:45%}.time-5.svelte-gfjuk8.svelte-gfjuk8{top:61.021%;left:54.25%}.time-4.svelte-gfjuk8.svelte-gfjuk8{top:54.25%;left:61.021%}#bg_clock.svelte-gfjuk8 #clockbody img.time-2.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-4.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-6.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-8.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-10.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-12.svelte-gfjuk8{animation-direction:reverse;-webkit-animation-direction:reverse}@keyframes svelte-gfjuk8-wheelrotate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}@-webkit-keyframes svelte-gfjuk8-wheelrotate{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg)}}@media screen and (min-width: 600px){}@media screen and (min-width: 700px){#bg_clock.svelte-gfjuk8 #clockbody.svelte-gfjuk8{top:35vh;left:50vw;height:850px;width:850px}#bg_clock.svelte-gfjuk8 #clockbody img.svelte-gfjuk8{width:850px}#bg_clock.svelte-gfjuk8 img.time.svelte-gfjuk8{width:85px}}",
+      map: null
+    };
+    N2Clock = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      $$result.css.add(css$13);
+      return `<div id="${"bg_clock"}" class="${"svelte-gfjuk8"}"><div id="${"clockbody"}" class="${"svelte-gfjuk8"}">
+        <img class="${"time time-1 svelte-gfjuk8"}" src="${"/img/n2_clock/time-1.svg"}" alt="${""}">\u3000
+        <img class="${"time time-2 svelte-gfjuk8"}" src="${"/img/n2_clock/time-2.svg"}" alt="${""}">
+        <img class="${"time time-3 svelte-gfjuk8"}" src="${"/img/n2_clock/time-3.svg"}" alt="${""}">
+        <img class="${"time time-4 svelte-gfjuk8"}" src="${"/img/n2_clock/time-4.svg"}" alt="${""}">
+        <img class="${"time time-5 svelte-gfjuk8"}" src="${"/img/n2_clock/time-5.svg"}" alt="${""}">
+        <img class="${"time time-6 svelte-gfjuk8"}" src="${"/img/n2_clock/time-6.svg"}" alt="${""}">
+        <img class="${"time time-7 svelte-gfjuk8"}" src="${"/img/n2_clock/time-7.svg"}" alt="${""}">
+        <img class="${"time time-8 svelte-gfjuk8"}" src="${"/img/n2_clock/time-8.svg"}" alt="${""}">
+        <img class="${"time time-9 svelte-gfjuk8"}" src="${"/img/n2_clock/time-9.svg"}" alt="${""}">
+        <img class="${"time time-10 svelte-gfjuk8"}" src="${"/img/n2_clock/time-10.svg"}" alt="${""}">
+        <img class="${"time time-11 svelte-gfjuk8"}" src="${"/img/n2_clock/time-11.svg"}" alt="${""}">
+        <img class="${"time time-12 svelte-gfjuk8"}" src="${"/img/n2_clock/time-12.svg"}" alt="${""}">
+        <img id="${"insidewheel"}" src="${"/img/n2_clock/clock_insidewheel.svg"}" alt="${""}" class="${"svelte-gfjuk8"}">
+        <img src="${"/img/n2_clock/clock_body.svg"}" alt="${""}" class="${"svelte-gfjuk8"}"></div>    
+</div>`;
+    });
+    css5 = {
+      code: "#menu_box.svelte-9tmjw9{max-height:700px;max-width:500px;margin:0 auto}.icon_box.svelte-9tmjw9{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:space-around;border:solid 1px white;max-width:400px;padding:20px 10px;margin:100px 30px}",
+      map: null
+    };
+    Routes = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $mainmenus, $$unsubscribe_mainmenus;
+      $$unsubscribe_mainmenus = subscribe(mainmenus, (value) => $mainmenus = value);
+      let mainmenu_array = $mainmenus;
+      $$result.css.add(css5);
+      $$unsubscribe_mainmenus();
+      return `<div id="${"menu_box"}" class="${"svelte-9tmjw9"}">${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
+        default: ({ matches }) => {
+          return `${matches ? `<div class="${"icon_box svelte-9tmjw9"}">${each(mainmenu_array, (menu) => {
+            return `${validate_component(HomeButton, "HomeButton").$$render($$result, {
+              path: menu.path,
+              icon_url: menu.img,
+              explain: menu.name
+            }, {}, {})}`;
+          })}</div>` : ``}`;
+        }
+      })}
+    ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
+        default: ({ matches }) => {
+          return `${matches ? `<div class="${"icon_box svelte-9tmjw9"}">${each(mainmenu_array, (menu) => {
+            return `${validate_component(HomeButton, "HomeButton").$$render($$result, {
+              path: menu.path,
+              icon_url: menu.img,
+              explain: menu.name
+            }, {}, {})}`;
+          })}</div>` : ``}`;
+        }
+      })}
+    ${validate_component(N2Clock, "N2Clock").$$render($$result, {}, {}, {})}</div>
+
+${slots.default ? slots.default({}) : ``}`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/16.js
+var __exports3 = {};
+__export(__exports3, {
+  css: () => css6,
+  entry: () => entry3,
+  js: () => js3,
+  module: () => index_svelte_exports
+});
+var entry3, js3, css6;
+var init__3 = __esm({
+  ".svelte-kit/output/server/nodes/16.js"() {
+    init_index_svelte();
+    entry3 = "pages/index.svelte-41aa1666.js";
+    js3 = ["pages/index.svelte-41aa1666.js", "chunks/index-4741d8af.js", "chunks/MainMenu-ef41ec5e.js", "chunks/index-1f66f3ef.js", "chunks/MediaQuery-e124c5d0.js"];
+    css6 = ["assets/pages/index.svelte-7ded9e66.css"];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/app.svelte.js
+var app_svelte_exports = {};
+__export(app_svelte_exports, {
+  default: () => App
+});
+var css7, App;
+var init_app_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/app.svelte.js"() {
+    init_index_2e97bc70();
+    css7 = {
+      code: 'article.svelte-18s83uh.svelte-18s83uh{width:90vw;max-width:350px;margin:0 auto}article.svelte-18s83uh h1.svelte-18s83uh{margin:20px 0 10px 0}#phone-flame.svelte-18s83uh.svelte-18s83uh{padding:10px;border:solid 2px white;background:white;min-height:555px;border-radius:20px;position:relative}#phone-flame.svelte-18s83uh.svelte-18s83uh::before{content:"";position:absolute;background:white;--width:160px;left:calc(50% - var(--width) / 2);right:calc(50% - var(--width) / 2);height:25px;border-radius:0 0 20px 20px/0 0 15px 15px}#phone-flame.svelte-18s83uh.svelte-18s83uh::after{content:"";position:absolute;background:black;top:17px;--width:50px;left:calc(50% - var(--width) / 2);right:calc(50% - var(--width) / 2);height:10px;border-radius:5px}#phone-flame.svelte-18s83uh section.svelte-18s83uh{font-family:"Kosugi Maru", sans-serif;border:solid 2px white;padding:50px 20px 20px 20px;background:linear-gradient(135deg, black, black, rgba(0, 0, 0, 0.85));border-radius:10px;min-height:535px;display:flex;flex-wrap:wrap;grid-template-columns:repeat(auto-fill, 80px);justify-content:space-between}#phone-flame.svelte-18s83uh section .app-icon.svelte-18s83uh{display:flex;flex-direction:column;align-items:center;margin:0 0 45px 0;width:80px;height:80px}#phone-flame.svelte-18s83uh section .app-icon.active.svelte-18s83uh{border:solid 2px white;border-radius:20px}#phone-flame.svelte-18s83uh section .app-icon img.svelte-18s83uh{margin:0 auto;padding:10px;height:75px;cursor:pointer}#phone-flame.svelte-18s83uh section .app-icon .app-name.svelte-18s83uh{margin:10px 0 0 0;font-size:10px;text-align:center}',
+      map: null
+    };
+    App = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let apps = [
+        {
+          name: "\u3070\u304F\u305C\u3064\u3055\u3042\u3061",
+          icon: "/img/bs2nd/ba_gray.svg",
+          href: "/app/bakuzetsu-searcher-2nd/edit",
+          description: "\u30B3\u30C8\u30C0\u30DE\u30F3\u3067\u697D\u3057\u3066\u52DD\u3061\u305F\u3044\u4EBA\u306B\u5411\u3051\u305F\u30C4\u30FC\u30EB"
+        },
+        {
+          name: "Web\u30C0\u30E1\u30AB\u30F3",
+          icon: "/img/tcg-sim/card_naname.svg",
+          href: "/app/pokemon-card-game-effector/game",
+          description: "\u30DD\u30B1\u30AB\u306E\u30C0\u30E1\u30AB\u30F3\u3092Web\u3067\u3084\u3063\u3061\u3083\u3046\u3002"
+        },
+        {
+          name: "TCG\u30B7\u30DF\u30E5",
+          icon: "/img/tcg-sim/card_naname.svg",
+          href: "/app/tcg-simulator/game",
+          description: "\u30C8\u30EC\u30FC\u30C7\u30A3\u30F3\u30B0\u30AB\u30FC\u30C9\u3092\u30A4\u30F3\u30DD\u30FC\u30C8\u3057\u3066\u30D7\u30EC\u30A4"
+        },
+        {
+          name: "DM\u30C0\u30A6\u30F3\u30ED\u30FC\u30C0",
+          icon: "/img/tcg-sim/card_naname.svg",
+          href: "/app/DM-Downloader/collect",
+          description: "\u30AB\u30FC\u30C9\u753B\u50CF\u3092\u53CE\u96C6"
+        }
+      ];
+      $$result.css.add(css7);
+      return `<article class="${"svelte-18s83uh"}"><h1 class="${"svelte-18s83uh"}">APP LIST</h1>
+    <div id="${"phone-flame"}" class="${"svelte-18s83uh"}"><section class="${"svelte-18s83uh"}">${each(apps, (a) => {
+        return `<div class="${"app-icon active svelte-18s83uh"}"><a${add_attribute("href", a.href, 0)}><img${add_attribute("src", a.icon, 0)} alt="${""}" class="${"svelte-18s83uh"}">
+                    <div class="${"app-name svelte-18s83uh"}">${escape(a.name)}</div></a>
+            </div>`;
+      })}
+        <div class="${"app-icon svelte-18s83uh"}"></div>
+        <div class="${"app-icon svelte-18s83uh"}"></div>
+        <div class="${"app-icon svelte-18s83uh"}"></div></section></div>
+</article>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/12.js
+var __exports4 = {};
+__export(__exports4, {
+  css: () => css8,
+  entry: () => entry4,
+  js: () => js4,
+  module: () => app_svelte_exports
+});
+var entry4, js4, css8;
+var init__4 = __esm({
+  ".svelte-kit/output/server/nodes/12.js"() {
+    init_app_svelte();
+    entry4 = "pages/app.svelte-57607911.js";
+    js4 = ["pages/app.svelte-57607911.js", "chunks/index-4741d8af.js"];
+    css8 = ["assets/pages/app.svelte-1db43c81.css"];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/contact.svelte.js
+var contact_svelte_exports = {};
+__export(contact_svelte_exports, {
+  default: () => Contact
+});
+var css9, Contact;
+var init_contact_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/contact.svelte.js"() {
+    init_index_2e97bc70();
+    css9 = {
+      code: "article.svelte-11yu7j3{width:90%;max-width:700px;margin:0 auto}",
+      map: null
+    };
+    Contact = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      $$result.css.add(css9);
+      return `<article class="${"svelte-11yu7j3"}">
+
+</article>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/15.js
+var __exports5 = {};
+__export(__exports5, {
+  css: () => css10,
+  entry: () => entry5,
+  js: () => js5,
+  module: () => contact_svelte_exports
+});
+var entry5, js5, css10;
+var init__5 = __esm({
+  ".svelte-kit/output/server/nodes/15.js"() {
+    init_contact_svelte();
+    entry5 = "pages/contact.svelte-546c3197.js";
+    js5 = ["pages/contact.svelte-546c3197.js", "chunks/index-4741d8af.js"];
+    css10 = ["assets/pages/contact.svelte-297997af.css"];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/introduce/index.svelte.js
+var index_svelte_exports2 = {};
+__export(index_svelte_exports2, {
+  default: () => Introduce
+});
+var css11, myname, mySex, myBloodType, Introduce;
+var init_index_svelte2 = __esm({
+  ".svelte-kit/output/server/entries/pages/introduce/index.svelte.js"() {
+    init_index_2e97bc70();
+    css11 = {
+      code: "#introduce-box.svelte-muuo5r.svelte-muuo5r{position:relative;width:80%;max-width:700px;margin:30px auto 0 auto;height:700px}#introduce-box.svelte-muuo5r #introduce-text.svelte-muuo5r{padding:30px}#introduce-box.svelte-muuo5r #introduce-text div.svelte-muuo5r{margin:5px}#introduce-box.svelte-muuo5r #introduce-text h1.svelte-muuo5r{margin:10px 0}#introduce-box.svelte-muuo5r #introduce-text .job.svelte-muuo5r{margin:10px 5px;font-size:16px}#introduce-box.svelte-muuo5r #introduce-text .birthday .birthday-count.svelte-muuo5r{display:inline;font-size:13px}#introduce-box.svelte-muuo5r .image.svelte-muuo5r{z-index:-1;position:absolute;filter:blur(2px);background-image:var(--url);background-position:center;width:100%;height:100%}",
+      map: null
+    };
+    myname = "Making";
+    mySex = "Male";
+    myBloodType = "A Rh+";
+    Introduce = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let myAgeYear = 0;
+      let myAgeDay = 0;
+      let myAgeHour = 0;
+      let myAgeMinutes = 0;
+      let myAgeSecond = 0;
+      const myJob = ["Engineer", "Designer", "Artist"];
+      const backgroundIllust = [
+        "https://lh3.googleusercontent.com/bcvBUbA1fI0nUqannPAJxes6L1JmFm4VdhfjCwq6fkvqgoBHlGoVJhMk-L20s5zscQZe8FO9d3x4u757Gk35od1rhy8wbOlOEHDt0GULdy7Af2oI_TMadzt4mohs-okGaJoaYaxq27I9HXPCNyoO_cv5nSEM2WlUNF_KKNMW-Hv-0RJkpREnBwzn-HPzuP9lXk5VVIhIcNEwspqsh4n_byo-SlBOOnDX6YDSI_iPzQOftJTfIoZupSXt7yT0eTX4X3G4iU7l0oJd72Mm72_4xAgAw9Ogoyy2wOx_f9TY3hLZWqO1n94DOM0GxWtE-YbfX_LxLRbAzbIUk4IGhl0eNUNfY-w-zg6DjNe0EgQ0MlgBbQH7GDUa-0va2ppQwNTdU_nJIlBBlFa5MCEaBrc3WJZuN1uC7Od7bgY2w3l9_zTajyvYMDRK40k0jlJjqUov2v5QmbAOwVap49VF1bNQrqZsKN-KaCuVeBZHOsA33U28f7qE5Pw2V1g0nUvcYGjBgSyIjX0d-4abQnpNO_AAP5mKUhiMHPAxc1SJne8b_AQMPQNk0qAdO_-I68Eb1nN2LdKyk2Ca4YWqGb2OTQyyewAaxnYhPY9tTXCMxU18r2NVuJWDmrzXaNab3s_rjdMwn1zW5sxrJEpqFu2Av7wPWQ5PRbbPBZVVid_jh8slBbZLULwQ7qLRbn3L-opMCJzUq748fEL2GXe1wWK1G87Fw_I=s700-no"
+      ];
+      $$result.css.add(css11);
+      return `<section id="${"introduce-box"}" class="${"svelte-muuo5r"}"><div class="${"image svelte-muuo5r"}" style="${"--url:url(" + escape(backgroundIllust[0]) + ")"}"></div>
+    <div id="${"introduce-text"}" class="${"svelte-muuo5r"}"><h1 class="${"svelte-muuo5r"}"><!-- HTML_TAG_START -->${myname}<!-- HTML_TAG_END --></h1>
+        <div class="${"job svelte-muuo5r"}">${escape(myJob.join(", "))}</div>
+        <div class="${"birthday svelte-muuo5r"}">${escape(`Age ${myAgeYear}`)}
+            <div class="${"birthday-count svelte-muuo5r"}">${escape(`( ${myAgeDay}d ${myAgeHour}h ${myAgeMinutes}m ${myAgeSecond}s )`)}</div></div>
+        <div class="${"svelte-muuo5r"}">${escape(mySex)}</div>
+        <div class="${"svelte-muuo5r"}">${escape(myBloodType)}</div></div>
+</section>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/17.js
+var __exports6 = {};
+__export(__exports6, {
+  css: () => css12,
+  entry: () => entry6,
+  js: () => js6,
+  module: () => index_svelte_exports2
+});
+var entry6, js6, css12;
+var init__6 = __esm({
+  ".svelte-kit/output/server/nodes/17.js"() {
+    init_index_svelte2();
+    entry6 = "pages/introduce/index.svelte-47fb080e.js";
+    js6 = ["pages/introduce/index.svelte-47fb080e.js", "chunks/index-4741d8af.js"];
+    css12 = ["assets/pages/introduce/index.svelte-627fe975.css"];
+  }
+});
+
+// .svelte-kit/output/server/chunks/bs2ndLoader-cf0653eb.js
+var css13, Bs2ndLoader;
+var init_bs2ndLoader_cf0653eb = __esm({
+  ".svelte-kit/output/server/chunks/bs2ndLoader-cf0653eb.js"() {
+    init_index_2e97bc70();
+    css13 = {
+      code: ".loader.svelte-v9q609.svelte-v9q609{width:100%;height:100%}.loader.svelte-v9q609 .kotodama-box.svelte-v9q609{--size:30px;display:flex;flex-direction:row;justify-content:center;flex-wrap:wrap;align-items:center;max-width:150px;height:100%;margin:0 auto}.loader.svelte-v9q609 .kotodama-box .kotodama.svelte-v9q609{position:relative;width:var(--size);height:var(--size);margin:3px}.loader.svelte-v9q609 .kotodama-box .kotodama img.svelte-v9q609{position:absolute;bottom:0;left:0;width:var(--size);height:var(--size);animation:svelte-v9q609-popinkotodama linear 1.3s var(--delay) infinite}@keyframes svelte-v9q609-popinkotodama{0%{bottom:0}20%{bottom:var(--size)}40%{bottom:0;height:var(--size)}43%{bottom:0;height:calc(var(--size) / 3)}46%{bottom:0;height:var(--size)}}",
+      map: null
+    };
+    Bs2ndLoader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { popindelay = 0.15 } = $$props;
+      if ($$props.popindelay === void 0 && $$bindings.popindelay && popindelay !== void 0)
+        $$bindings.popindelay(popindelay);
+      $$result.css.add(css13);
+      return `<div class="${"loader svelte-v9q609"}"><div class="${"kotodama-box svelte-v9q609"}"><div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay}s`) + ";"}" src="${"/img/bs2nd/ba_gray.png"}" alt="${"\u3070"}" class="${"svelte-v9q609"}"></div>
+        <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 2}s`) + ";"}" src="${"/img/bs2nd/ku_gray.png"}" alt="${"\u304F"}" class="${"svelte-v9q609"}"></div>
+        <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 3}s`) + ";"}" src="${"/img/bs2nd/ze_gray.png"}" alt="${"\u305C"}" class="${"svelte-v9q609"}"></div>
+        <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 4}s`) + ";"}" src="${"/img/bs2nd/tsu_gray.png"}" alt="${"\u3064"}" class="${"svelte-v9q609"}"></div>
+        <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 5}s`) + ";"}" src="${"/img/bs2nd/sa_gray.png"}" alt="${"\u3055"}" class="${"svelte-v9q609"}"></div>
+        <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 6}s`) + ";"}" src="${"/img/bs2nd/a_gray.png"}" alt="${"\u3042"}" class="${"svelte-v9q609"}"></div>
+        <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 7}s`) + ";"}" src="${"/img/bs2nd/chi_gray.png"}" alt="${"\u3061"}" class="${"svelte-v9q609"}"></div></div>
+</div>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/show/index.svelte.js
+var index_svelte_exports3 = {};
+__export(index_svelte_exports3, {
+  default: () => Show
+});
+var css$5, PendulumLoader, css$4, RectWaveLoader, css$3, RoundFloweringLoader, css$24, Show_item, css$14, DotStringLoader, css14, Show;
+var init_index_svelte3 = __esm({
+  ".svelte-kit/output/server/entries/pages/show/index.svelte.js"() {
+    init_index_2e97bc70();
+    init_bs2ndLoader_cf0653eb();
+    init_MediaQuery_021992e5();
+    css$5 = {
+      code: ".loader.svelte-w1xkbb.svelte-w1xkbb{position:relative;width:100%;height:var(--loader-height)}.loader.svelte-w1xkbb .fulcrum.svelte-w1xkbb{position:absolute;left:50%;height:100%}.loader.svelte-w1xkbb .fulcrum .wire.svelte-w1xkbb{position:absolute;height:var(--wire_length_px);border:solid 1px var(--color);transform-origin:top}.loader.svelte-w1xkbb .fulcrum .wire.animate.svelte-w1xkbb{-webkit-animation:svelte-w1xkbb-penduluming ease-in-out var(--periodic_time_sec) infinite;animation:svelte-w1xkbb-penduluming ease-in-out var(--periodic_time_sec) infinite}.loader.svelte-w1xkbb .fulcrum .wire .weight.svelte-w1xkbb{position:absolute;bottom:calc(-1 * var(--weight_size_px) / 2);left:calc(-1 * var(--weight_size_px) / 2);width:var(--weight_size_px);height:var(--weight_size_px);border-radius:calc(var(--weight_size_px) / 2);background:var(--color)}@keyframes svelte-w1xkbb-penduluming{0%{transform:rotate(30deg)}50%{transform:rotate(-30deg)}100%{transform:rotate(30deg)}}",
+      map: null
+    };
+    PendulumLoader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { numof_pendulum = 16 } = $$props;
+      let { initial_length = 25 } = $$props;
+      let { increase_length = 12 } = $$props;
+      let { initial_size = 10 } = $$props;
+      let { increase_size = 0 } = $$props;
+      let { initial_frequency = 30 } = $$props;
+      let { decrease_frequency = 1 } = $$props;
+      let { color = "white" } = $$props;
+      let { is_animate = true } = $$props;
+      let pendulums_args = [];
+      for (let i2 = 0; i2 < numof_pendulum; i2++) {
+        let wire_length = initial_length + i2 * increase_length;
+        let periodic_time = 60 / (initial_frequency - decrease_frequency * i2);
+        pendulums_args.push({
+          wire_length: `${wire_length.toString()}px`,
+          weight_size: `${(initial_size + i2 * increase_size).toString()}px`,
+          periodic_time: `${periodic_time.toString()}s`
+        });
+      }
+      if ($$props.numof_pendulum === void 0 && $$bindings.numof_pendulum && numof_pendulum !== void 0)
+        $$bindings.numof_pendulum(numof_pendulum);
+      if ($$props.initial_length === void 0 && $$bindings.initial_length && initial_length !== void 0)
+        $$bindings.initial_length(initial_length);
+      if ($$props.increase_length === void 0 && $$bindings.increase_length && increase_length !== void 0)
+        $$bindings.increase_length(increase_length);
+      if ($$props.initial_size === void 0 && $$bindings.initial_size && initial_size !== void 0)
+        $$bindings.initial_size(initial_size);
+      if ($$props.increase_size === void 0 && $$bindings.increase_size && increase_size !== void 0)
+        $$bindings.increase_size(increase_size);
+      if ($$props.initial_frequency === void 0 && $$bindings.initial_frequency && initial_frequency !== void 0)
+        $$bindings.initial_frequency(initial_frequency);
+      if ($$props.decrease_frequency === void 0 && $$bindings.decrease_frequency && decrease_frequency !== void 0)
+        $$bindings.decrease_frequency(decrease_frequency);
+      if ($$props.color === void 0 && $$bindings.color && color !== void 0)
+        $$bindings.color(color);
+      if ($$props.is_animate === void 0 && $$bindings.is_animate && is_animate !== void 0)
+        $$bindings.is_animate(is_animate);
+      $$result.css.add(css$5);
+      return `<div class="${"loader svelte-w1xkbb"}" style="${"--loader-height: " + escape(`${initial_length + increase_length * numof_pendulum + initial_size}px`) + ";"}"><div class="${"fulcrum svelte-w1xkbb"}">${each(pendulums_args, (args) => {
+        return `
+            <div class="${"wire " + escape(is_animate ? "animate" : "") + " svelte-w1xkbb"}" style="${"--wire_length_px: " + escape(args.wire_length) + "; --periodic_time_sec: " + escape(args.periodic_time) + "; --color: " + escape(color) + ";"}"><div class="${"weight svelte-w1xkbb"}" style="${"--weight_size_px: " + escape(args.weight_size) + ";"}"></div>
+            </div>`;
+      })}</div>
+</div>`;
+    });
+    css$4 = {
+      code: ".loader.svelte-1prbtiu.svelte-1prbtiu{position:relative;width:100%;height:var(--loader-height)}.loader.svelte-1prbtiu .fulcrum.svelte-1prbtiu{position:absolute;width:100%;height:100%;left:0}.loader.svelte-1prbtiu .fulcrum .rect.svelte-1prbtiu{position:absolute;bottom:0;left:calc(50% + var(--interval));width:var(--width);height:0;border:solid 1px var(--color)}.loader.svelte-1prbtiu .fulcrum .rect.animate.svelte-1prbtiu{-webkit-animation:svelte-1prbtiu-rect_growth ease-in-out 3s var(--growth_delay) infinite;animation:svelte-1prbtiu-rect_growth ease-in-out 3s var(--growth_delay) infinite}@keyframes svelte-1prbtiu-rect_growth{0%{height:0}20%{height:var(--max_height)}40%{height:0}100%{height:0}}",
+      map: null
+    };
+    RectWaveLoader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { numof_rectangle = 20 } = $$props;
+      let { base_rect_width = 15 } = $$props;
+      let { blur_range_rect_width = 10 } = $$props;
+      let { formation_interval = 10 } = $$props;
+      let { growth_delay_sec = 0.25 } = $$props;
+      let { max_height = 150 } = $$props;
+      let { color = "white" } = $$props;
+      let { is_animate = true } = $$props;
+      let rectangle_args = [];
+      for (let i2 = 0; i2 < numof_rectangle; i2++) {
+        rectangle_args.push({
+          rect_width: `${Math.floor(Math.random() * blur_range_rect_width + base_rect_width - blur_range_rect_width / 2)}px`,
+          interval_position: `${formation_interval * (numof_rectangle / 2 - i2)}px`,
+          growth_delay: `${growth_delay_sec * i2}s`
+        });
+      }
+      if ($$props.numof_rectangle === void 0 && $$bindings.numof_rectangle && numof_rectangle !== void 0)
+        $$bindings.numof_rectangle(numof_rectangle);
+      if ($$props.base_rect_width === void 0 && $$bindings.base_rect_width && base_rect_width !== void 0)
+        $$bindings.base_rect_width(base_rect_width);
+      if ($$props.blur_range_rect_width === void 0 && $$bindings.blur_range_rect_width && blur_range_rect_width !== void 0)
+        $$bindings.blur_range_rect_width(blur_range_rect_width);
+      if ($$props.formation_interval === void 0 && $$bindings.formation_interval && formation_interval !== void 0)
+        $$bindings.formation_interval(formation_interval);
+      if ($$props.growth_delay_sec === void 0 && $$bindings.growth_delay_sec && growth_delay_sec !== void 0)
+        $$bindings.growth_delay_sec(growth_delay_sec);
+      if ($$props.max_height === void 0 && $$bindings.max_height && max_height !== void 0)
+        $$bindings.max_height(max_height);
+      if ($$props.color === void 0 && $$bindings.color && color !== void 0)
+        $$bindings.color(color);
+      if ($$props.is_animate === void 0 && $$bindings.is_animate && is_animate !== void 0)
+        $$bindings.is_animate(is_animate);
+      $$result.css.add(css$4);
+      return `<div class="${"loader svelte-1prbtiu"}" style="${"--loader-height: " + escape(`${77 + max_height}px`) + ";"}"><div class="${"fulcrum " + escape(is_animate ? "animate" : "") + " svelte-1prbtiu"}" style="${"--base_width:" + escape(`${base_rect_width}px`) + "; --max_height:" + escape(`${max_height}px`) + ";"}">${each(rectangle_args, (args) => {
+        return `<div class="${"rect " + escape(is_animate ? "animate" : "") + " svelte-1prbtiu"}" style="${"--width:" + escape(args.rect_width) + "; --color: " + escape(color) + "; --interval: " + escape(args.interval_position) + "; --growth_delay: " + escape(args.growth_delay)}"></div>`;
+      })}</div>
+</div>`;
+    });
+    css$3 = {
+      code: ".loader.svelte-8rpapr.svelte-8rpapr{position:relative;width:100%;height:var(--loader_height)}.loader.svelte-8rpapr .fulcrum.svelte-8rpapr{position:absolute;width:100%;height:100%}.loader.svelte-8rpapr .fulcrum .petals.svelte-8rpapr{position:absolute;top:calc(50% - var(--size) / 2);left:calc(50% - var(--size) / 2);width:var(--size);height:var(--size);transform:rotate(0);transform-origin:50% 50%}.loader.svelte-8rpapr .fulcrum .petals.animate.svelte-8rpapr{animation:svelte-8rpapr-cycle linear var(--speed) infinite}@keyframes svelte-8rpapr-cycle{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}.loader.svelte-8rpapr .fulcrum .petal.svelte-8rpapr{position:absolute;top:0;transform:rotate(var(--angle));width:var(--size);height:var(--size);border-radius:calc(var(--size) / 2);border:solid 1px var(--color)}.loader.svelte-8rpapr .fulcrum .petal.animate.svelte-8rpapr{animation:svelte-8rpapr-flowering ease-in-out 2s var(--delay) infinite}@keyframes svelte-8rpapr-flowering{0%{transform:translate(0, 0)}40%{transform:translate(var(--move_x), var(--move_y))}80%{transform:translate(0, 0)}100%{transform:translate(0, 0)}}",
+      map: null
+    };
+    RoundFloweringLoader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { color = "white" } = $$props;
+      let { is_animate = true } = $$props;
+      let { numof_small_round = 7 } = $$props;
+      let { numof_large_round = 5 } = $$props;
+      let { small_round_size = 80 } = $$props;
+      let { large_round_size = 120 } = $$props;
+      let { small_petal_stroke = 30 } = $$props;
+      let { large_petal_stroke = 50 } = $$props;
+      let { small_stroke_delay = 0 } = $$props;
+      let { large_stroke_delay = 0.4 } = $$props;
+      let { small_round_spin_speed = "5s" } = $$props;
+      let { large_round_spin_speed = "2s" } = $$props;
+      let small_flowering_args = [];
+      let large_flowering_args = [];
+      for (let i2 = 0; i2 < numof_small_round; i2++) {
+        let radius = 2 * Math.PI / numof_small_round * i2;
+        small_flowering_args.push({
+          flower_petal_x: `${Math.sin(radius) * small_petal_stroke}px`,
+          flower_petal_y: `${Math.cos(radius) * small_petal_stroke}px`
+        });
+      }
+      for (let i2 = 0; i2 < numof_large_round; i2++) {
+        let radius = 2 * Math.PI / numof_large_round * i2;
+        large_flowering_args.push({
+          flower_petal_x: `${Math.sin(radius) * large_petal_stroke}px`,
+          flower_petal_y: `${Math.cos(radius) * large_petal_stroke}px`
+        });
+      }
+      if ($$props.color === void 0 && $$bindings.color && color !== void 0)
+        $$bindings.color(color);
+      if ($$props.is_animate === void 0 && $$bindings.is_animate && is_animate !== void 0)
+        $$bindings.is_animate(is_animate);
+      if ($$props.numof_small_round === void 0 && $$bindings.numof_small_round && numof_small_round !== void 0)
+        $$bindings.numof_small_round(numof_small_round);
+      if ($$props.numof_large_round === void 0 && $$bindings.numof_large_round && numof_large_round !== void 0)
+        $$bindings.numof_large_round(numof_large_round);
+      if ($$props.small_round_size === void 0 && $$bindings.small_round_size && small_round_size !== void 0)
+        $$bindings.small_round_size(small_round_size);
+      if ($$props.large_round_size === void 0 && $$bindings.large_round_size && large_round_size !== void 0)
+        $$bindings.large_round_size(large_round_size);
+      if ($$props.small_petal_stroke === void 0 && $$bindings.small_petal_stroke && small_petal_stroke !== void 0)
+        $$bindings.small_petal_stroke(small_petal_stroke);
+      if ($$props.large_petal_stroke === void 0 && $$bindings.large_petal_stroke && large_petal_stroke !== void 0)
+        $$bindings.large_petal_stroke(large_petal_stroke);
+      if ($$props.small_stroke_delay === void 0 && $$bindings.small_stroke_delay && small_stroke_delay !== void 0)
+        $$bindings.small_stroke_delay(small_stroke_delay);
+      if ($$props.large_stroke_delay === void 0 && $$bindings.large_stroke_delay && large_stroke_delay !== void 0)
+        $$bindings.large_stroke_delay(large_stroke_delay);
+      if ($$props.small_round_spin_speed === void 0 && $$bindings.small_round_spin_speed && small_round_spin_speed !== void 0)
+        $$bindings.small_round_spin_speed(small_round_spin_speed);
+      if ($$props.large_round_spin_speed === void 0 && $$bindings.large_round_spin_speed && large_round_spin_speed !== void 0)
+        $$bindings.large_round_spin_speed(large_round_spin_speed);
+      $$result.css.add(css$3);
+      return `<div class="${"loader svelte-8rpapr"}" style="${"--loader_height:" + escape(`${large_petal_stroke * 2 + large_round_size}px`) + "; --color:" + escape(color) + ";"}"><div class="${"fulcrum svelte-8rpapr"}"><div class="${"petals " + escape(is_animate ? "animate" : "") + " svelte-8rpapr"}" style="${"--size:" + escape(`${small_round_size}px`) + "; --speed:" + escape(small_round_spin_speed)}">${each(small_flowering_args, (arg) => {
+        return `<div class="${"petal " + escape(is_animate ? "animate" : "") + " svelte-8rpapr"}" style="${"--size:" + escape(`${small_round_size}px`) + "; --move_x:" + escape(arg.flower_petal_x) + "; --move_y:" + escape(arg.flower_petal_y) + "; --delay:" + escape(`${small_stroke_delay}s`)}"></div>`;
+      })}</div>
+        <div class="${"petals " + escape(is_animate ? "animate" : "") + " svelte-8rpapr"}" style="${"--size:" + escape(`${large_round_size}px`) + "; --speed:" + escape(large_round_spin_speed)}">${each(large_flowering_args, (arg) => {
+        return `<div class="${"petal " + escape(is_animate ? "animate" : "") + " svelte-8rpapr"}" style="${"--size:" + escape(`${large_round_size}px`) + "; --move_x: " + escape(arg.flower_petal_x) + "; --move_y: " + escape(arg.flower_petal_y) + "; --delay:" + escape(`${large_stroke_delay}s`)}"></div>`;
+      })}</div></div>
+</div>`;
+    });
+    css$24 = {
+      code: ".loader-animation-box.svelte-yop039{padding:30px 0;border:solid 1px white;min-height:290px;width:100%;height:100%}",
+      map: null
+    };
+    Show_item = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { name } = $$props;
+      let { component } = $$props;
+      if ($$props.name === void 0 && $$bindings.name && name !== void 0)
+        $$bindings.name(name);
+      if ($$props.component === void 0 && $$bindings.component && component !== void 0)
+        $$bindings.component(component);
+      $$result.css.add(css$24);
+      return `<div class="${"loader-animation-box svelte-yop039"}">${validate_component(component || missing_component, "svelte:component").$$render($$result, {}, {}, {})}</div>
+<p>${escape(name)}</p>`;
+    });
+    css$14 = {
+      code: ".loader.svelte-1o1dzs3.svelte-1o1dzs3{width:100%;height:100%}.loader.svelte-1o1dzs3 .board.svelte-1o1dzs3{display:flex;flex-direction:row;justify-content:space-around;width:100%;height:100%}.loader.svelte-1o1dzs3 .board .dot_area.svelte-1o1dzs3{padding:5px;flex-basis:var(--dot_area_width);display:flex;flex-direction:row;justify-content:center;flex-wrap:wrap}.loader.svelte-1o1dzs3 .board .dot_area .dot.svelte-1o1dzs3,.loader.svelte-1o1dzs3 .board .dot_area .blank.svelte-1o1dzs3{flex-basis:32%;width:var(--dot_size);height:var(--dot_size)}.loader.svelte-1o1dzs3 .board .dot_area .dot.svelte-1o1dzs3{background:var(--color)}",
+      map: null
+    };
+    DotStringLoader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { color = "white" } = $$props;
+      let { is_animate = true } = $$props;
+      let { dot_size = 10 } = $$props;
+      let { input = 1056194 } = $$props;
+      let dot_string_dict = {
+        0: [1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1],
+        1: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
+        2: [1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1],
+        3: [1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1],
+        4: [1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1],
+        5: [1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1],
+        6: [1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1],
+        7: [1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
+        8: [1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1],
+        9: [1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1]
+      };
+      let input_tostr = input.toString();
+      let dot_args = [];
+      for (let i2 = 0; i2 < input_tostr.length; i2++) {
+        dot_args.push({ dots: dot_string_dict[input_tostr[i2]] });
+      }
+      console.log(dot_args);
+      console.log(Math.floor(100 / input_tostr.length));
+      if ($$props.color === void 0 && $$bindings.color && color !== void 0)
+        $$bindings.color(color);
+      if ($$props.is_animate === void 0 && $$bindings.is_animate && is_animate !== void 0)
+        $$bindings.is_animate(is_animate);
+      if ($$props.dot_size === void 0 && $$bindings.dot_size && dot_size !== void 0)
+        $$bindings.dot_size(dot_size);
+      if ($$props.input === void 0 && $$bindings.input && input !== void 0)
+        $$bindings.input(input);
+      $$result.css.add(css$14);
+      return `<div class="${"loader svelte-1o1dzs3"}"><div class="${"board svelte-1o1dzs3"}" style="${"--color:" + escape(color) + "; --dot_area_width:" + escape(Math.floor(100 / input_tostr.length)) + "%; --dot_size:" + escape(`${dot_size}px`)}">${each(dot_args, (args) => {
+        return `<div class="${"dot_area svelte-1o1dzs3"}">${each(args.dots, (dot) => {
+          return `${dot == 0 ? `<div class="${"blank svelte-1o1dzs3"}"></div>` : `<div class="${"dot svelte-1o1dzs3"}"></div>`}`;
+        })}
+            </div>`;
+      })}</div>
+</div>`;
+    });
+    css14 = {
+      code: ".show-room.svelte-7jgice.svelte-7jgice{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:space-around}.show-room.svelte-7jgice .show-box.svelte-7jgice{flex-basis:40%}.show-room.svelte-7jgice .show-box-phone.svelte-7jgice{flex-basis:90%}",
+      map: null
+    };
+    Show = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      const show_item_args = [
+        { name: "bs2nd", component: Bs2ndLoader },
+        {
+          name: "Pendulum",
+          component: PendulumLoader
+        },
+        {
+          name: "Rect Wave",
+          component: RectWaveLoader
+        },
+        {
+          name: "Round Flowering",
+          component: RoundFloweringLoader
+        },
+        {
+          name: "Dot Strings",
+          component: DotStringLoader
+        }
+      ];
+      $$result.css.add(css14);
+      return `<section class="${"show-room svelte-7jgice"}">${each(show_item_args, (arg) => {
+        return `${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
+          default: ({ matches }) => {
+            return `${matches ? `<div class="${"show-box-phone svelte-7jgice"}">${validate_component(Show_item, "ShowItem").$$render($$result, { name: arg.name, component: arg.component }, {}, {})}
+        </div>` : ``}
+    `;
+          }
+        })}
+    ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
+          default: ({ matches }) => {
+            return `${matches ? `<div class="${"show-box svelte-7jgice"}">${validate_component(Show_item, "ShowItem").$$render($$result, { name: arg.name, component: arg.component }, {}, {})}
+        </div>` : ``}
+    `;
+          }
+        })}`;
+      })}
+    
+</section>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/18.js
+var __exports7 = {};
+__export(__exports7, {
+  css: () => css15,
+  entry: () => entry7,
+  js: () => js7,
+  module: () => index_svelte_exports3
+});
+var entry7, js7, css15;
+var init__7 = __esm({
+  ".svelte-kit/output/server/nodes/18.js"() {
+    init_index_svelte3();
+    entry7 = "pages/show/index.svelte-6721a0f1.js";
+    js7 = ["pages/show/index.svelte-6721a0f1.js", "chunks/index-4741d8af.js", "chunks/bs2ndLoader-574176af.js", "chunks/MediaQuery-e124c5d0.js"];
+    css15 = ["assets/pages/show/index.svelte-e2989a52.css", "assets/bs2ndLoader-8a29ed63.css"];
   }
 });
 
 // node_modules/axios/lib/helpers/bind.js
 var require_bind = __commonJS({
   "node_modules/axios/lib/helpers/bind.js"(exports, module2) {
-    init_shims();
     "use strict";
     module2.exports = function bind(fn, thisArg) {
       return function wrap() {
         var args = new Array(arguments.length);
-        for (var i = 0; i < args.length; i++) {
-          args[i] = arguments[i];
+        for (var i2 = 0; i2 < args.length; i2++) {
+          args[i2] = arguments[i2];
         }
         return fn.apply(thisArg, args);
       };
@@ -4696,7 +6757,6 @@ var require_bind = __commonJS({
 // node_modules/axios/lib/utils.js
 var require_utils = __commonJS({
   "node_modules/axios/lib/utils.js"(exports, module2) {
-    init_shims();
     "use strict";
     var bind = require_bind();
     var toString = Object.prototype.toString;
@@ -4712,7 +6772,7 @@ var require_utils = __commonJS({
     function isArrayBuffer(val) {
       return toString.call(val) === "[object ArrayBuffer]";
     }
-    function isFormData2(val) {
+    function isFormData(val) {
       return typeof FormData !== "undefined" && val instanceof FormData;
     }
     function isArrayBufferView(val) {
@@ -4775,41 +6835,41 @@ var require_utils = __commonJS({
         obj = [obj];
       }
       if (isArray(obj)) {
-        for (var i = 0, l = obj.length; i < l; i++) {
-          fn.call(null, obj[i], i, obj);
+        for (var i2 = 0, l = obj.length; i2 < l; i2++) {
+          fn.call(null, obj[i2], i2, obj);
         }
       } else {
-        for (var key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            fn.call(null, obj[key], key, obj);
+        for (var key2 in obj) {
+          if (Object.prototype.hasOwnProperty.call(obj, key2)) {
+            fn.call(null, obj[key2], key2, obj);
           }
         }
       }
     }
     function merge() {
       var result = {};
-      function assignValue(val, key) {
-        if (isPlainObject(result[key]) && isPlainObject(val)) {
-          result[key] = merge(result[key], val);
+      function assignValue(val, key2) {
+        if (isPlainObject(result[key2]) && isPlainObject(val)) {
+          result[key2] = merge(result[key2], val);
         } else if (isPlainObject(val)) {
-          result[key] = merge({}, val);
+          result[key2] = merge({}, val);
         } else if (isArray(val)) {
-          result[key] = val.slice();
+          result[key2] = val.slice();
         } else {
-          result[key] = val;
+          result[key2] = val;
         }
       }
-      for (var i = 0, l = arguments.length; i < l; i++) {
-        forEach(arguments[i], assignValue);
+      for (var i2 = 0, l = arguments.length; i2 < l; i2++) {
+        forEach(arguments[i2], assignValue);
       }
       return result;
     }
     function extend(a, b, thisArg) {
-      forEach(b, function assignValue(val, key) {
+      forEach(b, function assignValue(val, key2) {
         if (thisArg && typeof val === "function") {
-          a[key] = bind(val, thisArg);
+          a[key2] = bind(val, thisArg);
         } else {
-          a[key] = val;
+          a[key2] = val;
         }
       });
       return a;
@@ -4824,7 +6884,7 @@ var require_utils = __commonJS({
       isArray,
       isArrayBuffer,
       isBuffer,
-      isFormData: isFormData2,
+      isFormData,
       isArrayBufferView,
       isString,
       isNumber,
@@ -4850,10 +6910,9 @@ var require_utils = __commonJS({
 // node_modules/axios/lib/helpers/buildURL.js
 var require_buildURL = __commonJS({
   "node_modules/axios/lib/helpers/buildURL.js"(exports, module2) {
-    init_shims();
     "use strict";
     var utils = require_utils();
-    function encode(val) {
+    function encode2(val) {
       return encodeURIComponent(val).replace(/%3A/gi, ":").replace(/%24/g, "$").replace(/%2C/gi, ",").replace(/%20/g, "+").replace(/%5B/gi, "[").replace(/%5D/gi, "]");
     }
     module2.exports = function buildURL(url, params, paramsSerializer) {
@@ -4867,12 +6926,12 @@ var require_buildURL = __commonJS({
         serializedParams = params.toString();
       } else {
         var parts = [];
-        utils.forEach(params, function serialize(val, key) {
+        utils.forEach(params, function serialize(val, key2) {
           if (val === null || typeof val === "undefined") {
             return;
           }
           if (utils.isArray(val)) {
-            key = key + "[]";
+            key2 = key2 + "[]";
           } else {
             val = [val];
           }
@@ -4882,7 +6941,7 @@ var require_buildURL = __commonJS({
             } else if (utils.isObject(v)) {
               v = JSON.stringify(v);
             }
-            parts.push(encode(key) + "=" + encode(v));
+            parts.push(encode2(key2) + "=" + encode2(v));
           });
         });
         serializedParams = parts.join("&");
@@ -4902,18 +6961,17 @@ var require_buildURL = __commonJS({
 // node_modules/axios/lib/core/InterceptorManager.js
 var require_InterceptorManager = __commonJS({
   "node_modules/axios/lib/core/InterceptorManager.js"(exports, module2) {
-    init_shims();
     "use strict";
     var utils = require_utils();
     function InterceptorManager() {
       this.handlers = [];
     }
-    InterceptorManager.prototype.use = function use(fulfilled, rejected, options2) {
+    InterceptorManager.prototype.use = function use(fulfilled, rejected, options) {
       this.handlers.push({
         fulfilled,
         rejected,
-        synchronous: options2 ? options2.synchronous : false,
-        runWhen: options2 ? options2.runWhen : null
+        synchronous: options ? options.synchronous : false,
+        runWhen: options ? options.runWhen : null
       });
       return this.handlers.length - 1;
     };
@@ -4923,9 +6981,9 @@ var require_InterceptorManager = __commonJS({
       }
     };
     InterceptorManager.prototype.forEach = function forEach(fn) {
-      utils.forEach(this.handlers, function forEachHandler(h) {
-        if (h !== null) {
-          fn(h);
+      utils.forEach(this.handlers, function forEachHandler(h2) {
+        if (h2 !== null) {
+          fn(h2);
         }
       });
     };
@@ -4936,7 +6994,6 @@ var require_InterceptorManager = __commonJS({
 // node_modules/axios/lib/helpers/normalizeHeaderName.js
 var require_normalizeHeaderName = __commonJS({
   "node_modules/axios/lib/helpers/normalizeHeaderName.js"(exports, module2) {
-    init_shims();
     "use strict";
     var utils = require_utils();
     module2.exports = function normalizeHeaderName(headers, normalizedName) {
@@ -4953,7 +7010,6 @@ var require_normalizeHeaderName = __commonJS({
 // node_modules/axios/lib/core/enhanceError.js
 var require_enhanceError = __commonJS({
   "node_modules/axios/lib/core/enhanceError.js"(exports, module2) {
-    init_shims();
     "use strict";
     module2.exports = function enhanceError(error2, config, code, request, response) {
       error2.config = config;
@@ -4986,7 +7042,6 @@ var require_enhanceError = __commonJS({
 // node_modules/axios/lib/core/createError.js
 var require_createError = __commonJS({
   "node_modules/axios/lib/core/createError.js"(exports, module2) {
-    init_shims();
     "use strict";
     var enhanceError = require_enhanceError();
     module2.exports = function createError(message, config, code, request, response) {
@@ -4999,7 +7054,6 @@ var require_createError = __commonJS({
 // node_modules/axios/lib/core/settle.js
 var require_settle = __commonJS({
   "node_modules/axios/lib/core/settle.js"(exports, module2) {
-    init_shims();
     "use strict";
     var createError = require_createError();
     module2.exports = function settle(resolve2, reject, response) {
@@ -5016,7 +7070,6 @@ var require_settle = __commonJS({
 // node_modules/axios/lib/helpers/cookies.js
 var require_cookies = __commonJS({
   "node_modules/axios/lib/helpers/cookies.js"(exports, module2) {
-    init_shims();
     "use strict";
     var utils = require_utils();
     module2.exports = utils.isStandardBrowserEnv() ? function standardBrowserEnv() {
@@ -5038,7 +7091,7 @@ var require_cookies = __commonJS({
           }
           document.cookie = cookie.join("; ");
         },
-        read: function read(name) {
+        read: function read2(name) {
           var match = document.cookie.match(new RegExp("(^|;\\s*)(" + name + ")=([^;]*)"));
           return match ? decodeURIComponent(match[3]) : null;
         },
@@ -5050,7 +7103,7 @@ var require_cookies = __commonJS({
       return {
         write: function write() {
         },
-        read: function read() {
+        read: function read2() {
           return null;
         },
         remove: function remove() {
@@ -5063,7 +7116,6 @@ var require_cookies = __commonJS({
 // node_modules/axios/lib/helpers/isAbsoluteURL.js
 var require_isAbsoluteURL = __commonJS({
   "node_modules/axios/lib/helpers/isAbsoluteURL.js"(exports, module2) {
-    init_shims();
     "use strict";
     module2.exports = function isAbsoluteURL(url) {
       return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
@@ -5074,7 +7126,6 @@ var require_isAbsoluteURL = __commonJS({
 // node_modules/axios/lib/helpers/combineURLs.js
 var require_combineURLs = __commonJS({
   "node_modules/axios/lib/helpers/combineURLs.js"(exports, module2) {
-    init_shims();
     "use strict";
     module2.exports = function combineURLs(baseURL, relativeURL) {
       return relativeURL ? baseURL.replace(/\/+$/, "") + "/" + relativeURL.replace(/^\/+/, "") : baseURL;
@@ -5085,7 +7136,6 @@ var require_combineURLs = __commonJS({
 // node_modules/axios/lib/core/buildFullPath.js
 var require_buildFullPath = __commonJS({
   "node_modules/axios/lib/core/buildFullPath.js"(exports, module2) {
-    init_shims();
     "use strict";
     var isAbsoluteURL = require_isAbsoluteURL();
     var combineURLs = require_combineURLs();
@@ -5101,7 +7151,6 @@ var require_buildFullPath = __commonJS({
 // node_modules/axios/lib/helpers/parseHeaders.js
 var require_parseHeaders = __commonJS({
   "node_modules/axios/lib/helpers/parseHeaders.js"(exports, module2) {
-    init_shims();
     "use strict";
     var utils = require_utils();
     var ignoreDuplicateOf = [
@@ -5125,24 +7174,24 @@ var require_parseHeaders = __commonJS({
     ];
     module2.exports = function parseHeaders(headers) {
       var parsed = {};
-      var key;
+      var key2;
       var val;
-      var i;
+      var i2;
       if (!headers) {
         return parsed;
       }
       utils.forEach(headers.split("\n"), function parser(line) {
-        i = line.indexOf(":");
-        key = utils.trim(line.substr(0, i)).toLowerCase();
-        val = utils.trim(line.substr(i + 1));
-        if (key) {
-          if (parsed[key] && ignoreDuplicateOf.indexOf(key) >= 0) {
+        i2 = line.indexOf(":");
+        key2 = utils.trim(line.substr(0, i2)).toLowerCase();
+        val = utils.trim(line.substr(i2 + 1));
+        if (key2) {
+          if (parsed[key2] && ignoreDuplicateOf.indexOf(key2) >= 0) {
             return;
           }
-          if (key === "set-cookie") {
-            parsed[key] = (parsed[key] ? parsed[key] : []).concat([val]);
+          if (key2 === "set-cookie") {
+            parsed[key2] = (parsed[key2] ? parsed[key2] : []).concat([val]);
           } else {
-            parsed[key] = parsed[key] ? parsed[key] + ", " + val : val;
+            parsed[key2] = parsed[key2] ? parsed[key2] + ", " + val : val;
           }
         }
       });
@@ -5154,7 +7203,6 @@ var require_parseHeaders = __commonJS({
 // node_modules/axios/lib/helpers/isURLSameOrigin.js
 var require_isURLSameOrigin = __commonJS({
   "node_modules/axios/lib/helpers/isURLSameOrigin.js"(exports, module2) {
-    init_shims();
     "use strict";
     var utils = require_utils();
     module2.exports = utils.isStandardBrowserEnv() ? function standardBrowserEnv() {
@@ -5195,7 +7243,6 @@ var require_isURLSameOrigin = __commonJS({
 // node_modules/axios/lib/cancel/Cancel.js
 var require_Cancel = __commonJS({
   "node_modules/axios/lib/cancel/Cancel.js"(exports, module2) {
-    init_shims();
     "use strict";
     function Cancel(message) {
       this.message = message;
@@ -5211,7 +7258,6 @@ var require_Cancel = __commonJS({
 // node_modules/axios/lib/adapters/xhr.js
 var require_xhr = __commonJS({
   "node_modules/axios/lib/adapters/xhr.js"(exports, module2) {
-    init_shims();
     "use strict";
     var utils = require_utils();
     var settle = require_settle();
@@ -5312,11 +7358,11 @@ var require_xhr = __commonJS({
           }
         }
         if ("setRequestHeader" in request) {
-          utils.forEach(requestHeaders, function setRequestHeader(val, key) {
-            if (typeof requestData === "undefined" && key.toLowerCase() === "content-type") {
-              delete requestHeaders[key];
+          utils.forEach(requestHeaders, function setRequestHeader(val, key2) {
+            if (typeof requestData === "undefined" && key2.toLowerCase() === "content-type") {
+              delete requestHeaders[key2];
             } else {
-              request.setRequestHeader(key, val);
+              request.setRequestHeader(key2, val);
             }
           });
         }
@@ -5358,20 +7404,19 @@ var require_xhr = __commonJS({
 // node_modules/ms/index.js
 var require_ms = __commonJS({
   "node_modules/ms/index.js"(exports, module2) {
-    init_shims();
-    var s2 = 1e3;
-    var m = s2 * 60;
-    var h = m * 60;
-    var d = h * 24;
+    var s3 = 1e3;
+    var m2 = s3 * 60;
+    var h2 = m2 * 60;
+    var d = h2 * 24;
     var w = d * 7;
     var y = d * 365.25;
-    module2.exports = function(val, options2) {
-      options2 = options2 || {};
+    module2.exports = function(val, options) {
+      options = options || {};
       var type = typeof val;
       if (type === "string" && val.length > 0) {
         return parse(val);
       } else if (type === "number" && isFinite(val)) {
-        return options2.long ? fmtLong(val) : fmtShort(val);
+        return options.long ? fmtLong(val) : fmtShort(val);
       }
       throw new Error("val is not a non-empty string or a valid number. val=" + JSON.stringify(val));
     };
@@ -5406,19 +7451,19 @@ var require_ms = __commonJS({
         case "hrs":
         case "hr":
         case "h":
-          return n * h;
+          return n * h2;
         case "minutes":
         case "minute":
         case "mins":
         case "min":
         case "m":
-          return n * m;
+          return n * m2;
         case "seconds":
         case "second":
         case "secs":
         case "sec":
         case "s":
-          return n * s2;
+          return n * s3;
         case "milliseconds":
         case "millisecond":
         case "msecs":
@@ -5434,14 +7479,14 @@ var require_ms = __commonJS({
       if (msAbs >= d) {
         return Math.round(ms / d) + "d";
       }
-      if (msAbs >= h) {
-        return Math.round(ms / h) + "h";
+      if (msAbs >= h2) {
+        return Math.round(ms / h2) + "h";
       }
-      if (msAbs >= m) {
-        return Math.round(ms / m) + "m";
+      if (msAbs >= m2) {
+        return Math.round(ms / m2) + "m";
       }
-      if (msAbs >= s2) {
-        return Math.round(ms / s2) + "s";
+      if (msAbs >= s3) {
+        return Math.round(ms / s3) + "s";
       }
       return ms + "ms";
     }
@@ -5450,14 +7495,14 @@ var require_ms = __commonJS({
       if (msAbs >= d) {
         return plural(ms, msAbs, d, "day");
       }
-      if (msAbs >= h) {
-        return plural(ms, msAbs, h, "hour");
+      if (msAbs >= h2) {
+        return plural(ms, msAbs, h2, "hour");
       }
-      if (msAbs >= m) {
-        return plural(ms, msAbs, m, "minute");
+      if (msAbs >= m2) {
+        return plural(ms, msAbs, m2, "minute");
       }
-      if (msAbs >= s2) {
-        return plural(ms, msAbs, s2, "second");
+      if (msAbs >= s3) {
+        return plural(ms, msAbs, s3, "second");
       }
       return ms + " ms";
     }
@@ -5471,7 +7516,6 @@ var require_ms = __commonJS({
 // node_modules/debug/src/common.js
 var require_common = __commonJS({
   "node_modules/debug/src/common.js"(exports, module2) {
-    init_shims();
     function setup(env) {
       createDebug.debug = createDebug;
       createDebug.default = createDebug;
@@ -5481,16 +7525,16 @@ var require_common = __commonJS({
       createDebug.enabled = enabled;
       createDebug.humanize = require_ms();
       createDebug.destroy = destroy;
-      Object.keys(env).forEach((key) => {
-        createDebug[key] = env[key];
+      Object.keys(env).forEach((key2) => {
+        createDebug[key2] = env[key2];
       });
       createDebug.names = [];
       createDebug.skips = [];
       createDebug.formatters = {};
       function selectColor(namespace) {
         let hash2 = 0;
-        for (let i = 0; i < namespace.length; i++) {
-          hash2 = (hash2 << 5) - hash2 + namespace.charCodeAt(i);
+        for (let i2 = 0; i2 < namespace.length; i2++) {
+          hash2 = (hash2 << 5) - hash2 + namespace.charCodeAt(i2);
           hash2 |= 0;
         }
         return createDebug.colors[Math.abs(hash2) % createDebug.colors.length];
@@ -5516,18 +7560,18 @@ var require_common = __commonJS({
           if (typeof args[0] !== "string") {
             args.unshift("%O");
           }
-          let index2 = 0;
+          let index = 0;
           args[0] = args[0].replace(/%([a-zA-Z%])/g, (match, format2) => {
             if (match === "%%") {
               return "%";
             }
-            index2++;
+            index++;
             const formatter = createDebug.formatters[format2];
             if (typeof formatter === "function") {
-              const val = args[index2];
+              const val = args[index];
               match = formatter.call(self2, val);
-              args.splice(index2, 1);
-              index2--;
+              args.splice(index, 1);
+              index--;
             }
             return match;
           });
@@ -5572,14 +7616,14 @@ var require_common = __commonJS({
         createDebug.namespaces = namespaces;
         createDebug.names = [];
         createDebug.skips = [];
-        let i;
+        let i2;
         const split = (typeof namespaces === "string" ? namespaces : "").split(/[\s,]+/);
         const len = split.length;
-        for (i = 0; i < len; i++) {
-          if (!split[i]) {
+        for (i2 = 0; i2 < len; i2++) {
+          if (!split[i2]) {
             continue;
           }
-          namespaces = split[i].replace(/\*/g, ".*?");
+          namespaces = split[i2].replace(/\*/g, ".*?");
           if (namespaces[0] === "-") {
             createDebug.skips.push(new RegExp("^" + namespaces.substr(1) + "$"));
           } else {
@@ -5599,15 +7643,15 @@ var require_common = __commonJS({
         if (name[name.length - 1] === "*") {
           return true;
         }
-        let i;
+        let i2;
         let len;
-        for (i = 0, len = createDebug.skips.length; i < len; i++) {
-          if (createDebug.skips[i].test(name)) {
+        for (i2 = 0, len = createDebug.skips.length; i2 < len; i2++) {
+          if (createDebug.skips[i2].test(name)) {
             return false;
           }
         }
-        for (i = 0, len = createDebug.names.length; i < len; i++) {
-          if (createDebug.names[i].test(name)) {
+        for (i2 = 0, len = createDebug.names.length; i2 < len; i2++) {
+          if (createDebug.names[i2].test(name)) {
             return true;
           }
         }
@@ -5635,7 +7679,6 @@ var require_common = __commonJS({
 // node_modules/debug/src/browser.js
 var require_browser = __commonJS({
   "node_modules/debug/src/browser.js"(exports, module2) {
-    init_shims();
     exports.formatArgs = formatArgs;
     exports.save = save;
     exports.load = load2;
@@ -5744,15 +7787,15 @@ var require_browser = __commonJS({
       }
       const c = "color: " + this.color;
       args.splice(1, 0, c, "color: inherit");
-      let index2 = 0;
+      let index = 0;
       let lastC = 0;
       args[0].replace(/%[a-zA-Z%]/g, (match) => {
         if (match === "%%") {
           return;
         }
-        index2++;
+        index++;
         if (match === "%c") {
-          lastC = index2;
+          lastC = index;
         }
       });
       args.splice(lastC, 0, c);
@@ -5770,15 +7813,15 @@ var require_browser = __commonJS({
       }
     }
     function load2() {
-      let r;
+      let r2;
       try {
-        r = exports.storage.getItem("debug");
+        r2 = exports.storage.getItem("debug");
       } catch (error2) {
       }
-      if (!r && typeof process !== "undefined" && "env" in process) {
-        r = process.env.DEBUG;
+      if (!r2 && typeof process !== "undefined" && "env" in process) {
+        r2 = process.env.DEBUG;
       }
-      return r;
+      return r2;
     }
     function localstorage() {
       try {
@@ -5801,7 +7844,6 @@ var require_browser = __commonJS({
 // node_modules/has-flag/index.js
 var require_has_flag = __commonJS({
   "node_modules/has-flag/index.js"(exports, module2) {
-    init_shims();
     "use strict";
     module2.exports = (flag, argv) => {
       argv = argv || process.argv;
@@ -5816,7 +7858,6 @@ var require_has_flag = __commonJS({
 // node_modules/supports-color/index.js
 var require_supports_color = __commonJS({
   "node_modules/supports-color/index.js"(exports, module2) {
-    init_shims();
     "use strict";
     var os = require("os");
     var hasFlag = require_has_flag();
@@ -5912,7 +7953,6 @@ var require_supports_color = __commonJS({
 // node_modules/debug/src/node.js
 var require_node = __commonJS({
   "node_modules/debug/src/node.js"(exports, module2) {
-    init_shims();
     var tty = require("tty");
     var util = require("util");
     exports.init = init2;
@@ -6008,13 +8048,13 @@ var require_node = __commonJS({
       }
     } catch (error2) {
     }
-    exports.inspectOpts = Object.keys(process.env).filter((key) => {
-      return /^debug_/i.test(key);
-    }).reduce((obj, key) => {
-      const prop = key.substring(6).toLowerCase().replace(/_([a-z])/g, (_, k) => {
+    exports.inspectOpts = Object.keys(process.env).filter((key2) => {
+      return /^debug_/i.test(key2);
+    }).reduce((obj, key2) => {
+      const prop = key2.substring(6).toLowerCase().replace(/_([a-z])/g, (_, k) => {
         return k.toUpperCase();
       });
-      let val = process.env[key];
+      let val = process.env[key2];
       if (/^(yes|on|true|enabled)$/i.test(val)) {
         val = true;
       } else if (/^(no|off|false|disabled)$/i.test(val)) {
@@ -6034,10 +8074,10 @@ var require_node = __commonJS({
       const { namespace: name, useColors: useColors2 } = this;
       if (useColors2) {
         const c = this.color;
-        const colorCode = "[3" + (c < 8 ? c : "8;5;" + c);
-        const prefix = `  ${colorCode};1m${name} [0m`;
+        const colorCode = "\x1B[3" + (c < 8 ? c : "8;5;" + c);
+        const prefix = `  ${colorCode};1m${name} \x1B[0m`;
         args[0] = prefix + args[0].split("\n").join("\n" + prefix);
-        args.push(colorCode + "m+" + module2.exports.humanize(this.diff) + "[0m");
+        args.push(colorCode + "m+" + module2.exports.humanize(this.diff) + "\x1B[0m");
       } else {
         args[0] = getDate() + name + " " + args[0];
       }
@@ -6064,8 +8104,8 @@ var require_node = __commonJS({
     function init2(debug) {
       debug.inspectOpts = {};
       const keys = Object.keys(exports.inspectOpts);
-      for (let i = 0; i < keys.length; i++) {
-        debug.inspectOpts[keys[i]] = exports.inspectOpts[keys[i]];
+      for (let i2 = 0; i2 < keys.length; i2++) {
+        debug.inspectOpts[keys[i2]] = exports.inspectOpts[keys[i2]];
       }
     }
     module2.exports = require_common()(exports);
@@ -6084,7 +8124,6 @@ var require_node = __commonJS({
 // node_modules/debug/src/index.js
 var require_src = __commonJS({
   "node_modules/debug/src/index.js"(exports, module2) {
-    init_shims();
     if (typeof process === "undefined" || process.type === "renderer" || process.browser === true || process.__nwjs) {
       module2.exports = require_browser();
     } else {
@@ -6096,7 +8135,6 @@ var require_src = __commonJS({
 // node_modules/follow-redirects/debug.js
 var require_debug = __commonJS({
   "node_modules/follow-redirects/debug.js"(exports, module2) {
-    init_shims();
     var debug;
     module2.exports = function() {
       if (!debug) {
@@ -6117,7 +8155,6 @@ var require_debug = __commonJS({
 // node_modules/follow-redirects/index.js
 var require_follow_redirects = __commonJS({
   "node_modules/follow-redirects/index.js"(exports, module2) {
-    init_shims();
     var url = require("url");
     var URL2 = url.URL;
     var http2 = require("http");
@@ -6126,7 +8163,7 @@ var require_follow_redirects = __commonJS({
     var assert = require("assert");
     var debug = require_debug();
     var events = ["abort", "aborted", "connect", "error", "socket", "timeout"];
-    var eventHandlers = Object.create(null);
+    var eventHandlers = /* @__PURE__ */ Object.create(null);
     events.forEach(function(event) {
       eventHandlers[event] = function(arg1, arg2, arg3) {
         this._redirectable.emit(event, arg1, arg2, arg3);
@@ -6136,10 +8173,10 @@ var require_follow_redirects = __commonJS({
     var TooManyRedirectsError = createErrorType("ERR_FR_TOO_MANY_REDIRECTS", "Maximum number of redirects exceeded");
     var MaxBodyLengthExceededError = createErrorType("ERR_FR_MAX_BODY_LENGTH_EXCEEDED", "Request body larger than maxBodyLength limit");
     var WriteAfterEndError = createErrorType("ERR_STREAM_WRITE_AFTER_END", "write after end");
-    function RedirectableRequest(options2, responseCallback) {
+    function RedirectableRequest(options, responseCallback) {
       Writable.call(this);
-      this._sanitizeOptions(options2);
-      this._options = options2;
+      this._sanitizeOptions(options);
+      this._options = options;
       this._ended = false;
       this._ending = false;
       this._redirectCount = 0;
@@ -6274,23 +8311,23 @@ var require_follow_redirects = __commonJS({
         }
       });
     });
-    RedirectableRequest.prototype._sanitizeOptions = function(options2) {
-      if (!options2.headers) {
-        options2.headers = {};
+    RedirectableRequest.prototype._sanitizeOptions = function(options) {
+      if (!options.headers) {
+        options.headers = {};
       }
-      if (options2.host) {
-        if (!options2.hostname) {
-          options2.hostname = options2.host;
+      if (options.host) {
+        if (!options.hostname) {
+          options.hostname = options.host;
         }
-        delete options2.host;
+        delete options.host;
       }
-      if (!options2.pathname && options2.path) {
-        var searchPos = options2.path.indexOf("?");
+      if (!options.pathname && options.path) {
+        var searchPos = options.path.indexOf("?");
         if (searchPos < 0) {
-          options2.pathname = options2.path;
+          options.pathname = options.path;
         } else {
-          options2.pathname = options2.path.substring(0, searchPos);
-          options2.search = options2.path.substring(searchPos);
+          options.pathname = options.path.substring(0, searchPos);
+          options.search = options.path.substring(searchPos);
         }
       }
     };
@@ -6302,25 +8339,25 @@ var require_follow_redirects = __commonJS({
         return;
       }
       if (this._options.agents) {
-        var scheme = protocol.substr(0, protocol.length - 1);
-        this._options.agent = this._options.agents[scheme];
+        var scheme2 = protocol.substr(0, protocol.length - 1);
+        this._options.agent = this._options.agents[scheme2];
       }
       var request = this._currentRequest = nativeProtocol.request(this._options, this._onNativeResponse);
       this._currentUrl = url.format(this._options);
       request._redirectable = this;
-      for (var e = 0; e < events.length; e++) {
-        request.on(events[e], eventHandlers[events[e]]);
+      for (var e2 = 0; e2 < events.length; e2++) {
+        request.on(events[e2], eventHandlers[events[e2]]);
       }
       if (this._isRedirect) {
-        var i = 0;
+        var i2 = 0;
         var self2 = this;
         var buffers = this._requestBodyBuffers;
         (function writeNext(error2) {
           if (request === self2._currentRequest) {
             if (error2) {
               self2.emit("error", error2);
-            } else if (i < buffers.length) {
-              var buffer = buffers[i++];
+            } else if (i2 < buffers.length) {
+              var buffer = buffers[i2++];
               if (!request.finished) {
                 request.write(buffer.data, buffer.encoding, writeNext);
               }
@@ -6392,11 +8429,11 @@ var require_follow_redirects = __commonJS({
         maxBodyLength: 10 * 1024 * 1024
       };
       var nativeProtocols = {};
-      Object.keys(protocols).forEach(function(scheme) {
-        var protocol = scheme + ":";
-        var nativeProtocol = nativeProtocols[protocol] = protocols[scheme];
-        var wrappedProtocol = exports2[scheme] = Object.create(nativeProtocol);
-        function request(input, options2, callback) {
+      Object.keys(protocols).forEach(function(scheme2) {
+        var protocol = scheme2 + ":";
+        var nativeProtocol = nativeProtocols[protocol] = protocols[scheme2];
+        var wrappedProtocol = exports2[scheme2] = Object.create(nativeProtocol);
+        function request(input, options, callback) {
           if (typeof input === "string") {
             var urlStr = input;
             try {
@@ -6407,25 +8444,25 @@ var require_follow_redirects = __commonJS({
           } else if (URL2 && input instanceof URL2) {
             input = urlToOptions(input);
           } else {
-            callback = options2;
-            options2 = input;
+            callback = options;
+            options = input;
             input = { protocol };
           }
-          if (typeof options2 === "function") {
-            callback = options2;
-            options2 = null;
+          if (typeof options === "function") {
+            callback = options;
+            options = null;
           }
-          options2 = Object.assign({
+          options = Object.assign({
             maxRedirects: exports2.maxRedirects,
             maxBodyLength: exports2.maxBodyLength
-          }, input, options2);
-          options2.nativeProtocols = nativeProtocols;
-          assert.equal(options2.protocol, protocol, "protocol mismatch");
-          debug("options", options2);
-          return new RedirectableRequest(options2, callback);
+          }, input, options);
+          options.nativeProtocols = nativeProtocols;
+          assert.equal(options.protocol, protocol, "protocol mismatch");
+          debug("options", options);
+          return new RedirectableRequest(options, callback);
         }
-        function get(input, options2, callback) {
-          var wrappedRequest = wrappedProtocol.request(input, options2, callback);
+        function get(input, options, callback) {
+          var wrappedRequest = wrappedProtocol.request(input, options, callback);
           wrappedRequest.end();
           return wrappedRequest;
         }
@@ -6436,10 +8473,10 @@ var require_follow_redirects = __commonJS({
       });
       return exports2;
     }
-    function noop2() {
+    function noop4() {
     }
     function urlToOptions(urlObject) {
-      var options2 = {
+      var options = {
         protocol: urlObject.protocol,
         hostname: urlObject.hostname.startsWith("[") ? urlObject.hostname.slice(1, -1) : urlObject.hostname,
         hash: urlObject.hash,
@@ -6449,9 +8486,9 @@ var require_follow_redirects = __commonJS({
         href: urlObject.href
       };
       if (urlObject.port !== "") {
-        options2.port = Number(urlObject.port);
+        options.port = Number(urlObject.port);
       }
-      return options2;
+      return options;
     }
     function removeMatchingHeaders(regex, headers) {
       var lastValue;
@@ -6475,10 +8512,10 @@ var require_follow_redirects = __commonJS({
       return CustomError;
     }
     function abortRequest(request) {
-      for (var e = 0; e < events.length; e++) {
-        request.removeListener(events[e], eventHandlers[events[e]]);
+      for (var e2 = 0; e2 < events.length; e2++) {
+        request.removeListener(events[e2], eventHandlers[events[e2]]);
       }
-      request.on("error", noop2);
+      request.on("error", noop4);
       request.abort();
     }
     module2.exports = wrap({ http: http2, https: https2 });
@@ -6489,7 +8526,6 @@ var require_follow_redirects = __commonJS({
 // node_modules/axios/lib/env/data.js
 var require_data = __commonJS({
   "node_modules/axios/lib/env/data.js"(exports, module2) {
-    init_shims();
     module2.exports = {
       "version": "0.23.0"
     };
@@ -6499,7 +8535,6 @@ var require_data = __commonJS({
 // node_modules/axios/lib/adapters/http.js
 var require_http = __commonJS({
   "node_modules/axios/lib/adapters/http.js"(exports, module2) {
-    init_shims();
     "use strict";
     var utils = require_utils();
     var settle = require_settle();
@@ -6517,16 +8552,16 @@ var require_http = __commonJS({
     var defaults2 = require_defaults();
     var Cancel = require_Cancel();
     var isHttps = /https:?/;
-    function setProxy(options2, proxy, location) {
-      options2.hostname = proxy.host;
-      options2.host = proxy.host;
-      options2.port = proxy.port;
-      options2.path = location;
+    function setProxy(options, proxy, location) {
+      options.hostname = proxy.host;
+      options.host = proxy.host;
+      options.port = proxy.port;
+      options.path = location;
       if (proxy.auth) {
-        var base64 = Buffer.from(proxy.auth.username + ":" + proxy.auth.password, "utf8").toString("base64");
-        options2.headers["Proxy-Authorization"] = "Basic " + base64;
+        var base642 = Buffer.from(proxy.auth.username + ":" + proxy.auth.password, "utf8").toString("base64");
+        options.headers["Proxy-Authorization"] = "Basic " + base642;
       }
-      options2.beforeRedirect = function beforeRedirect(redirection) {
+      options.beforeRedirect = function beforeRedirect(redirection) {
         redirection.headers.host = redirection.host;
         setProxy(redirection, proxy, redirection.href);
       };
@@ -6596,7 +8631,7 @@ var require_http = __commonJS({
         }
         var isHttpsRequest = isHttps.test(protocol);
         var agent = isHttpsRequest ? config.httpsAgent : config.httpAgent;
-        var options2 = {
+        var options = {
           path: buildURL(parsed.path, config.params, config.paramsSerializer).replace(/^\?/, ""),
           method: config.method.toUpperCase(),
           headers,
@@ -6605,10 +8640,10 @@ var require_http = __commonJS({
           auth
         };
         if (config.socketPath) {
-          options2.socketPath = config.socketPath;
+          options.socketPath = config.socketPath;
         } else {
-          options2.hostname = parsed.hostname;
-          options2.port = parsed.port;
+          options.hostname = parsed.hostname;
+          options.port = parsed.port;
         }
         var proxy = config.proxy;
         if (!proxy && proxy !== false) {
@@ -6619,8 +8654,8 @@ var require_http = __commonJS({
             var noProxyEnv = process.env.no_proxy || process.env.NO_PROXY;
             var shouldProxy = true;
             if (noProxyEnv) {
-              var noProxy = noProxyEnv.split(",").map(function trim(s2) {
-                return s2.trim();
+              var noProxy = noProxyEnv.split(",").map(function trim(s3) {
+                return s3.trim();
               });
               shouldProxy = !noProxy.some(function proxyMatch(proxyElement) {
                 if (!proxyElement) {
@@ -6652,8 +8687,8 @@ var require_http = __commonJS({
           }
         }
         if (proxy) {
-          options2.headers.host = parsed.hostname + (parsed.port ? ":" + parsed.port : "");
-          setProxy(options2, proxy, protocol + "//" + parsed.hostname + (parsed.port ? ":" + parsed.port : "") + options2.path);
+          options.headers.host = parsed.hostname + (parsed.port ? ":" + parsed.port : "");
+          setProxy(options, proxy, protocol + "//" + parsed.hostname + (parsed.port ? ":" + parsed.port : "") + options.path);
         }
         var transport;
         var isHttpsProxy = isHttpsRequest && (proxy ? isHttps.test(proxy.protocol) : true);
@@ -6663,17 +8698,17 @@ var require_http = __commonJS({
           transport = isHttpsProxy ? https2 : http2;
         } else {
           if (config.maxRedirects) {
-            options2.maxRedirects = config.maxRedirects;
+            options.maxRedirects = config.maxRedirects;
           }
           transport = isHttpsProxy ? httpsFollow : httpFollow;
         }
         if (config.maxBodyLength > -1) {
-          options2.maxBodyLength = config.maxBodyLength;
+          options.maxBodyLength = config.maxBodyLength;
         }
         if (config.insecureHTTPParser) {
-          options2.insecureHTTPParser = config.insecureHTTPParser;
+          options.insecureHTTPParser = config.insecureHTTPParser;
         }
-        var req = transport.request(options2, function handleResponse(res) {
+        var req = transport.request(options, function handleResponse(res) {
           if (req.aborted)
             return;
           var stream = res;
@@ -6771,7 +8806,6 @@ var require_http = __commonJS({
 // node_modules/axios/lib/defaults.js
 var require_defaults = __commonJS({
   "node_modules/axios/lib/defaults.js"(exports, module2) {
-    init_shims();
     "use strict";
     var utils = require_utils();
     var normalizeHeaderName = require_normalizeHeaderName();
@@ -6793,18 +8827,18 @@ var require_defaults = __commonJS({
       }
       return adapter;
     }
-    function stringifySafely(rawValue, parser, encoder) {
+    function stringifySafely(rawValue, parser, encoder2) {
       if (utils.isString(rawValue)) {
         try {
           (parser || JSON.parse)(rawValue);
           return utils.trim(rawValue);
-        } catch (e) {
-          if (e.name !== "SyntaxError") {
-            throw e;
+        } catch (e2) {
+          if (e2.name !== "SyntaxError") {
+            throw e2;
           }
         }
       }
-      return (encoder || JSON.stringify)(rawValue);
+      return (encoder2 || JSON.stringify)(rawValue);
     }
     var defaults2 = {
       transitional: {
@@ -6840,12 +8874,12 @@ var require_defaults = __commonJS({
         if (strictJSONParsing || forcedJSONParsing && utils.isString(data) && data.length) {
           try {
             return JSON.parse(data);
-          } catch (e) {
+          } catch (e2) {
             if (strictJSONParsing) {
-              if (e.name === "SyntaxError") {
-                throw enhanceError(e, this, "E_JSON_PARSE");
+              if (e2.name === "SyntaxError") {
+                throw enhanceError(e2, this, "E_JSON_PARSE");
               }
-              throw e;
+              throw e2;
             }
           }
         }
@@ -6878,7 +8912,6 @@ var require_defaults = __commonJS({
 // node_modules/axios/lib/core/transformData.js
 var require_transformData = __commonJS({
   "node_modules/axios/lib/core/transformData.js"(exports, module2) {
-    init_shims();
     "use strict";
     var utils = require_utils();
     var defaults2 = require_defaults();
@@ -6895,7 +8928,6 @@ var require_transformData = __commonJS({
 // node_modules/axios/lib/cancel/isCancel.js
 var require_isCancel = __commonJS({
   "node_modules/axios/lib/cancel/isCancel.js"(exports, module2) {
-    init_shims();
     "use strict";
     module2.exports = function isCancel(value) {
       return !!(value && value.__CANCEL__);
@@ -6906,7 +8938,6 @@ var require_isCancel = __commonJS({
 // node_modules/axios/lib/core/dispatchRequest.js
 var require_dispatchRequest = __commonJS({
   "node_modules/axios/lib/core/dispatchRequest.js"(exports, module2) {
-    init_shims();
     "use strict";
     var utils = require_utils();
     var transformData = require_transformData();
@@ -6950,7 +8981,6 @@ var require_dispatchRequest = __commonJS({
 // node_modules/axios/lib/core/mergeConfig.js
 var require_mergeConfig = __commonJS({
   "node_modules/axios/lib/core/mergeConfig.js"(exports, module2) {
-    init_shims();
     "use strict";
     var utils = require_utils();
     module2.exports = function mergeConfig(config1, config2) {
@@ -7033,13 +9063,12 @@ var require_mergeConfig = __commonJS({
 // node_modules/axios/lib/helpers/validator.js
 var require_validator = __commonJS({
   "node_modules/axios/lib/helpers/validator.js"(exports, module2) {
-    init_shims();
     "use strict";
     var VERSION = require_data().version;
     var validators = {};
-    ["object", "boolean", "number", "function", "string", "symbol"].forEach(function(type, i) {
+    ["object", "boolean", "number", "function", "string", "symbol"].forEach(function(type, i2) {
       validators[type] = function validator(thing) {
-        return typeof thing === type || "a" + (i < 1 ? "n " : " ") + type;
+        return typeof thing === type || "a" + (i2 < 1 ? "n " : " ") + type;
       };
     });
     var deprecatedWarnings = {};
@@ -7058,18 +9087,18 @@ var require_validator = __commonJS({
         return validator ? validator(value, opt, opts) : true;
       };
     };
-    function assertOptions(options2, schema, allowUnknown) {
-      if (typeof options2 !== "object") {
+    function assertOptions(options, schema, allowUnknown) {
+      if (typeof options !== "object") {
         throw new TypeError("options must be an object");
       }
-      var keys = Object.keys(options2);
-      var i = keys.length;
-      while (i-- > 0) {
-        var opt = keys[i];
+      var keys = Object.keys(options);
+      var i2 = keys.length;
+      while (i2-- > 0) {
+        var opt = keys[i2];
         var validator = schema[opt];
         if (validator) {
-          var value = options2[opt];
-          var result = value === void 0 || validator(value, opt, options2);
+          var value = options[opt];
+          var result = value === void 0 || validator(value, opt, options);
           if (result !== true) {
             throw new TypeError("option " + opt + " must be " + result);
           }
@@ -7090,7 +9119,6 @@ var require_validator = __commonJS({
 // node_modules/axios/lib/core/Axios.js
 var require_Axios = __commonJS({
   "node_modules/axios/lib/core/Axios.js"(exports, module2) {
-    init_shims();
     "use strict";
     var utils = require_utils();
     var buildURL = require_buildURL();
@@ -7203,7 +9231,6 @@ var require_Axios = __commonJS({
 // node_modules/axios/lib/cancel/CancelToken.js
 var require_CancelToken = __commonJS({
   "node_modules/axios/lib/cancel/CancelToken.js"(exports, module2) {
-    init_shims();
     "use strict";
     var Cancel = require_Cancel();
     function CancelToken(executor) {
@@ -7218,10 +9245,10 @@ var require_CancelToken = __commonJS({
       this.promise.then(function(cancel) {
         if (!token._listeners)
           return;
-        var i;
+        var i2;
         var l = token._listeners.length;
-        for (i = 0; i < l; i++) {
-          token._listeners[i](cancel);
+        for (i2 = 0; i2 < l; i2++) {
+          token._listeners[i2](cancel);
         }
         token._listeners = null;
       });
@@ -7264,9 +9291,9 @@ var require_CancelToken = __commonJS({
       if (!this._listeners) {
         return;
       }
-      var index2 = this._listeners.indexOf(listener);
-      if (index2 !== -1) {
-        this._listeners.splice(index2, 1);
+      var index = this._listeners.indexOf(listener);
+      if (index !== -1) {
+        this._listeners.splice(index, 1);
       }
     };
     CancelToken.source = function source() {
@@ -7286,7 +9313,6 @@ var require_CancelToken = __commonJS({
 // node_modules/axios/lib/helpers/spread.js
 var require_spread = __commonJS({
   "node_modules/axios/lib/helpers/spread.js"(exports, module2) {
-    init_shims();
     "use strict";
     module2.exports = function spread(callback) {
       return function wrap(arr) {
@@ -7299,7 +9325,6 @@ var require_spread = __commonJS({
 // node_modules/axios/lib/helpers/isAxiosError.js
 var require_isAxiosError = __commonJS({
   "node_modules/axios/lib/helpers/isAxiosError.js"(exports, module2) {
-    init_shims();
     "use strict";
     module2.exports = function isAxiosError(payload) {
       return typeof payload === "object" && payload.isAxiosError === true;
@@ -7310,7 +9335,6 @@ var require_isAxiosError = __commonJS({
 // node_modules/axios/lib/axios.js
 var require_axios = __commonJS({
   "node_modules/axios/lib/axios.js"(exports, module2) {
-    init_shims();
     "use strict";
     var utils = require_utils();
     var bind = require_bind();
@@ -7346,28 +9370,1391 @@ var require_axios = __commonJS({
 // node_modules/axios/index.js
 var require_axios2 = __commonJS({
   "node_modules/axios/index.js"(exports, module2) {
-    init_shims();
     module2.exports = require_axios();
   }
 });
 
-// .svelte-kit/vercel/entry.js
-__export(exports, {
+// .svelte-kit/output/server/chunks/api-86cf5a07.js
+function switchBaseURL() {
+  return "https://n2freevas-api.herokuapp.com/api";
+}
+var import_axios;
+var init_api_86cf5a07 = __esm({
+  ".svelte-kit/output/server/chunks/api-86cf5a07.js"() {
+    import_axios = __toESM(require_axios2(), 1);
+    import_axios.default.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
+    import_axios.default.create({
+      baseURL: switchBaseURL(),
+      headers: {
+        "authorization": "n2freevas-api-token-Nx2gFhrRaEwEadVxxAadawS",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+      }
+    });
+    import_axios.default.create({
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+      }
+    });
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/blog/list.svelte.js
+var list_svelte_exports = {};
+__export(list_svelte_exports, {
+  default: () => List
+});
+var import_axios2, notion_pages, css$15, List_item, css16, List;
+var init_list_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/blog/list.svelte.js"() {
+    init_index_2e97bc70();
+    init_index_96622166();
+    init_api_86cf5a07();
+    init_MediaQuery_021992e5();
+    import_axios2 = __toESM(require_axios2(), 1);
+    notion_pages = writable2([]);
+    css$15 = {
+      code: ".items.svelte-g7z64q.svelte-g7z64q.svelte-g7z64q{margin:20px 0px;border:solid 1px black;display:flex;flex-direction:row;justify-content:space-between;height:175px}.items.svelte-g7z64q .info_container.svelte-g7z64q.svelte-g7z64q{padding:20px 40px;width:50%;display:flex;flex-direction:column;justify-content:space-between}.items.svelte-g7z64q .info_container.svelte-g7z64q h3.svelte-g7z64q{font-size:25px;color:black}.items.svelte-g7z64q .thumbnail_container.svelte-g7z64q.svelte-g7z64q{overflow:hidden;width:50%;max-width:432px}.items_phone.svelte-g7z64q.svelte-g7z64q.svelte-g7z64q{margin:20px 0px;border:solid 1px black;display:flex;flex-direction:column;justify-content:space-between}.items_phone.svelte-g7z64q .info_container.svelte-g7z64q.svelte-g7z64q{padding:15px 30px}.items_phone.svelte-g7z64q .info_container.svelte-g7z64q h3.svelte-g7z64q{font-size:20px;color:black;margin:10px 0}.items_phone.svelte-g7z64q .thumbnail_container.svelte-g7z64q.svelte-g7z64q{overflow:hidden;width:100%;height:200px}.tag_container.svelte-g7z64q.svelte-g7z64q.svelte-g7z64q{display:flex;flex-direction:row;flex-wrap:wrap}.tag_container.svelte-g7z64q .tag_box.svelte-g7z64q.svelte-g7z64q{margin:5px;padding:5px 10px;border-radius:2px;background:rgb(133, 133, 133);font-size:13px}.tag_container.svelte-g7z64q .tag_box.default.svelte-g7z64q.svelte-g7z64q{background:black;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.gray.svelte-g7z64q.svelte-g7z64q{background:#525252;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.brown.svelte-g7z64q.svelte-g7z64q{background:#613c1a;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.orange.svelte-g7z64q.svelte-g7z64q{background:#b95a00;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.yellow.svelte-g7z64q.svelte-g7z64q{background:#e4a700;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.green.svelte-g7z64q.svelte-g7z64q{background:#135e00;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.blue.svelte-g7z64q.svelte-g7z64q{background:#000a9b;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.purple.svelte-g7z64q.svelte-g7z64q{background:#3d008d;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.pink.svelte-g7z64q.svelte-g7z64q{background:#a80076;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.red.svelte-g7z64q.svelte-g7z64q{background:#880000;border:solid 1px #880000}",
+      map: null
+    };
+    List_item = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { id } = $$props;
+      let { tags } = $$props;
+      let { title } = $$props;
+      let { thumbnail } = $$props;
+      if ($$props.id === void 0 && $$bindings.id && id !== void 0)
+        $$bindings.id(id);
+      if ($$props.tags === void 0 && $$bindings.tags && tags !== void 0)
+        $$bindings.tags(tags);
+      if ($$props.title === void 0 && $$bindings.title && title !== void 0)
+        $$bindings.title(title);
+      if ($$props.thumbnail === void 0 && $$bindings.thumbnail && thumbnail !== void 0)
+        $$bindings.thumbnail(thumbnail);
+      $$result.css.add(css$15);
+      return `${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
+        default: ({ matches }) => {
+          return `${matches ? `<div class="${"items_phone svelte-g7z64q"}"><div class="${"info_container svelte-g7z64q"}"><a href="${"/blog/page?page_id=" + escape(id)}"><h3 class="${"svelte-g7z64q"}"><!-- HTML_TAG_START -->${title}<!-- HTML_TAG_END --></h3></a>
+        <div class="${"tag_container svelte-g7z64q"}">${each(tags, (tag) => {
+            return `<div class="${"tag_box " + escape(tag.tag_color) + " svelte-g7z64q"}">${escape(tag.tag_name)}
+            </div>`;
+          })}</div></div>
+    <div class="${"thumbnail_container svelte-g7z64q"}"><a href="${"/blog/page?page_id=" + escape(id)}"><img${add_attribute("src", thumbnail, 0)} alt="${escape(title) + "\u306E\u753B\u50CF"}"></a></div></div>` : ``}`;
+        }
+      })}
+
+${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
+        default: ({ matches }) => {
+          return `${matches ? `<div class="${"items svelte-g7z64q"}"><div class="${"info_container svelte-g7z64q"}"><a href="${"/blog/page?page_id=" + escape(id)}"><h3 class="${"svelte-g7z64q"}"><!-- HTML_TAG_START -->${title}<!-- HTML_TAG_END --></h3></a>
+        <div class="${"tag_container svelte-g7z64q"}">${each(tags, (tag) => {
+            return `<div class="${"tag_box " + escape(tag.tag_color) + " svelte-g7z64q"}">${escape(tag.tag_name)}
+            </div>`;
+          })}</div></div>
+    <div class="${"thumbnail_container svelte-g7z64q"}"><a href="${"/blog/page?page_id=" + escape(id)}"><img${add_attribute("src", thumbnail, 0)} alt="${escape(title) + "\u306E\u753B\u50CF"}"></a></div></div>` : ``}`;
+        }
+      })}`;
+    });
+    css16 = {
+      code: "h2.svelte-13h619c{color:black}.background.svelte-13h619c{padding:30px 20px;width:100%;height:100%;background:white}",
+      map: null
+    };
+    List = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $notion_pages, $$unsubscribe_notion_pages;
+      $$unsubscribe_notion_pages = subscribe(notion_pages, (value) => $notion_pages = value);
+      $$result.css.add(css16);
+      $$unsubscribe_notion_pages();
+      return `<div class="${"background svelte-13h619c"}"><section class="${"title"}"><h2 class="${"svelte-13h619c"}">BLOG LIST</h2></section>
+<section class="${"blog_list"}">${each($notion_pages, (page) => {
+        return `${validate_component(List_item, "ListItem").$$render($$result, {
+          id: page.page_id,
+          title: page.page_title,
+          tags: page.tags,
+          thumbnail: page.thumbnail
+        }, {}, {})}`;
+      })}</section>
+
+</div>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/13.js
+var __exports8 = {};
+__export(__exports8, {
+  css: () => css17,
+  entry: () => entry8,
+  js: () => js8,
+  module: () => list_svelte_exports
+});
+var entry8, js8, css17;
+var init__8 = __esm({
+  ".svelte-kit/output/server/nodes/13.js"() {
+    init_list_svelte();
+    entry8 = "pages/blog/list.svelte-06554d05.js";
+    js8 = ["pages/blog/list.svelte-06554d05.js", "chunks/index-4741d8af.js", "chunks/index-1f66f3ef.js", "chunks/api-e2b0109c.js", "chunks/MediaQuery-e124c5d0.js"];
+    css17 = ["assets/pages/blog/list.svelte-fa9025ee.css"];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/blog/page.svelte.js
+var page_svelte_exports = {};
+__export(page_svelte_exports, {
+  default: () => Page
+});
+var Page;
+var init_page_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/blog/page.svelte.js"() {
+    init_index_2e97bc70();
+    Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let data;
+      console.log(data);
+      return `<h1>${escape(data)}</h1>
+<p>list</p>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/14.js
+var __exports9 = {};
+__export(__exports9, {
+  css: () => css18,
+  entry: () => entry9,
+  js: () => js9,
+  module: () => page_svelte_exports
+});
+var entry9, js9, css18;
+var init__9 = __esm({
+  ".svelte-kit/output/server/nodes/14.js"() {
+    init_page_svelte();
+    entry9 = "pages/blog/page.svelte-3a616a3b.js";
+    js9 = ["pages/blog/page.svelte-3a616a3b.js", "chunks/index-4741d8af.js"];
+    css18 = [];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/app/DM-Downloader/collect.svelte.js
+var collect_svelte_exports = {};
+__export(collect_svelte_exports, {
+  default: () => Collect
+});
+var import_axios3, Collect;
+var init_collect_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/app/DM-Downloader/collect.svelte.js"() {
+    init_index_2e97bc70();
+    init_api_86cf5a07();
+    import_axios3 = __toESM(require_axios2(), 1);
+    Collect = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      return ``;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/5.js
+var __exports10 = {};
+__export(__exports10, {
+  css: () => css19,
+  entry: () => entry10,
+  js: () => js10,
+  module: () => collect_svelte_exports
+});
+var entry10, js10, css19;
+var init__10 = __esm({
+  ".svelte-kit/output/server/nodes/5.js"() {
+    init_collect_svelte();
+    entry10 = "pages/app/DM-Downloader/collect.svelte-e9169efa.js";
+    js10 = ["pages/app/DM-Downloader/collect.svelte-e9169efa.js", "chunks/index-4741d8af.js", "chunks/api-e2b0109c.js"];
+    css19 = [];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/app/bakuzetsu-searcher-2nd/__layout.svelte.js
+var layout_svelte_exports2 = {};
+__export(layout_svelte_exports2, {
+  default: () => _layout2
+});
+var css20, _layout2;
+var init_layout_svelte2 = __esm({
+  ".svelte-kit/output/server/entries/pages/app/bakuzetsu-searcher-2nd/__layout.svelte.js"() {
+    init_index_2e97bc70();
+    init_ToastArea_32d9fee1();
+    init_index_96622166();
+    css20 = {
+      code: "header.svelte-yl89mf.svelte-yl89mf.svelte-yl89mf{display:flex;justify-content:space-between;height:40px}header.svelte-yl89mf .n2-logo.svelte-yl89mf.svelte-yl89mf{padding:10px}header.svelte-yl89mf .n2-logo img.svelte-yl89mf.svelte-yl89mf{height:20px}#base.svelte-yl89mf.svelte-yl89mf.svelte-yl89mf{background:black}footer.svelte-yl89mf.svelte-yl89mf.svelte-yl89mf{position:fixed;z-index:50;bottom:0;width:100%;height:75px;box-shadow:0 -1px 2px white;padding:10px;background:black}footer.svelte-yl89mf .footer-icon-box.svelte-yl89mf.svelte-yl89mf{display:flex;justify-content:space-around;max-width:700px;margin:0 auto}footer.svelte-yl89mf .footer-icon-box a.svelte-yl89mf.svelte-yl89mf{display:flex;flex-direction:column;align-items:center;justify-content:space-between;position:relative;width:40px;height:40px;border-radius:27px}footer.svelte-yl89mf .footer-icon-box a.active .footer-icon-bg.svelte-yl89mf.svelte-yl89mf{position:absolute;width:30px;height:30px;border:solid 2px var(--active-yellow);border-radius:15px}footer.svelte-yl89mf .footer-icon-box a.active p.svelte-yl89mf.svelte-yl89mf{color:var(--active-yellow)}footer.svelte-yl89mf .footer-icon-box a.svelte-yl89mf img.svelte-yl89mf{height:25px}footer.svelte-yl89mf .footer-icon-box a p.svelte-yl89mf.svelte-yl89mf{font-size:12px;font-weight:bold}",
+      map: null
+    };
+    _layout2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      $$result.css.add(css20);
+      return `${$$result.head += `${$$result.title = `<title>\u3070\u304F\u305C\u3064\u3055\u3042\u3061 | \u30B3\u30C8\u30C0\u30DE\u30F3\u5358\u8A9E \u691C\u7D22 | \u30B3\u30C8\u30C0\u30DE\u30F3\u8F9E\u66F8 \u691C\u7D22</title>`, ""}<meta name="${"google-site-verification"}" content="${"3OjGMRDR5lkfKidGxk6ZUvUpS8GTtV2Hs8mCtnf8m3M"}" data-svelte="svelte-s74sy5">`, ""}
+
+<header class="${"svelte-yl89mf"}"><div class="${"n2-logo svelte-yl89mf"}"><a href="${"/"}" class="${"svelte-yl89mf"}"><img src="${"/img/n2-icon-white.svg"}" alt="${""}" class="${"svelte-yl89mf"}"></a></div></header>
+${validate_component(ToastArea, "ToastArea").$$render($$result, {}, {}, {})}
+<section id="${"base"}" class="${"svelte-yl89mf"}">${slots.default ? slots.default({}) : ``}</section>
+
+<footer class="${"svelte-yl89mf"}"><div class="${"footer-icon-box svelte-yl89mf"}"><a class="${escape(null_to_empty("")) + " svelte-yl89mf"}" href="${"/app/bakuzetsu-searcher-2nd/edit"}"><div class="${"footer-icon-bg svelte-yl89mf"}"></div>
+        <img src="${"/img/bs2nd/e_gray_fill.svg"}" alt="${"EDIT"}" class="${"svelte-yl89mf"}">
+        <p class="${"svelte-yl89mf"}">EDIT</p></a>
+    <a class="${escape(null_to_empty("")) + " svelte-yl89mf"}" href="${"/app/bakuzetsu-searcher-2nd/analyze"}"><div class="${"footer-icon-bg svelte-yl89mf"}"></div>
+        <img src="${"/img/bs2nd/a_gray_fill.svg"}" alt="${"ANALYZE"}" class="${"svelte-yl89mf"}">
+        <p class="${"svelte-yl89mf"}">ANALYZE</p></a>
+    </div>
+</footer>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/2.js
+var __exports11 = {};
+__export(__exports11, {
+  css: () => css21,
+  entry: () => entry11,
+  js: () => js11,
+  module: () => layout_svelte_exports2
+});
+var entry11, js11, css21;
+var init__11 = __esm({
+  ".svelte-kit/output/server/nodes/2.js"() {
+    init_layout_svelte2();
+    entry11 = "pages/app/bakuzetsu-searcher-2nd/__layout.svelte-69322cd5.js";
+    js11 = ["pages/app/bakuzetsu-searcher-2nd/__layout.svelte-69322cd5.js", "chunks/index-4741d8af.js", "chunks/ToastArea-d8ce3583.js", "chunks/SvelteToast.svelte_svelte_type_style_lang-4f8ef653.js", "chunks/index-1f66f3ef.js"];
+    css21 = ["assets/pages/app/bakuzetsu-searcher-2nd/__layout.svelte-31fdee30.css", "assets/ToastArea-00e911a5.css", "assets/SvelteToast.svelte_svelte_type_style_lang-00aa1808.css"];
+  }
+});
+
+// .svelte-kit/output/server/chunks/InfiniteScroll-eaf736c0.js
+function getDeck() {
+  if (typeof localStorage !== "undefined") {
+    console.log("localStorage find");
+    let st = localStorage.getItem("n2freevas-bs2nd-localstorage-decks");
+    if (st) {
+      storedDecks = JSON.parse(st);
+    } else {
+      console.log("localStorage not fount");
+    }
+  } else {
+    console.log("localstorage undef");
+  }
+}
+var DEFAULT_LIMIT, deckStore, filterConditionStore, kanaStore, elemStore, tribeStore, gimmickStore, isDeckFullStore, unitListStore, isSettingFilterCondition, isBottomOfScroll, isListLoading, storedDecks, decks, adventStore, adventTargetStore, adventBanmenStore, adventFilterConditionStore, adventElemStore, mojiLengthConfigStore, ElemEngDict, TribeEngDict, GimmickEngDict, AdventNumDict, InfiniteScroll;
+var init_InfiniteScroll_eaf736c0 = __esm({
+  ".svelte-kit/output/server/chunks/InfiniteScroll-eaf736c0.js"() {
+    init_index_96622166();
+    init_index_2e97bc70();
+    DEFAULT_LIMIT = 48;
+    deckStore = writable2(new Array(12));
+    filterConditionStore = writable2({
+      offset: 0,
+      limit: DEFAULT_LIMIT,
+      word: [],
+      elem: [],
+      tribe: [],
+      gimmick: []
+    });
+    kanaStore = writable2([
+      { id: 1, kanas: ["\u3042", "\u3041"], active: false },
+      { id: 2, kanas: ["\u3044", "\u3043"], active: false },
+      { id: 3, kanas: ["\u3046", "\u3045"], active: false },
+      { id: 4, kanas: ["\u3048", "\u3047"], active: false },
+      { id: 5, kanas: ["\u304A", "\u3049"], active: false },
+      { id: 6, kanas: ["\u304B", "\u304C"], active: false },
+      { id: 7, kanas: ["\u304D", "\u304E"], active: false },
+      { id: 8, kanas: ["\u304F", "\u3050"], active: false },
+      { id: 9, kanas: ["\u3051", "\u3052"], active: false },
+      { id: 10, kanas: ["\u3053", "\u3054"], active: false },
+      { id: 11, kanas: ["\u3055", "\u3056"], active: false },
+      { id: 12, kanas: ["\u3057", "\u3058"], active: false },
+      { id: 13, kanas: ["\u3059", "\u305A"], active: false },
+      { id: 14, kanas: ["\u305B", "\u305C"], active: false },
+      { id: 15, kanas: ["\u305D", "\u305E"], active: false },
+      { id: 16, kanas: ["\u305F", "\u3060"], active: false },
+      { id: 17, kanas: ["\u3061", "\u3062"], active: false },
+      { id: 18, kanas: ["\u3064", "\u3065"], active: false },
+      { id: 19, kanas: ["\u3066", "\u3067"], active: false },
+      { id: 20, kanas: ["\u3068", "\u3069"], active: false },
+      { id: 21, kanas: ["\u306A"], active: false },
+      { id: 22, kanas: ["\u306B"], active: false },
+      { id: 23, kanas: ["\u306C"], active: false },
+      { id: 24, kanas: ["\u306D"], active: false },
+      { id: 25, kanas: ["\u306E"], active: false },
+      { id: 26, kanas: ["\u306F", "\u3070", "\u3071"], active: false },
+      { id: 27, kanas: ["\u3072", "\u3073", "\u3074"], active: false },
+      { id: 28, kanas: ["\u3075", "\u3076", "\u3077"], active: false },
+      { id: 29, kanas: ["\u3078", "\u3079", "\u307A"], active: false },
+      { id: 30, kanas: ["\u307B", "\u307C", "\u307D"], active: false },
+      { id: 31, kanas: ["\u307E"], active: false },
+      { id: 32, kanas: ["\u307F"], active: false },
+      { id: 33, kanas: ["\u3080"], active: false },
+      { id: 34, kanas: ["\u3081"], active: false },
+      { id: 35, kanas: ["\u3082"], active: false },
+      { id: 36, kanas: ["\u3084", "\u3083"], active: false },
+      { id: 37, kanas: [""], active: false },
+      { id: 38, kanas: ["\u3086", "\u3085"], active: false },
+      { id: 39, kanas: [""], active: false },
+      { id: 40, kanas: ["\u3088", "\u3087"], active: false },
+      { id: 41, kanas: ["\u3089"], active: false },
+      { id: 42, kanas: ["\u308A"], active: false },
+      { id: 43, kanas: ["\u308B"], active: false },
+      { id: 44, kanas: ["\u308C"], active: false },
+      { id: 45, kanas: ["\u308D"], active: false },
+      { id: 46, kanas: ["\u308F"], active: false },
+      { id: 47, kanas: [""], active: false },
+      { id: 48, kanas: ["\u3092"], active: false },
+      { id: 49, kanas: [""], active: false },
+      { id: 50, kanas: ["\u3093"], active: false }
+    ]);
+    elemStore = writable2([
+      { id: 1, elem: "\u706B", active: false },
+      { id: 2, elem: "\u6C34", active: false },
+      { id: 3, elem: "\u6728", active: false },
+      { id: 4, elem: "\u5149", active: false },
+      { id: 5, elem: "\u95C7", active: false },
+      { id: 6, elem: "\u51A5", active: false },
+      { id: 7, elem: "\u5929", active: false }
+    ]);
+    tribeStore = writable2([
+      { id: 1, tribe: "\u795E", active: false },
+      { id: 2, tribe: "\u9B54", active: false },
+      { id: 3, tribe: "\u82F1", active: false },
+      { id: 4, tribe: "\u9F8D", active: false },
+      { id: 5, tribe: "\u7363", active: false },
+      { id: 6, tribe: "\u970A", active: false },
+      { id: 7, tribe: "\u7269", active: false }
+    ]);
+    gimmickStore = writable2([
+      { id: 1, gimmick: "\u30B7\u30FC\u30EB\u30C9\u30D6\u30EC\u30A4\u30AB\u30FC", active: false },
+      { id: 2, gimmick: "\u30C8\u30B2\u30AC\u30FC\u30C9", active: false },
+      { id: 3, gimmick: "\u30C1\u30A7\u30F3\u30B8\u30AC\u30FC\u30C9", active: false },
+      { id: 4, gimmick: "\u5F31\u4F53\u30AC\u30FC\u30C9", active: false },
+      { id: 5, gimmick: "\u30A6\u30A9\u30FC\u30EB\u30D6\u30EC\u30A4\u30AB\u30FC", active: false },
+      { id: 6, gimmick: "\u30D3\u30EA\u30D3\u30EA\u30AC\u30FC\u30C9", active: false },
+      { id: 7, gimmick: "\u30D2\u30FC\u30EB\u30D6\u30EC\u30A4\u30AB\u30FC", active: false },
+      { id: 8, gimmick: "\u30B3\u30D4\u30FC\u30AC\u30FC\u30C9", active: false }
+    ]);
+    isDeckFullStore = writable2(false);
+    unitListStore = writable2([]);
+    isSettingFilterCondition = writable2(false);
+    isBottomOfScroll = writable2(false);
+    isListLoading = writable2(false);
+    storedDecks = [
+      { deckid: 1, deckname: "", list: [] },
+      { deckid: 2, deckname: "", list: [] },
+      { deckid: 3, deckname: "", list: [] },
+      { deckid: 4, deckname: "", list: [] },
+      { deckid: 5, deckname: "", list: [] }
+    ];
+    getDeck();
+    decks = writable2(storedDecks);
+    adventStore = writable2([]);
+    adventTargetStore = writable2(void 0);
+    adventBanmenStore = writable2([]);
+    adventFilterConditionStore = writable2({
+      offset: 0,
+      limit: DEFAULT_LIMIT,
+      elem: []
+    });
+    adventElemStore = writable2([
+      { id: 1, elem: "\u706B", active: false },
+      { id: 2, elem: "\u6C34", active: false },
+      { id: 3, elem: "\u6728", active: false },
+      { id: 4, elem: "\u5149", active: false },
+      { id: 5, elem: "\u95C7", active: false },
+      { id: 6, elem: "\u51A5", active: false },
+      { id: 7, elem: "\u5929", active: false }
+    ]);
+    mojiLengthConfigStore = writable2([
+      { length: 4, active: false },
+      { length: 5, active: true },
+      { length: 6, active: true },
+      { length: 7, active: false }
+    ]);
+    ElemEngDict = {
+      "\u706B": "fire",
+      "\u6C34": "water",
+      "\u6728": "wood",
+      "\u5149": "light",
+      "\u95C7": "dark",
+      "\u51A5": "hell",
+      "\u5929": "heaven"
+    };
+    TribeEngDict = {
+      "\u795E": "god",
+      "\u9B54": "evil",
+      "\u82F1": "hero",
+      "\u9F8D": "dragon",
+      "\u7363": "beast",
+      "\u970A": "ghost",
+      "\u7269": "object"
+    };
+    GimmickEngDict = {
+      "\u30B7\u30FC\u30EB\u30C9\u30D6\u30EC\u30A4\u30AB\u30FC": "shield",
+      "\u30C8\u30B2\u30AC\u30FC\u30C9": "needle",
+      "\u30C1\u30A7\u30F3\u30B8\u30AC\u30FC\u30C9": "change",
+      "\u5F31\u4F53\u30AC\u30FC\u30C9": "week",
+      "\u30A6\u30A9\u30FC\u30EB\u30D6\u30EC\u30A4\u30AB\u30FC": "wall",
+      "\u30D3\u30EA\u30D3\u30EA\u30AC\u30FC\u30C9": "biribiri",
+      "\u30D2\u30FC\u30EB\u30D6\u30EC\u30A4\u30AB\u30FC": "heal",
+      "\u30B3\u30D4\u30FC\u30AC\u30FC\u30C9": "copy"
+    };
+    AdventNumDict = {
+      0: "-",
+      1: "\u521D\u30FB\u4E2D\u7D1A",
+      2: "\u4E2D\u30FB\u4E0A\u7D1A",
+      3: "\u8D85\u7D1A",
+      4: "\u9B54\u7D1A",
+      5: "\u7834\u6EC5\u7D1A"
+    };
+    InfiniteScroll = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { threshold = 0 } = $$props;
+      let { horizontal = false } = $$props;
+      let { hasMore = true } = $$props;
+      createEventDispatcher();
+      let component;
+      onDestroy(() => {
+      });
+      if ($$props.threshold === void 0 && $$bindings.threshold && threshold !== void 0)
+        $$bindings.threshold(threshold);
+      if ($$props.horizontal === void 0 && $$bindings.horizontal && horizontal !== void 0)
+        $$bindings.horizontal(horizontal);
+      if ($$props.hasMore === void 0 && $$bindings.hasMore && hasMore !== void 0)
+        $$bindings.hasMore(hasMore);
+      return `<div style="${"width:0px"}"${add_attribute("this", component, 0)}></div>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/app/bakuzetsu-searcher-2nd/analyze.svelte.js
+var analyze_svelte_exports = {};
+__export(analyze_svelte_exports, {
+  default: () => Analyze
+});
+var import_axios4, css$16, Advent, css22, Analyze;
+var init_analyze_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/app/bakuzetsu-searcher-2nd/analyze.svelte.js"() {
+    init_index_2e97bc70();
+    init_api_86cf5a07();
+    init_InfiniteScroll_eaf736c0();
+    import_axios4 = __toESM(require_axios2(), 1);
+    init_index_96622166();
+    css$16 = {
+      code: '.advent.svelte-12z7jfs.svelte-12z7jfs{font-family:"Kosugi Maru", sans-serif;width:71px;margin:10px}.advent.svelte-12z7jfs .smart-info-box.svelte-12z7jfs{display:flex;flex-direction:row;justify-content:space-around}.advent.svelte-12z7jfs .smart-info-box img.svelte-12z7jfs{width:60px;height:50px}.advent.svelte-12z7jfs .smart-info-box img.disable.svelte-12z7jfs{filter:grayscale(85%)}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box.svelte-12z7jfs{position:relative}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box.svelte-12z7jfs{height:100%;display:flex;flex-direction:column-reverse}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box .elem.svelte-12z7jfs{width:11px;height:11px;border-radius:6px;margin:0 0 2px 0;border:solid 2px}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box .elem.fire.svelte-12z7jfs{background-color:rgb(219, 70, 70);border-color:rgb(255, 145, 0)}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box .elem.water.svelte-12z7jfs{background-color:rgb(41, 126, 255);border-color:rgb(167, 215, 255)}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box .elem.wood.svelte-12z7jfs{background-color:rgb(105, 172, 105);border-color:rgb(175, 216, 171)}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box .elem.light.svelte-12z7jfs{background-color:rgb(255, 210, 62);border-color:rgb(255, 240, 158)}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box .elem.dark.svelte-12z7jfs{background-color:rgb(146, 85, 165);border-color:rgb(208, 172, 255)}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box .elem.hell.svelte-12z7jfs{background-color:rgb(49, 31, 4);border-color:rgb(214, 166, 9)}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box .elem.heaven.svelte-12z7jfs{background-color:rgb(250, 243, 248);border-color:rgb(255, 175, 248)}.advent.scaleup.svelte-12z7jfs.svelte-12z7jfs{width:120px}.advent.scaleup.svelte-12z7jfs img.svelte-12z7jfs{width:120px;height:100px}.advent.svelte-12z7jfs .name.svelte-12z7jfs{text-align:center;line-height:10px;font-size:10px;width:100%;margin:3px 0 0 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.advent.svelte-12z7jfs .name.disable.svelte-12z7jfs{color:gray}',
+      map: null
+    };
+    Advent = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      createEventDispatcher();
+      let { advent } = $$props;
+      let { full = false } = $$props;
+      if ($$props.advent === void 0 && $$bindings.advent && advent !== void 0)
+        $$bindings.advent(advent);
+      if ($$props.full === void 0 && $$bindings.full && full !== void 0)
+        $$bindings.full(full);
+      $$result.css.add(css$16);
+      return `<div class="${"advent " + escape(!full ? "scaleup" : "") + " svelte-12z7jfs"}"><div class="${"smart-info-box svelte-12z7jfs"}"><img class="${escape(null_to_empty(advent.disable ? "disable" : "")) + " svelte-12z7jfs"}"${add_attribute("src", advent.figure, 0)}${add_attribute("alt", advent.name, 0)}>
+        ${full ? `<div class="${"elems-tribe-box svelte-12z7jfs"}"><div class="${"elems-box svelte-12z7jfs"}">${advent.elem.includes("\u706B") ? `<div class="${"elem fire svelte-12z7jfs"}"></div>` : ``}
+                ${advent.elem.includes("\u6C34") ? `<div class="${"elem water svelte-12z7jfs"}"></div>` : ``}
+                ${advent.elem.includes("\u6728") ? `<div class="${"elem wood svelte-12z7jfs"}"></div>` : ``}
+                ${advent.elem.includes("\u5149") ? `<div class="${"elem light svelte-12z7jfs"}"></div>` : ``}
+                ${advent.elem.includes("\u95C7") ? `<div class="${"elem dark svelte-12z7jfs"}"></div>` : ``}
+                ${advent.elem.includes("\u51A5") ? `<div class="${"elem hell svelte-12z7jfs"}"></div>` : ``}
+                ${advent.elem.includes("\u5929") ? `<div class="${"elem heaven svelte-12z7jfs"}"></div>` : ``}</div></div>` : ``}</div>
+    ${full ? `<p class="${"name " + escape(advent.disable ? "disable" : "") + " svelte-12z7jfs"}">${escape(advent.name)}</p>` : ``}
+    
+</div>`;
+    });
+    css22 = {
+      code: "button.svelte-4h12hp.svelte-4h12hp{font-size:14px;width:70px;color:white;border:solid 2px white;border-radius:5px}article.svelte-4h12hp.svelte-4h12hp{height:calc(100vh - 150px);overflow-y:scroll}article.svelte-4h12hp section.svelte-4h12hp{margin:0 auto;width:90vw;max-width:700px}article.svelte-4h12hp #elem-filter-box.svelte-4h12hp{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:right}article.svelte-4h12hp #elem-filter-box .elem.svelte-4h12hp{width:25px;font-size:12px;font-weight:900;text-align:center;margin:5px;border-radius:5px;border:solid 2px rgb(146, 146, 146);padding:3px}article.svelte-4h12hp #elem-filter-box .elem div.svelte-4h12hp{width:25px;height:25px;margin:0 auto;border-radius:12px}article.svelte-4h12hp #elem-filter-box .elem.active.fire.svelte-4h12hp{border-color:rgb(255, 0, 0);color:rgb(255, 0, 0);text-shadow:2px 1px 0px rgb(255, 115, 0)}article.svelte-4h12hp #elem-filter-box .elem.active.water.svelte-4h12hp{border-color:rgb(44, 128, 255);color:rgb(44, 128, 255);text-shadow:2px 1px 0px rgb(162, 191, 255)}article.svelte-4h12hp #elem-filter-box .elem.active.wood.svelte-4h12hp{border-color:rgb(53, 175, 0);color:rgb(53, 175, 0);text-shadow:2px 1px 0px rgb(46, 115, 0)}article.svelte-4h12hp #elem-filter-box .elem.active.light.svelte-4h12hp{border-color:rgb(255, 244, 195);color:rgb(255, 232, 131);text-shadow:2px 1px 0px rgb(255, 196, 0)}article.svelte-4h12hp #elem-filter-box .elem.active.dark.svelte-4h12hp{border-color:rgb(200, 62, 255);color:rgb(200, 62, 255);text-shadow:2px 1px 0px rgb(219, 129, 255)}article.svelte-4h12hp #elem-filter-box .elem.active.hell.svelte-4h12hp{border-color:rgb(255, 196, 0);color:rgb(61, 45, 0);text-shadow:2px 1px 0px rgb(255, 196, 0)}article.svelte-4h12hp #elem-filter-box .elem.active.heaven.svelte-4h12hp{border-color:rgb(255, 180, 245);color:rgb(241, 218, 222);text-shadow:2px 1px 0px rgb(255, 95, 234)}article.svelte-4h12hp #elem-filter-box button.svelte-4h12hp{--green:#6fffcf;color:var(--green);border:solid 2px var(--green);margin:0 0 0 15px}article.svelte-4h12hp #advent-list-box.svelte-4h12hp{width:90vw}article.svelte-4h12hp #advent-list-box p.svelte-4h12hp{font-size:11px}article.svelte-4h12hp #advent-list-box #advent-list.svelte-4h12hp{max-width:700px;margin:0 auto 10px auto;height:170px;display:flex;flex-direction:column;justify-content:start;flex-wrap:wrap;overflow-x:scroll}article.svelte-4h12hp #advent-detail-box.svelte-4h12hp{margin:30px auto;width:90vw}article.svelte-4h12hp #advent-detail-box #advent-overview.svelte-4h12hp{display:flex}article.svelte-4h12hp #advent-detail-box #advent-overview #advent-overview-text.svelte-4h12hp{display:flex;flex-direction:column;justify-content:center}article.svelte-4h12hp #advent-detail-box #advent-overview #advent-overview-text h5.svelte-4h12hp{margin:5px 0}article.svelte-4h12hp #advent-detail-box #banmen-list.svelte-4h12hp{margin:10px 0 400px 0}article.svelte-4h12hp #advent-detail-box #banmen-list #banmen-moj-length-config-box.svelte-4h12hp{margin:10px 0 20px 0;max-width:350px;display:flex;justify-content:space-between}article.svelte-4h12hp #advent-detail-box #banmen-list #banmen-moj-length-config-box button.active.svelte-4h12hp{color:var(--active-yellow);border-color:var(--active-yellow)}article.svelte-4h12hp #advent-detail-box #banmen-list .banmen.svelte-4h12hp{display:flex;justify-content:space-between;align-items:center;font-size:20px;font-weight:bold;letter-spacing:3px;border-bottom:solid 1px white;padding:0 0 5px 0;margin:0 0 15px 0}article.svelte-4h12hp #advent-detail-box #banmen-list .banmen img.svelte-4h12hp{width:8px;height:15px;margin:0 20px 0 0;transition:0.5s}article.svelte-4h12hp #advent-detail-box #banmen-list .banmen.active.svelte-4h12hp{color:var(--active-yellow)}article.svelte-4h12hp #advent-detail-box #banmen-list .banmen.active img.svelte-4h12hp{transform:rotate(90deg)}article.svelte-4h12hp #advent-detail-box #answers-box.svelte-4h12hp{position:fixed;padding:15px 15px 60px 15px;z-index:100;bottom:-520px;left:0;width:100vw;height:480px;background:linear-gradient(225deg, black, rgba(0, 0, 0, 0.8));border-top:solid 2px white;transition:0.3s}article.svelte-4h12hp #advent-detail-box #answers-box.active.svelte-4h12hp{bottom:0}article.svelte-4h12hp #advent-detail-box #answers-box .answer-count.svelte-4h12hp{max-width:650px;margin:0 auto 20px auto}article.svelte-4h12hp #advent-detail-box #answers-box #answer-box-close-button.svelte-4h12hp{position:absolute;top:-30px;right:50px;width:80px;height:30px;border:solid 1px white;border-bottom:solid 2px black;border-radius:7px 7px 0 0;background:black}article.svelte-4h12hp #advent-detail-box #answers-box #answer-box-close-button-tap-area.svelte-4h12hp{position:absolute;top:-30px;right:50px;width:80px;height:100px;padding:15px 30px}article.svelte-4h12hp #advent-detail-box #answers-box #answers-list.svelte-4h12hp{width:90vw;max-width:650px;margin:0 auto;color:white;height:100%;overflow-y:scroll;display:flex;justify-content:left;flex-wrap:wrap}article.svelte-4h12hp #advent-detail-box #answers-box #answers-list .ans-box.svelte-4h12hp{width:160px;padding:0 0 0 15px;border-left:solid 3px white;margin:10px 0}article.svelte-4h12hp #advent-detail-box #answers-box #answers-list .ans-box .answer-word.svelte-4h12hp{font-size:18px}article.svelte-4h12hp #advent-detail-box #answers-box #answers-list .ans-box .answer-nessesary.svelte-4h12hp{font-size:12px}",
+      map: null
+    };
+    Analyze = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $adventBanmenStore, $$unsubscribe_adventBanmenStore;
+      let $mojiLengthConfigStore, $$unsubscribe_mojiLengthConfigStore;
+      let $adventTargetStore, $$unsubscribe_adventTargetStore;
+      let $adventStore, $$unsubscribe_adventStore;
+      let $$unsubscribe_adventFilterConditionStore;
+      let $adventElemStore, $$unsubscribe_adventElemStore;
+      let $$unsubscribe_deckStore;
+      $$unsubscribe_adventBanmenStore = subscribe(adventBanmenStore, (value) => $adventBanmenStore = value);
+      $$unsubscribe_mojiLengthConfigStore = subscribe(mojiLengthConfigStore, (value) => $mojiLengthConfigStore = value);
+      $$unsubscribe_adventTargetStore = subscribe(adventTargetStore, (value) => $adventTargetStore = value);
+      $$unsubscribe_adventStore = subscribe(adventStore, (value) => $adventStore = value);
+      $$unsubscribe_adventFilterConditionStore = subscribe(adventFilterConditionStore, (value) => value);
+      $$unsubscribe_adventElemStore = subscribe(adventElemStore, (value) => $adventElemStore = value);
+      $$unsubscribe_deckStore = subscribe(deckStore, (value) => value);
+      let answerCount = 0;
+      let answerList = [];
+      $$result.css.add(css22);
+      $$unsubscribe_adventBanmenStore();
+      $$unsubscribe_mojiLengthConfigStore();
+      $$unsubscribe_adventTargetStore();
+      $$unsubscribe_adventStore();
+      $$unsubscribe_adventFilterConditionStore();
+      $$unsubscribe_adventElemStore();
+      $$unsubscribe_deckStore();
+      return `<article class="${"com_scroll-y svelte-4h12hp"}"><section id="${"advent-list-box"}" class="${"svelte-4h12hp"}"><p class="${"svelte-4h12hp"}">\u653B\u7565\u3059\u308B\u964D\u81E8\u3092\u9078\u629E</p>
+        <div id="${"advent-list"}" class="${"com_scroll-x svelte-4h12hp"}">${`${each($adventStore, (as) => {
+        return `${validate_component(Advent, "Advent").$$render($$result, { advent: as, full: true }, {}, {})}
+                ${validate_component(InfiniteScroll, "InfiniteScroll").$$render($$result, { threshold: 100 }, {}, {})}`;
+      })}`}</div></section>
+    <section id="${"elem-filter-box"}" class="${"svelte-4h12hp"}">${each($adventElemStore, (es, i2) => {
+        return `<div class="${"elem " + escape(ElemEngDict[es.elem]) + " " + escape(es.active ? "active" : "") + " svelte-4h12hp"}">${escape(es.elem)}</div>`;
+      })}
+        <button class="${"svelte-4h12hp"}">\u7D5E\u8FBC</button></section>
+    <section id="${"advent-detail-box"}" class="${"svelte-4h12hp"}">${`<div id="${"advent-overview"}" class="${"svelte-4h12hp"}">${$adventTargetStore ? `${validate_component(Advent, "Advent").$$render($$result, { advent: $adventTargetStore }, {}, {})}
+                <div id="${"advent-overview-text"}" class="${"svelte-4h12hp"}"><h3>${escape($adventTargetStore.name)}</h3>
+                    <h5 class="${"svelte-4h12hp"}">${escape(AdventNumDict[$adventTargetStore.level])}</h5>
+                    <h5 class="${"svelte-4h12hp"}">\u53CE\u9332\u76E4\u9762\u6570 : ${escape($adventBanmenStore.length)}</h5></div>` : ``}</div>
+            <div id="${"banmen-list"}" class="${"svelte-4h12hp"}">${$adventBanmenStore.length != 0 ? `<div id="${"banmen-moj-length-config-box"}" class="${"svelte-4h12hp"}">${each($mojiLengthConfigStore, (mlcs) => {
+        return `<button class="${escape(null_to_empty(mlcs.active ? "active" : "")) + " svelte-4h12hp"}">${escape(mlcs.length)}\u6587\u5B57
+                        </button>`;
+      })}</div>` : ``}
+                ${each($adventBanmenStore, (abs) => {
+        return `<div class="${"banmen " + escape(abs.active ? "active" : "") + " svelte-4h12hp"}">${escape(abs.banmen.banmen.replace(/\./g, "\u25EF"))}
+                        <img src="${"/img/arrow_simple_right.svg"}" alt="${">"}" class="${"svelte-4h12hp"}">
+                    </div>`;
+      })}</div>
+            <div id="${"answers-box"}" class="${escape(null_to_empty("")) + " svelte-4h12hp"}"><div id="${"answer-box-close-button"}" class="${"svelte-4h12hp"}"></div>
+                <div id="${"answer-box-close-button-tap-area"}" class="${"svelte-4h12hp"}"><img src="${"/img/arrow_simple_bottom.svg"}" alt="${"\u2B07\uFE0E"}" class="${"svelte-4h12hp"}"></div>
+                <div class="${"answer-count svelte-4h12hp"}">\u30D2\u30C3\u30C8\u6570 : ${escape(answerCount)}</div>
+                <div id="${"answers-list"}" class="${"com_scroll-y svelte-4h12hp"}">${`${each(answerList, (al) => {
+        return `<div class="${"ans-box svelte-4h12hp"}"><div class="${"answer-word svelte-4h12hp"}">${escape(al.word)}</div>
+                                <div class="${"answer-nessesary svelte-4h12hp"}">${escape(al.necessary)}</div>
+                            </div>`;
+      })}`}</div></div>`}</section>
+
+
+</article>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/6.js
+var __exports12 = {};
+__export(__exports12, {
+  css: () => css23,
+  entry: () => entry12,
+  js: () => js12,
+  module: () => analyze_svelte_exports
+});
+var entry12, js12, css23;
+var init__12 = __esm({
+  ".svelte-kit/output/server/nodes/6.js"() {
+    init_analyze_svelte();
+    entry12 = "pages/app/bakuzetsu-searcher-2nd/analyze.svelte-5c542d27.js";
+    js12 = ["pages/app/bakuzetsu-searcher-2nd/analyze.svelte-5c542d27.js", "chunks/index-4741d8af.js", "chunks/summon-455a7576.js", "chunks/api-e2b0109c.js", "chunks/index-1f66f3ef.js", "chunks/SvelteToast.svelte_svelte_type_style_lang-4f8ef653.js", "chunks/bs2ndLoader-574176af.js"];
+    css23 = ["assets/pages/app/bakuzetsu-searcher-2nd/analyze.svelte-816fdac6.css", "assets/SvelteToast.svelte_svelte_type_style_lang-00aa1808.css", "assets/bs2ndLoader-8a29ed63.css"];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/app/bakuzetsu-searcher-2nd/edit.svelte.js
+var edit_svelte_exports = {};
+__export(edit_svelte_exports, {
+  default: () => Edit
+});
+var import_axios5, css$52, Kotodaman, css$42, Specify, css$32, Kana, css$25, Main, css$17, Storage, css24, Edit;
+var init_edit_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/app/bakuzetsu-searcher-2nd/edit.svelte.js"() {
+    init_index_2e97bc70();
+    init_api_86cf5a07();
+    init_MediaQuery_021992e5();
+    init_InfiniteScroll_eaf736c0();
+    init_bs2ndLoader_cf0653eb();
+    import_axios5 = __toESM(require_axios2(), 1);
+    init_index_96622166();
+    css$52 = {
+      code: '.kotodaman.svelte-1ii2yan.svelte-1ii2yan{font-family:"Kosugi Maru", sans-serif;width:71px;margin:10px}.kotodaman.no-margin.svelte-1ii2yan.svelte-1ii2yan{display:flex;justify-content:center;align-items:center;width:70px;height:70px;margin:0px}.kotodaman.svelte-1ii2yan .smart-info-box.svelte-1ii2yan{display:flex;flex-direction:row;justify-content:space-around}.kotodaman.svelte-1ii2yan .smart-info-box img.svelte-1ii2yan{width:60px;height:50px}.kotodaman.svelte-1ii2yan .smart-info-box img.disable.svelte-1ii2yan{filter:grayscale(85%)}.kotodaman.svelte-1ii2yan .smart-info-box .elems-tribe-box.svelte-1ii2yan{position:relative}.kotodaman.svelte-1ii2yan .smart-info-box .elems-tribe-box .tribe-box.svelte-1ii2yan{position:absolute;top:2px;left:-10px;width:19px;height:17px;background-color:rgb(255, 215, 38);box-shadow:1px 2px 1px white;border-radius:1px 8px}.kotodaman.svelte-1ii2yan .smart-info-box .elems-tribe-box .tribe-box.disable.svelte-1ii2yan{color:rgb(182, 182, 182);background-color:rgb(136, 126, 67)}.kotodaman.svelte-1ii2yan .smart-info-box .elems-tribe-box .tribe-box p.svelte-1ii2yan{font-size:14px;line-height:17px;text-align:center;text-shadow:1px 1px 2px black}.kotodaman.svelte-1ii2yan .smart-info-box .elems-tribe-box .elems-box.svelte-1ii2yan{height:100%;display:flex;flex-direction:column-reverse}.kotodaman.svelte-1ii2yan .smart-info-box .elems-tribe-box .elems-box .elem.svelte-1ii2yan{width:11px;height:11px;border-radius:6px;margin:0 0 2px 0;border:solid 2px}.kotodaman.svelte-1ii2yan .smart-info-box .elems-tribe-box .elems-box .elem.fire.svelte-1ii2yan{background-color:rgb(219, 70, 70);border-color:rgb(255, 145, 0)}.kotodaman.svelte-1ii2yan .smart-info-box .elems-tribe-box .elems-box .elem.water.svelte-1ii2yan{background-color:rgb(41, 126, 255);border-color:rgb(167, 215, 255)}.kotodaman.svelte-1ii2yan .smart-info-box .elems-tribe-box .elems-box .elem.wood.svelte-1ii2yan{background-color:rgb(105, 172, 105);border-color:rgb(175, 216, 171)}.kotodaman.svelte-1ii2yan .smart-info-box .elems-tribe-box .elems-box .elem.light.svelte-1ii2yan{background-color:rgb(255, 210, 62);border-color:rgb(255, 240, 158)}.kotodaman.svelte-1ii2yan .smart-info-box .elems-tribe-box .elems-box .elem.dark.svelte-1ii2yan{background-color:rgb(146, 85, 165);border-color:rgb(208, 172, 255)}.kotodaman.svelte-1ii2yan .smart-info-box .elems-tribe-box .elems-box .elem.hell.svelte-1ii2yan{background-color:rgb(49, 31, 4);border-color:rgb(214, 166, 9)}.kotodaman.svelte-1ii2yan .smart-info-box .elems-tribe-box .elems-box .elem.heaven.svelte-1ii2yan{background-color:rgb(250, 243, 248);border-color:rgb(255, 175, 248)}.kotodaman.svelte-1ii2yan .name.svelte-1ii2yan{text-align:center;line-height:10px;font-size:10px;width:100%;margin:3px 0 0 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.kotodaman.svelte-1ii2yan .name.disable.svelte-1ii2yan{color:gray}',
+      map: null
+    };
+    Kotodaman = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $$unsubscribe_isDeckFullStore;
+      $$unsubscribe_isDeckFullStore = subscribe(isDeckFullStore, (value) => value);
+      createEventDispatcher();
+      let { kotodaman } = $$props;
+      let { full = false } = $$props;
+      if ($$props.kotodaman === void 0 && $$bindings.kotodaman && kotodaman !== void 0)
+        $$bindings.kotodaman(kotodaman);
+      if ($$props.full === void 0 && $$bindings.full && full !== void 0)
+        $$bindings.full(full);
+      $$result.css.add(css$52);
+      $$unsubscribe_isDeckFullStore();
+      return `<div class="${"kotodaman " + escape(!full ? "no-margin" : "") + " svelte-1ii2yan"}"><div class="${"smart-info-box svelte-1ii2yan"}"><img class="${escape(null_to_empty(kotodaman.disable ? "disable" : "")) + " svelte-1ii2yan"}"${add_attribute("src", kotodaman.figure, 0)}${add_attribute("alt", kotodaman.name, 0)}>
+        ${full ? `<div class="${"elems-tribe-box svelte-1ii2yan"}"><div class="${"tribe-box " + escape(kotodaman.disable ? "disable" : "") + " svelte-1ii2yan"}"><p class="${"svelte-1ii2yan"}">${escape(kotodaman.tribe[0])}</p></div>
+            
+            <div class="${"elems-box svelte-1ii2yan"}">${kotodaman.elem.includes("\u706B") ? `<div class="${"elem fire svelte-1ii2yan"}"></div>` : ``}
+                ${kotodaman.elem.includes("\u6C34") ? `<div class="${"elem water svelte-1ii2yan"}"></div>` : ``}
+                ${kotodaman.elem.includes("\u6728") ? `<div class="${"elem wood svelte-1ii2yan"}"></div>` : ``}
+                ${kotodaman.elem.includes("\u5149") ? `<div class="${"elem light svelte-1ii2yan"}"></div>` : ``}
+                ${kotodaman.elem.includes("\u95C7") ? `<div class="${"elem dark svelte-1ii2yan"}"></div>` : ``}
+                ${kotodaman.elem.includes("\u51A5") ? `<div class="${"elem hell svelte-1ii2yan"}"></div>` : ``}
+                ${kotodaman.elem.includes("\u5929") ? `<div class="${"elem heaven svelte-1ii2yan"}"></div>` : ``}</div></div>` : ``}</div>
+    ${full ? `<p class="${"name " + escape(kotodaman.disable ? "disable" : "") + " svelte-1ii2yan"}">${escape(kotodaman.name)}</p>` : ``}
+    
+</div>`;
+    });
+    css$42 = {
+      code: '#specify-filter-box.svelte-1iaypzj.svelte-1iaypzj{width:100%;display:flex;flex-direction:column;justify-content:space-evenly;font-family:"Kosugi Maru", sans-serif}h3.svelte-1iaypzj.svelte-1iaypzj{margin:10px 0 0 0}#elem-box.svelte-1iaypzj.svelte-1iaypzj,#tribe-box.svelte-1iaypzj.svelte-1iaypzj,#gimmick-box.svelte-1iaypzj.svelte-1iaypzj{width:100%;display:flex;flex-direction:row;flex-wrap:wrap;justify-content:center;margin:0 0 10px 0}.elem.svelte-1iaypzj.svelte-1iaypzj{width:50px;font-size:18px;font-weight:900;text-align:center;margin:5px;border-radius:5px;border:solid 2px white;padding:3px}.elem.active.fire.svelte-1iaypzj.svelte-1iaypzj{border-color:rgb(255, 0, 0);color:rgb(255, 0, 0);text-shadow:2px 1px 0px rgb(255, 115, 0)}.elem.active.water.svelte-1iaypzj.svelte-1iaypzj{border-color:rgb(44, 128, 255);color:rgb(44, 128, 255);text-shadow:2px 1px 0px rgb(162, 191, 255)}.elem.active.wood.svelte-1iaypzj.svelte-1iaypzj{border-color:rgb(53, 175, 0);color:rgb(53, 175, 0);text-shadow:2px 1px 0px rgb(46, 115, 0)}.elem.active.light.svelte-1iaypzj.svelte-1iaypzj{border-color:rgb(255, 244, 195);color:rgb(255, 232, 131);text-shadow:2px 1px 0px rgb(255, 196, 0)}.elem.active.dark.svelte-1iaypzj.svelte-1iaypzj{border-color:rgb(200, 62, 255);color:rgb(200, 62, 255);text-shadow:2px 1px 0px rgb(219, 129, 255)}.elem.active.hell.svelte-1iaypzj.svelte-1iaypzj{border-color:rgb(255, 196, 0);color:rgb(61, 45, 0);text-shadow:2px 1px 0px rgb(255, 196, 0)}.elem.active.heaven.svelte-1iaypzj.svelte-1iaypzj{border-color:rgb(255, 180, 245);color:rgb(241, 218, 222);text-shadow:2px 1px 0px rgb(255, 95, 234)}.elem.long.svelte-1iaypzj.svelte-1iaypzj{width:70px}.tribe.svelte-1iaypzj.svelte-1iaypzj{width:50px;height:35px;margin:5px;border-radius:5px;text-align:center;justify-content:space-around;line-height:30px;border:solid 2px white}.tribe.blank.svelte-1iaypzj.svelte-1iaypzj{border:none}.tribe.active.svelte-1iaypzj.svelte-1iaypzj{border:solid 2px var(--active-yellow);color:var(--active-yellow)}.gimmick.svelte-1iaypzj.svelte-1iaypzj{width:50px;height:40px;margin:5px;justify-content:space-around;border-radius:5px;border:solid 2px white;padding:3px}.gimmick.active.svelte-1iaypzj.svelte-1iaypzj{border:solid 2px var(--active-yellow)}.gimmick.svelte-1iaypzj img.svelte-1iaypzj{margin:0 auto;height:30px}.elem.svelte-1iaypzj.svelte-1iaypzj,.tribe.svelte-1iaypzj.svelte-1iaypzj,.gimmick.svelte-1iaypzj.svelte-1iaypzj{cursor:pointer}',
+      map: null
+    };
+    Specify = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $gimmickStore, $$unsubscribe_gimmickStore;
+      let $tribeStore, $$unsubscribe_tribeStore;
+      let $elemStore, $$unsubscribe_elemStore;
+      $$unsubscribe_gimmickStore = subscribe(gimmickStore, (value) => $gimmickStore = value);
+      $$unsubscribe_tribeStore = subscribe(tribeStore, (value) => $tribeStore = value);
+      $$unsubscribe_elemStore = subscribe(elemStore, (value) => $elemStore = value);
+      $$result.css.add(css$42);
+      $$unsubscribe_gimmickStore();
+      $$unsubscribe_tribeStore();
+      $$unsubscribe_elemStore();
+      return `<article id="${"specify-filter-box"}" class="${"svelte-1iaypzj"}"><h3 class="${"svelte-1iaypzj"}">\u5C5E\u6027</h3>
+    <section id="${"elem-box"}" class="${"svelte-1iaypzj"}">${each($elemStore, (es, i2) => {
+        return `<div class="${"elem " + escape(ElemEngDict[es.elem]) + " " + escape(i2 < 3 ? "long" : "") + " " + escape(es.active ? "active" : "") + " svelte-1iaypzj"}">${escape(es.elem)}</div>`;
+      })}</section>
+    <h3 class="${"svelte-1iaypzj"}">\u7A2E\u65CF</h3>
+    <section id="${"tribe-box"}" class="${"svelte-1iaypzj"}">${each($tribeStore, (ts) => {
+        return `<div class="${"tribe " + escape(TribeEngDict[ts.tribe]) + " " + escape(ts.active ? "active" : "") + " svelte-1iaypzj"}">${escape(ts.tribe)}</div>`;
+      })}
+        <div class="${"tribe blank svelte-1iaypzj"}"></div></section>
+    <h3 class="${"svelte-1iaypzj"}">\u30AE\u30DF\u30C3\u30AF</h3>
+    <section id="${"gimmick-box"}" class="${"svelte-1iaypzj"}">${each($gimmickStore, (gs) => {
+        return `<div class="${"gimmick " + escape(gs.active ? "active" : "") + " svelte-1iaypzj"}"><img${add_attribute("src", `/img/bs2nd/${GimmickEngDict[gs.gimmick]}.svg`, 0)}${add_attribute("alt", gs.gimmick, 0)} class="${"svelte-1iaypzj"}"></div>`;
+      })}</section>
+</article>`;
+    });
+    css$32 = {
+      code: '#kana-filter-box.svelte-1dnb1gp.svelte-1dnb1gp{width:100%;font-family:"Kosugi Maru", sans-serif}#kana-filter-box.svelte-1dnb1gp p.svelte-1dnb1gp{margin:10px 0 0 0;font-size:10px}#kana-box.svelte-1dnb1gp.svelte-1dnb1gp{display:flex;justify-content:space-around;flex-wrap:wrap;--kana-box-size:38px}#kana-box.svelte-1dnb1gp .kana.svelte-1dnb1gp{cursor:pointer;border:solid 1px white;border-radius:3px;width:var(--kana-box-size);height:var(--kana-box-size);margin:2px 5px;line-height:var(--kana-box-size);text-align:center}#kana-box.svelte-1dnb1gp .kana.active.svelte-1dnb1gp{border-color:var(--active-yellow);color:var(--active-yellow)}#kana-box.svelte-1dnb1gp .kana-blank.svelte-1dnb1gp{width:var(--kana-box-size);height:var(--kana-box-size);margin:2px}',
+      map: null
+    };
+    Kana = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $kanaStore, $$unsubscribe_kanaStore;
+      $$unsubscribe_kanaStore = subscribe(kanaStore, (value) => $kanaStore = value);
+      $$result.css.add(css$32);
+      $$unsubscribe_kanaStore();
+      return `<article id="${"kana-filter-box"}" class="${"svelte-1dnb1gp"}"><section id="${"kana-box"}" class="${"svelte-1dnb1gp"}">${each($kanaStore, (k) => {
+        return `${k.kanas[0] != "" ? `<div class="${"kana " + escape(k.active ? "active" : "") + " svelte-1dnb1gp"}">${escape(k.kanas[0])}
+                </div>` : `<div class="${"kana-blank svelte-1dnb1gp"}"></div>`}`;
+      })}</section>
+    <p class="${"svelte-1dnb1gp"}">* \u6FC1\u97F3\u3084\u4FC3\u97F3\u306A\u3069\u306F\u3001\u5168\u3066\u305D\u306E\u76F4\u97F3\u306B\u542B\u307E\u308C\u307E\u3059\u3002</p>
+</article>`;
+    });
+    css$25 = {
+      code: "#bs2nd-edit-filter-panel.svelte-lv4ubr.svelte-lv4ubr.svelte-lv4ubr{padding:5px;width:100%;height:100%;position:relative}#bs2nd-edit-filter-panel.svelte-lv4ubr .tabbox.svelte-lv4ubr.svelte-lv4ubr{margin-bottom:10px;padding:10px;border:1px solid #dee2e6;border-radius:0 0 0.5rem 0.5rem;border-top:0}#bs2nd-edit-filter-panel.svelte-lv4ubr ul.svelte-lv4ubr.svelte-lv4ubr{display:flex;flex-wrap:wrap;padding-left:0;margin:0 0;list-style:none;border-bottom:1px solid #dee2e6}#bs2nd-edit-filter-panel.svelte-lv4ubr li.svelte-lv4ubr.svelte-lv4ubr{width:50%;text-align:center;margin-bottom:-1px}#bs2nd-edit-filter-panel.svelte-lv4ubr span.svelte-lv4ubr.svelte-lv4ubr{border:1px solid transparent;border-top-left-radius:0.25rem;border-top-right-radius:0.25rem;display:block;padding:0.5rem 1rem;cursor:pointer;transition:0.3s}#bs2nd-edit-filter-panel.svelte-lv4ubr span.svelte-lv4ubr.svelte-lv4ubr:hover{border-color:#e9ecef #e9ecef #dee2e6}#bs2nd-edit-filter-panel.svelte-lv4ubr li.active.svelte-lv4ubr>span.svelte-lv4ubr{border-color:#dee2e6 #dee2e6 #fff}#bs2nd-edit-filter-panel.svelte-lv4ubr #filter-execute-box.svelte-lv4ubr.svelte-lv4ubr{position:absolute;bottom:25px;width:100%;text-align:center}#bs2nd-edit-filter-panel.svelte-lv4ubr #filter-execute-box button.svelte-lv4ubr.svelte-lv4ubr{margin:0 10px;border:solid 1px white;border-radius:5px;color:white;width:110px;height:35px}",
+      map: null
+    };
+    Main = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $$unsubscribe_gimmickStore;
+      let $$unsubscribe_tribeStore;
+      let $$unsubscribe_elemStore;
+      let $$unsubscribe_kanaStore;
+      let $$unsubscribe_isSettingFilterCondition;
+      let $$unsubscribe_isListLoading;
+      let $$unsubscribe_filterConditionStore;
+      let $$unsubscribe_unitListStore;
+      let $$unsubscribe_deckStore;
+      let $$unsubscribe_isBottomOfScroll;
+      $$unsubscribe_gimmickStore = subscribe(gimmickStore, (value) => value);
+      $$unsubscribe_tribeStore = subscribe(tribeStore, (value) => value);
+      $$unsubscribe_elemStore = subscribe(elemStore, (value) => value);
+      $$unsubscribe_kanaStore = subscribe(kanaStore, (value) => value);
+      $$unsubscribe_isSettingFilterCondition = subscribe(isSettingFilterCondition, (value) => value);
+      $$unsubscribe_isListLoading = subscribe(isListLoading, (value) => value);
+      $$unsubscribe_filterConditionStore = subscribe(filterConditionStore, (value) => value);
+      $$unsubscribe_unitListStore = subscribe(unitListStore, (value) => value);
+      $$unsubscribe_deckStore = subscribe(deckStore, (value) => value);
+      $$unsubscribe_isBottomOfScroll = subscribe(isBottomOfScroll, (value) => value);
+      createEventDispatcher();
+      let tabs = [
+        {
+          label: "\u7A2E\u5225",
+          value: 1,
+          component: Specify
+        },
+        { label: "50\u97F3", value: 2, component: Kana }
+      ];
+      let activeTabs = 1;
+      $$result.css.add(css$25);
+      $$unsubscribe_gimmickStore();
+      $$unsubscribe_tribeStore();
+      $$unsubscribe_elemStore();
+      $$unsubscribe_kanaStore();
+      $$unsubscribe_isSettingFilterCondition();
+      $$unsubscribe_isListLoading();
+      $$unsubscribe_filterConditionStore();
+      $$unsubscribe_unitListStore();
+      $$unsubscribe_deckStore();
+      $$unsubscribe_isBottomOfScroll();
+      return `<article id="${"bs2nd-edit-filter-panel"}" class="${"svelte-lv4ubr"}"><ul class="${"svelte-lv4ubr"}">${each(tabs, (t2) => {
+        return `<li class="${escape(null_to_empty(activeTabs === t2.value ? "active" : "")) + " svelte-lv4ubr"}"><span class="${"svelte-lv4ubr"}">${escape(t2.label)}</span>
+            </li>`;
+      })}</ul>
+    ${each(tabs, (t2) => {
+        return `${activeTabs == t2.value ? `<div class="${"tabbox svelte-lv4ubr"}">${validate_component(t2.component || missing_component, "svelte:component").$$render($$result, {}, {}, {})}
+        </div>` : ``}`;
+      })}
+    <section id="${"filter-execute-box"}" class="${"svelte-lv4ubr"}"><button id="${"search-button"}" class="${"svelte-lv4ubr"}">\u691C\u7D22</button>
+        <button id="${"reset-button"}" class="${"svelte-lv4ubr"}">\u30EA\u30BB\u30C3\u30C8</button></section>
+</article>`;
+    });
+    css$17 = {
+      code: '#deck-list-panel.svelte-zpytjz.svelte-zpytjz{font-family:"Kosugi Maru", sans-serif;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-between}#deck-list-panel.svelte-zpytjz .deck-box.svelte-zpytjz{width:100%;height:100px;position:relative}#deck-list-panel.svelte-zpytjz .deck-box .deck-name.svelte-zpytjz{position:absolute;color:white;background:none;border:none;z-index:15;width:150px;font-size:15px;top:20px;left:10px}#deck-list-panel.svelte-zpytjz .deck-box .deck-name.svelte-zpytjz:focus{outline:none;border:solid 1px var(--active-yellow);border-radius:5px}#deck-list-panel.svelte-zpytjz .deck-box .deck-thumbnail.svelte-zpytjz{position:absolute;top:10px;right:0;width:70%;height:80px}#deck-list-panel.svelte-zpytjz .deck-box .deck-thumbnail .deck-img.svelte-zpytjz{position:absolute;width:100%;height:inherit;background-image:var(--url);background-size:cover;background-position:50% 30%;background-repeat:no-repeat;background-blend-mode:screen}#deck-list-panel.svelte-zpytjz .deck-box .deck-thumbnail .deck-img-blank.svelte-zpytjz{position:absolute;right:40px;top:20px;width:auto;height:40px;background-image:var(--url-blank)}#deck-list-panel.svelte-zpytjz .deck-box .deck-thumbnail .deck-img-filter.svelte-zpytjz{position:absolute;width:100%;height:100%;background:linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0))}#deck-list-panel.svelte-zpytjz .deck-box .deck-list.svelte-zpytjz{position:absolute;z-index:10;left:10px;bottom:0px;width:180px;display:flex;flex-direction:row;flex-wrap:wrap-reverse}#deck-list-panel.svelte-zpytjz .deck-box .deck-list img.svelte-zpytjz{width:25px;margin:0 3px 0 0}#deck-list-panel.svelte-zpytjz .deck-box .deck-delete-button.svelte-zpytjz{position:absolute;bottom:0;right:10px}#deck-list-panel.svelte-zpytjz .deck-box .deck-delete-button img.svelte-zpytjz{width:30px}',
+      map: null
+    };
+    Storage = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $$unsubscribe_unitListStore;
+      let $$unsubscribe_deckStore;
+      let $decks, $$unsubscribe_decks;
+      let $$unsubscribe_isDeckFullStore;
+      $$unsubscribe_unitListStore = subscribe(unitListStore, (value) => value);
+      $$unsubscribe_deckStore = subscribe(deckStore, (value) => value);
+      $$unsubscribe_decks = subscribe(decks, (value) => $decks = value);
+      $$unsubscribe_isDeckFullStore = subscribe(isDeckFullStore, (value) => value);
+      createEventDispatcher();
+      console.log($decks);
+      $$result.css.add(css$17);
+      $$unsubscribe_unitListStore();
+      $$unsubscribe_deckStore();
+      $$unsubscribe_decks();
+      $$unsubscribe_isDeckFullStore();
+      return `<section id="${"deck-list-panel"}" class="${"svelte-zpytjz"}">${each($decks, (d) => {
+        return `${d.list.length != 0 ? `<div class="${"deck-box svelte-zpytjz"}"><input placeholder="${"deck name"}" class="${"deck-name svelte-zpytjz"}"${add_attribute("value", d.deckname, 0)}>
+            <div class="${"deck-thumbnail svelte-zpytjz"}"><div class="${"deck-img svelte-zpytjz"}" style="${"--url:url(" + escape(d.list[0].figure) + ")"}"></div>
+                <div class="${"deck-img-filter svelte-zpytjz"}"></div></div>
+            <div class="${"deck-list svelte-zpytjz"}">${each(d.list, (dl, i2) => {
+          return `${i2 != 0 ? `<img${add_attribute("src", dl.figure, 0)} alt="${""}" class="${"svelte-zpytjz"}">` : ``}`;
+        })}</div>
+            <div class="${"deck-delete-button svelte-zpytjz"}"><img src="${"/img/trash.svg"}" alt="${"\u524A\u9664"}" class="${"svelte-zpytjz"}"></div>
+        </div>` : `<div class="${"deck-box svelte-zpytjz"}"><input style="${"color:gray;"}" class="${"deck-name svelte-zpytjz"}"${add_attribute("value", "Empty", 0)} ${"disabled"}>
+            <div class="${"deck-thumbnail svelte-zpytjz"}"><img class="${"deck-img-blank svelte-zpytjz"}" src="${"/img/add_people.svg"}" alt="${"add deck"}"></div>
+        </div>`}`;
+      })}
+</section>`;
+    });
+    css24 = {
+      code: "#bs2nd-screen.svelte-haop3e.svelte-haop3e{margin:0 auto;height:calc(100vh - 120px);overflow:hidden;display:flex;flex-direction:row;justify-content:space-evenly}#bs2nd-screen.svelte-haop3e #bs2nd-edit-panels.svelte-haop3e{max-width:90vw;height:100%;display:flex;flex-direction:column;justify-content:space-around}#bs2nd-screen.svelte-haop3e #bs2nd-edit-panels #bs2nd-deck-edit.svelte-haop3e{margin:10px auto 10px auto}#bs2nd-screen.svelte-haop3e #bs2nd-edit-panels #bs2nd-deck-edit #bs2nd-deck-edit-panel.svelte-haop3e{height:225px;width:300px;margin:0 0 5px 0;background:white;border-radius:20px;display:flex;flex-direction:row;justify-content:space-evenly;flex-wrap:wrap}#bs2nd-screen.svelte-haop3e #bs2nd-edit-panels #bs2nd-deck-edit #bs2nd-deck-edit-panel .unit-in-deck-blank-slot.svelte-haop3e{width:50px;height:50px;border-radius:25px;margin:10px;background-color:rgb(51, 51, 51)}#bs2nd-screen.svelte-haop3e #bs2nd-edit-panels #bs2nd-deck-edit button.svelte-haop3e{width:100px;margin:0 0 0 15px;border:solid 1px white;border-radius:10px;color:white;font-size:12px}#bs2nd-screen.svelte-haop3e #bs2nd-edit-panels #bs2nd-show-units-panel.svelte-haop3e{flex-grow:2;overflow-y:scroll;display:flex;flex-direction:row;justify-content:center;flex-wrap:wrap;margin:10px 0 15px 0;width:100%;max-width:400px;border:solid 2px white;border-radius:20px;padding:25px 0 200px 0}#bs2nd-screen.svelte-haop3e #bs2nd-edit-panels #bs2nd-show-units-panel.svelte-haop3e::-webkit-scrollbar{width:5px}#bs2nd-screen.svelte-haop3e #bs2nd-edit-panels #bs2nd-show-units-panel.svelte-haop3e::-webkit-scrollbar-thumb{border-radius:2px}#bs2nd-screen.svelte-haop3e .panel-box h2.svelte-haop3e{margin:0 0 5px 0}#bs2nd-screen.svelte-haop3e .panel-box p.svelte-haop3e{margin:0 0 25px 0;font-size:12px}#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-slider.svelte-haop3e{position:fixed;top:50px;right:-250px;border:solid 2px white;border-radius:20px 0 0 20px}#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-panel.svelte-haop3e{border:solid 2px white;border-radius:10px}#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-slider.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-panel.svelte-haop3e{width:250px;height:550px;background:linear-gradient(90deg, black, rgba(0, 0, 0, 0.7));transition:0.3s;padding:5px 0 5px 5px}#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-slider.open.svelte-haop3e{right:-3px}#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-slider #bs2nd-deck-select-slider-button.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-panel #bs2nd-deck-select-slider-button.svelte-haop3e{position:absolute;border-top:solid 2px white;border-left:solid 2px white;border-bottom:solid 2px white;border-right:solid 4px black;background-color:black;border-radius:15px 0 0 15px;top:200px;left:-59px;width:60px;height:60px}#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-slider #bs2nd-deck-select-slider-button img.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-panel #bs2nd-deck-select-slider-button img.svelte-haop3e{width:40px;margin:8px auto;transition:0.5s 0.3s}#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-slider #bs2nd-deck-select-slider-button img.open.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-panel #bs2nd-deck-select-slider-button img.open.svelte-haop3e{transform:rotate(180deg)}#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-slider.svelte-haop3e{position:fixed;bottom:80px;right:-300px;width:300px;height:600px;border:solid 2px white;border-radius:15px 0 0 15px}#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-panel.svelte-haop3e{width:300px;height:600px;border:solid 2px white;border-radius:10px}#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-slider.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-panel.svelte-haop3e{background:linear-gradient(45deg, black, rgba(0, 0, 0, 0.7));transition:0.3s;padding:5px}#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-slider.open.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-panel.open.svelte-haop3e{right:0}#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-slider #bs2nd-units-filter-slider-button.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-panel #bs2nd-units-filter-slider-button.svelte-haop3e{position:absolute;border-top:solid 2px white;border-left:solid 2px white;border-bottom:solid 2px white;border-right:solid 4px black;background-color:black;border-radius:15px 0 0 15px;bottom:10px;left:-59px;width:60px;height:60px}#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-slider #bs2nd-units-filter-slider-button img.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-panel #bs2nd-units-filter-slider-button img.svelte-haop3e{width:40px;margin:8px auto;transition:0.5s 0.3s}#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-slider #bs2nd-units-filter-slider-button img.open.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-panel #bs2nd-units-filter-slider-button img.open.svelte-haop3e{transform:rotate(180deg)}",
+      map: null
+    };
+    Edit = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $$unsubscribe_isDeckFullStore;
+      let $deckStore, $$unsubscribe_deckStore;
+      let $unitListStore, $$unsubscribe_unitListStore;
+      let $isListLoading, $$unsubscribe_isListLoading;
+      let $$unsubscribe_isBottomOfScroll;
+      let $$unsubscribe_filterConditionStore;
+      $$unsubscribe_isDeckFullStore = subscribe(isDeckFullStore, (value) => value);
+      $$unsubscribe_deckStore = subscribe(deckStore, (value) => $deckStore = value);
+      $$unsubscribe_unitListStore = subscribe(unitListStore, (value) => $unitListStore = value);
+      $$unsubscribe_isListLoading = subscribe(isListLoading, (value) => $isListLoading = value);
+      $$unsubscribe_isBottomOfScroll = subscribe(isBottomOfScroll, (value) => value);
+      $$unsubscribe_filterConditionStore = subscribe(filterConditionStore, (value) => value);
+      $$result.css.add(css24);
+      $$unsubscribe_isDeckFullStore();
+      $$unsubscribe_deckStore();
+      $$unsubscribe_unitListStore();
+      $$unsubscribe_isListLoading();
+      $$unsubscribe_isBottomOfScroll();
+      $$unsubscribe_filterConditionStore();
+      return `<article id="${"bs2nd-screen"}" class="${"svelte-haop3e"}">${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
+        default: ({ matches }) => {
+          return `${matches ? `
+        <section class="${"panel-box"}"><h2 class="${"svelte-haop3e"}">\u7D5E\u308A\u8FBC\u307F</h2>
+            <p class="${"svelte-haop3e"}">\u672C\u5BB6\u30B2\u30FC\u30E0\u3068\u307B\u307C\u540C\u3058\u8981\u9818\u3067\u3001<br>\u30AD\u30E3\u30E9\u306E\u7D5E\u308A\u8FBC\u307F\u691C\u7D22\u304C\u3067\u304D\u307E\u3059\u3002</p>
+            <section id="${"bs2nd-units-filter-panel"}" class="${escape(null_to_empty("")) + " svelte-haop3e"}">${validate_component(Main, "EditCompMain").$$render($$result, {}, {}, {})}
+                <div id="${"bs2nd-units-filter-slider-button"}" class="${"svelte-haop3e"}"><img class="${escape(null_to_empty("")) + " svelte-haop3e"}" src="${"/img/arrow-circle-left-solid.svg"}" alt="${"\u21E6"}"></div></section></section>
+        
+    ` : ``}`;
+        }
+      })}
+    <section id="${"bs2nd-edit-panels"}" class="${"svelte-haop3e"}"><section id="${"bs2nd-deck-edit"}" class="${"svelte-haop3e"}"><section id="${"bs2nd-deck-edit-panel"}" class="${"svelte-haop3e"}">${each($deckStore, (unit) => {
+        return `${unit == void 0 ? `<div class="${"unit-in-deck-blank-slot svelte-haop3e"}"></div>` : `${validate_component(Kotodaman, "Kotodaman").$$render($$result, { kotodaman: unit }, {}, {})}`}`;
+      })}</section>
+            <button class="${"svelte-haop3e"}">\u30EA\u30BB\u30C3\u30C8</button></section>
+        <section id="${"bs2nd-show-units-panel"}" class="${"svelte-haop3e"}">${each($unitListStore, (unit) => {
+        return `${validate_component(Kotodaman, "Kotodaman").$$render($$result, { kotodaman: unit, full: true }, {}, {})}`;
+      })}
+            ${$isListLoading ? `<div style="${"margin-top:80px"}">${validate_component(Bs2ndLoader, "Bs2ndLoader").$$render($$result, {}, {}, {})}</div>` : ``}
+            ${``}
+            ${validate_component(InfiniteScroll, "InfiniteScroll").$$render($$result, { threshold: 100 }, {}, {})}</section></section>
+    ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
+        default: ({ matches }) => {
+          return `${matches ? `
+    <section id="${"bs2nd-deck-select-slider"}" class="${escape(null_to_empty("")) + " svelte-haop3e"}">${validate_component(Storage, "Storage").$$render($$result, {}, {}, {})}
+        <div id="${"bs2nd-deck-select-slider-button"}" class="${"svelte-haop3e"}"><img class="${escape(null_to_empty("")) + " svelte-haop3e"}" src="${"/img/arrow-circle-left-solid.svg"}" alt="${"\u21E6"}"></div></section>
+    <section id="${"bs2nd-units-filter-slider"}" class="${escape(null_to_empty("")) + " svelte-haop3e"}">${validate_component(Main, "EditCompMain").$$render($$result, {}, {}, {})}
+        <div id="${"bs2nd-units-filter-slider-button"}" class="${"svelte-haop3e"}"><img class="${escape(null_to_empty("")) + " svelte-haop3e"}" src="${"/img/arrow-circle-left-solid.svg"}" alt="${"\u21E6"}"></div></section>
+    ` : ``}`;
+        }
+      })}
+
+    ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
+        default: ({ matches }) => {
+          return `${matches ? `
+    <section class="${"panel-box"}"><h2 class="${"svelte-haop3e"}">\u30C7\u30C3\u30AD\u30B9\u30C8\u30EC\u30FC\u30B8</h2>
+        <p class="${"svelte-haop3e"}">\u7DE8\u6210\u3057\u305F\u30C7\u30C3\u30AD\u3092\u4FDD\u5B58\u3067\u304D\u307E\u3059\u3002<br>\u30C7\u30C3\u30AD\u306F\u3001\u3053\u306E\u30D6\u30E9\u30A6\u30B6\u306E<br>\u30ED\u30FC\u30AB\u30EB\u30B9\u30C8\u30EC\u30FC\u30B8\u306B\u4FDD\u5B58\u3055\u308C\u307E\u3059\u3002</p>
+        <section id="${"bs2nd-deck-select-panel"}" class="${"svelte-haop3e"}">${validate_component(Storage, "Storage").$$render($$result, {}, {}, {})}</section></section>
+    ` : ``}`;
+        }
+      })}
+</article>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/7.js
+var __exports13 = {};
+__export(__exports13, {
+  css: () => css25,
+  entry: () => entry13,
+  js: () => js13,
+  module: () => edit_svelte_exports
+});
+var entry13, js13, css25;
+var init__13 = __esm({
+  ".svelte-kit/output/server/nodes/7.js"() {
+    init_edit_svelte();
+    entry13 = "pages/app/bakuzetsu-searcher-2nd/edit.svelte-684da9af.js";
+    js13 = ["pages/app/bakuzetsu-searcher-2nd/edit.svelte-684da9af.js", "chunks/index-4741d8af.js", "chunks/summon-455a7576.js", "chunks/api-e2b0109c.js", "chunks/index-1f66f3ef.js", "chunks/SvelteToast.svelte_svelte_type_style_lang-4f8ef653.js", "chunks/MediaQuery-e124c5d0.js", "chunks/bs2ndLoader-574176af.js"];
+    css25 = ["assets/pages/app/bakuzetsu-searcher-2nd/edit.svelte-4a3fd636.css", "assets/SvelteToast.svelte_svelte_type_style_lang-00aa1808.css", "assets/bs2ndLoader-8a29ed63.css"];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/app/bakuzetsu-searcher-2nd/post.svelte.js
+var post_svelte_exports = {};
+__export(post_svelte_exports, {
+  default: () => Post
+});
+var Post;
+var init_post_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/app/bakuzetsu-searcher-2nd/post.svelte.js"() {
+    init_index_2e97bc70();
+    Post = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      return ``;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/8.js
+var __exports14 = {};
+__export(__exports14, {
+  css: () => css26,
+  entry: () => entry14,
+  js: () => js14,
+  module: () => post_svelte_exports
+});
+var entry14, js14, css26;
+var init__14 = __esm({
+  ".svelte-kit/output/server/nodes/8.js"() {
+    init_post_svelte();
+    entry14 = "pages/app/bakuzetsu-searcher-2nd/post.svelte-cedb19f8.js";
+    js14 = ["pages/app/bakuzetsu-searcher-2nd/post.svelte-cedb19f8.js", "chunks/index-4741d8af.js"];
+    css26 = [];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/app/pokemon-card-game-effector/__layout.svelte.js
+var layout_svelte_exports3 = {};
+__export(layout_svelte_exports3, {
+  default: () => _layout3
+});
+var css27, _layout3;
+var init_layout_svelte3 = __esm({
+  ".svelte-kit/output/server/entries/pages/app/pokemon-card-game-effector/__layout.svelte.js"() {
+    init_index_2e97bc70();
+    css27 = {
+      code: "header.svelte-8xc0wm.svelte-8xc0wm{position:fixed;width:60%;max-width:500px;right:50px;padding:20px;z-index:100}header.svelte-8xc0wm .n2-logo.svelte-8xc0wm{display:flex;background:linear-gradient(135deg, rgb(0, 0, 0), rgba(0, 0, 0, 0.2));padding:20px}header.svelte-8xc0wm .n2-logo img.svelte-8xc0wm{width:40px}header.svelte-8xc0wm .n2-logo h1.svelte-8xc0wm{font-size:14px;margin:0 20px}article.svelte-8xc0wm.svelte-8xc0wm{position:relative;height:100vh;overflow:hidden}",
+      map: null
+    };
+    _layout3 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      $$result.css.add(css27);
+      return `<header class="${"svelte-8xc0wm"}"><div class="${"n2-logo svelte-8xc0wm"}"><a href="${"/"}"><img src="${"/img/n2-icon-white.svg"}" alt="${""}" class="${"svelte-8xc0wm"}"></a>
+        <h1 class="${"svelte-8xc0wm"}">Pokemon Card Game<br>Damage Counter Web Effector</h1></div></header>
+
+<article class="${"svelte-8xc0wm"}">${slots.default ? slots.default({}) : ``}
+</article>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/3.js
+var __exports15 = {};
+__export(__exports15, {
+  css: () => css28,
+  entry: () => entry15,
+  js: () => js15,
+  module: () => layout_svelte_exports3
+});
+var entry15, js15, css28;
+var init__15 = __esm({
+  ".svelte-kit/output/server/nodes/3.js"() {
+    init_layout_svelte3();
+    entry15 = "pages/app/pokemon-card-game-effector/__layout.svelte-d07bed9f.js";
+    js15 = ["pages/app/pokemon-card-game-effector/__layout.svelte-d07bed9f.js", "chunks/index-4741d8af.js"];
+    css28 = ["assets/pages/app/pokemon-card-game-effector/__layout.svelte-88ca99f2.css"];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/app/pokemon-card-game-effector/game.svelte.js
+var game_svelte_exports = {};
+__export(game_svelte_exports, {
+  default: () => Game
+});
+var css$26, size, DamageKanComponent, css$18, StorageComponent, css29, Game;
+var init_game_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/app/pokemon-card-game-effector/game.svelte.js"() {
+    init_index_2e97bc70();
+    css$26 = {
+      code: ".damage_kan.svelte-um7kxu.svelte-um7kxu{position:absolute;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:var(--id);top:var(--x);left:var(--y);width:var(--size);height:var(--size);border-radius:calc(var(--size) / 2);background:yellow}.damage_kan.svelte-um7kxu p.svelte-um7kxu{user-select:none;color:black;font-size:20px;font-weight:bold}",
+      map: null
+    };
+    size = 100;
+    DamageKanComponent = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { model = { id: 1, x: 0, y: 0, counter: 100 } } = $$props;
+      if ($$props.model === void 0 && $$bindings.model && model !== void 0)
+        $$bindings.model(model);
+      $$result.css.add(css$26);
+      return `
+
+<div class="${"damage_kan svelte-um7kxu"}" style="${"--id:" + escape(model.id) + ";--x:" + escape(model.x) + "px; --y:" + escape(model.y) + "px; --size:" + escape(size) + "px"}"><p class="${"svelte-um7kxu"}">${escape(model.counter)}</p>
+</div>`;
+    });
+    css$18 = {
+      code: ".storage-box.svelte-1jmy6x1{position:absolute;right:var(--dx);top:var(--dy);width:120px;height:500px;background:linear-gradient(\n            127deg,\n            rgb(0, 0, 0),\n            rgb(26, 32, 53)\n        );box-shadow:-5px 10px 0 rgba(0,0,0,0.5);border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center}button.svelte-1jmy6x1{position:absolute;right:10px;bottom:10px;background:white;--size:40px;width:var(--size);height:var(--size);border-radius:calc( var(--size) / 2)}",
+      map: null
+    };
+    StorageComponent = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      createEventDispatcher();
+      let dx = 50;
+      let dy = 300;
+      let damageKanArray = [];
+      $$result.css.add(css$18);
+      return `
+
+<div class="${"storage-box svelte-1jmy6x1"}" style="${"--dx:" + escape(dx) + "px;--dy:" + escape(dy) + "px;"}">${each(damageKanArray, (item) => {
+        return `${validate_component(DamageKanComponent, "DamageKanComponent").$$render($$result, { model: item }, {}, {})}`;
+      })}
+
+<button class="${"svelte-1jmy6x1"}">\u6574</button>
+</div>`;
+    });
+    css29 = {
+      code: "section.svelte-93faju.svelte-93faju{position:absolute;width:100vw;height:100vh}#video-layor.svelte-93faju.svelte-93faju{display:flex;justify-content:center;overflow:hidden}#video-layor.svelte-93faju video.svelte-93faju{position:absolute;top:0;bottom:0;height:95%;margin:auto 0}#effect-layor.svelte-93faju.svelte-93faju{right:0;width:0px;height:100vh}",
+      map: null
+    };
+    Game = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      $$result.css.add(css29);
+      return `<section id="${"video-layor"}" class="${"svelte-93faju"}"><video id="${"web-video"}" class="${"svelte-93faju"}"><track kind="${"captions"}"></video></section>
+
+<section id="${"effect-layor"}" class="${"svelte-93faju"}">${validate_component(StorageComponent, "StorageComponent").$$render($$result, {}, {}, {})}
+</section>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/9.js
+var __exports16 = {};
+__export(__exports16, {
+  css: () => css30,
+  entry: () => entry16,
+  js: () => js16,
+  module: () => game_svelte_exports
+});
+var entry16, js16, css30;
+var init__16 = __esm({
+  ".svelte-kit/output/server/nodes/9.js"() {
+    init_game_svelte();
+    entry16 = "pages/app/pokemon-card-game-effector/game.svelte-499f3964.js";
+    js16 = ["pages/app/pokemon-card-game-effector/game.svelte-499f3964.js", "chunks/index-4741d8af.js"];
+    css30 = ["assets/pages/app/pokemon-card-game-effector/game.svelte-5d629a23.css"];
+  }
+});
+
+// .svelte-kit/output/server/chunks/TCGsimStore-f57989de.js
+var cardWidth, modeStore, movingStore, exDeckListStore, deckListStore, handListStore, boardListStore, unshuffleDeckListStore, unshuffleExDeckListStore, boardAreaInfoStore, handAreaInfoStore, deckAreaInfoStore;
+var init_TCGsimStore_f57989de = __esm({
+  ".svelte-kit/output/server/chunks/TCGsimStore-f57989de.js"() {
+    init_index_96622166();
+    cardWidth = readable2(90);
+    readable2(110);
+    modeStore = writable2("dark");
+    movingStore = writable2(false);
+    exDeckListStore = writable2([]);
+    deckListStore = writable2([]);
+    handListStore = writable2([]);
+    boardListStore = writable2([]);
+    unshuffleDeckListStore = writable2([]);
+    unshuffleExDeckListStore = writable2([]);
+    boardAreaInfoStore = writable2({ top: 0, left: 0, right: 0, bottom: 0 });
+    handAreaInfoStore = writable2({ top: 0, left: 0, right: 0, bottom: 0 });
+    deckAreaInfoStore = writable2({ top: 0, left: 0, right: 0, bottom: 0 });
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/app/tcg-simulator/__layout.svelte.js
+var layout_svelte_exports4 = {};
+__export(layout_svelte_exports4, {
+  default: () => _layout4
+});
+var css31, _layout4;
+var init_layout_svelte4 = __esm({
+  ".svelte-kit/output/server/entries/pages/app/tcg-simulator/__layout.svelte.js"() {
+    init_index_2e97bc70();
+    init_ToastArea_32d9fee1();
+    init_TCGsimStore_f57989de();
+    init_index_96622166();
+    css31 = {
+      code: '@charset "UTF-8";:root{--header-height:40px;--cw:90px;--ch:110px}#tcg-all-compnents.svelte-c83jr6.svelte-c83jr6{display:flex;justify-content:space-between;top:0;left:0;right:0;bottom:0;overflow-y:scroll;-ms-overflow-style:none;scrollbar-width:none}#tcg-all-compnents.svelte-c83jr6.svelte-c83jr6::-webkit-scrollbar{display:none}header.svelte-c83jr6.svelte-c83jr6{display:flex;justify-content:space-between;height:var(--header-height)}header.svelte-c83jr6 .n2-logo.svelte-c83jr6{padding:10px}header.svelte-c83jr6 .n2-logo img.svelte-c83jr6{height:20px}header.svelte-c83jr6 .color-config.svelte-c83jr6{margin:0 20px 0 0;display:flex;align-items:center}header.svelte-c83jr6 .color-config button.svelte-c83jr6{width:25px;height:25px;margin:0 7px;border-radius:7px}header.svelte-c83jr6 .color-config .light.svelte-c83jr6{background:white}header.svelte-c83jr6 .color-config .dark.svelte-c83jr6{background:darkblue}#screen.svelte-c83jr6.svelte-c83jr6{display:flex;flex-direction:column;justify-content:center;width:calc(100vw - 70px);height:calc(100vh - 40px)}#screen.svelte-c83jr6 #base.svelte-c83jr6{width:1100px;height:760px;margin:0 auto;-moz-perspective:500;-webkit-perspective:500;-o-perspective:500;-ms-perspective:500;perspective:500}#screen.svelte-c83jr6 #base.light.svelte-c83jr6{background:rgb(255, 255, 255);background:radial-gradient(circle at bottom, rgb(255, 255, 255) 0%, rgb(255, 236, 192) 100%)}#screen.svelte-c83jr6 #base.dark.svelte-c83jr6{background:rgb(36, 24, 110);background:radial-gradient(circle at bottom, rgb(36, 24, 110) 0%, rgb(0, 0, 0) 100%)}footer.svelte-c83jr6.svelte-c83jr6{top:0;bottom:0;right:0;width:70px;display:flex;flex-direction:column;justify-content:space-around}footer.light.svelte-c83jr6.svelte-c83jr6{background:white}footer.dark.svelte-c83jr6.svelte-c83jr6{background:black}footer.svelte-c83jr6 a div.svelte-c83jr6{width:50px;height:50px;background:yellow}',
+      map: null
+    };
+    _layout4 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $modeStore, $$unsubscribe_modeStore;
+      $$unsubscribe_modeStore = subscribe(modeStore, (value) => $modeStore = value);
+      $$result.css.add(css31);
+      $$unsubscribe_modeStore();
+      return `<header class="${"svelte-c83jr6"}"><div class="${"n2-logo svelte-c83jr6"}"><a href="${"/"}"><img src="${"/img/n2-icon-white.svg"}" alt="${""}" class="${"svelte-c83jr6"}"></a></div>
+    <div class="${"color-config svelte-c83jr6"}"><button class="${"light svelte-c83jr6"}"></button>
+        <button class="${"dark svelte-c83jr6"}"></button></div></header>
+<div id="${"tcg-all-compnents"}" class="${"svelte-c83jr6"}"><article id="${"screen"}" class="${"svelte-c83jr6"}"><section id="${"base"}" class="${escape(null_to_empty($modeStore)) + " svelte-c83jr6"}">${slots.default ? slots.default({}) : ``}</section></article>
+    
+    <footer class="${escape(null_to_empty($modeStore)) + " svelte-c83jr6"}"><a href="${"/app/tcg-simulator/game"}"><div class="${"svelte-c83jr6"}"></div></a>
+        <a href="${"/app/tcg-simulator/edit"}"><div class="${"svelte-c83jr6"}"></div></a></footer></div>
+${validate_component(ToastArea, "ToastArea").$$render($$result, {}, {}, {})}`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/4.js
+var __exports17 = {};
+__export(__exports17, {
+  css: () => css32,
+  entry: () => entry17,
+  js: () => js17,
+  module: () => layout_svelte_exports4
+});
+var entry17, js17, css32;
+var init__17 = __esm({
+  ".svelte-kit/output/server/nodes/4.js"() {
+    init_layout_svelte4();
+    entry17 = "pages/app/tcg-simulator/__layout.svelte-78c90e62.js";
+    js17 = ["pages/app/tcg-simulator/__layout.svelte-78c90e62.js", "chunks/index-4741d8af.js", "chunks/ToastArea-d8ce3583.js", "chunks/SvelteToast.svelte_svelte_type_style_lang-4f8ef653.js", "chunks/index-1f66f3ef.js", "chunks/TCGsimStore-8bf2b04b.js"];
+    css32 = ["assets/pages/app/tcg-simulator/__layout.svelte-89ebff80.css", "assets/ToastArea-00e911a5.css", "assets/SvelteToast.svelte_svelte_type_style_lang-00aa1808.css"];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/app/tcg-simulator/edit.svelte.js
+var edit_svelte_exports2 = {};
+__export(edit_svelte_exports2, {
+  default: () => Edit2
+});
+var css33, Edit2;
+var init_edit_svelte2 = __esm({
+  ".svelte-kit/output/server/entries/pages/app/tcg-simulator/edit.svelte.js"() {
+    init_index_2e97bc70();
+    init_TCGsimStore_f57989de();
+    init_index_96622166();
+    css33 = {
+      code: ":root{--card-width:85px;--card-margin:5px}img.svelte-ds7p2u{border-radius:10px;width:var(--card-width);margin:var(--card-margin)}#deck.svelte-ds7p2u,#exdeck.svelte-ds7p2u{display:flex;width:calc(var(--card-width) * 10 + var(--card-margin) * 20);margin:0 auto;flex-wrap:wrap}",
+      map: null
+    };
+    Edit2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $$unsubscribe_exDeckListStore;
+      let $$unsubscribe_deckListStore;
+      let $unshuffleDeckListStore, $$unsubscribe_unshuffleDeckListStore;
+      let $unshuffleExDeckListStore, $$unsubscribe_unshuffleExDeckListStore;
+      $$unsubscribe_exDeckListStore = subscribe(exDeckListStore, (value) => value);
+      $$unsubscribe_deckListStore = subscribe(deckListStore, (value) => value);
+      $$unsubscribe_unshuffleDeckListStore = subscribe(unshuffleDeckListStore, (value) => $unshuffleDeckListStore = value);
+      $$unsubscribe_unshuffleExDeckListStore = subscribe(unshuffleExDeckListStore, (value) => $unshuffleExDeckListStore = value);
+      $$result.css.add(css33);
+      $$unsubscribe_exDeckListStore();
+      $$unsubscribe_deckListStore();
+      $$unsubscribe_unshuffleDeckListStore();
+      $$unsubscribe_unshuffleExDeckListStore();
+      return `<input type="${"file"}" webkitdirectory>
+<section id="${"deck"}" class="${"svelte-ds7p2u"}">${each($unshuffleDeckListStore, (d) => {
+        return `<img${add_attribute("src", d.url, 0)} alt="${""}" class="${"svelte-ds7p2u"}">`;
+      })}</section>
+<section id="${"exdeck"}" class="${"svelte-ds7p2u"}">${each($unshuffleExDeckListStore, (e2) => {
+        return `<img${add_attribute("src", e2.url, 0)} alt="${""}" class="${"svelte-ds7p2u"}">`;
+      })}
+</section>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/10.js
+var __exports18 = {};
+__export(__exports18, {
+  css: () => css34,
+  entry: () => entry18,
+  js: () => js18,
+  module: () => edit_svelte_exports2
+});
+var entry18, js18, css34;
+var init__18 = __esm({
+  ".svelte-kit/output/server/nodes/10.js"() {
+    init_edit_svelte2();
+    entry18 = "pages/app/tcg-simulator/edit.svelte-cf4a5ef4.js";
+    js18 = ["pages/app/tcg-simulator/edit.svelte-cf4a5ef4.js", "chunks/index-4741d8af.js", "chunks/TCGsimStore-8bf2b04b.js", "chunks/index-1f66f3ef.js", "chunks/deck-dd9ec9e1.js"];
+    css34 = ["assets/pages/app/tcg-simulator/edit.svelte-d6139e6a.css", "assets/deck-d908b596.css"];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/app/tcg-simulator/game.svelte.js
+var game_svelte_exports2 = {};
+__export(game_svelte_exports2, {
+  default: () => Game2
+});
+function handLineupGuideFunction(x2) {
+  return -1 * Math.sqrt(Math.pow(handLineupGuideRadius, 2) - Math.pow(x2, 2));
+}
+var css$33, Card, css$27, Deck, css$19, handLineupGuideRadius, Hand, css35, Game2;
+var init_game_svelte2 = __esm({
+  ".svelte-kit/output/server/entries/pages/app/tcg-simulator/game.svelte.js"() {
+    init_index_2e97bc70();
+    init_TCGsimStore_f57989de();
+    init_index_96622166();
+    css$33 = {
+      code: ":root{--guide-color:#ffbb00}img.svelte-e02kpp.svelte-e02kpp{-webkit-user-drag:none;border-radius:5px}.card-body.svelte-e02kpp.svelte-e02kpp{position:absolute;z-index:100;left:var(--pos_x);top:var(--pos_y);width:var(--cw);height:var(--ch);cursor:move}.card-body.noBoard.svelte-e02kpp.svelte-e02kpp{transition:0.2s}.card-body.movin.svelte-e02kpp.svelte-e02kpp{transition:none}.card-body.movin.svelte-e02kpp .card-surface.svelte-e02kpp{filter:grayscale(100%) blur(2px)}.card-body.noGuide.svelte-e02kpp .card-surface.svelte-e02kpp{filter:none}.card-body.svelte-e02kpp .card-surface.svelte-e02kpp{position:absolute;transform:rotate(var(--rotate));transition:0.2s;width:100%;height:100%;-moz-perspective:500;-webkit-perspective:500;-o-perspective:500;-ms-perspective:500;perspective:500;transition:0.2s}.card-body.svelte-e02kpp .card-surface .front.svelte-e02kpp,.card-body.svelte-e02kpp .card-surface .back.svelte-e02kpp{transition:0.2s;position:absolute;left:8px;backface-visibility:hidden}.card-body.svelte-e02kpp .card-surface .front img.svelte-e02kpp,.card-body.svelte-e02kpp .card-surface .back img.svelte-e02kpp{width:calc(var(--cw) - 16px);z-index:10000}.card-body.svelte-e02kpp .card-surface .back.svelte-e02kpp{transform:rotateY(-180deg)}.card-body.svelte-e02kpp .card-surface.flippin .front.svelte-e02kpp{transform:rotateY(-180deg)}.card-body.svelte-e02kpp .card-surface.flippin .back.svelte-e02kpp{transform:rotateY(0deg)}.card-body.svelte-e02kpp .card-guide.svelte-e02kpp{position:absolute;--scaleup-width:10px;--scaleup-height:50px;left:calc(-1 * var(--scaleup-width) / 2);top:calc(-1 * var(--scaleup-height) / 2);width:calc(var(--cw) + var(--scaleup-width));height:calc(var(--ch) + var(--scaleup-height));border-radius:10px}.card-body.svelte-e02kpp .card-guide.hover.svelte-e02kpp{border:solid 2px var(--guide-color)}.card-body.svelte-e02kpp .card-guide.hover button.svelte-e02kpp{opacity:0.6;padding:0;position:absolute;--b-width:50%;--b-height:25px;--b-width-long:60px;--b-height-long:70px;--b-bradius:8px;width:var(--b-width);height:var(--b-height);background-color:var(--guide-color)}.card-body.svelte-e02kpp .card-guide.hover button.left-rotate.svelte-e02kpp{top:0;left:0}.card-body.svelte-e02kpp .card-guide.hover button.right-rotate.svelte-e02kpp{top:0;right:0}.card-body.svelte-e02kpp .card-guide.hover button.flip.svelte-e02kpp{bottom:0;left:0;right:0;width:100%;height:var(--b-height)}.card-body.svelte-e02kpp .card-shadow.svelte-e02kpp{position:absolute;--scaleup-width:20px;--scaleup-height:50px;left:calc(-1 * var(--scaleup-width) / 2);top:calc(-1 * var(--scaleup-height) * 2);width:calc(var(--cw) + var(--scaleup-width));height:calc(var(--ch) + var(--scaleup-height))}",
+      map: null
+    };
+    Card = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $$unsubscribe_boardListStore;
+      let $movingStore, $$unsubscribe_movingStore;
+      let $$unsubscribe_deckAreaInfoStore;
+      let $$unsubscribe_handAreaInfoStore;
+      let $$unsubscribe_boardAreaInfoStore;
+      $$unsubscribe_boardListStore = subscribe(boardListStore, (value) => value);
+      $$unsubscribe_movingStore = subscribe(movingStore, (value) => $movingStore = value);
+      $$unsubscribe_deckAreaInfoStore = subscribe(deckAreaInfoStore, (value) => value);
+      $$unsubscribe_handAreaInfoStore = subscribe(handAreaInfoStore, (value) => value);
+      $$unsubscribe_boardAreaInfoStore = subscribe(boardAreaInfoStore, (value) => value);
+      createEventDispatcher();
+      let { id } = $$props;
+      let { pos_x } = $$props;
+      let { pos_y } = $$props;
+      let { onArea = "board" } = $$props;
+      let { img_url } = $$props;
+      let { sleeve_url } = $$props;
+      let { rotate = 0 } = $$props;
+      let { noGuide = false } = $$props;
+      let { flippin = false } = $$props;
+      if ($$props.id === void 0 && $$bindings.id && id !== void 0)
+        $$bindings.id(id);
+      if ($$props.pos_x === void 0 && $$bindings.pos_x && pos_x !== void 0)
+        $$bindings.pos_x(pos_x);
+      if ($$props.pos_y === void 0 && $$bindings.pos_y && pos_y !== void 0)
+        $$bindings.pos_y(pos_y);
+      if ($$props.onArea === void 0 && $$bindings.onArea && onArea !== void 0)
+        $$bindings.onArea(onArea);
+      if ($$props.img_url === void 0 && $$bindings.img_url && img_url !== void 0)
+        $$bindings.img_url(img_url);
+      if ($$props.sleeve_url === void 0 && $$bindings.sleeve_url && sleeve_url !== void 0)
+        $$bindings.sleeve_url(sleeve_url);
+      if ($$props.rotate === void 0 && $$bindings.rotate && rotate !== void 0)
+        $$bindings.rotate(rotate);
+      if ($$props.noGuide === void 0 && $$bindings.noGuide && noGuide !== void 0)
+        $$bindings.noGuide(noGuide);
+      if ($$props.flippin === void 0 && $$bindings.flippin && flippin !== void 0)
+        $$bindings.flippin(flippin);
+      $$result.css.add(css$33);
+      $$unsubscribe_boardListStore();
+      $$unsubscribe_movingStore();
+      $$unsubscribe_deckAreaInfoStore();
+      $$unsubscribe_handAreaInfoStore();
+      $$unsubscribe_boardAreaInfoStore();
+      return `
+
+
+<section class="${"card-body " + escape("") + " " + escape(noGuide ? "noGuide" : "") + " " + escape(onArea != "board" ? "noBoard" : "") + " svelte-e02kpp"}" style="${"--pos_x:" + escape(pos_x) + "px; --pos_y:" + escape(pos_y) + "px;--img:" + escape(img_url) + "; --rotate:" + escape(rotate) + "deg;"}">${!$movingStore ? `<div class="${"card-guide " + escape("") + " svelte-e02kpp"}">${``}</div>` : ``}
+    <div class="${"card-surface " + escape(flippin ? "flippin" : "") + " svelte-e02kpp"}"><div class="${"front svelte-e02kpp"}"><img${add_attribute("src", img_url, 0)} alt="${""}" class="${"svelte-e02kpp"}"></div>
+        <div class="${"back svelte-e02kpp"}"><img${add_attribute("src", sleeve_url, 0)} alt="${""}" class="${"svelte-e02kpp"}"></div></div>
+
+    ${``}
+    
+</section>`;
+    });
+    css$27 = {
+      code: "#deckArea.svelte-1kk6kdi.svelte-1kk6kdi{position:relative}#deckArea.light.svelte-1kk6kdi.svelte-1kk6kdi{--deck-bg-color-top:#0a2ea5;--deck-bg-color-center:#324892;--deck-bg-color-bottom:#130069}#deckArea.dark.svelte-1kk6kdi.svelte-1kk6kdi{--deck-bg-color-top:#0a2ea5;--deck-bg-color-center:#83a0ff;--deck-bg-color-bottom:#130069}#deckPiling.svelte-1kk6kdi.svelte-1kk6kdi{position:relative;width:var(--ch);height:var(--cw)}#deckPiling.svelte-1kk6kdi .deckbottom.svelte-1kk6kdi{position:absolute;--round-len:300px;width:calc(var(--round-len) / 2);height:var(--round-len);top:-90px;left:0;overflow:hidden}#deckPiling.svelte-1kk6kdi .deckbottom .round.svelte-1kk6kdi{position:absolute;right:0;width:var(--round-len);height:var(--round-len);border-radius:200px;overflow:hidden}#deckPiling.svelte-1kk6kdi .deckbottom .round .round-top.svelte-1kk6kdi,#deckPiling.svelte-1kk6kdi .deckbottom .round .round-center.svelte-1kk6kdi,#deckPiling.svelte-1kk6kdi .deckbottom .round .round-bottom.svelte-1kk6kdi{position:absolute;width:var(--round-len);height:calc(var(--round-len) / 3)}#deckPiling.svelte-1kk6kdi .deckbottom .round .round-top.svelte-1kk6kdi{top:0;background:var(--deck-bg-color-top)}#deckPiling.svelte-1kk6kdi .deckbottom .round .round-center.svelte-1kk6kdi{top:50%;transform:translate(0, -50%);background:var(--deck-bg-color-center)}#deckPiling.svelte-1kk6kdi .deckbottom .round .round-bottom.svelte-1kk6kdi{bottom:0;background:var(--deck-bg-color-bottom)}",
+      map: null
+    };
+    Deck = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $deckListStore, $$unsubscribe_deckListStore;
+      let $modeStore, $$unsubscribe_modeStore;
+      $$unsubscribe_deckListStore = subscribe(deckListStore, (value) => $deckListStore = value);
+      $$unsubscribe_modeStore = subscribe(modeStore, (value) => $modeStore = value);
+      createEventDispatcher();
+      $$result.css.add(css$27);
+      $$unsubscribe_deckListStore();
+      $$unsubscribe_modeStore();
+      return `<section id="${"deckArea"}" class="${escape(null_to_empty($modeStore)) + " svelte-1kk6kdi"}"><section id="${"deckPiling"}" class="${"svelte-1kk6kdi"}"><div class="${"deckbottom svelte-1kk6kdi"}"><div class="${"round svelte-1kk6kdi"}"><div class="${"round-top svelte-1kk6kdi"}"></div>
+                <div class="${"round-center svelte-1kk6kdi"}"></div>
+                <div class="${"round-bottom svelte-1kk6kdi"}"></div></div></div>
+        ${each($deckListStore, (d, i2) => {
+        return `${validate_component(Card, "Card").$$render($$result, {
+          id: d.id,
+          pos_x: d.x + i2 * -0.5 + 25,
+          pos_y: d.y + i2 * -0.8 + 10,
+          flippin: d.flip,
+          onArea: "deck",
+          img_url: d.url,
+          sleeve_url: d.burl,
+          noGuide: true
+        }, {}, {})}`;
+      })}</section>
+</section>`;
+    });
+    css$19 = {
+      code: "#handArea.svelte-11la4tw.svelte-11la4tw{position:absolute;margin:0 auto;width:500px;height:75px;left:calc(50% - 250px);bottom:0}#handArea.light.svelte-11la4tw.svelte-11la4tw{--hand-bg-color:#0a2ea5}#handArea.dark.svelte-11la4tw.svelte-11la4tw{--hand-bg-color:#081081}#handArea.svelte-11la4tw #handArea-bg.svelte-11la4tw{overflow:hidden;width:inherit;height:inherit}#handArea.svelte-11la4tw #handArea-bg #handArea-bg-radius.svelte-11la4tw{position:relative;margin:0 auto;width:inherit;height:500px;border-radius:250px}#handArea.svelte-11la4tw #handArea-bg #handArea-bg-radius.light.svelte-11la4tw{background:yellow}#handArea.svelte-11la4tw #handArea-bg #handArea-bg-radius.dark.svelte-11la4tw{background:var(--hand-bg-color)}",
+      map: null
+    };
+    handLineupGuideRadius = 250;
+    Hand = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $handListStore, $$unsubscribe_handListStore;
+      let $cardWidth, $$unsubscribe_cardWidth;
+      let $modeStore, $$unsubscribe_modeStore;
+      $$unsubscribe_handListStore = subscribe(handListStore, (value) => $handListStore = value);
+      $$unsubscribe_cardWidth = subscribe(cardWidth, (value) => $cardWidth = value);
+      $$unsubscribe_modeStore = subscribe(modeStore, (value) => $modeStore = value);
+      createEventDispatcher();
+      $$result.css.add(css$19);
+      {
+        {
+          let hand = $handListStore;
+          const handLen = hand.length;
+          let xSpacing = (handLineupGuideRadius * 2 - 150) / handLen;
+          let degSpaning = 100 / handLen;
+          if (xSpacing > 50) {
+            xSpacing = 50;
+          }
+          if (degSpaning > 20) {
+            degSpaning = 20;
+          }
+          let temp = [];
+          for (let i2 = 0; i2 < handLen; i2++) {
+            if (hand[i2]) {
+              const x2 = xSpacing * (i2 - handLen / 2 + 0.5);
+              const y = handLineupGuideFunction(x2);
+              const deg = (i2 - Math.floor(handLen / 2)) * degSpaning;
+              temp.push({
+                id: hand[i2].id,
+                url: hand[i2].url,
+                burl: hand[i2].burl,
+                x: x2 + handLineupGuideRadius - $cardWidth / 2,
+                y: y + 150,
+                rotate: deg,
+                flip: false
+              });
+            } else {
+              temp.push(void 0);
+            }
+          }
+          set_store_value(handListStore, $handListStore = temp, $handListStore);
+        }
+      }
+      $$unsubscribe_handListStore();
+      $$unsubscribe_cardWidth();
+      $$unsubscribe_modeStore();
+      return `<section id="${"handArea"}" class="${escape(null_to_empty($modeStore)) + " svelte-11la4tw"}"><div id="${"handArea-bg"}" class="${"svelte-11la4tw"}"><div id="${"handArea-bg-radius"}" class="${escape(null_to_empty($modeStore)) + " svelte-11la4tw"}"></div></div>
+    ${each($handListStore, (h2) => {
+        return `${h2 ? `${validate_component(Card, "Card").$$render($$result, {
+          id: h2.id,
+          pos_x: h2.x,
+          pos_y: h2.y,
+          rotate: h2.rotate,
+          onArea: "hand",
+          img_url: h2.url,
+          sleeve_url: h2.burl,
+          flippin: h2.flip
+        }, {}, {})}` : ``}`;
+      })}
+</section>`;
+    });
+    css35 = {
+      code: "#board.svelte-wvq7x7.svelte-wvq7x7{width:825px;height:550px;z-index:1;margin:0 auto 0 200px;transform:rotateX(10deg);border-radius:30px;position:relative}#board.light.svelte-wvq7x7.svelte-wvq7x7{background:radial-gradient(ellipse, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 70%, rgba(0, 0, 0, 0.2) 100%)}#board.dark.svelte-wvq7x7.svelte-wvq7x7{background:radial-gradient(ellipse, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.4) 70%, rgba(255, 255, 255, 0.1) 100%)}#myHand.svelte-wvq7x7.svelte-wvq7x7{position:fixed;z-index:0;width:100%;height:75px;bottom:0}#myHand.svelte-wvq7x7 #handArea-main.svelte-wvq7x7{position:absolute;width:500px;height:180px;left:50%;transform:translate(-50%, 0);bottom:0;pointer-events:none}#myDeck.svelte-wvq7x7.svelte-wvq7x7{position:fixed;z-index:0;bottom:130px;left:0px}#myDeck.svelte-wvq7x7 #deckArea-main.svelte-wvq7x7{position:absolute;width:200px;height:300px;top:50%;left:-50%;transform:translate(0, -50%);bottom:0;pointer-events:none}#is-not-PC-alert.svelte-wvq7x7.svelte-wvq7x7{margin:100px 20px;background:black;border:solid 1px white;border-radius:20px;width:70%;max-width:600px}#is-not-PC-alert.svelte-wvq7x7 .clear.svelte-wvq7x7{color:yellow}#is-not-PC-alert.svelte-wvq7x7 .panel.svelte-wvq7x7{padding:20px}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp.svelte-wvq7x7{color:white;position:relative;max-width:310px;margin:50px auto}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp .device-figure.svelte-wvq7x7{width:80%;margin:0 auto;font-size:18px}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp .device-figure span.svelte-wvq7x7{font-size:15px;line-height:18px}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp .device-figure .width.svelte-wvq7x7{position:absolute;left:50%;top:-30px;transform:translate(-50%, 0)}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp .device-figure .height.svelte-wvq7x7{position:absolute;top:50%;right:-55px;transform:rotate(90deg)}",
+      map: null
+    };
+    Game2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $$unsubscribe_deckListStore;
+      let $boardListStore, $$unsubscribe_boardListStore;
+      let $$unsubscribe_handListStore;
+      let $$unsubscribe_cardWidth;
+      let $$unsubscribe_deckAreaInfoStore;
+      let $$unsubscribe_handAreaInfoStore;
+      let $$unsubscribe_boardAreaInfoStore;
+      let $modeStore, $$unsubscribe_modeStore;
+      $$unsubscribe_deckListStore = subscribe(deckListStore, (value) => value);
+      $$unsubscribe_boardListStore = subscribe(boardListStore, (value) => $boardListStore = value);
+      $$unsubscribe_handListStore = subscribe(handListStore, (value) => value);
+      $$unsubscribe_cardWidth = subscribe(cardWidth, (value) => value);
+      $$unsubscribe_deckAreaInfoStore = subscribe(deckAreaInfoStore, (value) => value);
+      $$unsubscribe_handAreaInfoStore = subscribe(handAreaInfoStore, (value) => value);
+      $$unsubscribe_boardAreaInfoStore = subscribe(boardAreaInfoStore, (value) => value);
+      $$unsubscribe_modeStore = subscribe(modeStore, (value) => $modeStore = value);
+      $$result.css.add(css35);
+      $$unsubscribe_deckListStore();
+      $$unsubscribe_boardListStore();
+      $$unsubscribe_handListStore();
+      $$unsubscribe_cardWidth();
+      $$unsubscribe_deckAreaInfoStore();
+      $$unsubscribe_handAreaInfoStore();
+      $$unsubscribe_boardAreaInfoStore();
+      $$unsubscribe_modeStore();
+      return `
+${`<article id="${"board"}" class="${escape(null_to_empty($modeStore)) + " svelte-wvq7x7"}">${each($boardListStore, (bs) => {
+        return `${validate_component(Card, "Card").$$render($$result, {
+          id: bs.id,
+          pos_x: bs.x,
+          pos_y: bs.y,
+          flippin: bs.flip,
+          onArea: "board",
+          img_url: bs.url,
+          sleeve_url: bs.burl
+        }, {}, {})}`;
+      })}</article>
+<article id="${"myHand"}" class="${"svelte-wvq7x7"}"><div id="${"handArea-main"}" class="${"svelte-wvq7x7"}"></div>
+    ${validate_component(Hand, "Hand").$$render($$result, {}, {}, {})}</article>
+<article id="${"myDeck"}" class="${"svelte-wvq7x7"}"><div id="${"deckArea-main"}" class="${"svelte-wvq7x7"}"></div>
+    ${validate_component(Deck, "Deck").$$render($$result, {}, {}, {})}</article>`}`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/11.js
+var __exports19 = {};
+__export(__exports19, {
+  css: () => css36,
+  entry: () => entry19,
+  js: () => js19,
+  module: () => game_svelte_exports2
+});
+var entry19, js19, css36;
+var init__19 = __esm({
+  ".svelte-kit/output/server/nodes/11.js"() {
+    init_game_svelte2();
+    entry19 = "pages/app/tcg-simulator/game.svelte-200e0399.js";
+    js19 = ["pages/app/tcg-simulator/game.svelte-200e0399.js", "chunks/index-4741d8af.js", "chunks/deck-dd9ec9e1.js", "chunks/TCGsimStore-8bf2b04b.js", "chunks/index-1f66f3ef.js"];
+    css36 = ["assets/pages/app/tcg-simulator/game.svelte-d520b168.css", "assets/deck-d908b596.css"];
+  }
+});
+
+// .svelte-kit/vercel-tmp/entry.js
+var entry_exports = {};
+__export(entry_exports, {
   default: () => entry_default
 });
-init_shims();
+module.exports = __toCommonJS(entry_exports);
+
+// .svelte-kit/vercel-tmp/shims.js
+init_install_fetch();
+installFetch();
 
 // node_modules/@sveltejs/kit/dist/node.js
-init_shims();
-function getRawBody(req) {
+var import_stream = require("stream");
+function get_raw_body(req) {
   return new Promise((fulfil, reject) => {
-    const h = req.headers;
-    if (!h["content-type"]) {
+    const h2 = req.headers;
+    if (!h2["content-type"]) {
       return fulfil(null);
     }
     req.on("error", reject);
-    const length = Number(h["content-length"]);
-    if (isNaN(length) && h["transfer-encoding"] == null) {
+    const length = Number(h2["content-length"]);
+    if (isNaN(length) && h2["transfer-encoding"] == null) {
       return fulfil(null);
     }
     let data = new Uint8Array(length || 0);
@@ -7397,103 +10784,241 @@ function getRawBody(req) {
     });
   });
 }
+async function getRequest(base2, req) {
+  let headers = req.headers;
+  if (req.httpVersionMajor === 2) {
+    headers = Object.assign({}, headers);
+    delete headers[":method"];
+    delete headers[":path"];
+    delete headers[":authority"];
+    delete headers[":scheme"];
+  }
+  return new Request(base2 + req.url, {
+    method: req.method,
+    headers,
+    body: await get_raw_body(req)
+  });
+}
+async function setResponse(res, response) {
+  const headers = Object.fromEntries(response.headers);
+  if (response.headers.has("set-cookie")) {
+    headers["set-cookie"] = response.headers.raw()["set-cookie"];
+  }
+  res.writeHead(response.status, headers);
+  if (response.body instanceof import_stream.Readable) {
+    response.body.pipe(res);
+  } else {
+    if (response.body) {
+      res.write(await response.arrayBuffer());
+    }
+    res.end();
+  }
+}
 
-// .svelte-kit/output/server/app.js
-init_shims();
-var import_axios = __toModule(require_axios2());
-var __accessCheck = (obj, member, msg) => {
+// .svelte-kit/output/server/index.js
+init_index_2e97bc70();
+var __accessCheck2 = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
-var __privateGet = (obj, member, getter) => {
-  __accessCheck(obj, member, "read from private field");
+var __privateGet2 = (obj, member, getter) => {
+  __accessCheck2(obj, member, "read from private field");
   return getter ? getter.call(obj) : member.get(obj);
 };
-var __privateAdd = (obj, member, value) => {
+var __privateAdd2 = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateSet = (obj, member, value, setter) => {
-  __accessCheck(obj, member, "write to private field");
+var __privateSet2 = (obj, member, value, setter) => {
+  __accessCheck2(obj, member, "write to private field");
   setter ? setter.call(obj, value) : member.set(obj, value);
   return value;
 };
-var _map;
-function get_single_valued_header(headers, key) {
-  const value = headers[key];
-  if (Array.isArray(value)) {
-    if (value.length === 0) {
-      return void 0;
-    }
-    if (value.length > 1) {
-      throw new Error(`Multiple headers provided for ${key}. Multiple may be provided only for set-cookie`);
-    }
-    return value[0];
-  }
-  return value;
+var _use_hashes;
+var _dev;
+var _script_needs_csp;
+var _style_needs_csp;
+var _directives;
+var _script_src;
+var _style_src;
+function afterUpdate() {
 }
-function coalesce_to_error(err) {
-  return err instanceof Error || err && err.name && err.message ? err : new Error(JSON.stringify(err));
+var Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let { stores } = $$props;
+  let { page } = $$props;
+  let { components } = $$props;
+  let { props_0 = null } = $$props;
+  let { props_1 = null } = $$props;
+  let { props_2 = null } = $$props;
+  let { props_3 = null } = $$props;
+  setContext("__svelte__", stores);
+  afterUpdate(stores.page.notify);
+  if ($$props.stores === void 0 && $$bindings.stores && stores !== void 0)
+    $$bindings.stores(stores);
+  if ($$props.page === void 0 && $$bindings.page && page !== void 0)
+    $$bindings.page(page);
+  if ($$props.components === void 0 && $$bindings.components && components !== void 0)
+    $$bindings.components(components);
+  if ($$props.props_0 === void 0 && $$bindings.props_0 && props_0 !== void 0)
+    $$bindings.props_0(props_0);
+  if ($$props.props_1 === void 0 && $$bindings.props_1 && props_1 !== void 0)
+    $$bindings.props_1(props_1);
+  if ($$props.props_2 === void 0 && $$bindings.props_2 && props_2 !== void 0)
+    $$bindings.props_2(props_2);
+  if ($$props.props_3 === void 0 && $$bindings.props_3 && props_3 !== void 0)
+    $$bindings.props_3(props_3);
+  {
+    stores.page.set(page);
+  }
+  return `
+
+
+${components[1] ? `${validate_component(components[0] || missing_component, "svelte:component").$$render($$result, Object.assign(props_0 || {}), {}, {
+    default: () => {
+      return `${components[2] ? `${validate_component(components[1] || missing_component, "svelte:component").$$render($$result, Object.assign(props_1 || {}), {}, {
+        default: () => {
+          return `${components[3] ? `${validate_component(components[2] || missing_component, "svelte:component").$$render($$result, Object.assign(props_2 || {}), {}, {
+            default: () => {
+              return `${validate_component(components[3] || missing_component, "svelte:component").$$render($$result, Object.assign(props_3 || {}), {}, {})}`;
+            }
+          })}` : `${validate_component(components[2] || missing_component, "svelte:component").$$render($$result, Object.assign(props_2 || {}), {}, {})}`}`;
+        }
+      })}` : `${validate_component(components[1] || missing_component, "svelte:component").$$render($$result, Object.assign(props_1 || {}), {}, {})}`}`;
+    }
+  })}` : `${validate_component(components[0] || missing_component, "svelte:component").$$render($$result, Object.assign(props_0 || {}), {}, {})}`}
+
+${``}`;
+});
+function to_headers(object) {
+  const headers = new Headers();
+  if (object) {
+    for (const key2 in object) {
+      const value = object[key2];
+      if (!value)
+        continue;
+      if (Array.isArray(value)) {
+        value.forEach((value2) => {
+          headers.append(key2, value2);
+        });
+      } else {
+        headers.set(key2, value);
+      }
+    }
+  }
+  return headers;
+}
+function hash(value) {
+  let hash2 = 5381;
+  let i2 = value.length;
+  if (typeof value === "string") {
+    while (i2)
+      hash2 = hash2 * 33 ^ value.charCodeAt(--i2);
+  } else {
+    while (i2)
+      hash2 = hash2 * 33 ^ value[--i2];
+  }
+  return (hash2 >>> 0).toString(36);
 }
 function lowercase_keys(obj) {
   const clone2 = {};
-  for (const key in obj) {
-    clone2[key.toLowerCase()] = obj[key];
+  for (const key2 in obj) {
+    clone2[key2.toLowerCase()] = obj[key2];
   }
   return clone2;
 }
-function error$1(body) {
-  return {
-    status: 500,
-    body,
-    headers: {}
-  };
+function decode_params(params) {
+  for (const key2 in params) {
+    params[key2] = params[key2].replace(/%23/g, "#").replace(/%3[Bb]/g, ";").replace(/%2[Cc]/g, ",").replace(/%2[Ff]/g, "/").replace(/%3[Ff]/g, "?").replace(/%3[Aa]/g, ":").replace(/%40/g, "@").replace(/%26/g, "&").replace(/%3[Dd]/g, "=").replace(/%2[Bb]/g, "+").replace(/%24/g, "$");
+  }
+  return params;
 }
-function is_string(s2) {
-  return typeof s2 === "string" || s2 instanceof String;
+function is_pojo(body) {
+  if (typeof body !== "object")
+    return false;
+  if (body) {
+    if (body instanceof Uint8Array)
+      return false;
+    if (body._readableState && typeof body.pipe === "function")
+      return false;
+    if (typeof ReadableStream !== "undefined" && body instanceof ReadableStream)
+      return false;
+  }
+  return true;
 }
-function is_content_type_textual(content_type) {
+function normalize_request_method(event) {
+  const method = event.request.method.toLowerCase();
+  return method === "delete" ? "del" : method;
+}
+function error(body) {
+  return new Response(body, {
+    status: 500
+  });
+}
+function is_string(s22) {
+  return typeof s22 === "string" || s22 instanceof String;
+}
+var text_types = /* @__PURE__ */ new Set([
+  "application/xml",
+  "application/json",
+  "application/x-www-form-urlencoded",
+  "multipart/form-data"
+]);
+function is_text(content_type) {
   if (!content_type)
     return true;
-  const [type] = content_type.split(";");
-  return type === "text/plain" || type === "application/json" || type === "application/x-www-form-urlencoded" || type === "multipart/form-data";
+  const type = content_type.split(";")[0].toLowerCase();
+  return type.startsWith("text/") || type.endsWith("+xml") || text_types.has(type);
 }
-async function render_endpoint(request, route, match) {
-  const mod = await route.load();
-  const handler = mod[request.method.toLowerCase().replace("delete", "del")];
+async function render_endpoint(event, mod) {
+  const method = normalize_request_method(event);
+  let handler = mod[method];
+  if (!handler && method === "head") {
+    handler = mod.get;
+  }
   if (!handler) {
-    return;
+    return event.request.headers.get("x-sveltekit-load") ? new Response(void 0, {
+      status: 204
+    }) : new Response("Method not allowed", {
+      status: 405
+    });
   }
-  const params = route.params(match);
-  const response = await handler({ ...request, params });
-  const preface = `Invalid response from route ${request.path}`;
-  if (!response) {
-    return;
-  }
+  const response = await handler(event);
+  const preface = `Invalid response from route ${event.url.pathname}`;
   if (typeof response !== "object") {
-    return error$1(`${preface}: expected an object, got ${typeof response}`);
+    return error(`${preface}: expected an object, got ${typeof response}`);
   }
-  let { status = 200, body, headers = {} } = response;
-  headers = lowercase_keys(headers);
-  const type = get_single_valued_header(headers, "content-type");
-  const is_type_textual = is_content_type_textual(type);
-  if (!is_type_textual && !(body instanceof Uint8Array || is_string(body))) {
-    return error$1(`${preface}: body must be an instance of string or Uint8Array if content-type is not a supported textual content-type`);
+  if (response.fallthrough) {
+    throw new Error("fallthrough is no longer supported. Use matchers instead: https://kit.svelte.dev/docs/routing#advanced-routing-matching");
+  }
+  const { status = 200, body = {} } = response;
+  const headers = response.headers instanceof Headers ? new Headers(response.headers) : to_headers(response.headers);
+  const type = headers.get("content-type");
+  if (!is_text(type) && !(body instanceof Uint8Array || is_string(body))) {
+    return error(`${preface}: body must be an instance of string or Uint8Array if content-type is not a supported textual content-type`);
   }
   let normalized_body;
-  if ((typeof body === "object" || typeof body === "undefined") && !(body instanceof Uint8Array) && (!type || type.startsWith("application/json"))) {
-    headers = { ...headers, "content-type": "application/json; charset=utf-8" };
-    normalized_body = JSON.stringify(typeof body === "undefined" ? {} : body);
+  if (is_pojo(body) && (!type || type.startsWith("application/json"))) {
+    headers.set("content-type", "application/json; charset=utf-8");
+    normalized_body = JSON.stringify(body);
   } else {
     normalized_body = body;
   }
-  return { status, body: normalized_body, headers };
+  if ((typeof normalized_body === "string" || normalized_body instanceof Uint8Array) && !headers.has("etag")) {
+    const cache_control = headers.get("cache-control");
+    if (!cache_control || !/(no-store|immutable)/.test(cache_control)) {
+      headers.set("etag", `"${hash(normalized_body)}"`);
+    }
+  }
+  return new Response(method !== "head" ? normalized_body : void 0, {
+    status,
+    headers
+  });
 }
-var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_$";
+var chars$1 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_$";
 var unsafeChars = /[<>\b\f\n\r\t\0\u2028\u2029]/g;
 var reserved = /^(?:do|if|in|for|int|let|new|try|var|byte|case|char|else|enum|goto|long|this|void|with|await|break|catch|class|const|final|float|short|super|throw|while|yield|delete|double|export|import|native|return|switch|throws|typeof|boolean|default|extends|finally|package|private|abstract|continue|debugger|function|volatile|interface|protected|transient|implements|instanceof|synchronized)$/;
-var escaped$1 = {
+var escaped2 = {
   "<": "\\u003C",
   ">": "\\u003E",
   "/": "\\u002F",
@@ -7509,7 +11034,7 @@ var escaped$1 = {
 };
 var objectProtoOwnPropertyNames = Object.getOwnPropertyNames(Object.prototype).sort().join("\0");
 function devalue(value) {
-  var counts = new Map();
+  var counts = /* @__PURE__ */ new Map();
   function walk(thing) {
     if (typeof thing === "function") {
       throw new Error("Cannot stringify a function");
@@ -7543,20 +11068,20 @@ function devalue(value) {
           if (Object.getOwnPropertySymbols(thing).length > 0) {
             throw new Error("Cannot stringify POJOs with symbolic keys");
           }
-          Object.keys(thing).forEach(function(key) {
-            return walk(thing[key]);
+          Object.keys(thing).forEach(function(key2) {
+            return walk(thing[key2]);
           });
       }
     }
   }
   walk(value);
-  var names = new Map();
-  Array.from(counts).filter(function(entry) {
-    return entry[1] > 1;
+  var names = /* @__PURE__ */ new Map();
+  Array.from(counts).filter(function(entry20) {
+    return entry20[1] > 1;
   }).sort(function(a, b) {
     return b[1] - a[1];
-  }).forEach(function(entry, i) {
-    names.set(entry[0], getName(i));
+  }).forEach(function(entry20, i2) {
+    names.set(entry20[0], getName(i2));
   });
   function stringify(thing) {
     if (names.has(thing)) {
@@ -7576,8 +11101,8 @@ function devalue(value) {
       case "Date":
         return "new Date(" + thing.getTime() + ")";
       case "Array":
-        var members = thing.map(function(v, i) {
-          return i in thing ? stringify(v) : "";
+        var members = thing.map(function(v, i2) {
+          return i2 in thing ? stringify(v) : "";
         });
         var tail = thing.length === 0 || thing.length - 1 in thing ? "" : ",";
         return "[" + members.join(",") + tail + "]";
@@ -7585,8 +11110,8 @@ function devalue(value) {
       case "Map":
         return "new " + type + "([" + Array.from(thing).map(stringify).join(",") + "])";
       default:
-        var obj = "{" + Object.keys(thing).map(function(key) {
-          return safeKey(key) + ":" + stringify(thing[key]);
+        var obj = "{" + Object.keys(thing).map(function(key2) {
+          return safeKey(key2) + ":" + stringify(thing[key2]);
         }).join(",") + "}";
         var proto = Object.getPrototypeOf(thing);
         if (proto === null) {
@@ -7621,8 +11146,8 @@ function devalue(value) {
           break;
         case "Array":
           values_1.push("Array(" + thing.length + ")");
-          thing.forEach(function(v, i) {
-            statements_1.push(name + "[" + i + "]=" + stringify(v));
+          thing.forEach(function(v, i2) {
+            statements_1.push(name + "[" + i2 + "]=" + stringify(v));
           });
           break;
         case "Set":
@@ -7633,15 +11158,15 @@ function devalue(value) {
           break;
         case "Map":
           values_1.push("new Map");
-          statements_1.push(name + "." + Array.from(thing).map(function(_a) {
-            var k = _a[0], v = _a[1];
+          statements_1.push(name + "." + Array.from(thing).map(function(_a4) {
+            var k = _a4[0], v = _a4[1];
             return "set(" + stringify(k) + ", " + stringify(v) + ")";
           }).join("."));
           break;
         default:
           values_1.push(Object.getPrototypeOf(thing) === null ? "Object.create(null)" : "{}");
-          Object.keys(thing).forEach(function(key) {
-            statements_1.push("" + name + safeProp(key) + "=" + stringify(thing[key]));
+          Object.keys(thing).forEach(function(key2) {
+            statements_1.push("" + name + safeProp(key2) + "=" + stringify(thing[key2]));
           });
       }
     });
@@ -7654,8 +11179,8 @@ function devalue(value) {
 function getName(num) {
   var name = "";
   do {
-    name = chars[num % chars.length] + name;
-    num = ~~(num / chars.length) - 1;
+    name = chars$1[num % chars$1.length] + name;
+    num = ~~(num / chars$1.length) - 1;
   } while (num >= 0);
   return reserved.test(name) ? name + "_" : name;
 }
@@ -7678,30 +11203,30 @@ function getType(thing) {
   return Object.prototype.toString.call(thing).slice(8, -1);
 }
 function escapeUnsafeChar(c) {
-  return escaped$1[c] || c;
+  return escaped2[c] || c;
 }
 function escapeUnsafeChars(str) {
   return str.replace(unsafeChars, escapeUnsafeChar);
 }
-function safeKey(key) {
-  return /^[_$a-zA-Z][_$a-zA-Z0-9]*$/.test(key) ? key : escapeUnsafeChars(JSON.stringify(key));
+function safeKey(key2) {
+  return /^[_$a-zA-Z][_$a-zA-Z0-9]*$/.test(key2) ? key2 : escapeUnsafeChars(JSON.stringify(key2));
 }
-function safeProp(key) {
-  return /^[_$a-zA-Z][_$a-zA-Z0-9]*$/.test(key) ? "." + key : "[" + escapeUnsafeChars(JSON.stringify(key)) + "]";
+function safeProp(key2) {
+  return /^[_$a-zA-Z][_$a-zA-Z0-9]*$/.test(key2) ? "." + key2 : "[" + escapeUnsafeChars(JSON.stringify(key2)) + "]";
 }
 function stringifyString(str) {
   var result = '"';
-  for (var i = 0; i < str.length; i += 1) {
-    var char = str.charAt(i);
+  for (var i2 = 0; i2 < str.length; i2 += 1) {
+    var char = str.charAt(i2);
     var code = char.charCodeAt(0);
     if (char === '"') {
       result += '\\"';
-    } else if (char in escaped$1) {
-      result += escaped$1[char];
+    } else if (char in escaped2) {
+      result += escaped2[char];
     } else if (code >= 55296 && code <= 57343) {
-      var next = str.charCodeAt(i + 1);
+      var next = str.charCodeAt(i2 + 1);
       if (code <= 56319 && (next >= 56320 && next <= 57343)) {
-        result += char + str[++i];
+        result += char + str[++i2];
       } else {
         result += "\\u" + code.toString(16).toUpperCase();
       }
@@ -7712,30 +11237,35 @@ function stringifyString(str) {
   result += '"';
   return result;
 }
-function noop$1() {
+function noop3() {
 }
-function safe_not_equal$1(a, b) {
+function safe_not_equal2(a, b) {
   return a != a ? b == b : a !== b || (a && typeof a === "object" || typeof a === "function");
 }
 Promise.resolve();
-var subscriber_queue$1 = [];
-function writable$1(value, start = noop$1) {
+var subscriber_queue = [];
+function readable(value, start) {
+  return {
+    subscribe: writable(value, start).subscribe
+  };
+}
+function writable(value, start = noop3) {
   let stop;
-  const subscribers = new Set();
+  const subscribers = /* @__PURE__ */ new Set();
   function set(new_value) {
-    if (safe_not_equal$1(value, new_value)) {
+    if (safe_not_equal2(value, new_value)) {
       value = new_value;
       if (stop) {
-        const run_queue = !subscriber_queue$1.length;
+        const run_queue = !subscriber_queue.length;
         for (const subscriber of subscribers) {
           subscriber[1]();
-          subscriber_queue$1.push(subscriber, value);
+          subscriber_queue.push(subscriber, value);
         }
         if (run_queue) {
-          for (let i = 0; i < subscriber_queue$1.length; i += 2) {
-            subscriber_queue$1[i][0](subscriber_queue$1[i + 1]);
+          for (let i2 = 0; i2 < subscriber_queue.length; i2 += 2) {
+            subscriber_queue[i2][0](subscriber_queue[i2 + 1]);
           }
-          subscriber_queue$1.length = 0;
+          subscriber_queue.length = 0;
         }
       }
     }
@@ -7743,11 +11273,11 @@ function writable$1(value, start = noop$1) {
   function update(fn) {
     set(fn(value));
   }
-  function subscribe2(run2, invalidate = noop$1) {
+  function subscribe2(run2, invalidate = noop3) {
     const subscriber = [run2, invalidate];
     subscribers.add(subscriber);
     if (subscribers.size === 1) {
-      stop = start(set) || noop$1;
+      stop = start(set) || noop3;
     }
     run2(value);
     return () => {
@@ -7760,110 +11290,381 @@ function writable$1(value, start = noop$1) {
   }
   return { set, update, subscribe: subscribe2 };
 }
-function hash(value) {
-  let hash2 = 5381;
-  let i = value.length;
-  if (typeof value === "string") {
-    while (i)
-      hash2 = hash2 * 33 ^ value.charCodeAt(--i);
-  } else {
-    while (i)
-      hash2 = hash2 * 33 ^ value[--i];
-  }
-  return (hash2 >>> 0).toString(36);
+function coalesce_to_error(err) {
+  return err instanceof Error || err && err.name && err.message ? err : new Error(JSON.stringify(err));
 }
-var escape_json_string_in_html_dict = {
-  '"': '\\"',
+var render_json_payload_script_dict = {
   "<": "\\u003C",
-  ">": "\\u003E",
-  "/": "\\u002F",
-  "\\": "\\\\",
-  "\b": "\\b",
-  "\f": "\\f",
-  "\n": "\\n",
-  "\r": "\\r",
-  "	": "\\t",
-  "\0": "\\0",
   "\u2028": "\\u2028",
   "\u2029": "\\u2029"
 };
-function escape_json_string_in_html(str) {
-  return escape$1(str, escape_json_string_in_html_dict, (code) => `\\u${code.toString(16).toUpperCase()}`);
+var render_json_payload_script_regex = new RegExp(`[${Object.keys(render_json_payload_script_dict).join("")}]`, "g");
+function render_json_payload_script(attrs, payload) {
+  const safe_payload = JSON.stringify(payload).replace(render_json_payload_script_regex, (match) => render_json_payload_script_dict[match]);
+  let safe_attrs = "";
+  for (const [key2, value] of Object.entries(attrs)) {
+    if (value === void 0)
+      continue;
+    safe_attrs += ` sveltekit:data-${key2}=${escape_html_attr(value)}`;
+  }
+  return `<script type="application/json"${safe_attrs}>${safe_payload}<\/script>`;
 }
 var escape_html_attr_dict = {
-  "<": "&lt;",
-  ">": "&gt;",
+  "&": "&amp;",
   '"': "&quot;"
 };
+var escape_html_attr_regex = new RegExp(`[${Object.keys(escape_html_attr_dict).join("")}]|[\\ud800-\\udbff](?![\\udc00-\\udfff])|[\\ud800-\\udbff][\\udc00-\\udfff]|[\\udc00-\\udfff]`, "g");
 function escape_html_attr(str) {
-  return '"' + escape$1(str, escape_html_attr_dict, (code) => `&#${code};`) + '"';
-}
-function escape$1(str, dict, unicode_encoder) {
-  let result = "";
-  for (let i = 0; i < str.length; i += 1) {
-    const char = str.charAt(i);
-    const code = char.charCodeAt(0);
-    if (char in dict) {
-      result += dict[char];
-    } else if (code >= 55296 && code <= 57343) {
-      const next = str.charCodeAt(i + 1);
-      if (code <= 56319 && next >= 56320 && next <= 57343) {
-        result += char + str[++i];
-      } else {
-        result += unicode_encoder(code);
-      }
-    } else {
-      result += char;
+  const escaped_str = str.replace(escape_html_attr_regex, (match) => {
+    if (match.length === 2) {
+      return match;
     }
+    return escape_html_attr_dict[match] ?? `&#${match.charCodeAt(0)};`;
+  });
+  return `"${escaped_str}"`;
+}
+var s2 = JSON.stringify;
+function create_prerendering_url_proxy(url) {
+  return new Proxy(url, {
+    get: (target, prop, receiver) => {
+      if (prop === "search" || prop === "searchParams") {
+        throw new Error(`Cannot access url.${prop} on a page with prerendering enabled`);
+      }
+      return Reflect.get(target, prop, receiver);
+    }
+  });
+}
+var encoder = new TextEncoder();
+function sha256(data) {
+  if (!key[0])
+    precompute();
+  const out = init.slice(0);
+  const array = encode(data);
+  for (let i2 = 0; i2 < array.length; i2 += 16) {
+    const w = array.subarray(i2, i2 + 16);
+    let tmp;
+    let a;
+    let b;
+    let out0 = out[0];
+    let out1 = out[1];
+    let out2 = out[2];
+    let out3 = out[3];
+    let out4 = out[4];
+    let out5 = out[5];
+    let out6 = out[6];
+    let out7 = out[7];
+    for (let i22 = 0; i22 < 64; i22++) {
+      if (i22 < 16) {
+        tmp = w[i22];
+      } else {
+        a = w[i22 + 1 & 15];
+        b = w[i22 + 14 & 15];
+        tmp = w[i22 & 15] = (a >>> 7 ^ a >>> 18 ^ a >>> 3 ^ a << 25 ^ a << 14) + (b >>> 17 ^ b >>> 19 ^ b >>> 10 ^ b << 15 ^ b << 13) + w[i22 & 15] + w[i22 + 9 & 15] | 0;
+      }
+      tmp = tmp + out7 + (out4 >>> 6 ^ out4 >>> 11 ^ out4 >>> 25 ^ out4 << 26 ^ out4 << 21 ^ out4 << 7) + (out6 ^ out4 & (out5 ^ out6)) + key[i22];
+      out7 = out6;
+      out6 = out5;
+      out5 = out4;
+      out4 = out3 + tmp | 0;
+      out3 = out2;
+      out2 = out1;
+      out1 = out0;
+      out0 = tmp + (out1 & out2 ^ out3 & (out1 ^ out2)) + (out1 >>> 2 ^ out1 >>> 13 ^ out1 >>> 22 ^ out1 << 30 ^ out1 << 19 ^ out1 << 10) | 0;
+    }
+    out[0] = out[0] + out0 | 0;
+    out[1] = out[1] + out1 | 0;
+    out[2] = out[2] + out2 | 0;
+    out[3] = out[3] + out3 | 0;
+    out[4] = out[4] + out4 | 0;
+    out[5] = out[5] + out5 | 0;
+    out[6] = out[6] + out6 | 0;
+    out[7] = out[7] + out7 | 0;
+  }
+  const bytes = new Uint8Array(out.buffer);
+  reverse_endianness(bytes);
+  return base64(bytes);
+}
+var init = new Uint32Array(8);
+var key = new Uint32Array(64);
+function precompute() {
+  function frac(x2) {
+    return (x2 - Math.floor(x2)) * 4294967296;
+  }
+  let prime = 2;
+  for (let i2 = 0; i2 < 64; prime++) {
+    let is_prime = true;
+    for (let factor = 2; factor * factor <= prime; factor++) {
+      if (prime % factor === 0) {
+        is_prime = false;
+        break;
+      }
+    }
+    if (is_prime) {
+      if (i2 < 8) {
+        init[i2] = frac(prime ** (1 / 2));
+      }
+      key[i2] = frac(prime ** (1 / 3));
+      i2++;
+    }
+  }
+}
+function reverse_endianness(bytes) {
+  for (let i2 = 0; i2 < bytes.length; i2 += 4) {
+    const a = bytes[i2 + 0];
+    const b = bytes[i2 + 1];
+    const c = bytes[i2 + 2];
+    const d = bytes[i2 + 3];
+    bytes[i2 + 0] = d;
+    bytes[i2 + 1] = c;
+    bytes[i2 + 2] = b;
+    bytes[i2 + 3] = a;
+  }
+}
+function encode(str) {
+  const encoded = encoder.encode(str);
+  const length = encoded.length * 8;
+  const size2 = 512 * Math.ceil((length + 65) / 512);
+  const bytes = new Uint8Array(size2 / 8);
+  bytes.set(encoded);
+  bytes[encoded.length] = 128;
+  reverse_endianness(bytes);
+  const words = new Uint32Array(bytes.buffer);
+  words[words.length - 2] = Math.floor(length / 4294967296);
+  words[words.length - 1] = length;
+  return words;
+}
+var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".split("");
+function base64(bytes) {
+  const l = bytes.length;
+  let result = "";
+  let i2;
+  for (i2 = 2; i2 < l; i2 += 3) {
+    result += chars[bytes[i2 - 2] >> 2];
+    result += chars[(bytes[i2 - 2] & 3) << 4 | bytes[i2 - 1] >> 4];
+    result += chars[(bytes[i2 - 1] & 15) << 2 | bytes[i2] >> 6];
+    result += chars[bytes[i2] & 63];
+  }
+  if (i2 === l + 1) {
+    result += chars[bytes[i2 - 2] >> 2];
+    result += chars[(bytes[i2 - 2] & 3) << 4];
+    result += "==";
+  }
+  if (i2 === l) {
+    result += chars[bytes[i2 - 2] >> 2];
+    result += chars[(bytes[i2 - 2] & 3) << 4 | bytes[i2 - 1] >> 4];
+    result += chars[(bytes[i2 - 1] & 15) << 2];
+    result += "=";
   }
   return result;
 }
-var s$1 = JSON.stringify;
+var csp_ready;
+var generate_nonce;
+var generate_hash;
+if (typeof crypto !== "undefined") {
+  const array = new Uint8Array(16);
+  generate_nonce = () => {
+    crypto.getRandomValues(array);
+    return base64(array);
+  };
+  generate_hash = sha256;
+} else {
+  const name = "crypto";
+  csp_ready = import(name).then((crypto2) => {
+    generate_nonce = () => {
+      return crypto2.randomBytes(16).toString("base64");
+    };
+    generate_hash = (input) => {
+      return crypto2.createHash("sha256").update(input, "utf-8").digest().toString("base64");
+    };
+  });
+}
+var quoted = /* @__PURE__ */ new Set([
+  "self",
+  "unsafe-eval",
+  "unsafe-hashes",
+  "unsafe-inline",
+  "none",
+  "strict-dynamic",
+  "report-sample"
+]);
+var crypto_pattern = /^(nonce|sha\d\d\d)-/;
+var Csp = class {
+  constructor({ mode, directives }, { dev, prerender, needs_nonce }) {
+    __privateAdd2(this, _use_hashes, void 0);
+    __privateAdd2(this, _dev, void 0);
+    __privateAdd2(this, _script_needs_csp, void 0);
+    __privateAdd2(this, _style_needs_csp, void 0);
+    __privateAdd2(this, _directives, void 0);
+    __privateAdd2(this, _script_src, void 0);
+    __privateAdd2(this, _style_src, void 0);
+    __privateSet2(this, _use_hashes, mode === "hash" || mode === "auto" && prerender);
+    __privateSet2(this, _directives, dev ? __spreadValues({}, directives) : directives);
+    __privateSet2(this, _dev, dev);
+    const d = __privateGet2(this, _directives);
+    if (dev) {
+      const effective_style_src2 = d["style-src"] || d["default-src"];
+      if (effective_style_src2 && !effective_style_src2.includes("unsafe-inline")) {
+        d["style-src"] = [...effective_style_src2, "unsafe-inline"];
+      }
+    }
+    __privateSet2(this, _script_src, []);
+    __privateSet2(this, _style_src, []);
+    const effective_script_src = d["script-src"] || d["default-src"];
+    const effective_style_src = d["style-src"] || d["default-src"];
+    __privateSet2(this, _script_needs_csp, !!effective_script_src && effective_script_src.filter((value) => value !== "unsafe-inline").length > 0);
+    __privateSet2(this, _style_needs_csp, !dev && !!effective_style_src && effective_style_src.filter((value) => value !== "unsafe-inline").length > 0);
+    this.script_needs_nonce = __privateGet2(this, _script_needs_csp) && !__privateGet2(this, _use_hashes);
+    this.style_needs_nonce = __privateGet2(this, _style_needs_csp) && !__privateGet2(this, _use_hashes);
+    if (this.script_needs_nonce || this.style_needs_nonce || needs_nonce) {
+      this.nonce = generate_nonce();
+    }
+  }
+  add_script(content) {
+    if (__privateGet2(this, _script_needs_csp)) {
+      if (__privateGet2(this, _use_hashes)) {
+        __privateGet2(this, _script_src).push(`sha256-${generate_hash(content)}`);
+      } else if (__privateGet2(this, _script_src).length === 0) {
+        __privateGet2(this, _script_src).push(`nonce-${this.nonce}`);
+      }
+    }
+  }
+  add_style(content) {
+    if (__privateGet2(this, _style_needs_csp)) {
+      if (__privateGet2(this, _use_hashes)) {
+        __privateGet2(this, _style_src).push(`sha256-${generate_hash(content)}`);
+      } else if (__privateGet2(this, _style_src).length === 0) {
+        __privateGet2(this, _style_src).push(`nonce-${this.nonce}`);
+      }
+    }
+  }
+  get_header(is_meta = false) {
+    const header = [];
+    const directives = __spreadValues({}, __privateGet2(this, _directives));
+    if (__privateGet2(this, _style_src).length > 0) {
+      directives["style-src"] = [
+        ...directives["style-src"] || directives["default-src"] || [],
+        ...__privateGet2(this, _style_src)
+      ];
+    }
+    if (__privateGet2(this, _script_src).length > 0) {
+      directives["script-src"] = [
+        ...directives["script-src"] || directives["default-src"] || [],
+        ...__privateGet2(this, _script_src)
+      ];
+    }
+    for (const key2 in directives) {
+      if (is_meta && (key2 === "frame-ancestors" || key2 === "report-uri" || key2 === "sandbox")) {
+        continue;
+      }
+      const value = directives[key2];
+      if (!value)
+        continue;
+      const directive = [key2];
+      if (Array.isArray(value)) {
+        value.forEach((value2) => {
+          if (quoted.has(value2) || crypto_pattern.test(value2)) {
+            directive.push(`'${value2}'`);
+          } else {
+            directive.push(value2);
+          }
+        });
+      }
+      header.push(directive.join(" "));
+    }
+    return header.join("; ");
+  }
+  get_meta() {
+    const content = escape_html_attr(this.get_header(true));
+    return `<meta http-equiv="content-security-policy" content=${content}>`;
+  }
+};
+_use_hashes = /* @__PURE__ */ new WeakMap();
+_dev = /* @__PURE__ */ new WeakMap();
+_script_needs_csp = /* @__PURE__ */ new WeakMap();
+_style_needs_csp = /* @__PURE__ */ new WeakMap();
+_directives = /* @__PURE__ */ new WeakMap();
+_script_src = /* @__PURE__ */ new WeakMap();
+_style_src = /* @__PURE__ */ new WeakMap();
+var updated = __spreadProps(__spreadValues({}, readable(false)), {
+  check: () => false
+});
 async function render_response({
   branch,
-  options: options2,
+  options,
+  state,
   $session,
   page_config,
   status,
-  error: error2,
-  page: page2
+  error: error2 = null,
+  event,
+  resolve_opts,
+  stuff
 }) {
-  const css2 = new Set(options2.entry.css);
-  const js = new Set(options2.entry.js);
-  const styles = new Set();
+  if (state.prerender) {
+    if (options.csp.mode === "nonce") {
+      throw new Error('Cannot use prerendering if config.kit.csp.mode === "nonce"');
+    }
+    if (options.template_contains_nonce) {
+      throw new Error("Cannot use prerendering if page template contains %svelte.nonce%");
+    }
+  }
+  const stylesheets = new Set(options.manifest._.entry.css);
+  const modulepreloads = new Set(options.manifest._.entry.js);
+  const styles = /* @__PURE__ */ new Map();
   const serialized_data = [];
+  let shadow_props;
   let rendered;
   let is_private = false;
   let maxage;
   if (error2) {
-    error2.stack = options2.get_stack(error2);
+    error2.stack = options.get_stack(error2);
   }
-  if (page_config.ssr) {
-    branch.forEach(({ node, loaded, fetched, uses_credentials }) => {
+  if (resolve_opts.ssr) {
+    branch.forEach(({ node, props: props2, loaded, fetched, uses_credentials }) => {
       if (node.css)
-        node.css.forEach((url) => css2.add(url));
+        node.css.forEach((url) => stylesheets.add(url));
       if (node.js)
-        node.js.forEach((url) => js.add(url));
+        node.js.forEach((url) => modulepreloads.add(url));
       if (node.styles)
-        node.styles.forEach((content) => styles.add(content));
+        Object.entries(node.styles).forEach(([k, v]) => styles.set(k, v));
       if (fetched && page_config.hydrate)
         serialized_data.push(...fetched);
+      if (props2)
+        shadow_props = props2;
       if (uses_credentials)
         is_private = true;
       maxage = loaded.maxage;
     });
-    const session = writable$1($session);
+    const session = writable($session);
     const props = {
       stores: {
-        page: writable$1(null),
-        navigating: writable$1(null),
-        session
+        page: writable(null),
+        navigating: writable(null),
+        session,
+        updated
       },
-      page: page2,
+      page: {
+        error: error2,
+        params: event.params,
+        routeId: event.routeId,
+        status,
+        stuff,
+        url: state.prerender ? create_prerendering_url_proxy(event.url) : event.url
+      },
       components: branch.map(({ node }) => node.module.default)
     };
-    for (let i = 0; i < branch.length; i += 1) {
-      props[`props_${i}`] = await branch[i].loaded.props;
+    const print_error = (property, replacement) => {
+      Object.defineProperty(props.page, property, {
+        get: () => {
+          throw new Error(`$page.${property} has been replaced by $page.url.${replacement}`);
+        }
+      });
+    };
+    print_error("origin", "origin");
+    print_error("path", "pathname");
+    print_error("query", "searchParams");
+    for (let i2 = 0; i2 < branch.length; i2 += 1) {
+      props[`props_${i2}`] = await branch[i2].loaded.props;
     }
     let session_tracking_active = false;
     const unsubscribe = session.subscribe(() => {
@@ -7872,95 +11673,146 @@ async function render_response({
     });
     session_tracking_active = true;
     try {
-      rendered = options2.root.render(props);
+      rendered = options.root.render(props);
     } finally {
       unsubscribe();
     }
   } else {
     rendered = { head: "", html: "", css: { code: "", map: null } };
   }
-  const include_js = page_config.router || page_config.hydrate;
-  if (!include_js)
-    js.clear();
-  const links = options2.amp ? styles.size > 0 || rendered.css.code.length > 0 ? `<style amp-custom>${Array.from(styles).concat(rendered.css.code).join("\n")}</style>` : "" : [
-    ...Array.from(js).map((dep) => `<link rel="modulepreload" href="${dep}">`),
-    ...Array.from(css2).map((dep) => `<link rel="stylesheet" href="${dep}">`)
-  ].join("\n		");
-  let init2 = "";
-  if (options2.amp) {
-    init2 = `
+  let { head, html: body } = rendered;
+  const inlined_style = Array.from(styles.values()).join("\n");
+  await csp_ready;
+  const csp = new Csp(options.csp, {
+    dev: options.dev,
+    prerender: !!state.prerender,
+    needs_nonce: options.template_contains_nonce
+  });
+  const target = hash(body);
+  const init_app = `
+		import { start } from ${s2(options.prefix + options.manifest._.entry.file)};
+		start({
+			target: document.querySelector('[data-hydrate="${target}"]').parentNode,
+			paths: ${s2(options.paths)},
+			session: ${try_serialize($session, (error3) => {
+    throw new Error(`Failed to serialize session data: ${error3.message}`);
+  })},
+			route: ${!!page_config.router},
+			spa: ${!resolve_opts.ssr},
+			trailing_slash: ${s2(options.trailing_slash)},
+			hydrate: ${resolve_opts.ssr && page_config.hydrate ? `{
+				status: ${status},
+				error: ${serialize_error(error2)},
+				nodes: [
+					${(branch || []).map(({ node }) => `import(${s2(options.prefix + node.entry)})`).join(",\n						")}
+				],
+				params: ${devalue(event.params)},
+				routeId: ${s2(event.routeId)}
+			}` : "null"}
+		});
+	`;
+  const init_service_worker = `
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.register('${options.service_worker}');
+		}
+	`;
+  if (options.amp) {
+    const styles2 = `${inlined_style}
+${rendered.css.code}`;
+    head += `
 		<style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style>
 		<noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
-		<script async src="https://cdn.ampproject.org/v0.js"><\/script>`;
-  } else if (include_js) {
-    init2 = `<script type="module">
-			import { start } from ${s$1(options2.entry.file)};
-			start({
-				target: ${options2.target ? `document.querySelector(${s$1(options2.target)})` : "document.body"},
-				paths: ${s$1(options2.paths)},
-				session: ${try_serialize($session, (error3) => {
-      throw new Error(`Failed to serialize session data: ${error3.message}`);
-    })},
-				host: ${page2 && page2.host ? s$1(page2.host) : "location.host"},
-				route: ${!!page_config.router},
-				spa: ${!page_config.ssr},
-				trailing_slash: ${s$1(options2.trailing_slash)},
-				hydrate: ${page_config.ssr && page_config.hydrate ? `{
-					status: ${status},
-					error: ${serialize_error(error2)},
-					nodes: [
-						${(branch || []).map(({ node }) => `import(${s$1(node.entry)})`).join(",\n						")}
-					],
-					page: {
-						host: ${page2 && page2.host ? s$1(page2.host) : "location.host"}, // TODO this is redundant
-						path: ${page2 && page2.path ? try_serialize(page2.path, (error3) => {
-      throw new Error(`Failed to serialize page.path: ${error3.message}`);
-    }) : null},
-						query: new URLSearchParams(${page2 && page2.query ? s$1(page2.query.toString()) : ""}),
-						params: ${page2 && page2.params ? try_serialize(page2.params, (error3) => {
-      throw new Error(`Failed to serialize page.params: ${error3.message}`);
-    }) : null}
-					}
-				}` : "null"}
-			});
-		<\/script>`;
-  }
-  if (options2.service_worker) {
-    init2 += `<script>
-			if ('serviceWorker' in navigator) {
-				navigator.serviceWorker.register('${options2.service_worker}');
-			}
-		<\/script>`;
-  }
-  const head = [
-    rendered.head,
-    styles.size && !options2.amp ? `<style data-svelte>${Array.from(styles).join("\n")}</style>` : "",
-    links,
-    init2
-  ].join("\n\n		");
-  const body = options2.amp ? rendered.html : `${rendered.html}
+		<script async src="https://cdn.ampproject.org/v0.js"><\/script>
 
-			${serialized_data.map(({ url, body: body2, json }) => {
-    let attributes = `type="application/json" data-type="svelte-data" data-url=${escape_html_attr(url)}`;
-    if (body2)
-      attributes += ` data-body="${hash(body2)}"`;
-    return `<script ${attributes}>${json}<\/script>`;
-  }).join("\n\n	")}
-		`;
-  const headers = {
-    "content-type": "text/html"
-  };
+		<style amp-custom>${styles2}</style>`;
+    if (options.service_worker) {
+      head += '<script async custom-element="amp-install-serviceworker" src="https://cdn.ampproject.org/v0/amp-install-serviceworker-0.1.js"><\/script>';
+      body += `<amp-install-serviceworker src="${options.service_worker}" layout="nodisplay"></amp-install-serviceworker>`;
+    }
+  } else {
+    if (inlined_style) {
+      const attributes = [];
+      if (options.dev)
+        attributes.push(" data-svelte");
+      if (csp.style_needs_nonce)
+        attributes.push(` nonce="${csp.nonce}"`);
+      csp.add_style(inlined_style);
+      head += `
+	<style${attributes.join("")}>${inlined_style}</style>`;
+    }
+    head += Array.from(stylesheets).map((dep) => {
+      const attributes = [
+        'rel="stylesheet"',
+        `href="${options.prefix + dep}"`
+      ];
+      if (csp.style_needs_nonce) {
+        attributes.push(`nonce="${csp.nonce}"`);
+      }
+      if (styles.has(dep)) {
+        attributes.push("disabled", 'media="(max-width: 0)"');
+      }
+      return `
+	<link ${attributes.join(" ")}>`;
+    }).join("");
+    if (page_config.router || page_config.hydrate) {
+      head += Array.from(modulepreloads).map((dep) => `
+	<link rel="modulepreload" href="${options.prefix + dep}">`).join("");
+      const attributes = ['type="module"', `data-hydrate="${target}"`];
+      csp.add_script(init_app);
+      if (csp.script_needs_nonce) {
+        attributes.push(`nonce="${csp.nonce}"`);
+      }
+      body += `
+		<script ${attributes.join(" ")}>${init_app}<\/script>`;
+      body += serialized_data.map(({ url, body: body2, response }) => render_json_payload_script({ type: "data", url, body: typeof body2 === "string" ? hash(body2) : void 0 }, response)).join("\n	");
+      if (shadow_props) {
+        body += render_json_payload_script({ type: "props" }, shadow_props);
+      }
+    }
+    if (options.service_worker) {
+      csp.add_script(init_service_worker);
+      head += `
+				<script${csp.script_needs_nonce ? ` nonce="${csp.nonce}"` : ""}>${init_service_worker}<\/script>`;
+    }
+  }
+  if (state.prerender && !options.amp) {
+    const http_equiv = [];
+    const csp_headers = csp.get_meta();
+    if (csp_headers) {
+      http_equiv.push(csp_headers);
+    }
+    if (maxage) {
+      http_equiv.push(`<meta http-equiv="cache-control" content="max-age=${maxage}">`);
+    }
+    if (http_equiv.length > 0) {
+      head = http_equiv.join("\n") + head;
+    }
+  }
+  const segments = event.url.pathname.slice(options.paths.base.length).split("/").slice(2);
+  const assets2 = options.paths.assets || (segments.length > 0 ? segments.map(() => "..").join("/") : ".");
+  const html = await resolve_opts.transformPage({
+    html: options.template({ head, body, assets: assets2, nonce: csp.nonce })
+  });
+  const headers = new Headers({
+    "content-type": "text/html",
+    etag: `"${hash(html)}"`
+  });
   if (maxage) {
-    headers["cache-control"] = `${is_private ? "private" : "public"}, max-age=${maxage}`;
+    headers.set("cache-control", `${is_private ? "private" : "public"}, max-age=${maxage}`);
   }
-  if (!options2.floc) {
-    headers["permissions-policy"] = "interest-cohort=()";
+  if (!options.floc) {
+    headers.set("permissions-policy", "interest-cohort=()");
   }
-  return {
+  if (!state.prerender) {
+    const csp_header = csp.get_header();
+    if (csp_header) {
+      headers.set("content-security-policy", csp_header);
+    }
+  }
+  return new Response(html, {
     status,
-    headers,
-    body: options2.template({ head, body })
-  };
+    headers
+  });
 }
 function try_serialize(data, fail) {
   try {
@@ -7977,7 +11829,7 @@ function serialize_error(error2) {
   let serialized = try_serialize(error2);
   if (!serialized) {
     const { name, message, stack } = error2;
-    serialized = try_serialize({ ...error2, name, message, stack });
+    serialized = try_serialize(__spreadProps(__spreadValues({}, error2), { name, message, stack }));
   }
   if (!serialized) {
     serialized = "{}";
@@ -8026,190 +11878,11 @@ function normalize(loaded) {
   }
   return loaded;
 }
-var s = JSON.stringify;
-async function load_node({
-  request,
-  options: options2,
-  state,
-  route,
-  page: page2,
-  node,
-  $session,
-  stuff,
-  prerender_enabled,
-  is_leaf,
-  is_error,
-  status,
-  error: error2
-}) {
-  const { module: module2 } = node;
-  let uses_credentials = false;
-  const fetched = [];
-  let set_cookie_headers = [];
-  let loaded;
-  const page_proxy = new Proxy(page2, {
-    get: (target, prop, receiver) => {
-      if (prop === "query" && prerender_enabled) {
-        throw new Error("Cannot access query on a page with prerendering enabled");
-      }
-      return Reflect.get(target, prop, receiver);
-    }
-  });
-  if (module2.load) {
-    const load_input = {
-      page: page_proxy,
-      get session() {
-        uses_credentials = true;
-        return $session;
-      },
-      fetch: async (resource, opts = {}) => {
-        let url;
-        if (typeof resource === "string") {
-          url = resource;
-        } else {
-          url = resource.url;
-          opts = {
-            method: resource.method,
-            headers: resource.headers,
-            body: resource.body,
-            mode: resource.mode,
-            credentials: resource.credentials,
-            cache: resource.cache,
-            redirect: resource.redirect,
-            referrer: resource.referrer,
-            integrity: resource.integrity,
-            ...opts
-          };
-        }
-        const resolved = resolve(request.path, url.split("?")[0]);
-        let response;
-        const prefix = options2.paths.assets || options2.paths.base;
-        const filename = (resolved.startsWith(prefix) ? resolved.slice(prefix.length) : resolved).slice(1);
-        const filename_html = `${filename}/index.html`;
-        const asset = options2.manifest.assets.find((d) => d.file === filename || d.file === filename_html);
-        if (asset) {
-          response = options2.read ? new Response(options2.read(asset.file), {
-            headers: asset.type ? { "content-type": asset.type } : {}
-          }) : await fetch(`http://${page2.host}/${asset.file}`, opts);
-        } else if (resolved.startsWith("/") && !resolved.startsWith("//")) {
-          const relative = resolved;
-          const headers = {
-            ...opts.headers
-          };
-          if (opts.credentials !== "omit") {
-            uses_credentials = true;
-            headers.cookie = request.headers.cookie;
-            if (!headers.authorization) {
-              headers.authorization = request.headers.authorization;
-            }
-          }
-          if (opts.body && typeof opts.body !== "string") {
-            throw new Error("Request body must be a string");
-          }
-          const search = url.includes("?") ? url.slice(url.indexOf("?") + 1) : "";
-          const rendered = await respond({
-            host: request.host,
-            method: opts.method || "GET",
-            headers,
-            path: relative,
-            rawBody: opts.body == null ? null : new TextEncoder().encode(opts.body),
-            query: new URLSearchParams(search)
-          }, options2, {
-            fetched: url,
-            initiator: route
-          });
-          if (rendered) {
-            if (state.prerender) {
-              state.prerender.dependencies.set(relative, rendered);
-            }
-            response = new Response(rendered.body, {
-              status: rendered.status,
-              headers: rendered.headers
-            });
-          }
-        } else {
-          if (resolved.startsWith("//")) {
-            throw new Error(`Cannot request protocol-relative URL (${url}) in server-side fetch`);
-          }
-          if (typeof request.host !== "undefined") {
-            const { hostname: fetch_hostname } = new URL(url);
-            const [server_hostname] = request.host.split(":");
-            if (`.${fetch_hostname}`.endsWith(`.${server_hostname}`) && opts.credentials !== "omit") {
-              uses_credentials = true;
-              opts.headers = {
-                ...opts.headers,
-                cookie: request.headers.cookie
-              };
-            }
-          }
-          const external_request = new Request(url, opts);
-          response = await options2.hooks.externalFetch.call(null, external_request);
-        }
-        if (response) {
-          const proxy = new Proxy(response, {
-            get(response2, key, _receiver) {
-              async function text() {
-                const body = await response2.text();
-                const headers = {};
-                for (const [key2, value] of response2.headers) {
-                  if (key2 === "set-cookie") {
-                    set_cookie_headers = set_cookie_headers.concat(value);
-                  } else if (key2 !== "etag") {
-                    headers[key2] = value;
-                  }
-                }
-                if (!opts.body || typeof opts.body === "string") {
-                  fetched.push({
-                    url,
-                    body: opts.body,
-                    json: `{"status":${response2.status},"statusText":${s(response2.statusText)},"headers":${s(headers)},"body":"${escape_json_string_in_html(body)}"}`
-                  });
-                }
-                return body;
-              }
-              if (key === "text") {
-                return text;
-              }
-              if (key === "json") {
-                return async () => {
-                  return JSON.parse(await text());
-                };
-              }
-              return Reflect.get(response2, key, response2);
-            }
-          });
-          return proxy;
-        }
-        return response || new Response("Not found", {
-          status: 404
-        });
-      },
-      stuff: { ...stuff }
-    };
-    if (is_error) {
-      load_input.status = status;
-      load_input.error = error2;
-    }
-    loaded = await module2.load.call(null, load_input);
-  } else {
-    loaded = {};
-  }
-  if (!loaded && is_leaf && !is_error)
-    return;
-  if (!loaded) {
-    throw new Error(`${node.entry} - load must return a value except for page fall through`);
-  }
-  return {
-    node,
-    loaded: normalize(loaded),
-    stuff: loaded.stuff || stuff,
-    fetched,
-    set_cookie_headers,
-    uses_credentials
-  };
-}
 var absolute = /^([a-z]+:)?\/?\//;
+var scheme = /^[a-z]+:/;
 function resolve(base2, path) {
+  if (scheme.test(path))
+    return path;
   const base_match = absolute.exec(base2);
   const path_match = absolute.exec(path);
   if (!base_match) {
@@ -8218,8 +11891,8 @@ function resolve(base2, path) {
   const baseparts = path_match ? [] : base2.slice(base_match[0].length).split("/");
   const pathparts = path_match ? path.slice(path_match[0].length).split("/") : path.split("/");
   baseparts.pop();
-  for (let i = 0; i < pathparts.length; i += 1) {
-    const part = pathparts[i];
+  for (let i2 = 0; i2 < pathparts.length; i2 += 1) {
+    const part = pathparts[i2];
     if (part === ".")
       continue;
     else if (part === "..")
@@ -8230,2692 +11903,1129 @@ function resolve(base2, path) {
   const prefix = path_match && path_match[0] || base_match && base_match[0] || "";
   return `${prefix}${baseparts.join("/")}`;
 }
-async function respond_with_error({ request, options: options2, state, $session, status, error: error2 }) {
-  const default_layout = await options2.load_component(options2.manifest.layout);
-  const default_error = await options2.load_component(options2.manifest.error);
-  const page2 = {
-    host: request.host,
-    path: request.path,
-    query: request.query,
-    params: {}
+function is_root_relative(path) {
+  return path[0] === "/" && path[1] !== "/";
+}
+function normalize_path(path, trailing_slash) {
+  if (path === "/" || trailing_slash === "ignore")
+    return path;
+  if (trailing_slash === "never") {
+    return path.endsWith("/") ? path.slice(0, -1) : path;
+  } else if (trailing_slash === "always" && /\/[^./]+$/.test(path)) {
+    return path + "/";
+  }
+  return path;
+}
+async function load_node({
+  event,
+  options,
+  state,
+  route,
+  node,
+  $session,
+  stuff,
+  is_error,
+  is_leaf,
+  status,
+  error: error2
+}) {
+  const { module: module2 } = node;
+  let uses_credentials = false;
+  const fetched = [];
+  let set_cookie_headers = [];
+  let loaded;
+  const shadow = is_leaf ? await load_shadow_data(route, event, options, !!state.prerender) : {};
+  if (shadow.cookies) {
+    set_cookie_headers.push(...shadow.cookies);
+  }
+  if (shadow.error) {
+    loaded = {
+      status: shadow.status,
+      error: shadow.error
+    };
+  } else if (shadow.redirect) {
+    loaded = {
+      status: shadow.status,
+      redirect: shadow.redirect
+    };
+  } else if (module2.load) {
+    const load_input = {
+      url: state.prerender ? create_prerendering_url_proxy(event.url) : event.url,
+      params: event.params,
+      props: shadow.body || {},
+      routeId: event.routeId,
+      get session() {
+        uses_credentials = true;
+        return $session;
+      },
+      fetch: async (resource, opts = {}) => {
+        let requested;
+        if (typeof resource === "string") {
+          requested = resource;
+        } else {
+          requested = resource.url;
+          opts = __spreadValues({
+            method: resource.method,
+            headers: resource.headers,
+            body: resource.body,
+            mode: resource.mode,
+            credentials: resource.credentials,
+            cache: resource.cache,
+            redirect: resource.redirect,
+            referrer: resource.referrer,
+            integrity: resource.integrity
+          }, opts);
+        }
+        opts.headers = new Headers(opts.headers);
+        for (const [key2, value] of event.request.headers) {
+          if (key2 !== "authorization" && key2 !== "cookie" && key2 !== "host" && key2 !== "if-none-match" && !opts.headers.has(key2)) {
+            opts.headers.set(key2, value);
+          }
+        }
+        const resolved = resolve(event.url.pathname, requested.split("?")[0]);
+        let response;
+        let dependency;
+        const prefix = options.paths.assets || options.paths.base;
+        const filename = decodeURIComponent(resolved.startsWith(prefix) ? resolved.slice(prefix.length) : resolved).slice(1);
+        const filename_html = `${filename}/index.html`;
+        const is_asset = options.manifest.assets.has(filename);
+        const is_asset_html = options.manifest.assets.has(filename_html);
+        if (is_asset || is_asset_html) {
+          const file = is_asset ? filename : filename_html;
+          if (options.read) {
+            const type = is_asset ? options.manifest.mimeTypes[filename.slice(filename.lastIndexOf("."))] : "text/html";
+            response = new Response(options.read(file), {
+              headers: type ? { "content-type": type } : {}
+            });
+          } else {
+            response = await fetch(`${event.url.origin}/${file}`, opts);
+          }
+        } else if (is_root_relative(resolved)) {
+          if (opts.credentials !== "omit") {
+            uses_credentials = true;
+            const cookie = event.request.headers.get("cookie");
+            const authorization = event.request.headers.get("authorization");
+            if (cookie) {
+              opts.headers.set("cookie", cookie);
+            }
+            if (authorization && !opts.headers.has("authorization")) {
+              opts.headers.set("authorization", authorization);
+            }
+          }
+          if (opts.body && typeof opts.body !== "string") {
+            throw new Error("Request body must be a string");
+          }
+          response = await respond(new Request(new URL(requested, event.url).href, opts), options, {
+            getClientAddress: state.getClientAddress,
+            initiator: route,
+            prerender: state.prerender
+          });
+          if (state.prerender) {
+            dependency = { response, body: null };
+            state.prerender.dependencies.set(resolved, dependency);
+          }
+        } else {
+          if (resolved.startsWith("//")) {
+            requested = event.url.protocol + requested;
+          }
+          if (`.${new URL(requested).hostname}`.endsWith(`.${event.url.hostname}`) && opts.credentials !== "omit") {
+            uses_credentials = true;
+            const cookie = event.request.headers.get("cookie");
+            if (cookie)
+              opts.headers.set("cookie", cookie);
+          }
+          const external_request = new Request(requested, opts);
+          response = await options.hooks.externalFetch.call(null, external_request);
+        }
+        const proxy = new Proxy(response, {
+          get(response2, key2, _receiver) {
+            async function text() {
+              const body = await response2.text();
+              const headers = {};
+              for (const [key3, value] of response2.headers) {
+                if (key3 === "set-cookie") {
+                  set_cookie_headers = set_cookie_headers.concat(value);
+                } else if (key3 !== "etag") {
+                  headers[key3] = value;
+                }
+              }
+              if (!opts.body || typeof opts.body === "string") {
+                const status_number = Number(response2.status);
+                if (isNaN(status_number)) {
+                  throw new Error(`response.status is not a number. value: "${response2.status}" type: ${typeof response2.status}`);
+                }
+                fetched.push({
+                  url: requested,
+                  body: opts.body,
+                  response: {
+                    status: status_number,
+                    statusText: response2.statusText,
+                    headers,
+                    body
+                  }
+                });
+              }
+              if (dependency) {
+                dependency.body = body;
+              }
+              return body;
+            }
+            if (key2 === "arrayBuffer") {
+              return async () => {
+                const buffer = await response2.arrayBuffer();
+                if (dependency) {
+                  dependency.body = new Uint8Array(buffer);
+                }
+                return buffer;
+              };
+            }
+            if (key2 === "text") {
+              return text;
+            }
+            if (key2 === "json") {
+              return async () => {
+                return JSON.parse(await text());
+              };
+            }
+            return Reflect.get(response2, key2, response2);
+          }
+        });
+        return proxy;
+      },
+      stuff: __spreadValues({}, stuff)
+    };
+    if (options.dev) {
+      Object.defineProperty(load_input, "page", {
+        get: () => {
+          throw new Error("`page` in `load` functions has been replaced by `url` and `params`");
+        }
+      });
+    }
+    if (is_error) {
+      load_input.status = status;
+      load_input.error = error2;
+    }
+    loaded = await module2.load.call(null, load_input);
+    if (!loaded) {
+      throw new Error(`load function must return a value${options.dev ? ` (${node.entry})` : ""}`);
+    }
+    if (loaded.fallthrough) {
+      throw new Error("fallthrough is no longer supported. Use matchers instead: https://kit.svelte.dev/docs/routing#advanced-routing-matching");
+    }
+  } else if (shadow.body) {
+    loaded = {
+      props: shadow.body
+    };
+  } else {
+    loaded = {};
+  }
+  if (shadow.body && state.prerender) {
+    const pathname = `${event.url.pathname.replace(/\/$/, "")}/__data.json`;
+    const dependency = {
+      response: new Response(void 0),
+      body: JSON.stringify(shadow.body)
+    };
+    state.prerender.dependencies.set(pathname, dependency);
+  }
+  return {
+    node,
+    props: shadow.body,
+    loaded: normalize(loaded),
+    stuff: loaded.stuff || stuff,
+    fetched,
+    set_cookie_headers,
+    uses_credentials
   };
-  const loaded = await load_node({
-    request,
-    options: options2,
-    state,
-    route: null,
-    page: page2,
-    node: default_layout,
-    $session,
-    stuff: {},
-    prerender_enabled: is_prerender_enabled(options2, default_error, state),
-    is_leaf: false,
-    is_error: false
-  });
-  const branch = [
-    loaded,
-    await load_node({
-      request,
-      options: options2,
-      state,
-      route: null,
-      page: page2,
-      node: default_error,
-      $session,
-      stuff: loaded ? loaded.stuff : {},
-      prerender_enabled: is_prerender_enabled(options2, default_error, state),
-      is_leaf: false,
-      is_error: true,
-      status,
-      error: error2
-    })
-  ];
+}
+async function load_shadow_data(route, event, options, prerender) {
+  if (!route.shadow)
+    return {};
   try {
+    const mod = await route.shadow();
+    if (prerender && (mod.post || mod.put || mod.del || mod.patch)) {
+      throw new Error("Cannot prerender pages that have endpoints with mutative methods");
+    }
+    const method = normalize_request_method(event);
+    const is_get = method === "head" || method === "get";
+    const handler = method === "head" ? mod.head || mod.get : mod[method];
+    if (!handler && !is_get) {
+      return {
+        status: 405,
+        error: new Error(`${method} method not allowed`)
+      };
+    }
+    const data = {
+      status: 200,
+      cookies: [],
+      body: {}
+    };
+    if (!is_get) {
+      const result = await handler(event);
+      if (result.fallthrough) {
+        throw new Error("fallthrough is no longer supported. Use matchers instead: https://kit.svelte.dev/docs/routing#advanced-routing-matching");
+      }
+      const { status, headers, body } = validate_shadow_output(result);
+      data.status = status;
+      add_cookies(data.cookies, headers);
+      if (status >= 300 && status < 400) {
+        data.redirect = headers instanceof Headers ? headers.get("location") : headers.location;
+        return data;
+      }
+      data.body = body;
+    }
+    const get = method === "head" && mod.head || mod.get;
+    if (get) {
+      const result = await get(event);
+      if (result.fallthrough) {
+        throw new Error("fallthrough is no longer supported. Use matchers instead: https://kit.svelte.dev/docs/routing#advanced-routing-matching");
+      }
+      const { status, headers, body } = validate_shadow_output(result);
+      add_cookies(data.cookies, headers);
+      data.status = status;
+      if (status >= 400) {
+        data.error = new Error("Failed to load data");
+        return data;
+      }
+      if (status >= 300) {
+        data.redirect = headers instanceof Headers ? headers.get("location") : headers.location;
+        return data;
+      }
+      data.body = __spreadValues(__spreadValues({}, body), data.body);
+    }
+    return data;
+  } catch (e2) {
+    const error2 = coalesce_to_error(e2);
+    options.handle_error(error2, event);
+    return {
+      status: 500,
+      error: error2
+    };
+  }
+}
+function add_cookies(target, headers) {
+  const cookies = headers["set-cookie"];
+  if (cookies) {
+    if (Array.isArray(cookies)) {
+      target.push(...cookies);
+    } else {
+      target.push(cookies);
+    }
+  }
+}
+function validate_shadow_output(result) {
+  const { status = 200, body = {} } = result;
+  let headers = result.headers || {};
+  if (headers instanceof Headers) {
+    if (headers.has("set-cookie")) {
+      throw new Error("Endpoint request handler cannot use Headers interface with Set-Cookie headers");
+    }
+  } else {
+    headers = lowercase_keys(headers);
+  }
+  if (!is_pojo(body)) {
+    throw new Error("Body returned from endpoint request handler must be a plain object");
+  }
+  return { status, headers, body };
+}
+async function respond_with_error({
+  event,
+  options,
+  state,
+  $session,
+  status,
+  error: error2,
+  resolve_opts
+}) {
+  try {
+    const branch = [];
+    let stuff = {};
+    if (resolve_opts.ssr) {
+      const default_layout = await options.manifest._.nodes[0]();
+      const default_error = await options.manifest._.nodes[1]();
+      const layout_loaded = await load_node({
+        event,
+        options,
+        state,
+        route: null,
+        node: default_layout,
+        $session,
+        stuff: {},
+        is_error: false,
+        is_leaf: false
+      });
+      const error_loaded = await load_node({
+        event,
+        options,
+        state,
+        route: null,
+        node: default_error,
+        $session,
+        stuff: layout_loaded ? layout_loaded.stuff : {},
+        is_error: true,
+        is_leaf: false,
+        status,
+        error: error2
+      });
+      branch.push(layout_loaded, error_loaded);
+      stuff = error_loaded.stuff;
+    }
     return await render_response({
-      options: options2,
+      options,
+      state,
       $session,
       page_config: {
-        hydrate: options2.hydrate,
-        router: options2.router,
-        ssr: options2.ssr
+        hydrate: options.hydrate,
+        router: options.router
       },
+      stuff,
       status,
       error: error2,
       branch,
-      page: page2
+      event,
+      resolve_opts
     });
   } catch (err) {
     const error3 = coalesce_to_error(err);
-    options2.handle_error(error3, request);
-    return {
-      status: 500,
-      headers: {},
-      body: error3.stack
-    };
+    options.handle_error(error3, event);
+    return new Response(error3.stack, {
+      status: 500
+    });
   }
 }
-function is_prerender_enabled(options2, node, state) {
-  return options2.prerender && (!!node.module.prerender || !!state.prerender && state.prerender.all);
-}
 async function respond$1(opts) {
-  const { request, options: options2, state, $session, route } = opts;
+  const { event, options, state, $session, route, resolve_opts } = opts;
   let nodes;
+  if (!resolve_opts.ssr) {
+    return await render_response(__spreadProps(__spreadValues({}, opts), {
+      branch: [],
+      page_config: {
+        hydrate: true,
+        router: true
+      },
+      status: 200,
+      error: null,
+      event,
+      stuff: {}
+    }));
+  }
   try {
-    nodes = await Promise.all(route.a.map((id) => id ? options2.load_component(id) : void 0));
+    nodes = await Promise.all(route.a.map((n) => n == void 0 ? n : options.manifest._.nodes[n]()));
   } catch (err) {
     const error3 = coalesce_to_error(err);
-    options2.handle_error(error3, request);
+    options.handle_error(error3, event);
     return await respond_with_error({
-      request,
-      options: options2,
+      event,
+      options,
       state,
       $session,
       status: 500,
-      error: error3
+      error: error3,
+      resolve_opts
     });
   }
   const leaf = nodes[nodes.length - 1].module;
-  let page_config = get_page_config(leaf, options2);
-  if (!leaf.prerender && state.prerender && !state.prerender.all) {
-    return {
-      status: 204,
-      headers: {},
-      body: ""
-    };
+  let page_config = get_page_config(leaf, options);
+  if (state.prerender) {
+    const should_prerender = leaf.prerender ?? state.prerender.default;
+    if (!should_prerender) {
+      return new Response(void 0, {
+        status: 204
+      });
+    }
   }
   let branch = [];
   let status = 200;
-  let error2;
+  let error2 = null;
   let set_cookie_headers = [];
+  let stuff = {};
   ssr:
-    if (page_config.ssr) {
-      let stuff = {};
-      for (let i = 0; i < nodes.length; i += 1) {
-        const node = nodes[i];
+    if (resolve_opts.ssr) {
+      for (let i2 = 0; i2 < nodes.length; i2 += 1) {
+        const node = nodes[i2];
         let loaded;
         if (node) {
           try {
-            loaded = await load_node({
-              ...opts,
+            loaded = await load_node(__spreadProps(__spreadValues({}, opts), {
               node,
               stuff,
-              prerender_enabled: is_prerender_enabled(options2, node, state),
-              is_leaf: i === nodes.length - 1,
-              is_error: false
-            });
-            if (!loaded)
-              return;
+              is_error: false,
+              is_leaf: i2 === nodes.length - 1
+            }));
             set_cookie_headers = set_cookie_headers.concat(loaded.set_cookie_headers);
             if (loaded.loaded.redirect) {
-              return with_cookies({
+              return with_cookies(new Response(void 0, {
                 status: loaded.loaded.status,
                 headers: {
-                  location: encodeURI(loaded.loaded.redirect)
+                  location: loaded.loaded.redirect
                 }
-              }, set_cookie_headers);
+              }), set_cookie_headers);
             }
             if (loaded.loaded.error) {
               ({ status, error: error2 } = loaded.loaded);
             }
           } catch (err) {
-            const e = coalesce_to_error(err);
-            options2.handle_error(e, request);
+            const e2 = coalesce_to_error(err);
+            options.handle_error(e2, event);
             status = 500;
-            error2 = e;
+            error2 = e2;
           }
           if (loaded && !error2) {
             branch.push(loaded);
           }
           if (error2) {
-            while (i--) {
-              if (route.b[i]) {
-                const error_node = await options2.load_component(route.b[i]);
+            while (i2--) {
+              if (route.b[i2]) {
+                const index = route.b[i2];
+                const error_node = await options.manifest._.nodes[index]();
                 let node_loaded;
-                let j = i;
+                let j = i2;
                 while (!(node_loaded = branch[j])) {
                   j -= 1;
                 }
                 try {
-                  const error_loaded = await load_node({
-                    ...opts,
+                  const error_loaded = await load_node(__spreadProps(__spreadValues({}, opts), {
                     node: error_node,
                     stuff: node_loaded.stuff,
-                    prerender_enabled: is_prerender_enabled(options2, error_node, state),
-                    is_leaf: false,
                     is_error: true,
+                    is_leaf: false,
                     status,
                     error: error2
-                  });
+                  }));
                   if (error_loaded.loaded.error) {
                     continue;
                   }
-                  page_config = get_page_config(error_node.module, options2);
+                  page_config = get_page_config(error_node.module, options);
                   branch = branch.slice(0, j + 1).concat(error_loaded);
+                  stuff = __spreadValues(__spreadValues({}, node_loaded.stuff), error_loaded.stuff);
                   break ssr;
                 } catch (err) {
-                  const e = coalesce_to_error(err);
-                  options2.handle_error(e, request);
+                  const e2 = coalesce_to_error(err);
+                  options.handle_error(e2, event);
                   continue;
                 }
               }
             }
             return with_cookies(await respond_with_error({
-              request,
-              options: options2,
+              event,
+              options,
               state,
               $session,
               status,
-              error: error2
+              error: error2,
+              resolve_opts
             }), set_cookie_headers);
           }
         }
         if (loaded && loaded.loaded.stuff) {
-          stuff = {
-            ...stuff,
-            ...loaded.loaded.stuff
-          };
+          stuff = __spreadValues(__spreadValues({}, stuff), loaded.loaded.stuff);
         }
       }
     }
   try {
-    return with_cookies(await render_response({
-      ...opts,
+    return with_cookies(await render_response(__spreadProps(__spreadValues({}, opts), {
+      stuff,
+      event,
       page_config,
       status,
       error: error2,
       branch: branch.filter(Boolean)
-    }), set_cookie_headers);
+    })), set_cookie_headers);
   } catch (err) {
     const error3 = coalesce_to_error(err);
-    options2.handle_error(error3, request);
-    return with_cookies(await respond_with_error({
-      ...opts,
+    options.handle_error(error3, event);
+    return with_cookies(await respond_with_error(__spreadProps(__spreadValues({}, opts), {
       status: 500,
       error: error3
-    }), set_cookie_headers);
+    })), set_cookie_headers);
   }
 }
-function get_page_config(leaf, options2) {
+function get_page_config(leaf, options) {
+  if ("ssr" in leaf) {
+    throw new Error("`export const ssr` has been removed \u2014 use the handle hook instead: https://kit.svelte.dev/docs/hooks#handle");
+  }
   return {
-    ssr: "ssr" in leaf ? !!leaf.ssr : options2.ssr,
-    router: "router" in leaf ? !!leaf.router : options2.router,
-    hydrate: "hydrate" in leaf ? !!leaf.hydrate : options2.hydrate
+    router: "router" in leaf ? !!leaf.router : options.router,
+    hydrate: "hydrate" in leaf ? !!leaf.hydrate : options.hydrate
   };
 }
 function with_cookies(response, set_cookie_headers) {
   if (set_cookie_headers.length) {
-    response.headers["set-cookie"] = set_cookie_headers;
+    set_cookie_headers.forEach((value) => {
+      response.headers.append("set-cookie", value);
+    });
   }
   return response;
 }
-async function render_page(request, route, match, options2, state) {
+async function render_page(event, route, options, state, resolve_opts) {
   if (state.initiator === route) {
-    return {
-      status: 404,
-      headers: {},
-      body: `Not found: ${request.path}`
-    };
+    return new Response(`Not found: ${event.url.pathname}`, {
+      status: 404
+    });
   }
-  const params = route.params(match);
-  const page2 = {
-    host: request.host,
-    path: request.path,
-    query: request.query,
-    params
-  };
-  const $session = await options2.hooks.getSession(request);
-  const response = await respond$1({
-    request,
-    options: options2,
+  if (route.shadow) {
+    const type = negotiate(event.request.headers.get("accept") || "text/html", [
+      "text/html",
+      "application/json"
+    ]);
+    if (type === "application/json") {
+      return render_endpoint(event, await route.shadow());
+    }
+  }
+  const $session = await options.hooks.getSession(event);
+  return respond$1({
+    event,
+    options,
     state,
     $session,
-    route,
-    page: page2
+    resolve_opts,
+    route
   });
-  if (response) {
-    return response;
-  }
-  if (state.fetched) {
-    return {
-      status: 500,
-      headers: {},
-      body: `Bad request in load function: failed to fetch ${state.fetched}`
-    };
-  }
 }
-function read_only_form_data() {
-  const map = new Map();
-  return {
-    append(key, value) {
-      if (map.has(key)) {
-        (map.get(key) || []).push(value);
-      } else {
-        map.set(key, [value]);
-      }
-    },
-    data: new ReadOnlyFormData(map)
-  };
-}
-var ReadOnlyFormData = class {
-  constructor(map) {
-    __privateAdd(this, _map, void 0);
-    __privateSet(this, _map, map);
-  }
-  get(key) {
-    const value = __privateGet(this, _map).get(key);
-    return value && value[0];
-  }
-  getAll(key) {
-    return __privateGet(this, _map).get(key);
-  }
-  has(key) {
-    return __privateGet(this, _map).has(key);
-  }
-  *[Symbol.iterator]() {
-    for (const [key, value] of __privateGet(this, _map)) {
-      for (let i = 0; i < value.length; i += 1) {
-        yield [key, value[i]];
-      }
+function negotiate(accept, types2) {
+  const parts = accept.split(",").map((str, i2) => {
+    const match = /([^/]+)\/([^;]+)(?:;q=([0-9.]+))?/.exec(str);
+    if (match) {
+      const [, type, subtype, q = "1"] = match;
+      return { type, subtype, q: +q, i: i2 };
     }
-  }
-  *entries() {
-    for (const [key, value] of __privateGet(this, _map)) {
-      for (let i = 0; i < value.length; i += 1) {
-        yield [key, value[i]];
-      }
+    throw new Error(`Invalid Accept header: ${accept}`);
+  }).sort((a, b) => {
+    if (a.q !== b.q) {
+      return b.q - a.q;
     }
-  }
-  *keys() {
-    for (const [key] of __privateGet(this, _map))
-      yield key;
-  }
-  *values() {
-    for (const [, value] of __privateGet(this, _map)) {
-      for (let i = 0; i < value.length; i += 1) {
-        yield value[i];
-      }
+    if (a.subtype === "*" !== (b.subtype === "*")) {
+      return a.subtype === "*" ? 1 : -1;
     }
-  }
-};
-_map = new WeakMap();
-function parse_body(raw, headers) {
-  if (!raw)
-    return raw;
-  const content_type = headers["content-type"];
-  const [type, ...directives] = content_type ? content_type.split(/;\s*/) : [];
-  const text = () => new TextDecoder(headers["content-encoding"] || "utf-8").decode(raw);
-  switch (type) {
-    case "text/plain":
-      return text();
-    case "application/json":
-      return JSON.parse(text());
-    case "application/x-www-form-urlencoded":
-      return get_urlencoded(text());
-    case "multipart/form-data": {
-      const boundary = directives.find((directive) => directive.startsWith("boundary="));
-      if (!boundary)
-        throw new Error("Missing boundary");
-      return get_multipart(text(), boundary.slice("boundary=".length));
+    if (a.type === "*" !== (b.type === "*")) {
+      return a.type === "*" ? 1 : -1;
     }
-    default:
-      return raw;
-  }
-}
-function get_urlencoded(text) {
-  const { data, append } = read_only_form_data();
-  text.replace(/\+/g, " ").split("&").forEach((str) => {
-    const [key, value] = str.split("=");
-    append(decodeURIComponent(key), decodeURIComponent(value));
+    return a.i - b.i;
   });
-  return data;
-}
-function get_multipart(text, boundary) {
-  const parts = text.split(`--${boundary}`);
-  if (parts[0] !== "" || parts[parts.length - 1].trim() !== "--") {
-    throw new Error("Malformed form data");
-  }
-  const { data, append } = read_only_form_data();
-  parts.slice(1, -1).forEach((part) => {
-    const match = /\s*([\s\S]+?)\r\n\r\n([\s\S]*)\s*/.exec(part);
-    if (!match) {
-      throw new Error("Malformed form data");
+  let accepted;
+  let min_priority = Infinity;
+  for (const mimetype of types2) {
+    const [type, subtype] = mimetype.split("/");
+    const priority = parts.findIndex((part) => (part.type === type || part.type === "*") && (part.subtype === subtype || part.subtype === "*"));
+    if (priority !== -1 && priority < min_priority) {
+      accepted = mimetype;
+      min_priority = priority;
     }
-    const raw_headers = match[1];
-    const body = match[2].trim();
-    let key;
-    const headers = {};
-    raw_headers.split("\r\n").forEach((str) => {
-      const [raw_header, ...raw_directives] = str.split("; ");
-      let [name, value] = raw_header.split(": ");
-      name = name.toLowerCase();
-      headers[name] = value;
-      const directives = {};
-      raw_directives.forEach((raw_directive) => {
-        const [name2, value2] = raw_directive.split("=");
-        directives[name2] = JSON.parse(value2);
-      });
-      if (name === "content-disposition") {
-        if (value !== "form-data")
-          throw new Error("Malformed form data");
-        if (directives.filename) {
-          throw new Error("File upload is not yet implemented");
-        }
-        if (directives.name) {
-          key = directives.name;
-        }
+  }
+  return accepted;
+}
+function exec(match, names, types2, matchers) {
+  const params = {};
+  for (let i2 = 0; i2 < names.length; i2 += 1) {
+    const name = names[i2];
+    const type = types2[i2];
+    const value = match[i2 + 1] || "";
+    if (type) {
+      const matcher = matchers[type];
+      if (!matcher)
+        throw new Error(`Missing "${type}" param matcher`);
+      if (!matcher(value))
+        return;
+    }
+    params[name] = value;
+  }
+  return params;
+}
+var DATA_SUFFIX = "/__data.json";
+var default_transform = ({ html }) => html;
+async function respond(request, options, state) {
+  var _a4, _b, _c;
+  let url = new URL(request.url);
+  const normalized = normalize_path(url.pathname, options.trailing_slash);
+  if (normalized !== url.pathname && !((_a4 = state.prerender) == null ? void 0 : _a4.fallback)) {
+    return new Response(void 0, {
+      status: 301,
+      headers: {
+        location: (normalized.startsWith("//") ? url.origin + normalized : normalized) + (url.search === "?" ? "" : url.search)
       }
     });
-    if (!key)
-      throw new Error("Malformed form data");
-    append(key, body);
-  });
-  return data;
-}
-async function respond(incoming, options2, state = {}) {
-  if (incoming.path !== "/" && options2.trailing_slash !== "ignore") {
-    const has_trailing_slash = incoming.path.endsWith("/");
-    if (has_trailing_slash && options2.trailing_slash === "never" || !has_trailing_slash && options2.trailing_slash === "always" && !(incoming.path.split("/").pop() || "").includes(".")) {
-      const path = has_trailing_slash ? incoming.path.slice(0, -1) : incoming.path + "/";
-      const q = incoming.query.toString();
-      return {
-        status: 301,
-        headers: {
-          location: options2.paths.base + path + (q ? `?${q}` : "")
-        }
-      };
-    }
   }
-  const headers = lowercase_keys(incoming.headers);
-  const request = {
-    ...incoming,
-    headers,
-    body: parse_body(incoming.rawBody, headers),
-    params: {},
-    locals: {}
-  };
-  try {
-    return await options2.hooks.handle({
-      request,
-      resolve: async (request2) => {
-        if (state.prerender && state.prerender.fallback) {
-          return await render_response({
-            options: options2,
-            $session: await options2.hooks.getSession(request2),
-            page_config: { ssr: false, router: true, hydrate: true },
-            status: 200,
-            branch: []
-          });
-        }
-        const decoded = decodeURI(request2.path);
-        for (const route of options2.manifest.routes) {
-          const match = route.pattern.exec(decoded);
-          if (!match)
-            continue;
-          const response = route.type === "endpoint" ? await render_endpoint(request2, route, match) : await render_page(request2, route, match, options2, state);
-          if (response) {
-            if (response.status === 200) {
-              const cache_control = get_single_valued_header(response.headers, "cache-control");
-              if (!cache_control || !/(no-store|immutable)/.test(cache_control)) {
-                const etag = `"${hash(response.body || "")}"`;
-                if (request2.headers["if-none-match"] === etag) {
-                  return {
-                    status: 304,
-                    headers: {},
-                    body: ""
-                  };
-                }
-                response.headers["etag"] = etag;
-              }
-            }
-            return response;
+  const { parameter, allowed } = options.method_override;
+  const method_override = (_b = url.searchParams.get(parameter)) == null ? void 0 : _b.toUpperCase();
+  if (method_override) {
+    if (request.method === "POST") {
+      if (allowed.includes(method_override)) {
+        request = new Proxy(request, {
+          get: (target, property, _receiver) => {
+            if (property === "method")
+              return method_override;
+            return Reflect.get(target, property, target);
           }
-        }
-        const $session = await options2.hooks.getSession(request2);
-        return await respond_with_error({
-          request: request2,
-          options: options2,
-          state,
-          $session,
-          status: 404,
-          error: new Error(`Not found: ${request2.path}`)
+        });
+      } else {
+        const verb = allowed.length === 0 ? "enabled" : "allowed";
+        const body = `${parameter}=${method_override} is not ${verb}. See https://kit.svelte.dev/docs/configuration#methodoverride`;
+        return new Response(body, {
+          status: 400
         });
       }
-    });
-  } catch (err) {
-    const e = coalesce_to_error(err);
-    options2.handle_error(e, request);
-    return {
-      status: 500,
-      headers: {},
-      body: options2.dev ? e.stack : e.message
-    };
+    } else {
+      throw new Error(`${parameter}=${method_override} is only allowed with POST requests`);
+    }
   }
-}
-function noop() {
-}
-var identity = (x) => x;
-function assign(tar, src2) {
-  for (const k in src2)
-    tar[k] = src2[k];
-  return tar;
-}
-function run(fn) {
-  return fn();
-}
-function blank_object() {
-  return Object.create(null);
-}
-function run_all(fns) {
-  fns.forEach(run);
-}
-function safe_not_equal(a, b) {
-  return a != a ? b == b : a !== b || (a && typeof a === "object" || typeof a === "function");
-}
-function subscribe(store, ...callbacks) {
-  if (store == null) {
-    return noop;
+  let decoded = decodeURI(url.pathname);
+  let route = null;
+  let params = {};
+  if (options.paths.base && !((_c = state.prerender) == null ? void 0 : _c.fallback)) {
+    if (!decoded.startsWith(options.paths.base)) {
+      return new Response(void 0, { status: 404 });
+    }
+    decoded = decoded.slice(options.paths.base.length) || "/";
   }
-  const unsub = store.subscribe(...callbacks);
-  return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
-}
-function null_to_empty(value) {
-  return value == null ? "" : value;
-}
-function set_store_value(store, ret, value) {
-  store.set(value);
-  return ret;
-}
-var is_client = typeof window !== "undefined";
-var now = is_client ? () => window.performance.now() : () => Date.now();
-var raf = is_client ? (cb) => requestAnimationFrame(cb) : noop;
-var tasks = new Set();
-function run_tasks(now2) {
-  tasks.forEach((task) => {
-    if (!task.c(now2)) {
-      tasks.delete(task);
-      task.f();
+  const is_data_request = decoded.endsWith(DATA_SUFFIX);
+  if (is_data_request) {
+    decoded = decoded.slice(0, -DATA_SUFFIX.length) || "/";
+    const normalized2 = normalize_path(url.pathname.slice(0, -DATA_SUFFIX.length), options.trailing_slash);
+    url = new URL(url.origin + normalized2 + url.search);
+  }
+  if (!state.prerender || !state.prerender.fallback) {
+    const matchers = await options.manifest._.matchers();
+    for (const candidate of options.manifest._.routes) {
+      const match = candidate.pattern.exec(decoded);
+      if (!match)
+        continue;
+      const matched = exec(match, candidate.names, candidate.types, matchers);
+      if (matched) {
+        route = candidate;
+        params = decode_params(matched);
+        break;
+      }
+    }
+  }
+  const event = {
+    get clientAddress() {
+      if (!state.getClientAddress) {
+        throw new Error(`${"@sveltejs/adapter-vercel"} does not specify getClientAddress. Please raise an issue`);
+      }
+      Object.defineProperty(event, "clientAddress", {
+        value: state.getClientAddress()
+      });
+      return event.clientAddress;
+    },
+    locals: {},
+    params,
+    platform: state.platform,
+    request,
+    routeId: route && route.id,
+    url
+  };
+  const removed = (property, replacement, suffix = "") => ({
+    get: () => {
+      throw new Error(`event.${property} has been replaced by event.${replacement}` + suffix);
     }
   });
-  if (tasks.size !== 0)
-    raf(run_tasks);
-}
-function loop(callback) {
-  let task;
-  if (tasks.size === 0)
-    raf(run_tasks);
-  return {
-    promise: new Promise((fulfill) => {
-      tasks.add(task = { c: callback, f: fulfill });
-    }),
-    abort() {
-      tasks.delete(task);
+  const details = ". See https://github.com/sveltejs/kit/pull/3384 for details";
+  const body_getter = {
+    get: () => {
+      throw new Error("To access the request body use the text/json/arrayBuffer/formData methods, e.g. `body = await request.json()`" + details);
     }
   };
-}
-function custom_event(type, detail, bubbles = false) {
-  const e = document.createEvent("CustomEvent");
-  e.initCustomEvent(type, bubbles, false, detail);
-  return e;
-}
-var current_component;
-function set_current_component(component) {
-  current_component = component;
-}
-function get_current_component() {
-  if (!current_component)
-    throw new Error("Function called outside component initialization");
-  return current_component;
-}
-function onDestroy(fn) {
-  get_current_component().$$.on_destroy.push(fn);
-}
-function createEventDispatcher() {
-  const component = get_current_component();
-  return (type, detail) => {
-    const callbacks = component.$$.callbacks[type];
-    if (callbacks) {
-      const event = custom_event(type, detail);
-      callbacks.slice().forEach((fn) => {
-        fn.call(component, event);
+  Object.defineProperties(event, {
+    method: removed("method", "request.method", details),
+    headers: removed("headers", "request.headers", details),
+    origin: removed("origin", "url.origin"),
+    path: removed("path", "url.pathname"),
+    query: removed("query", "url.searchParams"),
+    body: body_getter,
+    rawBody: body_getter
+  });
+  let resolve_opts = {
+    ssr: true,
+    transformPage: default_transform
+  };
+  try {
+    const response = await options.hooks.handle({
+      event,
+      resolve: async (event2, opts) => {
+        if (opts) {
+          resolve_opts = {
+            ssr: opts.ssr !== false,
+            transformPage: opts.transformPage || default_transform
+          };
+        }
+        if (state.prerender && state.prerender.fallback) {
+          return await render_response({
+            event: event2,
+            options,
+            state,
+            $session: await options.hooks.getSession(event2),
+            page_config: { router: true, hydrate: true },
+            stuff: {},
+            status: 200,
+            error: null,
+            branch: [],
+            resolve_opts: __spreadProps(__spreadValues({}, resolve_opts), {
+              ssr: false
+            })
+          });
+        }
+        if (route) {
+          let response2;
+          if (is_data_request && route.type === "page" && route.shadow) {
+            response2 = await render_endpoint(event2, await route.shadow());
+            if (request.headers.has("x-sveltekit-load")) {
+              if (response2.status >= 300 && response2.status < 400) {
+                const location = response2.headers.get("location");
+                if (location) {
+                  const headers = new Headers(response2.headers);
+                  headers.set("x-sveltekit-location", location);
+                  response2 = new Response(void 0, {
+                    status: 204,
+                    headers
+                  });
+                }
+              }
+            }
+          } else {
+            response2 = route.type === "endpoint" ? await render_endpoint(event2, await route.load()) : await render_page(event2, route, options, state, resolve_opts);
+          }
+          if (response2) {
+            if (response2.status === 200 && response2.headers.has("etag")) {
+              let if_none_match_value = request.headers.get("if-none-match");
+              if (if_none_match_value == null ? void 0 : if_none_match_value.startsWith('W/"')) {
+                if_none_match_value = if_none_match_value.substring(2);
+              }
+              const etag = response2.headers.get("etag");
+              if (if_none_match_value === etag) {
+                const headers = new Headers({ etag });
+                for (const key2 of [
+                  "cache-control",
+                  "content-location",
+                  "date",
+                  "expires",
+                  "vary"
+                ]) {
+                  const value = response2.headers.get(key2);
+                  if (value)
+                    headers.set(key2, value);
+                }
+                return new Response(void 0, {
+                  status: 304,
+                  headers
+                });
+              }
+            }
+            return response2;
+          }
+        }
+        if (!state.initiator) {
+          const $session = await options.hooks.getSession(event2);
+          return await respond_with_error({
+            event: event2,
+            options,
+            state,
+            $session,
+            status: 404,
+            error: new Error(`Not found: ${event2.url.pathname}`),
+            resolve_opts
+          });
+        }
+        if (state.prerender) {
+          return new Response("not found", { status: 404 });
+        }
+        return await fetch(request);
+      },
+      get request() {
+        throw new Error("request in handle has been replaced with event" + details);
+      }
+    });
+    if (response && !(response instanceof Response)) {
+      throw new Error("handle must return a Response object" + details);
+    }
+    return response;
+  } catch (e2) {
+    const error2 = coalesce_to_error(e2);
+    options.handle_error(error2, event);
+    try {
+      const $session = await options.hooks.getSession(event);
+      return await respond_with_error({
+        event,
+        options,
+        state,
+        $session,
+        status: 500,
+        error: error2,
+        resolve_opts
+      });
+    } catch (e22) {
+      const error3 = coalesce_to_error(e22);
+      return new Response(options.dev ? error3.stack : error3.message, {
+        status: 500
       });
     }
-  };
-}
-function setContext(key, context) {
-  get_current_component().$$.context.set(key, context);
-}
-Promise.resolve();
-var escaped = {
-  '"': "&quot;",
-  "'": "&#39;",
-  "&": "&amp;",
-  "<": "&lt;",
-  ">": "&gt;"
-};
-function escape(html) {
-  return String(html).replace(/["'&<>]/g, (match) => escaped[match]);
-}
-function each(items, fn) {
-  let str = "";
-  for (let i = 0; i < items.length; i += 1) {
-    str += fn(items[i], i);
   }
-  return str;
 }
-var missing_component = {
-  $$render: () => ""
-};
-function validate_component(component, name) {
-  if (!component || !component.$$render) {
-    if (name === "svelte:component")
-      name += " this={...}";
-    throw new Error(`<${name}> is not a valid SSR component. You may need to review your build config to ensure that dependencies are compiled, rather than imported as pre-compiled modules`);
-  }
-  return component;
-}
-var on_destroy;
-function create_ssr_component(fn) {
-  function $$render(result, props, bindings, slots, context) {
-    const parent_component = current_component;
-    const $$ = {
-      on_destroy,
-      context: new Map(context || (parent_component ? parent_component.$$.context : [])),
-      on_mount: [],
-      before_update: [],
-      after_update: [],
-      callbacks: blank_object()
-    };
-    set_current_component({ $$ });
-    const html = fn(result, props, bindings, slots);
-    set_current_component(parent_component);
-    return html;
-  }
-  return {
-    render: (props = {}, { $$slots = {}, context = new Map() } = {}) => {
-      on_destroy = [];
-      const result = { title: "", head: "", css: new Set() };
-      const html = $$render(result, props, {}, $$slots, context);
-      run_all(on_destroy);
-      return {
-        html,
-        css: {
-          code: Array.from(result.css).map((css2) => css2.code).join("\n"),
-          map: null
-        },
-        head: result.title + result.head
-      };
-    },
-    $$render
-  };
-}
-function add_attribute(name, value, boolean) {
-  if (value == null || boolean && !value)
-    return "";
-  return ` ${name}${value === true ? "" : `=${typeof value === "string" ? JSON.stringify(escape(value)) : `"${value}"`}`}`;
-}
-function afterUpdate() {
-}
-var css$A = {
-  code: "#svelte-announcer.svelte-1j55zn5{position:absolute;left:0;top:0;clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden;white-space:nowrap;width:1px;height:1px}",
-  map: null
-};
-var Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { stores } = $$props;
-  let { page: page2 } = $$props;
-  let { components } = $$props;
-  let { props_0 = null } = $$props;
-  let { props_1 = null } = $$props;
-  let { props_2 = null } = $$props;
-  setContext("__svelte__", stores);
-  afterUpdate(stores.page.notify);
-  if ($$props.stores === void 0 && $$bindings.stores && stores !== void 0)
-    $$bindings.stores(stores);
-  if ($$props.page === void 0 && $$bindings.page && page2 !== void 0)
-    $$bindings.page(page2);
-  if ($$props.components === void 0 && $$bindings.components && components !== void 0)
-    $$bindings.components(components);
-  if ($$props.props_0 === void 0 && $$bindings.props_0 && props_0 !== void 0)
-    $$bindings.props_0(props_0);
-  if ($$props.props_1 === void 0 && $$bindings.props_1 && props_1 !== void 0)
-    $$bindings.props_1(props_1);
-  if ($$props.props_2 === void 0 && $$bindings.props_2 && props_2 !== void 0)
-    $$bindings.props_2(props_2);
-  $$result.css.add(css$A);
-  {
-    stores.page.set(page2);
-  }
-  return `
-
-
-${validate_component(components[0] || missing_component, "svelte:component").$$render($$result, Object.assign(props_0 || {}), {}, {
-    default: () => `${components[1] ? `${validate_component(components[1] || missing_component, "svelte:component").$$render($$result, Object.assign(props_1 || {}), {}, {
-      default: () => `${components[2] ? `${validate_component(components[2] || missing_component, "svelte:component").$$render($$result, Object.assign(props_2 || {}), {}, {})}` : ``}`
-    })}` : ``}`
-  })}
-
-${``}`;
-});
 var base = "";
 var assets = "";
 function set_paths(paths) {
   base = paths.base;
   assets = paths.assets || base;
 }
-function set_prerendering(value) {
-}
-var user_hooks = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module"
-});
-var template = ({ head, body }) => '<!DOCTYPE html>\n<html lang="en">\n	<head>\n		<meta charset="utf-8" />\n		<link rel="icon" href="/favicon.png" />\n		<link rel="stylesheet" href="/style/reset.css" />\n		<link rel="preconnect" href="https://fonts.googleapis.com">\n		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n		<link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet">\n    	<link rel="stylesheet" href="/style/common.css" />\n		<meta name="viewport" content="width=device-width, initial-scale=1" />\n		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6151369636468422" crossorigin="anonymous"><\/script>\n		' + head + '\n	</head>\n	<body>\n		<div id="svelte">' + body + "</div>\n	</body>\n</html>\n";
-var options = null;
-var default_settings = { paths: { "base": "", "assets": "" } };
-function init(settings = default_settings) {
-  set_paths(settings.paths);
-  set_prerendering(settings.prerendering || false);
-  const hooks = get_hooks(user_hooks);
-  options = {
-    amp: false,
-    dev: false,
-    entry: {
-      file: assets + "/_app/start-e82d5726.js",
-      css: [assets + "/_app/assets/start-61d1577b.css", assets + "/_app/assets/vendor-42482fb6.css"],
-      js: [assets + "/_app/start-e82d5726.js", assets + "/_app/chunks/vendor-cd26605b.js"]
-    },
-    fetched: void 0,
-    floc: false,
-    get_component_path: (id) => assets + "/_app/" + entry_lookup[id],
-    get_stack: (error2) => String(error2),
-    handle_error: (error2, request) => {
-      hooks.handleError({ error: error2, request });
-      error2.stack = options.get_stack(error2);
-    },
-    hooks,
-    hydrate: true,
-    initiator: void 0,
-    load_component,
-    manifest,
-    paths: settings.paths,
-    prerender: true,
-    read: settings.read,
-    root: Root,
-    service_worker: null,
-    router: true,
-    ssr: true,
-    target: "#svelte",
-    template,
-    trailing_slash: "never"
-  };
-}
-var empty = () => ({});
-var manifest = {
-  assets: [{ "file": "favicon.png", "size": 3988, "type": "image/png" }, { "file": "img/.DS_Store", "size": 6148, "type": null }, { "file": "img/add_people.svg", "size": 598, "type": "image/svg+xml" }, { "file": "img/app_icon.svg", "size": 3723, "type": "image/svg+xml" }, { "file": "img/arrow-circle-left-solid.svg", "size": 473, "type": "image/svg+xml" }, { "file": "img/arrow-osha.svg", "size": 762, "type": "image/svg+xml" }, { "file": "img/arrow_simple_bottom.svg", "size": 196, "type": "image/svg+xml" }, { "file": "img/arrow_simple_right.svg", "size": 270, "type": "image/svg+xml" }, { "file": "img/blog_icon.svg", "size": 1515, "type": "image/svg+xml" }, { "file": "img/bs2nd/a_gray.png", "size": 8451, "type": "image/png" }, { "file": "img/bs2nd/a_gray_fill.svg", "size": 1441, "type": "image/svg+xml" }, { "file": "img/bs2nd/ba_gray.png", "size": 8664, "type": "image/png" }, { "file": "img/bs2nd/ba_gray.svg", "size": 1441, "type": "image/svg+xml" }, { "file": "img/bs2nd/bakuzetsu-searchico-effect.png", "size": 462751, "type": "image/png" }, { "file": "img/bs2nd/bakuzetsu-searchico.png", "size": 368914, "type": "image/png" }, { "file": "img/bs2nd/biribiri.svg", "size": 242, "type": "image/svg+xml" }, { "file": "img/bs2nd/change.svg", "size": 582, "type": "image/svg+xml" }, { "file": "img/bs2nd/chi_gray.png", "size": 8409, "type": "image/png" }, { "file": "img/bs2nd/copy.svg", "size": 476, "type": "image/svg+xml" }, { "file": "img/bs2nd/e_gray_fill.svg", "size": 1230, "type": "image/svg+xml" }, { "file": "img/bs2nd/heal.svg", "size": 1055, "type": "image/svg+xml" }, { "file": "img/bs2nd/ku_gray.png", "size": 7616, "type": "image/png" }, { "file": "img/bs2nd/needle.svg", "size": 698, "type": "image/svg+xml" }, { "file": "img/bs2nd/sa_gray.png", "size": 8547, "type": "image/png" }, { "file": "img/bs2nd/shield.svg", "size": 691, "type": "image/svg+xml" }, { "file": "img/bs2nd/tsu_gray.png", "size": 7736, "type": "image/png" }, { "file": "img/bs2nd/wall.svg", "size": 523, "type": "image/svg+xml" }, { "file": "img/bs2nd/week.svg", "size": 503, "type": "image/svg+xml" }, { "file": "img/bs2nd/ze_gray.png", "size": 8329, "type": "image/png" }, { "file": "img/contacts_icon.svg", "size": 1409, "type": "image/svg+xml" }, { "file": "img/n2-icon-white.svg", "size": 210, "type": "image/svg+xml" }, { "file": "img/n2_clock/.DS_Store", "size": 6148, "type": null }, { "file": "img/n2_clock/clock_body.svg", "size": 18468, "type": "image/svg+xml" }, { "file": "img/n2_clock/clock_insidewheel.svg", "size": 1595, "type": "image/svg+xml" }, { "file": "img/n2_clock/time-1.svg", "size": 633, "type": "image/svg+xml" }, { "file": "img/n2_clock/time-10.svg", "size": 1790, "type": "image/svg+xml" }, { "file": "img/n2_clock/time-10_white.svg", "size": 1790, "type": "image/svg+xml" }, { "file": "img/n2_clock/time-11.svg", "size": 1058, "type": "image/svg+xml" }, { "file": "img/n2_clock/time-12.svg", "size": 2716, "type": "image/svg+xml" }, { "file": "img/n2_clock/time-2.svg", "size": 680, "type": "image/svg+xml" }, { "file": "img/n2_clock/time-3.svg", "size": 702, "type": "image/svg+xml" }, { "file": "img/n2_clock/time-4.svg", "size": 742, "type": "image/svg+xml" }, { "file": "img/n2_clock/time-5.svg", "size": 1267, "type": "image/svg+xml" }, { "file": "img/n2_clock/time-6.svg", "size": 719, "type": "image/svg+xml" }, { "file": "img/n2_clock/time-7.svg", "size": 753, "type": "image/svg+xml" }, { "file": "img/n2_clock/time-8.svg", "size": 798, "type": "image/svg+xml" }, { "file": "img/n2_clock/time-9.svg", "size": 1019, "type": "image/svg+xml" }, { "file": "img/portfolio_icon.svg", "size": 1100, "type": "image/svg+xml" }, { "file": "img/profile_icon.svg", "size": 1200, "type": "image/svg+xml" }, { "file": "img/tcg-sim/card.svg", "size": 622, "type": "image/svg+xml" }, { "file": "img/tcg-sim/card_naname.svg", "size": 703, "type": "image/svg+xml" }, { "file": "img/tcg-sim/dmbd13-002a.jpeg", "size": 152764, "type": "image/jpeg" }, { "file": "img/tcg-sim/dmbd16-011-[4].jpeg", "size": 177245, "type": "image/jpeg" }, { "file": "img/tcg-sim/dmex17-003-[4].jpeg", "size": 213712, "type": "image/jpeg" }, { "file": "img/tcg-sim/dmr21-l02-[4].jpeg", "size": 159352, "type": "image/jpeg" }, { "file": "img/tcg-sim/ellipse.svg", "size": 329, "type": "image/svg+xml" }, { "file": "img/tcg-sim/require_device.svg", "size": 941, "type": "image/svg+xml" }, { "file": "img/trash.svg", "size": 732, "type": "image/svg+xml" }, { "file": "style/common.css", "size": 690, "type": "text/css" }, { "file": "style/reset.css", "size": 1257, "type": "text/css" }],
-  layout: "src/routes/__layout.svelte",
-  error: ".svelte-kit/build/components/error.svelte",
-  routes: [
-    {
-      type: "page",
-      pattern: /^\/$/,
-      params: empty,
-      a: ["src/routes/__layout.svelte", "src/routes/index.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
-    },
-    {
-      type: "page",
-      pattern: /^\/introduce\/?$/,
-      params: empty,
-      a: ["src/routes/__layout.svelte", "src/routes/introduce/index.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
-    },
-    {
-      type: "page",
-      pattern: /^\/contact\/?$/,
-      params: empty,
-      a: ["src/routes/__layout.svelte", "src/routes/contact.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
-    },
-    {
-      type: "page",
-      pattern: /^\/blog\/list\/?$/,
-      params: empty,
-      a: ["src/routes/__layout.svelte", "src/routes/blog/list.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
-    },
-    {
-      type: "page",
-      pattern: /^\/blog\/page\/?$/,
-      params: empty,
-      a: ["src/routes/__layout.svelte", "src/routes/blog/page.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
-    },
-    {
-      type: "page",
-      pattern: /^\/show\/?$/,
-      params: empty,
-      a: ["src/routes/__layout.svelte", "src/routes/show/index.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
-    },
-    {
-      type: "page",
-      pattern: /^\/app\/bakuzetsu-searcher-2nd\/analyze\/?$/,
-      params: empty,
-      a: ["src/routes/app/bakuzetsu-searcher-2nd/__layout.reset.svelte", "src/routes/app/bakuzetsu-searcher-2nd/analyze.svelte"],
-      b: []
-    },
-    {
-      type: "page",
-      pattern: /^\/app\/bakuzetsu-searcher-2nd\/edit\/?$/,
-      params: empty,
-      a: ["src/routes/app/bakuzetsu-searcher-2nd/__layout.reset.svelte", "src/routes/app/bakuzetsu-searcher-2nd/edit.svelte"],
-      b: []
-    },
-    {
-      type: "page",
-      pattern: /^\/app\/bakuzetsu-searcher-2nd\/post\/?$/,
-      params: empty,
-      a: ["src/routes/app/bakuzetsu-searcher-2nd/__layout.reset.svelte", "src/routes/app/bakuzetsu-searcher-2nd/post.svelte"],
-      b: []
-    },
-    {
-      type: "page",
-      pattern: /^\/app\/DM-Downloader\/collect\/?$/,
-      params: empty,
-      a: ["src/routes/__layout.svelte", "src/routes/app/DM-Downloader/collect.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
-    },
-    {
-      type: "page",
-      pattern: /^\/app\/tcg-simulator\/edit\/?$/,
-      params: empty,
-      a: ["src/routes/app/tcg-simulator/__layout.reset.svelte", "src/routes/app/tcg-simulator/edit.svelte"],
-      b: []
-    },
-    {
-      type: "page",
-      pattern: /^\/app\/tcg-simulator\/game\/?$/,
-      params: empty,
-      a: ["src/routes/app/tcg-simulator/__layout.reset.svelte", "src/routes/app/tcg-simulator/game.svelte"],
-      b: []
-    },
-    {
-      type: "page",
-      pattern: /^\/app\/?$/,
-      params: empty,
-      a: ["src/routes/__layout.svelte", "src/routes/app.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
-    }
-  ]
-};
-var get_hooks = (hooks) => ({
-  getSession: hooks.getSession || (() => ({})),
-  handle: hooks.handle || (({ request, resolve: resolve2 }) => resolve2(request)),
-  handleError: hooks.handleError || (({ error: error2 }) => console.error(error2.stack)),
-  externalFetch: hooks.externalFetch || fetch
-});
-var module_lookup = {
-  "src/routes/__layout.svelte": () => Promise.resolve().then(function() {
-    return __layout;
-  }),
-  ".svelte-kit/build/components/error.svelte": () => Promise.resolve().then(function() {
-    return error;
-  }),
-  "src/routes/index.svelte": () => Promise.resolve().then(function() {
-    return index$2;
-  }),
-  "src/routes/introduce/index.svelte": () => Promise.resolve().then(function() {
-    return index$1;
-  }),
-  "src/routes/contact.svelte": () => Promise.resolve().then(function() {
-    return contact;
-  }),
-  "src/routes/blog/list.svelte": () => Promise.resolve().then(function() {
-    return list;
-  }),
-  "src/routes/blog/page.svelte": () => Promise.resolve().then(function() {
-    return page;
-  }),
-  "src/routes/show/index.svelte": () => Promise.resolve().then(function() {
-    return index;
-  }),
-  "src/routes/app/bakuzetsu-searcher-2nd/__layout.reset.svelte": () => Promise.resolve().then(function() {
-    return __layout_reset$1;
-  }),
-  "src/routes/app/bakuzetsu-searcher-2nd/analyze.svelte": () => Promise.resolve().then(function() {
-    return analyze;
-  }),
-  "src/routes/app/bakuzetsu-searcher-2nd/edit.svelte": () => Promise.resolve().then(function() {
-    return edit$1;
-  }),
-  "src/routes/app/bakuzetsu-searcher-2nd/post.svelte": () => Promise.resolve().then(function() {
-    return post;
-  }),
-  "src/routes/app/DM-Downloader/collect.svelte": () => Promise.resolve().then(function() {
-    return collect;
-  }),
-  "src/routes/app/tcg-simulator/__layout.reset.svelte": () => Promise.resolve().then(function() {
-    return __layout_reset;
-  }),
-  "src/routes/app/tcg-simulator/edit.svelte": () => Promise.resolve().then(function() {
-    return edit;
-  }),
-  "src/routes/app/tcg-simulator/game.svelte": () => Promise.resolve().then(function() {
-    return game;
-  }),
-  "src/routes/app.svelte": () => Promise.resolve().then(function() {
-    return app;
-  })
-};
-var metadata_lookup = { "src/routes/__layout.svelte": { "entry": "pages/__layout.svelte-388f8596.js", "css": ["assets/pages/__layout.svelte-c6104550.css", "assets/vendor-42482fb6.css", "assets/ToastArea-00e911a5.css"], "js": ["pages/__layout.svelte-388f8596.js", "chunks/vendor-cd26605b.js", "chunks/MainMenu-9e2659a3.js", "chunks/ToastArea-bde0df2b.js"], "styles": [] }, ".svelte-kit/build/components/error.svelte": { "entry": "error.svelte-9ad5eac8.js", "css": ["assets/vendor-42482fb6.css"], "js": ["error.svelte-9ad5eac8.js", "chunks/vendor-cd26605b.js"], "styles": [] }, "src/routes/index.svelte": { "entry": "pages/index.svelte-a6a92e60.js", "css": ["assets/pages/index.svelte-7ded9e66.css", "assets/vendor-42482fb6.css"], "js": ["pages/index.svelte-a6a92e60.js", "chunks/vendor-cd26605b.js", "chunks/MainMenu-9e2659a3.js"], "styles": [] }, "src/routes/introduce/index.svelte": { "entry": "pages/introduce/index.svelte-d7967b11.js", "css": ["assets/pages/introduce/index.svelte-627fe975.css", "assets/vendor-42482fb6.css"], "js": ["pages/introduce/index.svelte-d7967b11.js", "chunks/vendor-cd26605b.js"], "styles": [] }, "src/routes/contact.svelte": { "entry": "pages/contact.svelte-f5fbed3e.js", "css": ["assets/pages/contact.svelte-297997af.css", "assets/vendor-42482fb6.css"], "js": ["pages/contact.svelte-f5fbed3e.js", "chunks/vendor-cd26605b.js"], "styles": [] }, "src/routes/blog/list.svelte": { "entry": "pages/blog/list.svelte-7348812e.js", "css": ["assets/pages/blog/list.svelte-44f394b5.css", "assets/vendor-42482fb6.css"], "js": ["pages/blog/list.svelte-7348812e.js", "chunks/vendor-cd26605b.js", "chunks/api-275c89af.js"], "styles": [] }, "src/routes/blog/page.svelte": { "entry": "pages/blog/page.svelte-ff79a071.js", "css": ["assets/vendor-42482fb6.css"], "js": ["pages/blog/page.svelte-ff79a071.js", "chunks/vendor-cd26605b.js"], "styles": [] }, "src/routes/show/index.svelte": { "entry": "pages/show/index.svelte-c0987365.js", "css": ["assets/pages/show/index.svelte-e2989a52.css", "assets/vendor-42482fb6.css", "assets/bs2ndLoader-8a29ed63.css"], "js": ["pages/show/index.svelte-c0987365.js", "chunks/vendor-cd26605b.js", "chunks/bs2ndLoader-078618be.js"], "styles": [] }, "src/routes/app/bakuzetsu-searcher-2nd/__layout.reset.svelte": { "entry": "pages/app/bakuzetsu-searcher-2nd/__layout.reset.svelte-72401d69.js", "css": ["assets/pages/app/bakuzetsu-searcher-2nd/__layout.reset.svelte-d62b57c2.css", "assets/vendor-42482fb6.css", "assets/ToastArea-00e911a5.css"], "js": ["pages/app/bakuzetsu-searcher-2nd/__layout.reset.svelte-72401d69.js", "chunks/vendor-cd26605b.js", "chunks/ToastArea-bde0df2b.js"], "styles": [] }, "src/routes/app/bakuzetsu-searcher-2nd/analyze.svelte": { "entry": "pages/app/bakuzetsu-searcher-2nd/analyze.svelte-2c888323.js", "css": ["assets/pages/app/bakuzetsu-searcher-2nd/analyze.svelte-29b42ed3.css", "assets/vendor-42482fb6.css", "assets/bs2ndLoader-8a29ed63.css"], "js": ["pages/app/bakuzetsu-searcher-2nd/analyze.svelte-2c888323.js", "chunks/vendor-cd26605b.js", "chunks/summon-6d9e565d.js", "chunks/api-275c89af.js", "chunks/bs2ndLoader-078618be.js"], "styles": [] }, "src/routes/app/bakuzetsu-searcher-2nd/edit.svelte": { "entry": "pages/app/bakuzetsu-searcher-2nd/edit.svelte-6593f541.js", "css": ["assets/pages/app/bakuzetsu-searcher-2nd/edit.svelte-0fbbe2cb.css", "assets/vendor-42482fb6.css", "assets/bs2ndLoader-8a29ed63.css"], "js": ["pages/app/bakuzetsu-searcher-2nd/edit.svelte-6593f541.js", "chunks/vendor-cd26605b.js", "chunks/summon-6d9e565d.js", "chunks/api-275c89af.js", "chunks/bs2ndLoader-078618be.js"], "styles": [] }, "src/routes/app/bakuzetsu-searcher-2nd/post.svelte": { "entry": "pages/app/bakuzetsu-searcher-2nd/post.svelte-5527c911.js", "css": ["assets/vendor-42482fb6.css"], "js": ["pages/app/bakuzetsu-searcher-2nd/post.svelte-5527c911.js", "chunks/vendor-cd26605b.js"], "styles": [] }, "src/routes/app/DM-Downloader/collect.svelte": { "entry": "pages/app/DM-Downloader/collect.svelte-c610ad34.js", "css": ["assets/vendor-42482fb6.css"], "js": ["pages/app/DM-Downloader/collect.svelte-c610ad34.js", "chunks/vendor-cd26605b.js", "chunks/api-275c89af.js"], "styles": [] }, "src/routes/app/tcg-simulator/__layout.reset.svelte": { "entry": "pages/app/tcg-simulator/__layout.reset.svelte-bc5e0f19.js", "css": ["assets/pages/app/tcg-simulator/__layout.reset.svelte-73878397.css", "assets/vendor-42482fb6.css", "assets/ToastArea-00e911a5.css"], "js": ["pages/app/tcg-simulator/__layout.reset.svelte-bc5e0f19.js", "chunks/vendor-cd26605b.js", "chunks/ToastArea-bde0df2b.js", "chunks/TCGsimStore-4e993a22.js"], "styles": [] }, "src/routes/app/tcg-simulator/edit.svelte": { "entry": "pages/app/tcg-simulator/edit.svelte-2f978490.js", "css": ["assets/pages/app/tcg-simulator/edit.svelte-d6139e6a.css", "assets/vendor-42482fb6.css", "assets/deck-28461604.css"], "js": ["pages/app/tcg-simulator/edit.svelte-2f978490.js", "chunks/vendor-cd26605b.js", "chunks/TCGsimStore-4e993a22.js", "chunks/deck-4b33b201.js"], "styles": [] }, "src/routes/app/tcg-simulator/game.svelte": { "entry": "pages/app/tcg-simulator/game.svelte-d1a4376e.js", "css": ["assets/pages/app/tcg-simulator/game.svelte-d520b168.css", "assets/vendor-42482fb6.css", "assets/deck-28461604.css"], "js": ["pages/app/tcg-simulator/game.svelte-d1a4376e.js", "chunks/vendor-cd26605b.js", "chunks/deck-4b33b201.js", "chunks/TCGsimStore-4e993a22.js"], "styles": [] }, "src/routes/app.svelte": { "entry": "pages/app.svelte-659cbdfd.js", "css": ["assets/pages/app.svelte-f9f78e1b.css", "assets/vendor-42482fb6.css"], "js": ["pages/app.svelte-659cbdfd.js", "chunks/vendor-cd26605b.js"], "styles": [] } };
-async function load_component(file) {
-  const { entry, css: css2, js, styles } = metadata_lookup[file];
-  return {
-    module: await module_lookup[file](),
-    entry: assets + "/_app/" + entry,
-    css: css2.map((dep) => assets + "/_app/" + dep),
-    js: js.map((dep) => assets + "/_app/" + dep),
-    styles
-  };
-}
-function render(request, {
-  prerender
-} = {}) {
-  const host = request.headers["host"];
-  return respond({ ...request, host }, options, { prerender });
-}
-var subscriber_queue = [];
-function readable(value, start) {
-  return {
-    subscribe: writable(value, start).subscribe
-  };
-}
-function writable(value, start = noop) {
-  let stop;
-  const subscribers = new Set();
-  function set(new_value) {
-    if (safe_not_equal(value, new_value)) {
-      value = new_value;
-      if (stop) {
-        const run_queue = !subscriber_queue.length;
-        for (const subscriber of subscribers) {
-          subscriber[1]();
-          subscriber_queue.push(subscriber, value);
-        }
-        if (run_queue) {
-          for (let i = 0; i < subscriber_queue.length; i += 2) {
-            subscriber_queue[i][0](subscriber_queue[i + 1]);
+var template = ({ head, body, assets: assets2, nonce }) => '<!DOCTYPE html>\n<html lang="en">\n	<head>\n		<meta charset="utf-8" />\n		<link rel="icon" href="/favicon.png" />\n		<link rel="stylesheet" href="/style/reset.css" />\n		<link rel="preconnect" href="https://fonts.googleapis.com">\n		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n		<link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet">\n    	<link rel="stylesheet" href="/style/common.css" />\n		<meta name="viewport" content="width=device-width, initial-scale=1" />\n		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6151369636468422" crossorigin="anonymous"><\/script>\n		' + head + '\n	</head>\n	<body>\n		<div id="svelte">' + body + "</div>\n	</body>\n</html>\n";
+var read = null;
+set_paths({ "base": "", "assets": "" });
+var Server = class {
+  constructor(manifest2) {
+    this.options = {
+      amp: false,
+      csp: { "mode": "auto", "directives": { "upgrade-insecure-requests": false, "block-all-mixed-content": false } },
+      dev: false,
+      floc: false,
+      get_stack: (error2) => String(error2),
+      handle_error: (error2, event) => {
+        this.options.hooks.handleError({
+          error: error2,
+          event,
+          get request() {
+            throw new Error("request in handleError has been replaced with event. See https://github.com/sveltejs/kit/pull/3384 for details");
           }
-          subscriber_queue.length = 0;
-        }
-      }
-    }
-  }
-  function update(fn) {
-    set(fn(value));
-  }
-  function subscribe2(run2, invalidate = noop) {
-    const subscriber = [run2, invalidate];
-    subscribers.add(subscriber);
-    if (subscribers.size === 1) {
-      stop = start(set) || noop;
-    }
-    run2(value);
-    return () => {
-      subscribers.delete(subscriber);
-      if (subscribers.size === 0) {
-        stop();
-        stop = null;
-      }
+        });
+        error2.stack = this.options.get_stack(error2);
+      },
+      hooks: null,
+      hydrate: true,
+      manifest: manifest2,
+      method_override: { "parameter": "_method", "allowed": [] },
+      paths: { base, assets },
+      prefix: assets + "/_app/",
+      prerender: true,
+      read,
+      root: Root,
+      service_worker: null,
+      router: true,
+      template,
+      template_contains_nonce: false,
+      trailing_slash: "never"
     };
   }
-  return { set, update, subscribe: subscribe2 };
-}
-var mainmenus = writable([
-  {
-    name: "profile",
-    path: "/introduce",
-    img: "/img/profile_icon.svg",
-    explain: "Taro Nonoyama\u306E<br>\u30D7\u30ED\u30D5\u30A3\u30FC\u30EB\u3092\u8868\u793A\u3057\u307E\u3059\u3002",
-    submenu: []
-  },
-  {
-    name: "blog",
-    path: "/blog/list",
-    img: "/img/blog_icon.svg",
-    explain: "\u30D6\u30ED\u30B0\u3092\u8868\u793A\u3057\u307E\u3059<br> (Powered by Notion API)",
-    submenu: []
-  },
-  {
-    name: "portfolio",
-    path: "/portfolio",
-    img: "/img/portfolio_icon.svg",
-    explain: "\u30DD\u30FC\u30C8\u30D5\u30A9\u30EA\u30AA\u3092\u8868\u793A\u3057\u3001<br>\u30AF\u30EA\u30A8\u30A4\u30C6\u30A3\u30D6\u306E\u30D2\u30F3\u30C8\u3092\u63D0\u793A\u3057\u307E\u3059\u3002",
-    submenu: []
-  },
-  {
-    name: "app",
-    path: "/app",
-    img: "/img/app_icon.svg",
-    explain: "\u5236\u4F5C\u3057\u305FWeb\u30A2\u30D7\u30EA\u306E<br>\u4E00\u89A7\u3092\u8868\u793A\u3057\u307E\u3059\u3002",
-    submenu: [
+  async respond(request, options = {}) {
+    if (!(request instanceof Request)) {
+      throw new Error("The first argument to server.respond must be a Request object. See https://github.com/sveltejs/kit/pull/3384 for details");
+    }
+    if (!this.options.hooks) {
+      const module2 = await Promise.resolve().then(() => (init_hooks_1c45ba0b(), hooks_1c45ba0b_exports));
+      this.options.hooks = {
+        getSession: module2.getSession || (() => ({})),
+        handle: module2.handle || (({ event, resolve: resolve2 }) => resolve2(event)),
+        handleError: module2.handleError || (({ error: error2 }) => console.error(error2.stack)),
+        externalFetch: module2.externalFetch || fetch
+      };
+    }
+    return respond(request, this.options, options);
+  }
+};
+
+// .svelte-kit/vercel-tmp/manifest.js
+var manifest = {
+  appDir: "_app",
+  assets: /* @__PURE__ */ new Set(["favicon.png", "img/.DS_Store", "img/add_people.svg", "img/app_icon.svg", "img/arrow-circle-left-solid.svg", "img/arrow-osha.svg", "img/arrow_simple_bottom.svg", "img/arrow_simple_right.svg", "img/blog_icon.svg", "img/bs2nd/a_gray.png", "img/bs2nd/a_gray_fill.svg", "img/bs2nd/ba_gray.png", "img/bs2nd/ba_gray.svg", "img/bs2nd/bakuzetsu-searchico-effect.png", "img/bs2nd/bakuzetsu-searchico.png", "img/bs2nd/biribiri.svg", "img/bs2nd/change.svg", "img/bs2nd/chi_gray.png", "img/bs2nd/copy.svg", "img/bs2nd/e_gray_fill.svg", "img/bs2nd/heal.svg", "img/bs2nd/ku_gray.png", "img/bs2nd/needle.svg", "img/bs2nd/sa_gray.png", "img/bs2nd/shield.svg", "img/bs2nd/tsu_gray.png", "img/bs2nd/wall.svg", "img/bs2nd/week.svg", "img/bs2nd/ze_gray.png", "img/contacts_icon.svg", "img/n2-icon-white.svg", "img/n2_clock/.DS_Store", "img/n2_clock/clock_body.svg", "img/n2_clock/clock_insidewheel.svg", "img/n2_clock/time-1.svg", "img/n2_clock/time-10.svg", "img/n2_clock/time-10_white.svg", "img/n2_clock/time-11.svg", "img/n2_clock/time-12.svg", "img/n2_clock/time-2.svg", "img/n2_clock/time-3.svg", "img/n2_clock/time-4.svg", "img/n2_clock/time-5.svg", "img/n2_clock/time-6.svg", "img/n2_clock/time-7.svg", "img/n2_clock/time-8.svg", "img/n2_clock/time-9.svg", "img/portfolio_icon.svg", "img/profile_icon.svg", "img/tcg-sim/card.svg", "img/tcg-sim/card_naname.svg", "img/tcg-sim/dmbd13-002a.jpeg", "img/tcg-sim/dmbd16-011-[4].jpeg", "img/tcg-sim/dmex17-003-[4].jpeg", "img/tcg-sim/dmr21-l02-[4].jpeg", "img/tcg-sim/ellipse.svg", "img/tcg-sim/require_device.svg", "img/trash.svg", "style/common.css", "style/reset.css"]),
+  mimeTypes: { ".png": "image/png", ".svg": "image/svg+xml", ".jpeg": "image/jpeg", ".css": "text/css" },
+  _: {
+    entry: { "file": "start-52f7006c.js", "js": ["start-52f7006c.js", "chunks/index-4741d8af.js", "chunks/index-1f66f3ef.js"], "css": [] },
+    nodes: [
+      () => Promise.resolve().then(() => (init__(), __exports)),
+      () => Promise.resolve().then(() => (init__2(), __exports2)),
+      () => Promise.resolve().then(() => (init__3(), __exports3)),
+      () => Promise.resolve().then(() => (init__4(), __exports4)),
+      () => Promise.resolve().then(() => (init__5(), __exports5)),
+      () => Promise.resolve().then(() => (init__6(), __exports6)),
+      () => Promise.resolve().then(() => (init__7(), __exports7)),
+      () => Promise.resolve().then(() => (init__8(), __exports8)),
+      () => Promise.resolve().then(() => (init__9(), __exports9)),
+      () => Promise.resolve().then(() => (init__10(), __exports10)),
+      () => Promise.resolve().then(() => (init__11(), __exports11)),
+      () => Promise.resolve().then(() => (init__12(), __exports12)),
+      () => Promise.resolve().then(() => (init__13(), __exports13)),
+      () => Promise.resolve().then(() => (init__14(), __exports14)),
+      () => Promise.resolve().then(() => (init__15(), __exports15)),
+      () => Promise.resolve().then(() => (init__16(), __exports16)),
+      () => Promise.resolve().then(() => (init__17(), __exports17)),
+      () => Promise.resolve().then(() => (init__18(), __exports18)),
+      () => Promise.resolve().then(() => (init__19(), __exports19))
+    ],
+    routes: [
       {
-        name: "\u3070\u304F\u305C\u3064\u3055\u3042\u3061",
-        path: "/app/bakuzetsu-searcher-2nd/home",
-        img: "",
-        explain: "",
-        root: "app > \u3070\u304F\u305C\u3064\u3055\u3042\u3061 > ",
-        submenu: []
+        type: "page",
+        id: "",
+        pattern: /^\/$/,
+        names: [],
+        types: [],
+        path: "/",
+        shadow: null,
+        a: [0, 2],
+        b: [1]
+      },
+      {
+        type: "page",
+        id: "app",
+        pattern: /^\/app\/?$/,
+        names: [],
+        types: [],
+        path: "/app",
+        shadow: null,
+        a: [0, 3],
+        b: [1]
+      },
+      {
+        type: "page",
+        id: "contact",
+        pattern: /^\/contact\/?$/,
+        names: [],
+        types: [],
+        path: "/contact",
+        shadow: null,
+        a: [0, 4],
+        b: [1]
+      },
+      {
+        type: "page",
+        id: "introduce",
+        pattern: /^\/introduce\/?$/,
+        names: [],
+        types: [],
+        path: "/introduce",
+        shadow: null,
+        a: [0, 5],
+        b: [1]
+      },
+      {
+        type: "page",
+        id: "show",
+        pattern: /^\/show\/?$/,
+        names: [],
+        types: [],
+        path: "/show",
+        shadow: null,
+        a: [0, 6],
+        b: [1]
+      },
+      {
+        type: "page",
+        id: "blog/list",
+        pattern: /^\/blog\/list\/?$/,
+        names: [],
+        types: [],
+        path: "/blog/list",
+        shadow: null,
+        a: [0, 7],
+        b: [1]
+      },
+      {
+        type: "page",
+        id: "blog/page",
+        pattern: /^\/blog\/page\/?$/,
+        names: [],
+        types: [],
+        path: "/blog/page",
+        shadow: null,
+        a: [0, 8],
+        b: [1]
+      },
+      {
+        type: "page",
+        id: "app/DM-Downloader/collect",
+        pattern: /^\/app\/DM-Downloader\/collect\/?$/,
+        names: [],
+        types: [],
+        path: "/app/DM-Downloader/collect",
+        shadow: null,
+        a: [0, 9],
+        b: [1]
+      },
+      {
+        type: "page",
+        id: "app/bakuzetsu-searcher-2nd/analyze",
+        pattern: /^\/app\/bakuzetsu-searcher-2nd\/analyze\/?$/,
+        names: [],
+        types: [],
+        path: "/app/bakuzetsu-searcher-2nd/analyze",
+        shadow: null,
+        a: [0, 10, 11],
+        b: [1]
+      },
+      {
+        type: "page",
+        id: "app/bakuzetsu-searcher-2nd/edit",
+        pattern: /^\/app\/bakuzetsu-searcher-2nd\/edit\/?$/,
+        names: [],
+        types: [],
+        path: "/app/bakuzetsu-searcher-2nd/edit",
+        shadow: null,
+        a: [0, 10, 12],
+        b: [1]
+      },
+      {
+        type: "page",
+        id: "app/bakuzetsu-searcher-2nd/post",
+        pattern: /^\/app\/bakuzetsu-searcher-2nd\/post\/?$/,
+        names: [],
+        types: [],
+        path: "/app/bakuzetsu-searcher-2nd/post",
+        shadow: null,
+        a: [0, 10, 13],
+        b: [1]
+      },
+      {
+        type: "page",
+        id: "app/pokemon-card-game-effector/game",
+        pattern: /^\/app\/pokemon-card-game-effector\/game\/?$/,
+        names: [],
+        types: [],
+        path: "/app/pokemon-card-game-effector/game",
+        shadow: null,
+        a: [0, 14, 15],
+        b: [1]
+      },
+      {
+        type: "page",
+        id: "app/tcg-simulator/edit",
+        pattern: /^\/app\/tcg-simulator\/edit\/?$/,
+        names: [],
+        types: [],
+        path: "/app/tcg-simulator/edit",
+        shadow: null,
+        a: [0, 16, 17],
+        b: [1]
+      },
+      {
+        type: "page",
+        id: "app/tcg-simulator/game",
+        pattern: /^\/app\/tcg-simulator\/game\/?$/,
+        names: [],
+        types: [],
+        path: "/app/tcg-simulator/game",
+        shadow: null,
+        a: [0, 16, 18],
+        b: [1]
       }
-    ]
-  },
-  {
-    name: "contact",
-    path: "/contact",
-    img: "/img/contacts_icon.svg",
-    explain: "\u9023\u7D61\u5148\u30FBSNS\u30A2\u30AB\u30A6\u30F3\u30C8\u3092<br>\u8868\u793A\u3057\u307E\u3059\u3002",
-    submenu: []
-  },
-  {
-    name: "bonus",
-    path: "/show",
-    img: "/img/app_icon.svg",
-    explain: "\u30AA\u30DE\u30B1",
-    submenu: []
-  }
-]);
-var MediaQuery = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { query } = $$props;
-  let matches = false;
-  if ($$props.query === void 0 && $$bindings.query && query !== void 0)
-    $$bindings.query(query);
-  return `${slots.default ? slots.default({ matches }) : ``}`;
-});
-var css$z = {
-  code: ".menu-box.svelte-8jba9e.svelte-8jba9e{position:relative;display:inline-block}.menu-box.svelte-8jba9e .menu-name.svelte-8jba9e{border-radius:20px;padding:5px 20px}.menu-box.svelte-8jba9e .menu-name.svelte-8jba9e:hover{background:white}.menu-box.svelte-8jba9e .menu-name:hover p.svelte-8jba9e{color:black}.menu-box.svelte-8jba9e .explain-box.svelte-8jba9e{z-index:100;position:absolute;margin-top:30px;right:0;opacity:0;background:linear-gradient(90deg, #141414, rgba(20, 20, 20, 0.5));padding:20px;display:flex;flex-direction:row;align-items:center;transition:0.2s}.menu-box.svelte-8jba9e .explain-box.open.svelte-8jba9e{opacity:1}.menu-box.svelte-8jba9e .explain-box img.svelte-8jba9e{width:50px}.menu-box.svelte-8jba9e .explain-box p.svelte-8jba9e{padding:20px;width:300px;color:white}",
-  map: null
-};
-var HeaderMenuBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { name } = $$props;
-  let { path } = $$props;
-  let { img } = $$props;
-  let { explain } = $$props;
-  if ($$props.name === void 0 && $$bindings.name && name !== void 0)
-    $$bindings.name(name);
-  if ($$props.path === void 0 && $$bindings.path && path !== void 0)
-    $$bindings.path(path);
-  if ($$props.img === void 0 && $$bindings.img && img !== void 0)
-    $$bindings.img(img);
-  if ($$props.explain === void 0 && $$bindings.explain && explain !== void 0)
-    $$bindings.explain(explain);
-  $$result.css.add(css$z);
-  return `<div class="${"menu-box svelte-8jba9e"}"><div class="${"menu-name svelte-8jba9e"}"><a${add_attribute("href", path, 0)}><p class="${"svelte-8jba9e"}">${escape(name)}</p></a></div>
-    <div class="${"explain-box " + escape("") + " svelte-8jba9e"}"><img${add_attribute("src", img, 0)} alt="${""}" class="${"svelte-8jba9e"}">
-        <p class="${"svelte-8jba9e"}"><!-- HTML_TAG_START -->${explain}<!-- HTML_TAG_END --></p></div>
-</div>`;
-});
-var css$y = {
-  code: ".menu-box.svelte-13vu3ny.svelte-13vu3ny{padding:15px 10px;display:flex;height:100px;flex-direction:row}.menu-box.svelte-13vu3ny img.icon.svelte-13vu3ny{margin:0 10px;height:50px}.menu-box.svelte-13vu3ny img.arrow.svelte-13vu3ny{transform:rotate(-90deg);height:15px;margin:auto 0}.menu-box.svelte-13vu3ny .text.svelte-13vu3ny{padding:0 5px;width:230px}.menu-box.svelte-13vu3ny .text .name.svelte-13vu3ny{font-size:13px;margin:0 0 5px 0}.menu-box.svelte-13vu3ny .text .explain.svelte-13vu3ny{font-size:10px}",
-  map: null
-};
-var HambergerMenuBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { name } = $$props;
-  let { path } = $$props;
-  let { img } = $$props;
-  let { explain } = $$props;
-  if ($$props.name === void 0 && $$bindings.name && name !== void 0)
-    $$bindings.name(name);
-  if ($$props.path === void 0 && $$bindings.path && path !== void 0)
-    $$bindings.path(path);
-  if ($$props.img === void 0 && $$bindings.img && img !== void 0)
-    $$bindings.img(img);
-  if ($$props.explain === void 0 && $$bindings.explain && explain !== void 0)
-    $$bindings.explain(explain);
-  $$result.css.add(css$y);
-  return `<a${add_attribute("href", path, 0)}><div class="${"menu-box svelte-13vu3ny"}"><img class="${"icon svelte-13vu3ny"}"${add_attribute("src", img, 0)} alt="${""}">
-        <div class="${"text svelte-13vu3ny"}"><p class="${"name svelte-13vu3ny"}">${escape(name)}</p>
-            <p class="${"explain svelte-13vu3ny"}"><!-- HTML_TAG_START -->${explain}<!-- HTML_TAG_END --></p></div>
-        <img class="${"arrow svelte-13vu3ny"}" src="${"/img/arrow-osha.svg"}" alt="${">"}"></div>
-</a>`;
-});
-var defaults = {
-  duration: 4e3,
-  initial: 1,
-  next: 0,
-  pausable: false,
-  dismissable: true,
-  reversed: false,
-  intro: { x: 256 },
-  theme: {}
-};
-var createToast = () => {
-  const { subscribe: subscribe2, update } = writable([]);
-  let count = 0;
-  const options2 = {};
-  const _obj = (obj) => obj instanceof Object;
-  const push = (msg, opts = {}) => {
-    const param = { target: "default", ..._obj(msg) ? msg : { ...opts, msg } };
-    const conf = options2[param.target] || {};
-    const entry = {
-      ...defaults,
-      ...conf,
-      ...param,
-      theme: { ...conf.theme, ...param.theme },
-      id: ++count
-    };
-    update((n) => entry.reversed ? [...n, entry] : [entry, ...n]);
-    return count;
-  };
-  const pop = (id) => {
-    update((n) => {
-      if (!n.length || id === 0)
-        return [];
-      if (_obj(id))
-        return n.filter((i) => id(i));
-      const target = id || Math.max(...n.map((i) => i.id));
-      return n.filter((i) => i.id !== target);
-    });
-  };
-  const set = (id, opts = {}) => {
-    const param = _obj(id) ? { ...id } : { ...opts, id };
-    update((n) => {
-      const idx = n.findIndex((i) => i.id === param.id);
-      if (idx > -1) {
-        n[idx] = { ...n[idx], ...param };
-      }
-      return n;
-    });
-  };
-  const _init = (target = "default", opts = {}) => {
-    options2[target] = opts;
-    return options2;
-  };
-  return { subscribe: subscribe2, push, pop, set, _init };
-};
-var toast = createToast();
-function is_date(obj) {
-  return Object.prototype.toString.call(obj) === "[object Date]";
-}
-function get_interpolator(a, b) {
-  if (a === b || a !== a)
-    return () => a;
-  const type = typeof a;
-  if (type !== typeof b || Array.isArray(a) !== Array.isArray(b)) {
-    throw new Error("Cannot interpolate values of different type");
-  }
-  if (Array.isArray(a)) {
-    const arr = b.map((bi, i) => {
-      return get_interpolator(a[i], bi);
-    });
-    return (t) => arr.map((fn) => fn(t));
-  }
-  if (type === "object") {
-    if (!a || !b)
-      throw new Error("Object cannot be null");
-    if (is_date(a) && is_date(b)) {
-      a = a.getTime();
-      b = b.getTime();
-      const delta = b - a;
-      return (t) => new Date(a + t * delta);
-    }
-    const keys = Object.keys(b);
-    const interpolators = {};
-    keys.forEach((key) => {
-      interpolators[key] = get_interpolator(a[key], b[key]);
-    });
-    return (t) => {
-      const result = {};
-      keys.forEach((key) => {
-        result[key] = interpolators[key](t);
-      });
-      return result;
-    };
-  }
-  if (type === "number") {
-    const delta = b - a;
-    return (t) => a + t * delta;
-  }
-  throw new Error(`Cannot interpolate ${type} values`);
-}
-function tweened(value, defaults2 = {}) {
-  const store = writable(value);
-  let task;
-  let target_value = value;
-  function set(new_value, opts) {
-    if (value == null) {
-      store.set(value = new_value);
-      return Promise.resolve();
-    }
-    target_value = new_value;
-    let previous_task = task;
-    let started = false;
-    let { delay = 0, duration = 400, easing = identity, interpolate = get_interpolator } = assign(assign({}, defaults2), opts);
-    if (duration === 0) {
-      if (previous_task) {
-        previous_task.abort();
-        previous_task = null;
-      }
-      store.set(value = target_value);
-      return Promise.resolve();
-    }
-    const start = now() + delay;
-    let fn;
-    task = loop((now2) => {
-      if (now2 < start)
-        return true;
-      if (!started) {
-        fn = interpolate(value, new_value);
-        if (typeof duration === "function")
-          duration = duration(value, new_value);
-        started = true;
-      }
-      if (previous_task) {
-        previous_task.abort();
-        previous_task = null;
-      }
-      const elapsed = now2 - start;
-      if (elapsed > duration) {
-        store.set(value = new_value);
-        return false;
-      }
-      store.set(value = fn(easing(elapsed / duration)));
-      return true;
-    });
-    return task.promise;
-  }
-  return {
-    set,
-    update: (fn, opts) => set(fn(target_value, value), opts),
-    subscribe: store.subscribe
-  };
-}
-var css$x = {
-  code: "._toastItem.svelte-j9nwjb{width:var(--toastWidth, 16rem);height:var(--toastHeight, auto);min-height:var(--toastMinHeight, 3.5rem);margin:var(--toastMargin, 0 0 0.5rem 0);padding:var(--toastPadding, 0);background:var(--toastBackground, rgba(66, 66, 66, 0.9));color:var(--toastColor, #fff);box-shadow:var(--toastBoxShadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06));border:var(--toastBorder, none);border-radius:var(--toastBorderRadius, 0.125rem);position:relative;display:flex;flex-direction:row;align-items:center;overflow:hidden;will-change:transform, opacity;-webkit-tap-highlight-color:transparent}._toastMsg.svelte-j9nwjb{padding:var(--toastMsgPadding, 0.75rem 0.5rem);flex:1 1 0%}.pe.svelte-j9nwjb,._toastMsg.svelte-j9nwjb a{pointer-events:auto}._toastBtn.svelte-j9nwjb{width:2rem;height:100%;font:1rem sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;outline:none}._toastBar.svelte-j9nwjb{top:var(--toastBarTop, auto);right:var(--toastBarRight, auto);bottom:var(--toastBarBottom, 0);left:var(--toastBarLeft, 0);height:var(--toastBarHeight, 6px);width:var(--toastBarWidth, 100%);position:absolute;display:block;-webkit-appearance:none;-moz-appearance:none;appearance:none;border:none;background:transparent;pointer-events:none}._toastBar.svelte-j9nwjb::-webkit-progress-bar{background:transparent}._toastBar.svelte-j9nwjb::-webkit-progress-value{background:var(--toastProgressBackground, var(--toastBarBackground, rgba(33, 150, 243, 0.75)))}._toastBar.svelte-j9nwjb::-moz-progress-bar{background:var(--toastProgressBackground, var(--toastBarBackground, rgba(33, 150, 243, 0.75)))}",
-  map: null
-};
-var ToastItem = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $progress, $$unsubscribe_progress;
-  let { item } = $$props;
-  const progress = tweened(item.initial, { duration: item.duration, easing: identity });
-  $$unsubscribe_progress = subscribe(progress, (value) => $progress = value);
-  const close = () => toast.pop(item.id);
-  const autoclose = () => {
-    if ($progress === 1 || $progress === 0) {
-      close();
-    }
-  };
-  let next = item.initial;
-  const getProps = () => {
-    const { props = {}, sendIdTo } = item.component;
-    if (sendIdTo) {
-      props[sendIdTo] = item.id;
-    }
-    return props;
-  };
-  onDestroy(() => {
-    if (typeof item.onpop === "function") {
-      item.onpop(item.id);
-    }
-  });
-  if ($$props.item === void 0 && $$bindings.item && item !== void 0)
-    $$bindings.item(item);
-  $$result.css.add(css$x);
-  {
-    if (typeof item.progress !== "undefined") {
-      item.next = item.progress;
+    ],
+    matchers: async () => {
+      return {};
     }
   }
-  {
-    if (next !== item.next) {
-      next = item.next;
-      progress.set(next).then(autoclose);
-    }
-  }
-  $$unsubscribe_progress();
-  return `<div class="${["_toastItem svelte-j9nwjb", item.pausable ? "pe" : ""].join(" ").trim()}"><div class="${["_toastMsg svelte-j9nwjb", item.component ? "pe" : ""].join(" ").trim()}">${item.component ? `${validate_component(item.component.src || missing_component, "svelte:component").$$render($$result, Object.assign(getProps()), {}, {})}` : `<!-- HTML_TAG_START -->${item.msg}<!-- HTML_TAG_END -->`}</div>
-  ${item.dismissable ? `<div class="${"_toastBtn pe svelte-j9nwjb"}" role="${"button"}" tabindex="${"-1"}">\u2715</div>` : ``}
-  <progress class="${"_toastBar svelte-j9nwjb"}"${add_attribute("value", $progress, 0)}></progress></div>`;
-});
-var css$w = {
-  code: "._toastContainer.svelte-7xr3c1{top:var(--toastContainerTop, 1.5rem);right:var(--toastContainerRight, 2rem);bottom:var(--toastContainerBottom, auto);left:var(--toastContainerLeft, auto);position:fixed;margin:0;padding:0;list-style-type:none;pointer-events:none;z-index:9999}",
-  map: null
 };
-var SvelteToast = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $toast, $$unsubscribe_toast;
-  $$unsubscribe_toast = subscribe(toast, (value) => $toast = value);
-  let { options: options2 = {} } = $$props;
-  let { target = "default" } = $$props;
-  let items;
-  const getCss = (theme) => Object.keys(theme).reduce((a, c) => `${a}${c}:${theme[c]};`, "");
-  if ($$props.options === void 0 && $$bindings.options && options2 !== void 0)
-    $$bindings.options(options2);
-  if ($$props.target === void 0 && $$bindings.target && target !== void 0)
-    $$bindings.target(target);
-  $$result.css.add(css$w);
-  {
-    toast._init(target, options2);
-  }
-  items = $toast.filter((i) => i.target === target);
-  $$unsubscribe_toast();
-  return `<ul class="${"_toastContainer svelte-7xr3c1"}">${each(items, (item) => `<li${add_attribute("style", getCss(item.theme), 0)}>${validate_component(ToastItem, "ToastItem").$$render($$result, { item }, {}, {})}
-    </li>`)}</ul>`;
-});
-var css$v = {
-  code: ".toast_wrap.svelte-dznte4{--toastMsgPadding:10px 20px;font-size:0.85rem}.error_wrap.svelte-dznte4{--toastWidth:100%;--toastMaxWidth:500px;--toastMinHeight:1.5rem}",
-  map: null
-};
-var ToastArea = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  $$result.css.add(css$v);
-  return `<div class="${"toast_wrap svelte-dznte4"}">${validate_component(SvelteToast, "SvelteToast").$$render($$result, {}, {}, {})}</div>
 
-<div class="${"toast_wrap error_wrap svelte-dznte4"}">${validate_component(SvelteToast, "SvelteToast").$$render($$result, { target: "error" }, {}, {})}
-</div>`;
-});
-var css$u = {
-  code: "header.svelte-1qqhg8r.svelte-1qqhg8r{background:black;display:flex;justify-content:space-between;align-items:center;height:60px}header.svelte-1qqhg8r .n2-logo.svelte-1qqhg8r{padding:10px}header.svelte-1qqhg8r .n2-logo img.svelte-1qqhg8r{height:30px}header.svelte-1qqhg8r .menu-row-list.svelte-1qqhg8r{margin:0 20px}header.svelte-1qqhg8r .hamburger-menu.svelte-1qqhg8r{position:relative;padding:10px}header.svelte-1qqhg8r .hamburger-menu .hamburger-button .bar.svelte-1qqhg8r{display:block;background-color:#fff;height:4px;width:30px;border-radius:1px}header.svelte-1qqhg8r .hamburger-menu .hamburger-button .bar1.svelte-1qqhg8r{transform:translateY(-6px);transition:transform 0.3s}header.svelte-1qqhg8r .hamburger-menu .hamburger-button .bar3.svelte-1qqhg8r{transform:translateY(6px);transition:transform 0.3s}header.svelte-1qqhg8r .hamburger-menu .hamburger-slider.svelte-1qqhg8r{position:fixed;z-index:100;width:300px;top:100px;right:-320px;background:linear-gradient(90deg, black, rgba(0, 0, 0, 0.8));transition:0.3s}header.svelte-1qqhg8r .hamburger-menu .hamburger-slider.open.svelte-1qqhg8r{right:0}",
-  map: null
-};
-var _layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $mainmenus, $$unsubscribe_mainmenus;
-  $$unsubscribe_mainmenus = subscribe(mainmenus, (value) => $mainmenus = value);
-  $$result.css.add(css$u);
-  $$unsubscribe_mainmenus();
-  return `<header class="${"svelte-1qqhg8r"}"><div class="${"n2-logo svelte-1qqhg8r"}"><a href="${"/"}"><img src="${"/img/n2-icon-white.svg"}" alt="${""}" class="${"svelte-1qqhg8r"}"></a></div>
-    ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
-    default: ({ matches }) => `${matches ? `<div class="${"menu-row-list svelte-1qqhg8r"}">${each($mainmenus, (menu) => `${validate_component(HeaderMenuBox, "HeaderMenuBox").$$render($$result, {
-      name: menu.name,
-      path: menu.path,
-      img: menu.img,
-      explain: menu.explain
-    }, {}, {})}`)}</div>` : ``}`
-  })}
-    
-    ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
-    default: ({ matches }) => `${matches ? `<div class="${"hamburger-menu svelte-1qqhg8r"}"><span class="${"hamburger-button"}"><span class="${"bar bar1 svelte-1qqhg8r"}"></span>
-                <span class="${"bar bar2 svelte-1qqhg8r"}"></span>
-                <span class="${"bar bar3 svelte-1qqhg8r"}"></span></span>
-            <div class="${"hamburger-slider " + escape("") + " svelte-1qqhg8r"}">${each($mainmenus, (menu) => `${validate_component(HambergerMenuBox, "HambergerMenuBox").$$render($$result, {
-      name: menu.name,
-      path: menu.path,
-      img: menu.img,
-      explain: menu.explain
-    }, {}, {})}`)}</div></div>` : ``}`
-  })}</header>
-
-${slots.default ? slots.default({}) : ``}
-${validate_component(ToastArea, "ToastArea").$$render($$result, {}, {}, {})}`;
-});
-var __layout = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": _layout
-});
-function load({ error: error2, status }) {
-  return { props: { error: error2, status } };
-}
-var Error$1 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { status } = $$props;
-  let { error: error2 } = $$props;
-  if ($$props.status === void 0 && $$bindings.status && status !== void 0)
-    $$bindings.status(status);
-  if ($$props.error === void 0 && $$bindings.error && error2 !== void 0)
-    $$bindings.error(error2);
-  return `<h1>${escape(status)}</h1>
-
-<pre>${escape(error2.message)}</pre>
-
-
-
-${error2.frame ? `<pre>${escape(error2.frame)}</pre>` : ``}
-${error2.stack ? `<pre>${escape(error2.stack)}</pre>` : ``}`;
-});
-var error = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": Error$1,
-  load
-});
-var css$t = {
-  code: ".homebutton-box.svelte-10fykjs.svelte-10fykjs{position:relative;width:100px;height:100px;background:white;border-radius:15px;margin:15px;transition:0.5s}.homebutton-box.focus.svelte-10fykjs.svelte-10fykjs{border-radius:0px}.homebutton-box.svelte-10fykjs .icons.svelte-10fykjs{position:absolute;display:flex;flex-direction:column;justify-content:space-around;--topval:10px;top:var(--topval);left:var(--topval);width:calc(100% - var(--topval) * 2);height:calc(100% - var(--topval) * 2)}.homebutton-box.svelte-10fykjs .icons img.svelte-10fykjs{height:60%;margin:0 auto}.homebutton-box.svelte-10fykjs .icons h1.svelte-10fykjs{text-align:center;font-size:14px;color:white}.homebutton-box.svelte-10fykjs .homebutton_background.svelte-10fykjs{position:absolute;--positioning:5px;top:var(--positioning);left:var(--positioning);width:calc(100% - var(--positioning) * 2);height:calc(100% - var(--positioning) * 2);background:black;border-radius:25px;transition:0.5s}.homebutton-box.svelte-10fykjs .homebutton_background.focus.svelte-10fykjs{transform:rotate(45deg);background:red;border-radius:0px}.homebutton-box.svelte-10fykjs .hover_area.svelte-10fykjs{position:absolute;top:0;left:0;width:100%;height:100%}",
-  map: null
-};
-var HomeButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { path } = $$props;
-  let { icon_url } = $$props;
-  let { explain } = $$props;
-  if ($$props.path === void 0 && $$bindings.path && path !== void 0)
-    $$bindings.path(path);
-  if ($$props.icon_url === void 0 && $$bindings.icon_url && icon_url !== void 0)
-    $$bindings.icon_url(icon_url);
-  if ($$props.explain === void 0 && $$bindings.explain && explain !== void 0)
-    $$bindings.explain(explain);
-  $$result.css.add(css$t);
-  return `<div class="${"homebutton-box " + escape("") + " svelte-10fykjs"}"><a${add_attribute("href", path, 0)}><div class="${"homebutton_background " + escape("") + " svelte-10fykjs"}"></div>
-        <div class="${"icons svelte-10fykjs"}"><img${add_attribute("src", icon_url, 0)} alt="${escape(explain) + "\u30DC\u30BF\u30F3"}" class="${"svelte-10fykjs"}">
-            <h1 class="${"svelte-10fykjs"}">${escape(explain)}</h1></div>
-        <div class="${"hover_area svelte-10fykjs"}"></div></a>
-    
-</div>`;
-});
-var css$s = {
-  code: "#bg_clock.svelte-gfjuk8.svelte-gfjuk8{position:absolute;overflow:hidden;height:100%;width:100%;top:0;left:0;z-index:-1}#bg_clock.svelte-gfjuk8 #clockbody.svelte-gfjuk8{position:absolute;top:40vh;left:25vw;width:120vw;height:120vw;-webkit-animation:svelte-gfjuk8-clockrotate 60s cubic-bezier(1, 0, 0.95, 0.38) infinite;animation:svelte-gfjuk8-clockrotate 60s cubic-bezier(1, 0, 0.95, 0.38) infinite;transition:1s}@keyframes svelte-gfjuk8-clockslide{0%{left:25vw;transform:rotate(0deg)}100%{left:-200%;transform:rotate(-270deg)}}@-webkit-keyframes svelte-gfjuk8-clockslide{0%{left:25vw;-webkit-transform:rotate(0deg)}100%{left:-200%;-webkit-transform:rotate(-270deg)}}#bg_clock.svelte-gfjuk8 #clockbody img.svelte-gfjuk8{width:100%}@keyframes svelte-gfjuk8-clockrotate{0%{transform:rotate(0deg)}2%{transform:rotate(7deg)}4%{transform:rotate(14deg)}6%{transform:rotate(21deg)}8%{transform:rotate(28deg)}10%{transform:rotate(36deg)}12%{transform:rotate(43deg)}14%{transform:rotate(50deg)}16%{transform:rotate(57deg)}18%{transform:rotate(64deg)}20%{transform:rotate(72deg)}22%{transform:rotate(79deg)}24%{transform:rotate(86deg)}26%{transform:rotate(93deg)}28%{transform:rotate(100deg)}30%{transform:rotate(108deg)}32%{transform:rotate(115deg)}34%{transform:rotate(122deg)}36%{transform:rotate(129deg)}38%{transform:rotate(136deg)}40%{transform:rotate(144deg)}42%{transform:rotate(151deg)}44%{transform:rotate(158deg)}46%{transform:rotate(165deg)}48%{transform:rotate(172deg)}50%{transform:rotate(180deg)}52%{transform:rotate(187deg)}54%{transform:rotate(194deg)}56%{transform:rotate(201deg)}58%{transform:rotate(208deg)}60%{transform:rotate(216deg)}62%{transform:rotate(223deg)}64%{transform:rotate(230deg)}66%{transform:rotate(237deg)}68%{transform:rotate(244deg)}70%{transform:rotate(252deg)}72%{transform:rotate(259deg)}74%{transform:rotate(266deg)}76%{transform:rotate(273deg)}78%{transform:rotate(280deg)}80%{transform:rotate(288deg)}82%{transform:rotate(295deg)}84%{transform:rotate(302deg)}86%{transform:rotate(309deg)}88%{transform:rotate(316deg)}90%{transform:rotate(324deg)}92%{transform:rotate(331deg)}94%{transform:rotate(338deg)}96%{transform:rotate(345deg)}98%{transform:rotate(352deg)}100%{transform:rotate(360deg)}}@-webkit-keyframes svelte-gfjuk8-clockrotate{0%{-webkit-transform:rotate(0deg)}2%{-webkit-transform:rotate(7deg)}4%{-webkit-transform:rotate(14deg)}6%{-webkit-transform:rotate(21deg)}8%{-webkit-transform:rotate(28deg)}10%{-webkit-transform:rotate(36deg)}12%{-webkit-transform:rotate(43deg)}14%{-webkit-transform:rotate(50deg)}16%{-webkit-transform:rotate(57deg)}18%{-webkit-transform:rotate(64deg)}20%{-webkit-transform:rotate(72deg)}22%{-webkit-transform:rotate(79deg)}24%{-webkit-transform:rotate(86deg)}26%{-webkit-transform:rotate(93deg)}28%{-webkit-transform:rotate(100deg)}30%{-webkit-transform:rotate(108deg)}32%{-webkit-transform:rotate(115deg)}34%{-webkit-transform:rotate(122deg)}36%{-webkit-transform:rotate(129deg)}38%{-webkit-transform:rotate(136deg)}40%{-webkit-transform:rotate(144deg)}42%{-webkit-transform:rotate(151deg)}44%{-webkit-transform:rotate(158deg)}46%{-webkit-transform:rotate(165deg)}48%{-webkit-transform:rotate(172deg)}50%{-webkit-transform:rotate(180deg)}52%{-webkit-transform:rotate(187deg)}54%{-webkit-transform:rotate(194deg)}56%{-webkit-transform:rotate(201deg)}58%{-webkit-transform:rotate(208deg)}60%{-webkit-transform:rotate(216deg)}62%{-webkit-transform:rotate(223deg)}64%{-webkit-transform:rotate(230deg)}66%{-webkit-transform:rotate(237deg)}68%{-webkit-transform:rotate(244deg)}70%{-webkit-transform:rotate(252deg)}72%{-webkit-transform:rotate(259deg)}74%{-webkit-transform:rotate(266deg)}76%{-webkit-transform:rotate(273deg)}78%{-webkit-transform:rotate(280deg)}80%{-webkit-transform:rotate(288deg)}82%{-webkit-transform:rotate(295deg)}84%{-webkit-transform:rotate(302deg)}86%{-webkit-transform:rotate(309deg)}88%{-webkit-transform:rotate(316deg)}90%{-webkit-transform:rotate(324deg)}92%{-webkit-transform:rotate(331deg)}94%{-webkit-transform:rotate(338deg)}96%{-webkit-transform:rotate(345deg)}98%{-webkit-transform:rotate(352deg)}100%{-webkit-transform:rotate(360deg)}}@keyframes svelte-gfjuk8-clockspin{0%{transform:rotate(0deg)}100%{transform:rotate(720deg)}}@-webkit-keyframes svelte-gfjuk8-clockspin{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(720deg)}}#bg_clock.svelte-gfjuk8 #clockbody img.time.svelte-gfjuk8{position:absolute;width:10%;animation:svelte-gfjuk8-wheelrotate 10s linear infinite;-webkit-animation:svelte-gfjuk8-wheelrotate 10s linear infinite}#bg_clock.svelte-gfjuk8 #clockbody img#insidewheel.svelte-gfjuk8{position:absolute;width:25%;animation:svelte-gfjuk8-wheelrotate 10s linear infinite reverse;-webkit-animation:svelte-gfjuk8-wheelrotate 10s linear infinite reverse;top:37.5%;left:37.5%}.time-3.svelte-gfjuk8.svelte-gfjuk8{top:45%;left:63.5%}.time-2.svelte-gfjuk8.svelte-gfjuk8{top:35.75%;left:61.021%}.time-1.svelte-gfjuk8.svelte-gfjuk8{top:28.979%;left:54.25%}.time-12.svelte-gfjuk8.svelte-gfjuk8{top:26.5%;left:45%}.time-11.svelte-gfjuk8.svelte-gfjuk8{top:28.979%;left:35.75%}.time-10.svelte-gfjuk8.svelte-gfjuk8{top:35.75%;left:28.979%}.time-9.svelte-gfjuk8.svelte-gfjuk8{top:45%;left:26.5%}.time-8.svelte-gfjuk8.svelte-gfjuk8{top:54.25%;left:28.979%}.time-7.svelte-gfjuk8.svelte-gfjuk8{top:61.021%;left:35.75%}.time-6.svelte-gfjuk8.svelte-gfjuk8{top:63.5%;left:45%}.time-5.svelte-gfjuk8.svelte-gfjuk8{top:61.021%;left:54.25%}.time-4.svelte-gfjuk8.svelte-gfjuk8{top:54.25%;left:61.021%}#bg_clock.svelte-gfjuk8 #clockbody img.time-2.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-4.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-6.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-8.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-10.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-12.svelte-gfjuk8{animation-direction:reverse;-webkit-animation-direction:reverse}@keyframes svelte-gfjuk8-wheelrotate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}@-webkit-keyframes svelte-gfjuk8-wheelrotate{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg)}}@media screen and (min-width: 600px){}@media screen and (min-width: 700px){#bg_clock.svelte-gfjuk8 #clockbody.svelte-gfjuk8{top:35vh;left:50vw;height:850px;width:850px}#bg_clock.svelte-gfjuk8 #clockbody img.svelte-gfjuk8{width:850px}#bg_clock.svelte-gfjuk8 img.time.svelte-gfjuk8{width:85px}}",
-  map: null
-};
-var N2Clock = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  $$result.css.add(css$s);
-  return `<div id="${"bg_clock"}" class="${"svelte-gfjuk8"}"><div id="${"clockbody"}" class="${"svelte-gfjuk8"}">
-        <img class="${"time time-1 svelte-gfjuk8"}" src="${"/img/n2_clock/time-1.svg"}" alt="${""}">\u3000
-        <img class="${"time time-2 svelte-gfjuk8"}" src="${"/img/n2_clock/time-2.svg"}" alt="${""}">
-        <img class="${"time time-3 svelte-gfjuk8"}" src="${"/img/n2_clock/time-3.svg"}" alt="${""}">
-        <img class="${"time time-4 svelte-gfjuk8"}" src="${"/img/n2_clock/time-4.svg"}" alt="${""}">
-        <img class="${"time time-5 svelte-gfjuk8"}" src="${"/img/n2_clock/time-5.svg"}" alt="${""}">
-        <img class="${"time time-6 svelte-gfjuk8"}" src="${"/img/n2_clock/time-6.svg"}" alt="${""}">
-        <img class="${"time time-7 svelte-gfjuk8"}" src="${"/img/n2_clock/time-7.svg"}" alt="${""}">
-        <img class="${"time time-8 svelte-gfjuk8"}" src="${"/img/n2_clock/time-8.svg"}" alt="${""}">
-        <img class="${"time time-9 svelte-gfjuk8"}" src="${"/img/n2_clock/time-9.svg"}" alt="${""}">
-        <img class="${"time time-10 svelte-gfjuk8"}" src="${"/img/n2_clock/time-10.svg"}" alt="${""}">
-        <img class="${"time time-11 svelte-gfjuk8"}" src="${"/img/n2_clock/time-11.svg"}" alt="${""}">
-        <img class="${"time time-12 svelte-gfjuk8"}" src="${"/img/n2_clock/time-12.svg"}" alt="${""}">
-        <img id="${"insidewheel"}" src="${"/img/n2_clock/clock_insidewheel.svg"}" alt="${""}" class="${"svelte-gfjuk8"}">
-        <img src="${"/img/n2_clock/clock_body.svg"}" alt="${""}" class="${"svelte-gfjuk8"}"></div>    
-</div>`;
-});
-var css$r = {
-  code: "#menu_box.svelte-9tmjw9{max-height:700px;max-width:500px;margin:0 auto}.icon_box.svelte-9tmjw9{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:space-around;border:solid 1px white;max-width:400px;padding:20px 10px;margin:100px 30px}",
-  map: null
-};
-var Routes = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $mainmenus, $$unsubscribe_mainmenus;
-  $$unsubscribe_mainmenus = subscribe(mainmenus, (value) => $mainmenus = value);
-  let mainmenu_array = $mainmenus;
-  $$result.css.add(css$r);
-  $$unsubscribe_mainmenus();
-  return `<div id="${"menu_box"}" class="${"svelte-9tmjw9"}">${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
-    default: ({ matches }) => `${matches ? `<div class="${"icon_box svelte-9tmjw9"}">${each(mainmenu_array, (menu) => `${validate_component(HomeButton, "HomeButton").$$render($$result, {
-      path: menu.path,
-      icon_url: menu.img,
-      explain: menu.name
-    }, {}, {})}`)}</div>` : ``}`
-  })}
-    ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
-    default: ({ matches }) => `${matches ? `<div class="${"icon_box svelte-9tmjw9"}">${each(mainmenu_array, (menu) => `${validate_component(HomeButton, "HomeButton").$$render($$result, {
-      path: menu.path,
-      icon_url: menu.img,
-      explain: menu.name
-    }, {}, {})}`)}</div>` : ``}`
-  })}
-    ${validate_component(N2Clock, "N2Clock").$$render($$result, {}, {}, {})}</div>
-
-${slots.default ? slots.default({}) : ``}`;
-});
-var index$2 = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": Routes
-});
-var css$q = {
-  code: "#introduce-box.svelte-muuo5r.svelte-muuo5r{position:relative;width:80%;max-width:700px;margin:30px auto 0 auto;height:700px}#introduce-box.svelte-muuo5r #introduce-text.svelte-muuo5r{padding:30px}#introduce-box.svelte-muuo5r #introduce-text div.svelte-muuo5r{margin:5px}#introduce-box.svelte-muuo5r #introduce-text h1.svelte-muuo5r{margin:10px 0}#introduce-box.svelte-muuo5r #introduce-text .job.svelte-muuo5r{margin:10px 5px;font-size:16px}#introduce-box.svelte-muuo5r #introduce-text .birthday .birthday-count.svelte-muuo5r{display:inline;font-size:13px}#introduce-box.svelte-muuo5r .image.svelte-muuo5r{z-index:-1;position:absolute;filter:blur(2px);background-image:var(--url);background-position:center;width:100%;height:100%}",
-  map: null
-};
-var myname = "Making";
-var mySex = "Male";
-var myBloodType = "A Rh+";
-var Introduce = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let myAgeYear = 0;
-  let myAgeDay = 0;
-  let myAgeHour = 0;
-  let myAgeMinutes = 0;
-  let myAgeSecond = 0;
-  const myJob = ["Engineer", "Designer", "Artist"];
-  const backgroundIllust = [
-    "https://lh3.googleusercontent.com/bcvBUbA1fI0nUqannPAJxes6L1JmFm4VdhfjCwq6fkvqgoBHlGoVJhMk-L20s5zscQZe8FO9d3x4u757Gk35od1rhy8wbOlOEHDt0GULdy7Af2oI_TMadzt4mohs-okGaJoaYaxq27I9HXPCNyoO_cv5nSEM2WlUNF_KKNMW-Hv-0RJkpREnBwzn-HPzuP9lXk5VVIhIcNEwspqsh4n_byo-SlBOOnDX6YDSI_iPzQOftJTfIoZupSXt7yT0eTX4X3G4iU7l0oJd72Mm72_4xAgAw9Ogoyy2wOx_f9TY3hLZWqO1n94DOM0GxWtE-YbfX_LxLRbAzbIUk4IGhl0eNUNfY-w-zg6DjNe0EgQ0MlgBbQH7GDUa-0va2ppQwNTdU_nJIlBBlFa5MCEaBrc3WJZuN1uC7Od7bgY2w3l9_zTajyvYMDRK40k0jlJjqUov2v5QmbAOwVap49VF1bNQrqZsKN-KaCuVeBZHOsA33U28f7qE5Pw2V1g0nUvcYGjBgSyIjX0d-4abQnpNO_AAP5mKUhiMHPAxc1SJne8b_AQMPQNk0qAdO_-I68Eb1nN2LdKyk2Ca4YWqGb2OTQyyewAaxnYhPY9tTXCMxU18r2NVuJWDmrzXaNab3s_rjdMwn1zW5sxrJEpqFu2Av7wPWQ5PRbbPBZVVid_jh8slBbZLULwQ7qLRbn3L-opMCJzUq748fEL2GXe1wWK1G87Fw_I=s700-no"
-  ];
-  $$result.css.add(css$q);
-  return `<section id="${"introduce-box"}" class="${"svelte-muuo5r"}"><div class="${"image svelte-muuo5r"}" style="${"--url:url(" + escape(backgroundIllust[0]) + ")"}"></div>
-    <div id="${"introduce-text"}" class="${"svelte-muuo5r"}"><h1 class="${"svelte-muuo5r"}"><!-- HTML_TAG_START -->${myname}<!-- HTML_TAG_END --></h1>
-        <div class="${"job svelte-muuo5r"}">${escape(myJob.join(", "))}</div>
-        <div class="${"birthday svelte-muuo5r"}">${escape(`Age ${myAgeYear}`)}
-            <div class="${"birthday-count svelte-muuo5r"}">${escape(`( ${myAgeDay}d ${myAgeHour}h ${myAgeMinutes}m ${myAgeSecond}s )`)}</div></div>
-        <div class="${"svelte-muuo5r"}">${escape(mySex)}</div>
-        <div class="${"svelte-muuo5r"}">${escape(myBloodType)}</div></div>
-</section>`;
-});
-var index$1 = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": Introduce
-});
-var css$p = {
-  code: "article.svelte-11yu7j3{width:90%;max-width:700px;margin:0 auto}",
-  map: null
-};
-var Contact = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  $$result.css.add(css$p);
-  return `<article class="${"svelte-11yu7j3"}">
-
-</article>`;
-});
-var contact = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": Contact
-});
-var notion_pages = writable([]);
-function switchBaseURL() {
-  return "https://n2freevas-api.herokuapp.com/api";
-}
-import_axios.default.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
-import_axios.default.create({
-  baseURL: switchBaseURL(),
-  headers: {
-    "authorization": "n2freevas-api-token-Nx2gFhrRaEwEadVxxAadawS",
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*"
-  }
-});
-import_axios.default.create({
-  headers: {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*"
-  }
-});
-var css$o = {
-  code: ".items.svelte-wqwzll.svelte-wqwzll.svelte-wqwzll{margin:20px 0px;border:solid 1px black;display:flex;flex-direction:row;justify-content:space-between;height:175px}.items.svelte-wqwzll .info_container.svelte-wqwzll.svelte-wqwzll{padding:20px 40px;width:50%;display:flex;flex-direction:column;justify-content:space-between}.items.svelte-wqwzll .info_container.svelte-wqwzll h3.svelte-wqwzll{font-size:25px;color:black}.items.svelte-wqwzll .thumbnail_container.svelte-wqwzll.svelte-wqwzll{overflow:hidden;width:50%;max-width:432px}.items_phone.svelte-wqwzll.svelte-wqwzll.svelte-wqwzll{margin:20px 0px;border:solid 1px black;display:flex;flex-direction:column;justify-content:space-between}.items_phone.svelte-wqwzll .info_container.svelte-wqwzll.svelte-wqwzll{padding:15px 30px}.items_phone.svelte-wqwzll .info_container.svelte-wqwzll h3.svelte-wqwzll{font-size:20px;color:black;margin:10px 0}.items_phone.svelte-wqwzll .thumbnail_container.svelte-wqwzll.svelte-wqwzll{overflow:hidden;width:100%;height:200px}.tag_container.svelte-wqwzll.svelte-wqwzll.svelte-wqwzll{display:flex;flex-direction:row;flex-wrap:wrap}.tag_container.svelte-wqwzll .tag_box.svelte-wqwzll.svelte-wqwzll{margin:5px;padding:5px 10px;border-radius:2px;background:#858585;font-size:13px}.tag_container.svelte-wqwzll .tag_box.default.svelte-wqwzll.svelte-wqwzll{background:black;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.gray.svelte-wqwzll.svelte-wqwzll{background:#525252;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.brown.svelte-wqwzll.svelte-wqwzll{background:#613c1a;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.orange.svelte-wqwzll.svelte-wqwzll{background:#b95a00;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.yellow.svelte-wqwzll.svelte-wqwzll{background:#e4a700;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.green.svelte-wqwzll.svelte-wqwzll{background:#135e00;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.blue.svelte-wqwzll.svelte-wqwzll{background:#000a9b;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.purple.svelte-wqwzll.svelte-wqwzll{background:#3d008d;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.pink.svelte-wqwzll.svelte-wqwzll{background:#a80076;border:solid 1px #444444}.tag_container.svelte-wqwzll .tag_box.red.svelte-wqwzll.svelte-wqwzll{background:#880000;border:solid 1px #880000}",
-  map: null
-};
-var List_item = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { id } = $$props;
-  let { tags } = $$props;
-  let { title } = $$props;
-  let { thumbnail } = $$props;
-  if ($$props.id === void 0 && $$bindings.id && id !== void 0)
-    $$bindings.id(id);
-  if ($$props.tags === void 0 && $$bindings.tags && tags !== void 0)
-    $$bindings.tags(tags);
-  if ($$props.title === void 0 && $$bindings.title && title !== void 0)
-    $$bindings.title(title);
-  if ($$props.thumbnail === void 0 && $$bindings.thumbnail && thumbnail !== void 0)
-    $$bindings.thumbnail(thumbnail);
-  $$result.css.add(css$o);
-  return `${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
-    default: ({ matches }) => `${matches ? `<div class="${"items_phone svelte-wqwzll"}"><div class="${"info_container svelte-wqwzll"}"><a href="${"/blog/page?page_id=" + escape(id)}"><h3 class="${"svelte-wqwzll"}"><!-- HTML_TAG_START -->${title}<!-- HTML_TAG_END --></h3></a>
-        <div class="${"tag_container svelte-wqwzll"}">${each(tags, (tag) => `<div class="${"tag_box " + escape(tag.tag_color) + " svelte-wqwzll"}">${escape(tag.tag_name)}
-            </div>`)}</div></div>
-    <div class="${"thumbnail_container svelte-wqwzll"}"><a href="${"/blog/page?page_id=" + escape(id)}"><img${add_attribute("src", thumbnail, 0)} alt="${escape(title) + "\u306E\u753B\u50CF"}"></a></div></div>` : ``}`
-  })}
-
-${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
-    default: ({ matches }) => `${matches ? `<div class="${"items svelte-wqwzll"}"><div class="${"info_container svelte-wqwzll"}"><a href="${"/blog/page?page_id=" + escape(id)}"><h3 class="${"svelte-wqwzll"}"><!-- HTML_TAG_START -->${title}<!-- HTML_TAG_END --></h3></a>
-        <div class="${"tag_container svelte-wqwzll"}">${each(tags, (tag) => `<div class="${"tag_box " + escape(tag.tag_color) + " svelte-wqwzll"}">${escape(tag.tag_name)}
-            </div>`)}</div></div>
-    <div class="${"thumbnail_container svelte-wqwzll"}"><a href="${"/blog/page?page_id=" + escape(id)}"><img${add_attribute("src", thumbnail, 0)} alt="${escape(title) + "\u306E\u753B\u50CF"}"></a></div></div>` : ``}`
-  })}`;
-});
-var css$n = {
-  code: "h2.svelte-13h619c{color:black}.background.svelte-13h619c{padding:30px 20px;width:100%;height:100%;background:white}",
-  map: null
-};
-var List = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $notion_pages, $$unsubscribe_notion_pages;
-  $$unsubscribe_notion_pages = subscribe(notion_pages, (value) => $notion_pages = value);
-  $$result.css.add(css$n);
-  $$unsubscribe_notion_pages();
-  return `<div class="${"background svelte-13h619c"}"><section class="${"title"}"><h2 class="${"svelte-13h619c"}">BLOG LIST</h2></section>
-<section class="${"blog_list"}">${each($notion_pages, (page2) => `${validate_component(List_item, "ListItem").$$render($$result, {
-    id: page2.page_id,
-    title: page2.page_title,
-    tags: page2.tags,
-    thumbnail: page2.thumbnail
-  }, {}, {})}`)}</section>
-
-</div>`;
-});
-var list = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": List
-});
-var Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let data;
-  console.log(data);
-  return `<h1>${escape(data)}</h1>
-<p>list</p>`;
-});
-var page = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": Page
-});
-var css$m = {
-  code: ".loader.svelte-w1xkbb.svelte-w1xkbb{position:relative;width:100%;height:var(--loader-height)}.loader.svelte-w1xkbb .fulcrum.svelte-w1xkbb{position:absolute;left:50%;height:100%}.loader.svelte-w1xkbb .fulcrum .wire.svelte-w1xkbb{position:absolute;height:var(--wire_length_px);border:solid 1px var(--color);transform-origin:top}.loader.svelte-w1xkbb .fulcrum .wire.animate.svelte-w1xkbb{-webkit-animation:svelte-w1xkbb-penduluming ease-in-out var(--periodic_time_sec) infinite;animation:svelte-w1xkbb-penduluming ease-in-out var(--periodic_time_sec) infinite}.loader.svelte-w1xkbb .fulcrum .wire .weight.svelte-w1xkbb{position:absolute;bottom:calc(-1 * var(--weight_size_px) / 2);left:calc(-1 * var(--weight_size_px) / 2);width:var(--weight_size_px);height:var(--weight_size_px);border-radius:calc(var(--weight_size_px) / 2);background:var(--color)}@keyframes svelte-w1xkbb-penduluming{0%{transform:rotate(30deg)}50%{transform:rotate(-30deg)}100%{transform:rotate(30deg)}}",
-  map: null
-};
-var PendulumLoader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { numof_pendulum = 16 } = $$props;
-  let { initial_length = 25 } = $$props;
-  let { increase_length = 12 } = $$props;
-  let { initial_size = 10 } = $$props;
-  let { increase_size = 0 } = $$props;
-  let { initial_frequency = 30 } = $$props;
-  let { decrease_frequency = 1 } = $$props;
-  let { color = "white" } = $$props;
-  let { is_animate = true } = $$props;
-  let pendulums_args = [];
-  for (let i = 0; i < numof_pendulum; i++) {
-    let wire_length = initial_length + i * increase_length;
-    let periodic_time = 60 / (initial_frequency - decrease_frequency * i);
-    pendulums_args.push({
-      wire_length: `${wire_length.toString()}px`,
-      weight_size: `${(initial_size + i * increase_size).toString()}px`,
-      periodic_time: `${periodic_time.toString()}s`
-    });
-  }
-  if ($$props.numof_pendulum === void 0 && $$bindings.numof_pendulum && numof_pendulum !== void 0)
-    $$bindings.numof_pendulum(numof_pendulum);
-  if ($$props.initial_length === void 0 && $$bindings.initial_length && initial_length !== void 0)
-    $$bindings.initial_length(initial_length);
-  if ($$props.increase_length === void 0 && $$bindings.increase_length && increase_length !== void 0)
-    $$bindings.increase_length(increase_length);
-  if ($$props.initial_size === void 0 && $$bindings.initial_size && initial_size !== void 0)
-    $$bindings.initial_size(initial_size);
-  if ($$props.increase_size === void 0 && $$bindings.increase_size && increase_size !== void 0)
-    $$bindings.increase_size(increase_size);
-  if ($$props.initial_frequency === void 0 && $$bindings.initial_frequency && initial_frequency !== void 0)
-    $$bindings.initial_frequency(initial_frequency);
-  if ($$props.decrease_frequency === void 0 && $$bindings.decrease_frequency && decrease_frequency !== void 0)
-    $$bindings.decrease_frequency(decrease_frequency);
-  if ($$props.color === void 0 && $$bindings.color && color !== void 0)
-    $$bindings.color(color);
-  if ($$props.is_animate === void 0 && $$bindings.is_animate && is_animate !== void 0)
-    $$bindings.is_animate(is_animate);
-  $$result.css.add(css$m);
-  return `<div class="${"loader svelte-w1xkbb"}" style="${"--loader-height: " + escape(`${initial_length + increase_length * numof_pendulum + initial_size}px`) + ";"}"><div class="${"fulcrum svelte-w1xkbb"}">${each(pendulums_args, (args) => `
-            <div class="${"wire " + escape(is_animate ? "animate" : "") + " svelte-w1xkbb"}" style="${"--wire_length_px: " + escape(args.wire_length) + "; --periodic_time_sec: " + escape(args.periodic_time) + "; --color: " + escape(color) + ";"}"><div class="${"weight svelte-w1xkbb"}" style="${"--weight_size_px: " + escape(args.weight_size) + ";"}"></div>
-            </div>`)}</div>
-</div>`;
-});
-var css$l = {
-  code: ".loader.svelte-1prbtiu.svelte-1prbtiu{position:relative;width:100%;height:var(--loader-height)}.loader.svelte-1prbtiu .fulcrum.svelte-1prbtiu{position:absolute;width:100%;height:100%;left:0}.loader.svelte-1prbtiu .fulcrum .rect.svelte-1prbtiu{position:absolute;bottom:0;left:calc(50% + var(--interval));width:var(--width);height:0;border:solid 1px var(--color)}.loader.svelte-1prbtiu .fulcrum .rect.animate.svelte-1prbtiu{-webkit-animation:svelte-1prbtiu-rect_growth ease-in-out 3s var(--growth_delay) infinite;animation:svelte-1prbtiu-rect_growth ease-in-out 3s var(--growth_delay) infinite}@keyframes svelte-1prbtiu-rect_growth{0%{height:0}20%{height:var(--max_height)}40%{height:0}100%{height:0}}",
-  map: null
-};
-var RectWaveLoader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { numof_rectangle = 20 } = $$props;
-  let { base_rect_width = 15 } = $$props;
-  let { blur_range_rect_width = 10 } = $$props;
-  let { formation_interval = 10 } = $$props;
-  let { growth_delay_sec = 0.25 } = $$props;
-  let { max_height = 150 } = $$props;
-  let { color = "white" } = $$props;
-  let { is_animate = true } = $$props;
-  let rectangle_args = [];
-  for (let i = 0; i < numof_rectangle; i++) {
-    rectangle_args.push({
-      rect_width: `${Math.floor(Math.random() * blur_range_rect_width + base_rect_width - blur_range_rect_width / 2)}px`,
-      interval_position: `${formation_interval * (numof_rectangle / 2 - i)}px`,
-      growth_delay: `${growth_delay_sec * i}s`
-    });
-  }
-  if ($$props.numof_rectangle === void 0 && $$bindings.numof_rectangle && numof_rectangle !== void 0)
-    $$bindings.numof_rectangle(numof_rectangle);
-  if ($$props.base_rect_width === void 0 && $$bindings.base_rect_width && base_rect_width !== void 0)
-    $$bindings.base_rect_width(base_rect_width);
-  if ($$props.blur_range_rect_width === void 0 && $$bindings.blur_range_rect_width && blur_range_rect_width !== void 0)
-    $$bindings.blur_range_rect_width(blur_range_rect_width);
-  if ($$props.formation_interval === void 0 && $$bindings.formation_interval && formation_interval !== void 0)
-    $$bindings.formation_interval(formation_interval);
-  if ($$props.growth_delay_sec === void 0 && $$bindings.growth_delay_sec && growth_delay_sec !== void 0)
-    $$bindings.growth_delay_sec(growth_delay_sec);
-  if ($$props.max_height === void 0 && $$bindings.max_height && max_height !== void 0)
-    $$bindings.max_height(max_height);
-  if ($$props.color === void 0 && $$bindings.color && color !== void 0)
-    $$bindings.color(color);
-  if ($$props.is_animate === void 0 && $$bindings.is_animate && is_animate !== void 0)
-    $$bindings.is_animate(is_animate);
-  $$result.css.add(css$l);
-  return `<div class="${"loader svelte-1prbtiu"}" style="${"--loader-height: " + escape(`${77 + max_height}px`) + ";"}"><div class="${"fulcrum " + escape(is_animate ? "animate" : "") + " svelte-1prbtiu"}" style="${"--base_width:" + escape(`${base_rect_width}px`) + "; --max_height:" + escape(`${max_height}px`) + ";"}">${each(rectangle_args, (args) => `<div class="${"rect " + escape(is_animate ? "animate" : "") + " svelte-1prbtiu"}" style="${"--width:" + escape(args.rect_width) + "; --color: " + escape(color) + "; --interval: " + escape(args.interval_position) + "; --growth_delay: " + escape(args.growth_delay)}"></div>`)}</div>
-</div>`;
-});
-var css$k = {
-  code: ".loader.svelte-8rpapr.svelte-8rpapr{position:relative;width:100%;height:var(--loader_height)}.loader.svelte-8rpapr .fulcrum.svelte-8rpapr{position:absolute;width:100%;height:100%}.loader.svelte-8rpapr .fulcrum .petals.svelte-8rpapr{position:absolute;top:calc(50% - var(--size) / 2);left:calc(50% - var(--size) / 2);width:var(--size);height:var(--size);transform:rotate(0);transform-origin:50% 50%}.loader.svelte-8rpapr .fulcrum .petals.animate.svelte-8rpapr{animation:svelte-8rpapr-cycle linear var(--speed) infinite}@keyframes svelte-8rpapr-cycle{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}.loader.svelte-8rpapr .fulcrum .petal.svelte-8rpapr{position:absolute;top:0;transform:rotate(var(--angle));width:var(--size);height:var(--size);border-radius:calc(var(--size) / 2);border:solid 1px var(--color)}.loader.svelte-8rpapr .fulcrum .petal.animate.svelte-8rpapr{animation:svelte-8rpapr-flowering ease-in-out 2s var(--delay) infinite}@keyframes svelte-8rpapr-flowering{0%{transform:translate(0, 0)}40%{transform:translate(var(--move_x), var(--move_y))}80%{transform:translate(0, 0)}100%{transform:translate(0, 0)}}",
-  map: null
-};
-var RoundFloweringLoader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { color = "white" } = $$props;
-  let { is_animate = true } = $$props;
-  let { numof_small_round = 7 } = $$props;
-  let { numof_large_round = 5 } = $$props;
-  let { small_round_size = 80 } = $$props;
-  let { large_round_size = 120 } = $$props;
-  let { small_petal_stroke = 30 } = $$props;
-  let { large_petal_stroke = 50 } = $$props;
-  let { small_stroke_delay = 0 } = $$props;
-  let { large_stroke_delay = 0.4 } = $$props;
-  let { small_round_spin_speed = "5s" } = $$props;
-  let { large_round_spin_speed = "2s" } = $$props;
-  let small_flowering_args = [];
-  let large_flowering_args = [];
-  for (let i = 0; i < numof_small_round; i++) {
-    let radius = 2 * Math.PI / numof_small_round * i;
-    small_flowering_args.push({
-      flower_petal_x: `${Math.sin(radius) * small_petal_stroke}px`,
-      flower_petal_y: `${Math.cos(radius) * small_petal_stroke}px`
-    });
-  }
-  for (let i = 0; i < numof_large_round; i++) {
-    let radius = 2 * Math.PI / numof_large_round * i;
-    large_flowering_args.push({
-      flower_petal_x: `${Math.sin(radius) * large_petal_stroke}px`,
-      flower_petal_y: `${Math.cos(radius) * large_petal_stroke}px`
-    });
-  }
-  if ($$props.color === void 0 && $$bindings.color && color !== void 0)
-    $$bindings.color(color);
-  if ($$props.is_animate === void 0 && $$bindings.is_animate && is_animate !== void 0)
-    $$bindings.is_animate(is_animate);
-  if ($$props.numof_small_round === void 0 && $$bindings.numof_small_round && numof_small_round !== void 0)
-    $$bindings.numof_small_round(numof_small_round);
-  if ($$props.numof_large_round === void 0 && $$bindings.numof_large_round && numof_large_round !== void 0)
-    $$bindings.numof_large_round(numof_large_round);
-  if ($$props.small_round_size === void 0 && $$bindings.small_round_size && small_round_size !== void 0)
-    $$bindings.small_round_size(small_round_size);
-  if ($$props.large_round_size === void 0 && $$bindings.large_round_size && large_round_size !== void 0)
-    $$bindings.large_round_size(large_round_size);
-  if ($$props.small_petal_stroke === void 0 && $$bindings.small_petal_stroke && small_petal_stroke !== void 0)
-    $$bindings.small_petal_stroke(small_petal_stroke);
-  if ($$props.large_petal_stroke === void 0 && $$bindings.large_petal_stroke && large_petal_stroke !== void 0)
-    $$bindings.large_petal_stroke(large_petal_stroke);
-  if ($$props.small_stroke_delay === void 0 && $$bindings.small_stroke_delay && small_stroke_delay !== void 0)
-    $$bindings.small_stroke_delay(small_stroke_delay);
-  if ($$props.large_stroke_delay === void 0 && $$bindings.large_stroke_delay && large_stroke_delay !== void 0)
-    $$bindings.large_stroke_delay(large_stroke_delay);
-  if ($$props.small_round_spin_speed === void 0 && $$bindings.small_round_spin_speed && small_round_spin_speed !== void 0)
-    $$bindings.small_round_spin_speed(small_round_spin_speed);
-  if ($$props.large_round_spin_speed === void 0 && $$bindings.large_round_spin_speed && large_round_spin_speed !== void 0)
-    $$bindings.large_round_spin_speed(large_round_spin_speed);
-  $$result.css.add(css$k);
-  return `<div class="${"loader svelte-8rpapr"}" style="${"--loader_height:" + escape(`${large_petal_stroke * 2 + large_round_size}px`) + "; --color:" + escape(color) + ";"}"><div class="${"fulcrum svelte-8rpapr"}"><div class="${"petals " + escape(is_animate ? "animate" : "") + " svelte-8rpapr"}" style="${"--size:" + escape(`${small_round_size}px`) + "; --speed:" + escape(small_round_spin_speed)}">${each(small_flowering_args, (arg) => `<div class="${"petal " + escape(is_animate ? "animate" : "") + " svelte-8rpapr"}" style="${"--size:" + escape(`${small_round_size}px`) + "; --move_x:" + escape(arg.flower_petal_x) + "; --move_y:" + escape(arg.flower_petal_y) + "; --delay:" + escape(`${small_stroke_delay}s`)}"></div>`)}</div>
-        <div class="${"petals " + escape(is_animate ? "animate" : "") + " svelte-8rpapr"}" style="${"--size:" + escape(`${large_round_size}px`) + "; --speed:" + escape(large_round_spin_speed)}">${each(large_flowering_args, (arg) => `<div class="${"petal " + escape(is_animate ? "animate" : "") + " svelte-8rpapr"}" style="${"--size:" + escape(`${large_round_size}px`) + "; --move_x: " + escape(arg.flower_petal_x) + "; --move_y: " + escape(arg.flower_petal_y) + "; --delay:" + escape(`${large_stroke_delay}s`)}"></div>`)}</div></div>
-</div>`;
-});
-var css$j = {
-  code: ".loader.svelte-v9q609.svelte-v9q609{width:100%;height:100%}.loader.svelte-v9q609 .kotodama-box.svelte-v9q609{--size:30px;display:flex;flex-direction:row;justify-content:center;flex-wrap:wrap;align-items:center;max-width:150px;height:100%;margin:0 auto}.loader.svelte-v9q609 .kotodama-box .kotodama.svelte-v9q609{position:relative;width:var(--size);height:var(--size);margin:3px}.loader.svelte-v9q609 .kotodama-box .kotodama img.svelte-v9q609{position:absolute;bottom:0;left:0;width:var(--size);height:var(--size);animation:svelte-v9q609-popinkotodama linear 1.3s var(--delay) infinite}@keyframes svelte-v9q609-popinkotodama{0%{bottom:0}20%{bottom:var(--size)}40%{bottom:0;height:var(--size)}43%{bottom:0;height:calc(var(--size) / 3)}46%{bottom:0;height:var(--size)}}",
-  map: null
-};
-var Bs2ndLoader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { popindelay = 0.15 } = $$props;
-  if ($$props.popindelay === void 0 && $$bindings.popindelay && popindelay !== void 0)
-    $$bindings.popindelay(popindelay);
-  $$result.css.add(css$j);
-  return `<div class="${"loader svelte-v9q609"}"><div class="${"kotodama-box svelte-v9q609"}"><div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay}s`) + ";"}" src="${"/img/bs2nd/ba_gray.png"}" alt="${"\u3070"}" class="${"svelte-v9q609"}"></div>
-        <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 2}s`) + ";"}" src="${"/img/bs2nd/ku_gray.png"}" alt="${"\u304F"}" class="${"svelte-v9q609"}"></div>
-        <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 3}s`) + ";"}" src="${"/img/bs2nd/ze_gray.png"}" alt="${"\u305C"}" class="${"svelte-v9q609"}"></div>
-        <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 4}s`) + ";"}" src="${"/img/bs2nd/tsu_gray.png"}" alt="${"\u3064"}" class="${"svelte-v9q609"}"></div>
-        <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 5}s`) + ";"}" src="${"/img/bs2nd/sa_gray.png"}" alt="${"\u3055"}" class="${"svelte-v9q609"}"></div>
-        <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 6}s`) + ";"}" src="${"/img/bs2nd/a_gray.png"}" alt="${"\u3042"}" class="${"svelte-v9q609"}"></div>
-        <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 7}s`) + ";"}" src="${"/img/bs2nd/chi_gray.png"}" alt="${"\u3061"}" class="${"svelte-v9q609"}"></div></div>
-</div>`;
-});
-var css$i = {
-  code: ".loader-animation-box.svelte-yop039{padding:30px 0;border:solid 1px white;min-height:290px;width:100%;height:100%}",
-  map: null
-};
-var Show_item = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { name } = $$props;
-  let { component } = $$props;
-  if ($$props.name === void 0 && $$bindings.name && name !== void 0)
-    $$bindings.name(name);
-  if ($$props.component === void 0 && $$bindings.component && component !== void 0)
-    $$bindings.component(component);
-  $$result.css.add(css$i);
-  return `<div class="${"loader-animation-box svelte-yop039"}">${validate_component(component || missing_component, "svelte:component").$$render($$result, {}, {}, {})}</div>
-<p>${escape(name)}</p>`;
-});
-var css$h = {
-  code: ".loader.svelte-1o1dzs3.svelte-1o1dzs3{width:100%;height:100%}.loader.svelte-1o1dzs3 .board.svelte-1o1dzs3{display:flex;flex-direction:row;justify-content:space-around;width:100%;height:100%}.loader.svelte-1o1dzs3 .board .dot_area.svelte-1o1dzs3{padding:5px;flex-basis:var(--dot_area_width);display:flex;flex-direction:row;justify-content:center;flex-wrap:wrap}.loader.svelte-1o1dzs3 .board .dot_area .dot.svelte-1o1dzs3,.loader.svelte-1o1dzs3 .board .dot_area .blank.svelte-1o1dzs3{flex-basis:32%;width:var(--dot_size);height:var(--dot_size)}.loader.svelte-1o1dzs3 .board .dot_area .dot.svelte-1o1dzs3{background:var(--color)}",
-  map: null
-};
-var DotStringLoader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { color = "white" } = $$props;
-  let { is_animate = true } = $$props;
-  let { dot_size = 10 } = $$props;
-  let { input = 1056194 } = $$props;
-  let dot_string_dict = {
-    0: [1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1],
-    1: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
-    2: [1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1],
-    3: [1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1],
-    4: [1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1],
-    5: [1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1],
-    6: [1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1],
-    7: [1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
-    8: [1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1],
-    9: [1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1]
-  };
-  let input_tostr = input.toString();
-  let dot_args = [];
-  for (let i = 0; i < input_tostr.length; i++) {
-    dot_args.push({ dots: dot_string_dict[input_tostr[i]] });
-  }
-  console.log(dot_args);
-  console.log(Math.floor(100 / input_tostr.length));
-  if ($$props.color === void 0 && $$bindings.color && color !== void 0)
-    $$bindings.color(color);
-  if ($$props.is_animate === void 0 && $$bindings.is_animate && is_animate !== void 0)
-    $$bindings.is_animate(is_animate);
-  if ($$props.dot_size === void 0 && $$bindings.dot_size && dot_size !== void 0)
-    $$bindings.dot_size(dot_size);
-  if ($$props.input === void 0 && $$bindings.input && input !== void 0)
-    $$bindings.input(input);
-  $$result.css.add(css$h);
-  return `<div class="${"loader svelte-1o1dzs3"}"><div class="${"board svelte-1o1dzs3"}" style="${"--color:" + escape(color) + "; --dot_area_width:" + escape(Math.floor(100 / input_tostr.length)) + "%; --dot_size:" + escape(`${dot_size}px`)}">${each(dot_args, (args) => `<div class="${"dot_area svelte-1o1dzs3"}">${each(args.dots, (dot) => `${dot == 0 ? `<div class="${"blank svelte-1o1dzs3"}"></div>` : `<div class="${"dot svelte-1o1dzs3"}"></div>`}`)}
-            </div>`)}</div>
-</div>`;
-});
-var css$g = {
-  code: ".show-room.svelte-7jgice.svelte-7jgice{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:space-around}.show-room.svelte-7jgice .show-box.svelte-7jgice{flex-basis:40%}.show-room.svelte-7jgice .show-box-phone.svelte-7jgice{flex-basis:90%}",
-  map: null
-};
-var Show = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  const show_item_args = [
-    { name: "bs2nd", component: Bs2ndLoader },
-    {
-      name: "Pendulum",
-      component: PendulumLoader
-    },
-    {
-      name: "Rect Wave",
-      component: RectWaveLoader
-    },
-    {
-      name: "Round Flowering",
-      component: RoundFloweringLoader
-    },
-    {
-      name: "Dot Strings",
-      component: DotStringLoader
-    }
-  ];
-  $$result.css.add(css$g);
-  return `<section class="${"show-room svelte-7jgice"}">${each(show_item_args, (arg) => `${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
-    default: ({ matches }) => `${matches ? `<div class="${"show-box-phone svelte-7jgice"}">${validate_component(Show_item, "ShowItem").$$render($$result, { name: arg.name, component: arg.component }, {}, {})}
-        </div>` : ``}
-    `
-  })}
-    ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
-    default: ({ matches }) => `${matches ? `<div class="${"show-box svelte-7jgice"}">${validate_component(Show_item, "ShowItem").$$render($$result, { name: arg.name, component: arg.component }, {}, {})}
-        </div>` : ``}
-    `
-  })}`)}
-    
-</section>`;
-});
-var index = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": Show
-});
-var css$f = {
-  code: "header.svelte-yl89mf.svelte-yl89mf.svelte-yl89mf{display:flex;justify-content:space-between;height:40px}header.svelte-yl89mf .n2-logo.svelte-yl89mf.svelte-yl89mf{padding:10px}header.svelte-yl89mf .n2-logo img.svelte-yl89mf.svelte-yl89mf{height:20px}#base.svelte-yl89mf.svelte-yl89mf.svelte-yl89mf{background:black}footer.svelte-yl89mf.svelte-yl89mf.svelte-yl89mf{position:fixed;z-index:50;bottom:0;width:100%;height:75px;box-shadow:0 -1px 2px white;padding:10px;background:black}footer.svelte-yl89mf .footer-icon-box.svelte-yl89mf.svelte-yl89mf{display:flex;justify-content:space-around;max-width:700px;margin:0 auto}footer.svelte-yl89mf .footer-icon-box a.svelte-yl89mf.svelte-yl89mf{display:flex;flex-direction:column;align-items:center;justify-content:space-between;position:relative;width:40px;height:40px;border-radius:27px}footer.svelte-yl89mf .footer-icon-box a.active .footer-icon-bg.svelte-yl89mf.svelte-yl89mf{position:absolute;width:30px;height:30px;border:solid 2px var(--active-yellow);border-radius:15px}footer.svelte-yl89mf .footer-icon-box a.active p.svelte-yl89mf.svelte-yl89mf{color:var(--active-yellow)}footer.svelte-yl89mf .footer-icon-box a.svelte-yl89mf img.svelte-yl89mf{height:25px}footer.svelte-yl89mf .footer-icon-box a p.svelte-yl89mf.svelte-yl89mf{font-size:12px;font-weight:bold}",
-  map: null
-};
-var _layout_reset$1 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  $$result.css.add(css$f);
-  return `${$$result.head += `${$$result.title = `<title>\u3070\u304F\u305C\u3064\u3055\u3042\u3061 | \u30B3\u30C8\u30C0\u30DE\u30F3\u5358\u8A9E \u691C\u7D22 | \u30B3\u30C8\u30C0\u30DE\u30F3\u8F9E\u66F8 \u691C\u7D22</title>`, ""}<meta name="${"google-site-verification"}" content="${"3OjGMRDR5lkfKidGxk6ZUvUpS8GTtV2Hs8mCtnf8m3M"}" data-svelte="svelte-s74sy5">`, ""}
-
-<header class="${"svelte-yl89mf"}"><div class="${"n2-logo svelte-yl89mf"}"><a href="${"/"}" class="${"svelte-yl89mf"}"><img src="${"/img/n2-icon-white.svg"}" alt="${""}" class="${"svelte-yl89mf"}"></a></div></header>
-${validate_component(ToastArea, "ToastArea").$$render($$result, {}, {}, {})}
-<section id="${"base"}" class="${"svelte-yl89mf"}">${slots.default ? slots.default({}) : ``}</section>
-
-<footer class="${"svelte-yl89mf"}"><div class="${"footer-icon-box svelte-yl89mf"}"><a class="${escape(null_to_empty("")) + " svelte-yl89mf"}" href="${"/app/bakuzetsu-searcher-2nd/edit"}"><div class="${"footer-icon-bg svelte-yl89mf"}"></div>
-        <img src="${"/img/bs2nd/e_gray_fill.svg"}" alt="${"EDIT"}" class="${"svelte-yl89mf"}">
-        <p class="${"svelte-yl89mf"}">EDIT</p></a>
-    <a class="${escape(null_to_empty("")) + " svelte-yl89mf"}" href="${"/app/bakuzetsu-searcher-2nd/analyze"}"><div class="${"footer-icon-bg svelte-yl89mf"}"></div>
-        <img src="${"/img/bs2nd/a_gray_fill.svg"}" alt="${"ANALYZE"}" class="${"svelte-yl89mf"}">
-        <p class="${"svelte-yl89mf"}">ANALYZE</p></a>
-    </div>
-</footer>`;
-});
-var __layout_reset$1 = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": _layout_reset$1
-});
-var DEFAULT_LIMIT = 48;
-var deckStore = writable(new Array(12));
-var filterConditionStore = writable({
-  offset: 0,
-  limit: DEFAULT_LIMIT,
-  word: [],
-  elem: [],
-  tribe: [],
-  gimmick: []
-});
-var kanaStore = writable([
-  { id: 1, kanas: ["\u3042", "\u3041"], active: false },
-  { id: 2, kanas: ["\u3044", "\u3043"], active: false },
-  { id: 3, kanas: ["\u3046", "\u3045"], active: false },
-  { id: 4, kanas: ["\u3048", "\u3047"], active: false },
-  { id: 5, kanas: ["\u304A", "\u3049"], active: false },
-  { id: 6, kanas: ["\u304B", "\u304C"], active: false },
-  { id: 7, kanas: ["\u304D", "\u304E"], active: false },
-  { id: 8, kanas: ["\u304F", "\u3050"], active: false },
-  { id: 9, kanas: ["\u3051", "\u3052"], active: false },
-  { id: 10, kanas: ["\u3053", "\u3054"], active: false },
-  { id: 11, kanas: ["\u3055", "\u3056"], active: false },
-  { id: 12, kanas: ["\u3057", "\u3058"], active: false },
-  { id: 13, kanas: ["\u3059", "\u305A"], active: false },
-  { id: 14, kanas: ["\u305B", "\u305C"], active: false },
-  { id: 15, kanas: ["\u305D", "\u305E"], active: false },
-  { id: 16, kanas: ["\u305F", "\u3060"], active: false },
-  { id: 17, kanas: ["\u3061", "\u3062"], active: false },
-  { id: 18, kanas: ["\u3064", "\u3065"], active: false },
-  { id: 19, kanas: ["\u3066", "\u3067"], active: false },
-  { id: 20, kanas: ["\u3068", "\u3069"], active: false },
-  { id: 21, kanas: ["\u306A"], active: false },
-  { id: 22, kanas: ["\u306B"], active: false },
-  { id: 23, kanas: ["\u306C"], active: false },
-  { id: 24, kanas: ["\u306D"], active: false },
-  { id: 25, kanas: ["\u306E"], active: false },
-  { id: 26, kanas: ["\u306F", "\u3070", "\u3071"], active: false },
-  { id: 27, kanas: ["\u3072", "\u3073", "\u3074"], active: false },
-  { id: 28, kanas: ["\u3075", "\u3076", "\u3077"], active: false },
-  { id: 29, kanas: ["\u3078", "\u3079", "\u307A"], active: false },
-  { id: 30, kanas: ["\u307B", "\u307C", "\u307D"], active: false },
-  { id: 31, kanas: ["\u307E"], active: false },
-  { id: 32, kanas: ["\u307F"], active: false },
-  { id: 33, kanas: ["\u3080"], active: false },
-  { id: 34, kanas: ["\u3081"], active: false },
-  { id: 35, kanas: ["\u3082"], active: false },
-  { id: 36, kanas: ["\u3084", "\u3083"], active: false },
-  { id: 37, kanas: [""], active: false },
-  { id: 38, kanas: ["\u3086", "\u3085"], active: false },
-  { id: 39, kanas: [""], active: false },
-  { id: 40, kanas: ["\u3088", "\u3087"], active: false },
-  { id: 41, kanas: ["\u3089"], active: false },
-  { id: 42, kanas: ["\u308A"], active: false },
-  { id: 43, kanas: ["\u308B"], active: false },
-  { id: 44, kanas: ["\u308C"], active: false },
-  { id: 45, kanas: ["\u308D"], active: false },
-  { id: 46, kanas: ["\u308F"], active: false },
-  { id: 47, kanas: [""], active: false },
-  { id: 48, kanas: ["\u3092"], active: false },
-  { id: 49, kanas: [""], active: false },
-  { id: 50, kanas: ["\u3093"], active: false }
-]);
-var elemStore = writable([
-  { id: 1, elem: "\u706B", active: false },
-  { id: 2, elem: "\u6C34", active: false },
-  { id: 3, elem: "\u6728", active: false },
-  { id: 4, elem: "\u5149", active: false },
-  { id: 5, elem: "\u95C7", active: false },
-  { id: 6, elem: "\u51A5", active: false },
-  { id: 7, elem: "\u5929", active: false }
-]);
-var tribeStore = writable([
-  { id: 1, tribe: "\u795E", active: false },
-  { id: 2, tribe: "\u9B54", active: false },
-  { id: 3, tribe: "\u82F1", active: false },
-  { id: 4, tribe: "\u9F8D", active: false },
-  { id: 5, tribe: "\u7363", active: false },
-  { id: 6, tribe: "\u970A", active: false },
-  { id: 7, tribe: "\u7269", active: false }
-]);
-var gimmickStore = writable([
-  { id: 1, gimmick: "\u30B7\u30FC\u30EB\u30C9\u30D6\u30EC\u30A4\u30AB\u30FC", active: false },
-  { id: 2, gimmick: "\u30C8\u30B2\u30AC\u30FC\u30C9", active: false },
-  { id: 3, gimmick: "\u30C1\u30A7\u30F3\u30B8\u30AC\u30FC\u30C9", active: false },
-  { id: 4, gimmick: "\u5F31\u4F53\u30AC\u30FC\u30C9", active: false },
-  { id: 5, gimmick: "\u30A6\u30A9\u30FC\u30EB\u30D6\u30EC\u30A4\u30AB\u30FC", active: false },
-  { id: 6, gimmick: "\u30D3\u30EA\u30D3\u30EA\u30AC\u30FC\u30C9", active: false },
-  { id: 7, gimmick: "\u30D2\u30FC\u30EB\u30D6\u30EC\u30A4\u30AB\u30FC", active: false },
-  { id: 8, gimmick: "\u30B3\u30D4\u30FC\u30AC\u30FC\u30C9", active: false }
-]);
-var isDeckFullStore = writable(false);
-var unitListStore = writable([]);
-var isSettingFilterCondition = writable(false);
-var isBottomOfScroll = writable(false);
-var isListLoading = writable(false);
-var storedDecks = [
-  { deckid: 1, deckname: "", list: [] },
-  { deckid: 2, deckname: "", list: [] },
-  { deckid: 3, deckname: "", list: [] },
-  { deckid: 4, deckname: "", list: [] },
-  { deckid: 5, deckname: "", list: [] }
-];
-function getDeck() {
-  if (typeof localStorage !== "undefined") {
-    console.log("localStorage find");
-    let st = localStorage.getItem("n2freevas-bs2nd-localstorage-decks");
-    if (st) {
-      storedDecks = JSON.parse(st);
-    } else {
-      console.log("localStorage not fount");
-    }
-  } else {
-    console.log("localstorage undef");
-  }
-}
-getDeck();
-var decks = writable(storedDecks);
-var adventStore = writable([]);
-var adventTargetStore = writable(void 0);
-var adventBanmenStore = writable([]);
-var adventFilterConditionStore = writable({
-  offset: 0,
-  limit: DEFAULT_LIMIT,
-  elem: []
-});
-var adventElemStore = writable([
-  { id: 1, elem: "\u706B", active: false },
-  { id: 2, elem: "\u6C34", active: false },
-  { id: 3, elem: "\u6728", active: false },
-  { id: 4, elem: "\u5149", active: false },
-  { id: 5, elem: "\u95C7", active: false },
-  { id: 6, elem: "\u51A5", active: false },
-  { id: 7, elem: "\u5929", active: false }
-]);
-var mojiLengthConfigStore = writable([
-  { length: 4, active: false },
-  { length: 5, active: true },
-  { length: 6, active: true },
-  { length: 7, active: false }
-]);
-var ElemEngDict = {
-  "\u706B": "fire",
-  "\u6C34": "water",
-  "\u6728": "wood",
-  "\u5149": "light",
-  "\u95C7": "dark",
-  "\u51A5": "hell",
-  "\u5929": "heaven"
-};
-var TribeEngDict = {
-  "\u795E": "god",
-  "\u9B54": "evil",
-  "\u82F1": "hero",
-  "\u9F8D": "dragon",
-  "\u7363": "beast",
-  "\u970A": "ghost",
-  "\u7269": "object"
-};
-var GimmickEngDict = {
-  "\u30B7\u30FC\u30EB\u30C9\u30D6\u30EC\u30A4\u30AB\u30FC": "shield",
-  "\u30C8\u30B2\u30AC\u30FC\u30C9": "needle",
-  "\u30C1\u30A7\u30F3\u30B8\u30AC\u30FC\u30C9": "change",
-  "\u5F31\u4F53\u30AC\u30FC\u30C9": "week",
-  "\u30A6\u30A9\u30FC\u30EB\u30D6\u30EC\u30A4\u30AB\u30FC": "wall",
-  "\u30D3\u30EA\u30D3\u30EA\u30AC\u30FC\u30C9": "biribiri",
-  "\u30D2\u30FC\u30EB\u30D6\u30EC\u30A4\u30AB\u30FC": "heal",
-  "\u30B3\u30D4\u30FC\u30AC\u30FC\u30C9": "copy"
-};
-var AdventNumDict = {
-  0: "-",
-  1: "\u521D\u30FB\u4E2D\u7D1A",
-  2: "\u4E2D\u30FB\u4E0A\u7D1A",
-  3: "\u8D85\u7D1A",
-  4: "\u9B54\u7D1A",
-  5: "\u7834\u6EC5\u7D1A"
-};
-var css$e = {
-  code: '.advent.svelte-xvmnbq.svelte-xvmnbq{font-family:"Kosugi Maru", sans-serif;width:71px;margin:10px}.advent.svelte-xvmnbq .smart-info-box.svelte-xvmnbq{display:flex;flex-direction:row;justify-content:space-around}.advent.svelte-xvmnbq .smart-info-box img.svelte-xvmnbq{width:60px;height:50px}.advent.svelte-xvmnbq .smart-info-box img.disable.svelte-xvmnbq{filter:grayscale(85%)}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box.svelte-xvmnbq{position:relative}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box.svelte-xvmnbq{height:100%;display:flex;flex-direction:column-reverse}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box .elem.svelte-xvmnbq{width:11px;height:11px;border-radius:6px;margin:0 0 2px 0;border:solid 2px}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box .elem.fire.svelte-xvmnbq{background-color:#db4646;border-color:#ff9100}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box .elem.water.svelte-xvmnbq{background-color:#297eff;border-color:#a7d7ff}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box .elem.wood.svelte-xvmnbq{background-color:#69ac69;border-color:#afd8ab}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box .elem.light.svelte-xvmnbq{background-color:#ffd23e;border-color:#fff09e}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box .elem.dark.svelte-xvmnbq{background-color:#9255a5;border-color:#d0acff}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box .elem.hell.svelte-xvmnbq{background-color:#311f04;border-color:#d6a609}.advent.svelte-xvmnbq .smart-info-box .elems-tribe-box .elems-box .elem.heaven.svelte-xvmnbq{background-color:#faf3f8;border-color:#ffaff8}.advent.scaleup.svelte-xvmnbq.svelte-xvmnbq{width:120px}.advent.scaleup.svelte-xvmnbq img.svelte-xvmnbq{width:120px;height:100px}.advent.svelte-xvmnbq .name.svelte-xvmnbq{text-align:center;line-height:10px;font-size:10px;width:100%;margin:3px 0 0 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.advent.svelte-xvmnbq .name.disable.svelte-xvmnbq{color:gray}',
-  map: null
-};
-var Advent = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  createEventDispatcher();
-  let { advent } = $$props;
-  let { full = false } = $$props;
-  if ($$props.advent === void 0 && $$bindings.advent && advent !== void 0)
-    $$bindings.advent(advent);
-  if ($$props.full === void 0 && $$bindings.full && full !== void 0)
-    $$bindings.full(full);
-  $$result.css.add(css$e);
-  return `<div class="${"advent " + escape(!full ? "scaleup" : "") + " svelte-xvmnbq"}"><div class="${"smart-info-box svelte-xvmnbq"}"><img class="${escape(null_to_empty(advent.disable ? "disable" : "")) + " svelte-xvmnbq"}"${add_attribute("src", advent.figure, 0)}${add_attribute("alt", advent.name, 0)}>
-        ${full ? `<div class="${"elems-tribe-box svelte-xvmnbq"}"><div class="${"elems-box svelte-xvmnbq"}">${advent.elem.includes("\u706B") ? `<div class="${"elem fire svelte-xvmnbq"}"></div>` : ``}
-                ${advent.elem.includes("\u6C34") ? `<div class="${"elem water svelte-xvmnbq"}"></div>` : ``}
-                ${advent.elem.includes("\u6728") ? `<div class="${"elem wood svelte-xvmnbq"}"></div>` : ``}
-                ${advent.elem.includes("\u5149") ? `<div class="${"elem light svelte-xvmnbq"}"></div>` : ``}
-                ${advent.elem.includes("\u95C7") ? `<div class="${"elem dark svelte-xvmnbq"}"></div>` : ``}
-                ${advent.elem.includes("\u51A5") ? `<div class="${"elem hell svelte-xvmnbq"}"></div>` : ``}
-                ${advent.elem.includes("\u5929") ? `<div class="${"elem heaven svelte-xvmnbq"}"></div>` : ``}</div></div>` : ``}</div>
-    ${full ? `<p class="${"name " + escape(advent.disable ? "disable" : "") + " svelte-xvmnbq"}">${escape(advent.name)}</p>` : ``}
-    
-</div>`;
-});
-var InfiniteScroll = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { threshold = 0 } = $$props;
-  let { horizontal = false } = $$props;
-  let { hasMore = true } = $$props;
-  createEventDispatcher();
-  let component;
-  onDestroy(() => {
-  });
-  if ($$props.threshold === void 0 && $$bindings.threshold && threshold !== void 0)
-    $$bindings.threshold(threshold);
-  if ($$props.horizontal === void 0 && $$bindings.horizontal && horizontal !== void 0)
-    $$bindings.horizontal(horizontal);
-  if ($$props.hasMore === void 0 && $$bindings.hasMore && hasMore !== void 0)
-    $$bindings.hasMore(hasMore);
-  return `<div style="${"width:0px"}"${add_attribute("this", component, 0)}></div>`;
-});
-var css$d = {
-  code: "button.svelte-1r971ov.svelte-1r971ov{font-size:14px;width:70px;color:white;border:solid 2px white;border-radius:5px}article.svelte-1r971ov.svelte-1r971ov{height:calc(100vh - 150px);overflow-y:scroll}article.svelte-1r971ov section.svelte-1r971ov{margin:0 auto;width:90vw;max-width:700px}article.svelte-1r971ov #elem-filter-box.svelte-1r971ov{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:right}article.svelte-1r971ov #elem-filter-box .elem.svelte-1r971ov{width:25px;font-size:12px;font-weight:900;text-align:center;margin:5px;border-radius:5px;border:solid 2px #929292;padding:3px}article.svelte-1r971ov #elem-filter-box .elem div.svelte-1r971ov{width:25px;height:25px;margin:0 auto;border-radius:12px}article.svelte-1r971ov #elem-filter-box .elem.active.fire.svelte-1r971ov{border-color:red;color:red;text-shadow:2px 1px 0px #ff7300}article.svelte-1r971ov #elem-filter-box .elem.active.water.svelte-1r971ov{border-color:#2c80ff;color:#2c80ff;text-shadow:2px 1px 0px #a2bfff}article.svelte-1r971ov #elem-filter-box .elem.active.wood.svelte-1r971ov{border-color:#35af00;color:#35af00;text-shadow:2px 1px 0px #2e7300}article.svelte-1r971ov #elem-filter-box .elem.active.light.svelte-1r971ov{border-color:#fff4c3;color:#ffe883;text-shadow:2px 1px 0px #ffc400}article.svelte-1r971ov #elem-filter-box .elem.active.dark.svelte-1r971ov{border-color:#c83eff;color:#c83eff;text-shadow:2px 1px 0px #db81ff}article.svelte-1r971ov #elem-filter-box .elem.active.hell.svelte-1r971ov{border-color:#ffc400;color:#3d2d00;text-shadow:2px 1px 0px #ffc400}article.svelte-1r971ov #elem-filter-box .elem.active.heaven.svelte-1r971ov{border-color:#ffb4f5;color:#f1dade;text-shadow:2px 1px 0px #ff5fea}article.svelte-1r971ov #elem-filter-box button.svelte-1r971ov{--green:#6fffcf;color:var(--green);border:solid 2px var(--green);margin:0 0 0 15px}article.svelte-1r971ov #advent-list-box.svelte-1r971ov{width:90vw}article.svelte-1r971ov #advent-list-box p.svelte-1r971ov{font-size:11px}article.svelte-1r971ov #advent-list-box #advent-list.svelte-1r971ov{max-width:700px;margin:0 auto 10px auto;height:170px;display:flex;flex-direction:column;justify-content:start;flex-wrap:wrap;overflow-x:scroll}article.svelte-1r971ov #advent-detail-box.svelte-1r971ov{margin:30px auto;width:90vw}article.svelte-1r971ov #advent-detail-box #advent-overview.svelte-1r971ov{display:flex}article.svelte-1r971ov #advent-detail-box #advent-overview #advent-overview-text.svelte-1r971ov{display:flex;flex-direction:column;justify-content:center}article.svelte-1r971ov #advent-detail-box #advent-overview #advent-overview-text h5.svelte-1r971ov{margin:5px 0}article.svelte-1r971ov #advent-detail-box #banmen-list.svelte-1r971ov{margin:10px 0 400px 0}article.svelte-1r971ov #advent-detail-box #banmen-list #banmen-moj-length-config-box.svelte-1r971ov{margin:10px 0 20px 0;max-width:350px;display:flex;justify-content:space-between}article.svelte-1r971ov #advent-detail-box #banmen-list #banmen-moj-length-config-box button.active.svelte-1r971ov{color:var(--active-yellow);border-color:var(--active-yellow)}article.svelte-1r971ov #advent-detail-box #banmen-list .banmen.svelte-1r971ov{display:flex;justify-content:space-between;align-items:center;font-size:20px;font-weight:bold;letter-spacing:3px;border-bottom:solid 1px white;padding:0 0 5px 0;margin:0 0 15px 0}article.svelte-1r971ov #advent-detail-box #banmen-list .banmen img.svelte-1r971ov{width:8px;height:15px;margin:0 20px 0 0;transition:0.5s}article.svelte-1r971ov #advent-detail-box #banmen-list .banmen.active.svelte-1r971ov{color:var(--active-yellow)}article.svelte-1r971ov #advent-detail-box #banmen-list .banmen.active img.svelte-1r971ov{transform:rotate(90deg)}article.svelte-1r971ov #advent-detail-box #answers-box.svelte-1r971ov{position:fixed;padding:15px 15px 60px 15px;z-index:100;bottom:-520px;left:0;width:100vw;height:480px;background:linear-gradient(225deg, black, rgba(0, 0, 0, 0.8));border-top:solid 2px white;transition:0.3s}article.svelte-1r971ov #advent-detail-box #answers-box.active.svelte-1r971ov{bottom:0}article.svelte-1r971ov #advent-detail-box #answers-box .answer-count.svelte-1r971ov{max-width:650px;margin:0 auto 20px auto}article.svelte-1r971ov #advent-detail-box #answers-box #answer-box-close-button.svelte-1r971ov{position:absolute;top:-30px;right:50px;width:80px;height:30px;border:solid 1px white;border-bottom:solid 2px black;border-radius:7px 7px 0 0;background:black}article.svelte-1r971ov #advent-detail-box #answers-box #answer-box-close-button-tap-area.svelte-1r971ov{position:absolute;top:-30px;right:50px;width:80px;height:100px;padding:15px 30px}article.svelte-1r971ov #advent-detail-box #answers-box #answers-list.svelte-1r971ov{width:90vw;max-width:650px;margin:0 auto;color:white;height:100%;overflow-y:scroll;display:flex;justify-content:left;flex-wrap:wrap}article.svelte-1r971ov #advent-detail-box #answers-box #answers-list .ans-box.svelte-1r971ov{width:160px;padding:0 0 0 15px;border-left:solid 3px white;margin:10px 0}article.svelte-1r971ov #advent-detail-box #answers-box #answers-list .ans-box .answer-word.svelte-1r971ov{font-size:18px}article.svelte-1r971ov #advent-detail-box #answers-box #answers-list .ans-box .answer-nessesary.svelte-1r971ov{font-size:12px}",
-  map: null
-};
-var Analyze = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $adventBanmenStore, $$unsubscribe_adventBanmenStore;
-  let $mojiLengthConfigStore, $$unsubscribe_mojiLengthConfigStore;
-  let $adventTargetStore, $$unsubscribe_adventTargetStore;
-  let $adventStore, $$unsubscribe_adventStore;
-  let $$unsubscribe_adventFilterConditionStore;
-  let $adventElemStore, $$unsubscribe_adventElemStore;
-  let $$unsubscribe_deckStore;
-  $$unsubscribe_adventBanmenStore = subscribe(adventBanmenStore, (value) => $adventBanmenStore = value);
-  $$unsubscribe_mojiLengthConfigStore = subscribe(mojiLengthConfigStore, (value) => $mojiLengthConfigStore = value);
-  $$unsubscribe_adventTargetStore = subscribe(adventTargetStore, (value) => $adventTargetStore = value);
-  $$unsubscribe_adventStore = subscribe(adventStore, (value) => $adventStore = value);
-  $$unsubscribe_adventFilterConditionStore = subscribe(adventFilterConditionStore, (value) => value);
-  $$unsubscribe_adventElemStore = subscribe(adventElemStore, (value) => $adventElemStore = value);
-  $$unsubscribe_deckStore = subscribe(deckStore, (value) => value);
-  let answerCount = 0;
-  let answerList = [];
-  $$result.css.add(css$d);
-  $$unsubscribe_adventBanmenStore();
-  $$unsubscribe_mojiLengthConfigStore();
-  $$unsubscribe_adventTargetStore();
-  $$unsubscribe_adventStore();
-  $$unsubscribe_adventFilterConditionStore();
-  $$unsubscribe_adventElemStore();
-  $$unsubscribe_deckStore();
-  return `<article class="${"com_scroll-y svelte-1r971ov"}"><section id="${"advent-list-box"}" class="${"svelte-1r971ov"}"><p class="${"svelte-1r971ov"}">\u653B\u7565\u3059\u308B\u964D\u81E8\u3092\u9078\u629E</p>
-        <div id="${"advent-list"}" class="${"com_scroll-x svelte-1r971ov"}">${`${each($adventStore, (as) => `${validate_component(Advent, "Advent").$$render($$result, { advent: as, full: true }, {}, {})}
-                ${validate_component(InfiniteScroll, "InfiniteScroll").$$render($$result, { threshold: 100 }, {}, {})}`)}`}</div></section>
-    <section id="${"elem-filter-box"}" class="${"svelte-1r971ov"}">${each($adventElemStore, (es, i) => `<div class="${"elem " + escape(ElemEngDict[es.elem]) + " " + escape(es.active ? "active" : "") + " svelte-1r971ov"}">${escape(es.elem)}</div>`)}
-        <button class="${"svelte-1r971ov"}">\u7D5E\u8FBC</button></section>
-    <section id="${"advent-detail-box"}" class="${"svelte-1r971ov"}">${`<div id="${"advent-overview"}" class="${"svelte-1r971ov"}">${$adventTargetStore ? `${validate_component(Advent, "Advent").$$render($$result, { advent: $adventTargetStore }, {}, {})}
-                <div id="${"advent-overview-text"}" class="${"svelte-1r971ov"}"><h3>${escape($adventTargetStore.name)}</h3>
-                    <h5 class="${"svelte-1r971ov"}">${escape(AdventNumDict[$adventTargetStore.level])}</h5>
-                    <h5 class="${"svelte-1r971ov"}">\u53CE\u9332\u76E4\u9762\u6570 : ${escape($adventBanmenStore.length)}</h5></div>` : ``}</div>
-            <div id="${"banmen-list"}" class="${"svelte-1r971ov"}">${$adventBanmenStore.length != 0 ? `<div id="${"banmen-moj-length-config-box"}" class="${"svelte-1r971ov"}">${each($mojiLengthConfigStore, (mlcs) => `<button class="${escape(null_to_empty(mlcs.active ? "active" : "")) + " svelte-1r971ov"}">${escape(mlcs.length)}\u6587\u5B57
-                        </button>`)}</div>` : ``}
-                ${each($adventBanmenStore, (abs) => `<div class="${"banmen " + escape(abs.active ? "active" : "") + " svelte-1r971ov"}">${escape(abs.banmen.banmen.replace(/\./g, "\u25EF"))}
-                        <img src="${"/img/arrow_simple_right.svg"}" alt="${">"}" class="${"svelte-1r971ov"}">
-                    </div>`)}</div>
-            <div id="${"answers-box"}" class="${escape(null_to_empty("")) + " svelte-1r971ov"}"><div id="${"answer-box-close-button"}" class="${"svelte-1r971ov"}"></div>
-                <div id="${"answer-box-close-button-tap-area"}" class="${"svelte-1r971ov"}"><img src="${"/img/arrow_simple_bottom.svg"}" alt="${"\u2B07\uFE0E"}" class="${"svelte-1r971ov"}"></div>
-                <div class="${"answer-count svelte-1r971ov"}">\u30D2\u30C3\u30C8\u6570 : ${escape(answerCount)}</div>
-                <div id="${"answers-list"}" class="${"com_scroll-y svelte-1r971ov"}">${`${each(answerList, (al) => `<div class="${"ans-box svelte-1r971ov"}"><div class="${"answer-word svelte-1r971ov"}">${escape(al.word)}</div>
-                                <div class="${"answer-nessesary svelte-1r971ov"}">${escape(al.necessary)}</div>
-                            </div>`)}`}</div></div>`}</section>
-
-
-</article>`;
-});
-var analyze = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": Analyze
-});
-var css$c = {
-  code: '.kotodaman.svelte-1xo4c4s.svelte-1xo4c4s{font-family:"Kosugi Maru", sans-serif;width:71px;margin:10px}.kotodaman.no-margin.svelte-1xo4c4s.svelte-1xo4c4s{display:flex;justify-content:center;align-items:center;width:70px;height:70px;margin:0px}.kotodaman.svelte-1xo4c4s .smart-info-box.svelte-1xo4c4s{display:flex;flex-direction:row;justify-content:space-around}.kotodaman.svelte-1xo4c4s .smart-info-box img.svelte-1xo4c4s{width:60px;height:50px}.kotodaman.svelte-1xo4c4s .smart-info-box img.disable.svelte-1xo4c4s{filter:grayscale(85%)}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box.svelte-1xo4c4s{position:relative}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .tribe-box.svelte-1xo4c4s{position:absolute;top:2px;left:-10px;width:19px;height:17px;background-color:#ffd726;box-shadow:1px 2px 1px white;border-radius:1px 8px}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .tribe-box.disable.svelte-1xo4c4s{color:#b6b6b6;background-color:#887e43}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .tribe-box p.svelte-1xo4c4s{font-size:14px;line-height:17px;text-align:center;text-shadow:1px 1px 2px black}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box.svelte-1xo4c4s{height:100%;display:flex;flex-direction:column-reverse}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box .elem.svelte-1xo4c4s{width:11px;height:11px;border-radius:6px;margin:0 0 2px 0;border:solid 2px}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box .elem.fire.svelte-1xo4c4s{background-color:#db4646;border-color:#ff9100}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box .elem.water.svelte-1xo4c4s{background-color:#297eff;border-color:#a7d7ff}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box .elem.wood.svelte-1xo4c4s{background-color:#69ac69;border-color:#afd8ab}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box .elem.light.svelte-1xo4c4s{background-color:#ffd23e;border-color:#fff09e}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box .elem.dark.svelte-1xo4c4s{background-color:#9255a5;border-color:#d0acff}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box .elem.hell.svelte-1xo4c4s{background-color:#311f04;border-color:#d6a609}.kotodaman.svelte-1xo4c4s .smart-info-box .elems-tribe-box .elems-box .elem.heaven.svelte-1xo4c4s{background-color:#faf3f8;border-color:#ffaff8}.kotodaman.svelte-1xo4c4s .name.svelte-1xo4c4s{text-align:center;line-height:10px;font-size:10px;width:100%;margin:3px 0 0 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.kotodaman.svelte-1xo4c4s .name.disable.svelte-1xo4c4s{color:gray}',
-  map: null
-};
-var Kotodaman = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $$unsubscribe_isDeckFullStore;
-  $$unsubscribe_isDeckFullStore = subscribe(isDeckFullStore, (value) => value);
-  createEventDispatcher();
-  let { kotodaman } = $$props;
-  let { full = false } = $$props;
-  if ($$props.kotodaman === void 0 && $$bindings.kotodaman && kotodaman !== void 0)
-    $$bindings.kotodaman(kotodaman);
-  if ($$props.full === void 0 && $$bindings.full && full !== void 0)
-    $$bindings.full(full);
-  $$result.css.add(css$c);
-  $$unsubscribe_isDeckFullStore();
-  return `<div class="${"kotodaman " + escape(!full ? "no-margin" : "") + " svelte-1xo4c4s"}"><div class="${"smart-info-box svelte-1xo4c4s"}"><img class="${escape(null_to_empty(kotodaman.disable ? "disable" : "")) + " svelte-1xo4c4s"}"${add_attribute("src", kotodaman.figure, 0)}${add_attribute("alt", kotodaman.name, 0)}>
-        ${full ? `<div class="${"elems-tribe-box svelte-1xo4c4s"}"><div class="${"tribe-box " + escape(kotodaman.disable ? "disable" : "") + " svelte-1xo4c4s"}"><p class="${"svelte-1xo4c4s"}">${escape(kotodaman.tribe[0])}</p></div>
-            
-            <div class="${"elems-box svelte-1xo4c4s"}">${kotodaman.elem.includes("\u706B") ? `<div class="${"elem fire svelte-1xo4c4s"}"></div>` : ``}
-                ${kotodaman.elem.includes("\u6C34") ? `<div class="${"elem water svelte-1xo4c4s"}"></div>` : ``}
-                ${kotodaman.elem.includes("\u6728") ? `<div class="${"elem wood svelte-1xo4c4s"}"></div>` : ``}
-                ${kotodaman.elem.includes("\u5149") ? `<div class="${"elem light svelte-1xo4c4s"}"></div>` : ``}
-                ${kotodaman.elem.includes("\u95C7") ? `<div class="${"elem dark svelte-1xo4c4s"}"></div>` : ``}
-                ${kotodaman.elem.includes("\u51A5") ? `<div class="${"elem hell svelte-1xo4c4s"}"></div>` : ``}
-                ${kotodaman.elem.includes("\u5929") ? `<div class="${"elem heaven svelte-1xo4c4s"}"></div>` : ``}</div></div>` : ``}</div>
-    ${full ? `<p class="${"name " + escape(kotodaman.disable ? "disable" : "") + " svelte-1xo4c4s"}">${escape(kotodaman.name)}</p>` : ``}
-    
-</div>`;
-});
-var css$b = {
-  code: '#specify-filter-box.svelte-z4r2ey.svelte-z4r2ey{width:100%;display:flex;flex-direction:column;justify-content:space-evenly;font-family:"Kosugi Maru", sans-serif}h3.svelte-z4r2ey.svelte-z4r2ey{margin:10px 0 0 0}#elem-box.svelte-z4r2ey.svelte-z4r2ey,#tribe-box.svelte-z4r2ey.svelte-z4r2ey,#gimmick-box.svelte-z4r2ey.svelte-z4r2ey{width:100%;display:flex;flex-direction:row;flex-wrap:wrap;justify-content:center;margin:0 0 10px 0}.elem.svelte-z4r2ey.svelte-z4r2ey{width:50px;font-size:18px;font-weight:900;text-align:center;margin:5px;border-radius:5px;border:solid 2px white;padding:3px}.elem.active.fire.svelte-z4r2ey.svelte-z4r2ey{border-color:red;color:red;text-shadow:2px 1px 0px #ff7300}.elem.active.water.svelte-z4r2ey.svelte-z4r2ey{border-color:#2c80ff;color:#2c80ff;text-shadow:2px 1px 0px #a2bfff}.elem.active.wood.svelte-z4r2ey.svelte-z4r2ey{border-color:#35af00;color:#35af00;text-shadow:2px 1px 0px #2e7300}.elem.active.light.svelte-z4r2ey.svelte-z4r2ey{border-color:#fff4c3;color:#ffe883;text-shadow:2px 1px 0px #ffc400}.elem.active.dark.svelte-z4r2ey.svelte-z4r2ey{border-color:#c83eff;color:#c83eff;text-shadow:2px 1px 0px #db81ff}.elem.active.hell.svelte-z4r2ey.svelte-z4r2ey{border-color:#ffc400;color:#3d2d00;text-shadow:2px 1px 0px #ffc400}.elem.active.heaven.svelte-z4r2ey.svelte-z4r2ey{border-color:#ffb4f5;color:#f1dade;text-shadow:2px 1px 0px #ff5fea}.elem.long.svelte-z4r2ey.svelte-z4r2ey{width:70px}.tribe.svelte-z4r2ey.svelte-z4r2ey{width:50px;height:35px;margin:5px;border-radius:5px;text-align:center;justify-content:space-around;line-height:30px;border:solid 2px white}.tribe.blank.svelte-z4r2ey.svelte-z4r2ey{border:none}.tribe.active.svelte-z4r2ey.svelte-z4r2ey{border:solid 2px var(--active-yellow);color:var(--active-yellow)}.gimmick.svelte-z4r2ey.svelte-z4r2ey{width:50px;height:40px;margin:5px;justify-content:space-around;border-radius:5px;border:solid 2px white;padding:3px}.gimmick.active.svelte-z4r2ey.svelte-z4r2ey{border:solid 2px var(--active-yellow)}.gimmick.svelte-z4r2ey img.svelte-z4r2ey{margin:0 auto;height:30px}.elem.svelte-z4r2ey.svelte-z4r2ey,.tribe.svelte-z4r2ey.svelte-z4r2ey,.gimmick.svelte-z4r2ey.svelte-z4r2ey{cursor:pointer}',
-  map: null
-};
-var Specify = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $gimmickStore, $$unsubscribe_gimmickStore;
-  let $tribeStore, $$unsubscribe_tribeStore;
-  let $elemStore, $$unsubscribe_elemStore;
-  $$unsubscribe_gimmickStore = subscribe(gimmickStore, (value) => $gimmickStore = value);
-  $$unsubscribe_tribeStore = subscribe(tribeStore, (value) => $tribeStore = value);
-  $$unsubscribe_elemStore = subscribe(elemStore, (value) => $elemStore = value);
-  $$result.css.add(css$b);
-  $$unsubscribe_gimmickStore();
-  $$unsubscribe_tribeStore();
-  $$unsubscribe_elemStore();
-  return `<article id="${"specify-filter-box"}" class="${"svelte-z4r2ey"}"><h3 class="${"svelte-z4r2ey"}">\u5C5E\u6027</h3>
-    <section id="${"elem-box"}" class="${"svelte-z4r2ey"}">${each($elemStore, (es, i) => `<div class="${"elem " + escape(ElemEngDict[es.elem]) + " " + escape(i < 3 ? "long" : "") + " " + escape(es.active ? "active" : "") + " svelte-z4r2ey"}">${escape(es.elem)}</div>`)}</section>
-    <h3 class="${"svelte-z4r2ey"}">\u7A2E\u65CF</h3>
-    <section id="${"tribe-box"}" class="${"svelte-z4r2ey"}">${each($tribeStore, (ts) => `<div class="${"tribe " + escape(TribeEngDict[ts.tribe]) + " " + escape(ts.active ? "active" : "") + " svelte-z4r2ey"}">${escape(ts.tribe)}</div>`)}
-        <div class="${"tribe blank svelte-z4r2ey"}"></div></section>
-    <h3 class="${"svelte-z4r2ey"}">\u30AE\u30DF\u30C3\u30AF</h3>
-    <section id="${"gimmick-box"}" class="${"svelte-z4r2ey"}">${each($gimmickStore, (gs) => `<div class="${"gimmick " + escape(gs.active ? "active" : "") + " svelte-z4r2ey"}"><img${add_attribute("src", `/img/bs2nd/${GimmickEngDict[gs.gimmick]}.svg`, 0)}${add_attribute("alt", gs.gimmick, 0)} class="${"svelte-z4r2ey"}"></div>`)}</section>
-</article>`;
-});
-var css$a = {
-  code: '#kana-filter-box.svelte-1dnb1gp.svelte-1dnb1gp{width:100%;font-family:"Kosugi Maru", sans-serif}#kana-filter-box.svelte-1dnb1gp p.svelte-1dnb1gp{margin:10px 0 0 0;font-size:10px}#kana-box.svelte-1dnb1gp.svelte-1dnb1gp{display:flex;justify-content:space-around;flex-wrap:wrap;--kana-box-size:38px}#kana-box.svelte-1dnb1gp .kana.svelte-1dnb1gp{cursor:pointer;border:solid 1px white;border-radius:3px;width:var(--kana-box-size);height:var(--kana-box-size);margin:2px 5px;line-height:var(--kana-box-size);text-align:center}#kana-box.svelte-1dnb1gp .kana.active.svelte-1dnb1gp{border-color:var(--active-yellow);color:var(--active-yellow)}#kana-box.svelte-1dnb1gp .kana-blank.svelte-1dnb1gp{width:var(--kana-box-size);height:var(--kana-box-size);margin:2px}',
-  map: null
-};
-var Kana = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $kanaStore, $$unsubscribe_kanaStore;
-  $$unsubscribe_kanaStore = subscribe(kanaStore, (value) => $kanaStore = value);
-  $$result.css.add(css$a);
-  $$unsubscribe_kanaStore();
-  return `<article id="${"kana-filter-box"}" class="${"svelte-1dnb1gp"}"><section id="${"kana-box"}" class="${"svelte-1dnb1gp"}">${each($kanaStore, (k) => `${k.kanas[0] != "" ? `<div class="${"kana " + escape(k.active ? "active" : "") + " svelte-1dnb1gp"}">${escape(k.kanas[0])}
-                </div>` : `<div class="${"kana-blank svelte-1dnb1gp"}"></div>`}`)}</section>
-    <p class="${"svelte-1dnb1gp"}">* \u6FC1\u97F3\u3084\u4FC3\u97F3\u306A\u3069\u306F\u3001\u5168\u3066\u305D\u306E\u76F4\u97F3\u306B\u542B\u307E\u308C\u307E\u3059\u3002</p>
-</article>`;
-});
-var css$9 = {
-  code: "#bs2nd-edit-filter-panel.svelte-lv4ubr.svelte-lv4ubr.svelte-lv4ubr{padding:5px;width:100%;height:100%;position:relative}#bs2nd-edit-filter-panel.svelte-lv4ubr .tabbox.svelte-lv4ubr.svelte-lv4ubr{margin-bottom:10px;padding:10px;border:1px solid #dee2e6;border-radius:0 0 0.5rem 0.5rem;border-top:0}#bs2nd-edit-filter-panel.svelte-lv4ubr ul.svelte-lv4ubr.svelte-lv4ubr{display:flex;flex-wrap:wrap;padding-left:0;margin:0 0;list-style:none;border-bottom:1px solid #dee2e6}#bs2nd-edit-filter-panel.svelte-lv4ubr li.svelte-lv4ubr.svelte-lv4ubr{width:50%;text-align:center;margin-bottom:-1px}#bs2nd-edit-filter-panel.svelte-lv4ubr span.svelte-lv4ubr.svelte-lv4ubr{border:1px solid transparent;border-top-left-radius:0.25rem;border-top-right-radius:0.25rem;display:block;padding:0.5rem 1rem;cursor:pointer;transition:0.3s}#bs2nd-edit-filter-panel.svelte-lv4ubr span.svelte-lv4ubr.svelte-lv4ubr:hover{border-color:#e9ecef #e9ecef #dee2e6}#bs2nd-edit-filter-panel.svelte-lv4ubr li.active.svelte-lv4ubr>span.svelte-lv4ubr{border-color:#dee2e6 #dee2e6 #fff}#bs2nd-edit-filter-panel.svelte-lv4ubr #filter-execute-box.svelte-lv4ubr.svelte-lv4ubr{position:absolute;bottom:25px;width:100%;text-align:center}#bs2nd-edit-filter-panel.svelte-lv4ubr #filter-execute-box button.svelte-lv4ubr.svelte-lv4ubr{margin:0 10px;border:solid 1px white;border-radius:5px;color:white;width:110px;height:35px}",
-  map: null
-};
-var Main = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $$unsubscribe_gimmickStore;
-  let $$unsubscribe_tribeStore;
-  let $$unsubscribe_elemStore;
-  let $$unsubscribe_kanaStore;
-  let $$unsubscribe_isSettingFilterCondition;
-  let $$unsubscribe_isListLoading;
-  let $$unsubscribe_filterConditionStore;
-  let $$unsubscribe_unitListStore;
-  let $$unsubscribe_deckStore;
-  let $$unsubscribe_isBottomOfScroll;
-  $$unsubscribe_gimmickStore = subscribe(gimmickStore, (value) => value);
-  $$unsubscribe_tribeStore = subscribe(tribeStore, (value) => value);
-  $$unsubscribe_elemStore = subscribe(elemStore, (value) => value);
-  $$unsubscribe_kanaStore = subscribe(kanaStore, (value) => value);
-  $$unsubscribe_isSettingFilterCondition = subscribe(isSettingFilterCondition, (value) => value);
-  $$unsubscribe_isListLoading = subscribe(isListLoading, (value) => value);
-  $$unsubscribe_filterConditionStore = subscribe(filterConditionStore, (value) => value);
-  $$unsubscribe_unitListStore = subscribe(unitListStore, (value) => value);
-  $$unsubscribe_deckStore = subscribe(deckStore, (value) => value);
-  $$unsubscribe_isBottomOfScroll = subscribe(isBottomOfScroll, (value) => value);
-  createEventDispatcher();
-  let tabs = [
-    {
-      label: "\u7A2E\u5225",
-      value: 1,
-      component: Specify
-    },
-    { label: "50\u97F3", value: 2, component: Kana }
-  ];
-  let activeTabs = 1;
-  $$result.css.add(css$9);
-  $$unsubscribe_gimmickStore();
-  $$unsubscribe_tribeStore();
-  $$unsubscribe_elemStore();
-  $$unsubscribe_kanaStore();
-  $$unsubscribe_isSettingFilterCondition();
-  $$unsubscribe_isListLoading();
-  $$unsubscribe_filterConditionStore();
-  $$unsubscribe_unitListStore();
-  $$unsubscribe_deckStore();
-  $$unsubscribe_isBottomOfScroll();
-  return `<article id="${"bs2nd-edit-filter-panel"}" class="${"svelte-lv4ubr"}"><ul class="${"svelte-lv4ubr"}">${each(tabs, (t) => `<li class="${escape(null_to_empty(activeTabs === t.value ? "active" : "")) + " svelte-lv4ubr"}"><span class="${"svelte-lv4ubr"}">${escape(t.label)}</span>
-            </li>`)}</ul>
-    ${each(tabs, (t) => `${activeTabs == t.value ? `<div class="${"tabbox svelte-lv4ubr"}">${validate_component(t.component || missing_component, "svelte:component").$$render($$result, {}, {}, {})}
-        </div>` : ``}`)}
-    <section id="${"filter-execute-box"}" class="${"svelte-lv4ubr"}"><button id="${"search-button"}" class="${"svelte-lv4ubr"}">\u691C\u7D22</button>
-        <button id="${"reset-button"}" class="${"svelte-lv4ubr"}">\u30EA\u30BB\u30C3\u30C8</button></section>
-</article>`;
-});
-var css$8 = {
-  code: '#deck-list-panel.svelte-zpytjz.svelte-zpytjz{font-family:"Kosugi Maru", sans-serif;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-between}#deck-list-panel.svelte-zpytjz .deck-box.svelte-zpytjz{width:100%;height:100px;position:relative}#deck-list-panel.svelte-zpytjz .deck-box .deck-name.svelte-zpytjz{position:absolute;color:white;background:none;border:none;z-index:15;width:150px;font-size:15px;top:20px;left:10px}#deck-list-panel.svelte-zpytjz .deck-box .deck-name.svelte-zpytjz:focus{outline:none;border:solid 1px var(--active-yellow);border-radius:5px}#deck-list-panel.svelte-zpytjz .deck-box .deck-thumbnail.svelte-zpytjz{position:absolute;top:10px;right:0;width:70%;height:80px}#deck-list-panel.svelte-zpytjz .deck-box .deck-thumbnail .deck-img.svelte-zpytjz{position:absolute;width:100%;height:inherit;background-image:var(--url);background-size:cover;background-position:50% 30%;background-repeat:no-repeat;background-blend-mode:screen}#deck-list-panel.svelte-zpytjz .deck-box .deck-thumbnail .deck-img-blank.svelte-zpytjz{position:absolute;right:40px;top:20px;width:auto;height:40px;background-image:var(--url-blank)}#deck-list-panel.svelte-zpytjz .deck-box .deck-thumbnail .deck-img-filter.svelte-zpytjz{position:absolute;width:100%;height:100%;background:linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0))}#deck-list-panel.svelte-zpytjz .deck-box .deck-list.svelte-zpytjz{position:absolute;z-index:10;left:10px;bottom:0px;width:180px;display:flex;flex-direction:row;flex-wrap:wrap-reverse}#deck-list-panel.svelte-zpytjz .deck-box .deck-list img.svelte-zpytjz{width:25px;margin:0 3px 0 0}#deck-list-panel.svelte-zpytjz .deck-box .deck-delete-button.svelte-zpytjz{position:absolute;bottom:0;right:10px}#deck-list-panel.svelte-zpytjz .deck-box .deck-delete-button img.svelte-zpytjz{width:30px}',
-  map: null
-};
-var Storage = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $$unsubscribe_unitListStore;
-  let $$unsubscribe_deckStore;
-  let $decks, $$unsubscribe_decks;
-  let $$unsubscribe_isDeckFullStore;
-  $$unsubscribe_unitListStore = subscribe(unitListStore, (value) => value);
-  $$unsubscribe_deckStore = subscribe(deckStore, (value) => value);
-  $$unsubscribe_decks = subscribe(decks, (value) => $decks = value);
-  $$unsubscribe_isDeckFullStore = subscribe(isDeckFullStore, (value) => value);
-  createEventDispatcher();
-  console.log($decks);
-  $$result.css.add(css$8);
-  $$unsubscribe_unitListStore();
-  $$unsubscribe_deckStore();
-  $$unsubscribe_decks();
-  $$unsubscribe_isDeckFullStore();
-  return `<section id="${"deck-list-panel"}" class="${"svelte-zpytjz"}">${each($decks, (d) => `${d.list.length != 0 ? `<div class="${"deck-box svelte-zpytjz"}"><input placeholder="${"deck name"}" class="${"deck-name svelte-zpytjz"}"${add_attribute("value", d.deckname, 0)}>
-            <div class="${"deck-thumbnail svelte-zpytjz"}"><div class="${"deck-img svelte-zpytjz"}" style="${"--url:url(" + escape(d.list[0].figure) + ")"}"></div>
-                <div class="${"deck-img-filter svelte-zpytjz"}"></div></div>
-            <div class="${"deck-list svelte-zpytjz"}">${each(d.list, (dl, i) => `${i != 0 ? `<img${add_attribute("src", dl.figure, 0)} alt="${""}" class="${"svelte-zpytjz"}">` : ``}`)}</div>
-            <div class="${"deck-delete-button svelte-zpytjz"}"><img src="${"/img/trash.svg"}" alt="${"\u524A\u9664"}" class="${"svelte-zpytjz"}"></div>
-        </div>` : `<div class="${"deck-box svelte-zpytjz"}"><input style="${"color:gray;"}" class="${"deck-name svelte-zpytjz"}"${add_attribute("value", "Empty", 0)} ${"disabled"}>
-            <div class="${"deck-thumbnail svelte-zpytjz"}"><img class="${"deck-img-blank svelte-zpytjz"}" src="${"/img/add_people.svg"}" alt="${"add deck"}"></div>
-        </div>`}`)}
-</section>`;
-});
-var css$7 = {
-  code: "#bs2nd-screen.svelte-18a0dkd.svelte-18a0dkd{margin:0 auto;height:calc(100vh - 120px);overflow:hidden;display:flex;flex-direction:row;justify-content:space-evenly}#bs2nd-screen.svelte-18a0dkd #bs2nd-edit-panels.svelte-18a0dkd{max-width:90vw;height:100%;display:flex;flex-direction:column;justify-content:space-around}#bs2nd-screen.svelte-18a0dkd #bs2nd-edit-panels #bs2nd-deck-edit.svelte-18a0dkd{margin:10px auto 10px auto}#bs2nd-screen.svelte-18a0dkd #bs2nd-edit-panels #bs2nd-deck-edit #bs2nd-deck-edit-panel.svelte-18a0dkd{height:225px;width:300px;margin:0 0 5px 0;background:white;border-radius:20px;display:flex;flex-direction:row;justify-content:space-evenly;flex-wrap:wrap}#bs2nd-screen.svelte-18a0dkd #bs2nd-edit-panels #bs2nd-deck-edit #bs2nd-deck-edit-panel .unit-in-deck-blank-slot.svelte-18a0dkd{width:50px;height:50px;border-radius:25px;margin:10px;background-color:#333333}#bs2nd-screen.svelte-18a0dkd #bs2nd-edit-panels #bs2nd-deck-edit button.svelte-18a0dkd{width:100px;margin:0 0 0 15px;border:solid 1px white;border-radius:10px;color:white;font-size:12px}#bs2nd-screen.svelte-18a0dkd #bs2nd-edit-panels #bs2nd-show-units-panel.svelte-18a0dkd{flex-grow:2;overflow-y:scroll;display:flex;flex-direction:row;justify-content:center;flex-wrap:wrap;margin:10px 0 15px 0;width:100%;max-width:400px;border:solid 2px white;border-radius:20px;padding:25px 0 200px 0}#bs2nd-screen.svelte-18a0dkd #bs2nd-edit-panels #bs2nd-show-units-panel.svelte-18a0dkd::-webkit-scrollbar{width:5px}#bs2nd-screen.svelte-18a0dkd #bs2nd-edit-panels #bs2nd-show-units-panel.svelte-18a0dkd::-webkit-scrollbar-thumb{border-radius:2px}#bs2nd-screen.svelte-18a0dkd .panel-box h2.svelte-18a0dkd{margin:0 0 5px 0}#bs2nd-screen.svelte-18a0dkd .panel-box p.svelte-18a0dkd{margin:0 0 25px 0;font-size:12px}#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-slider.svelte-18a0dkd{position:fixed;top:50px;right:-250px;border:solid 2px white;border-radius:20px 0 0 20px}#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-panel.svelte-18a0dkd{border:solid 2px white;border-radius:10px}#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-slider.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-panel.svelte-18a0dkd{width:250px;height:550px;background:linear-gradient(90deg, black, rgba(0, 0, 0, 0.7));transition:0.3s;padding:5px 0 5px 5px}#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-slider.open.svelte-18a0dkd{right:-3px}#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-slider #bs2nd-deck-select-slider-button.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-panel #bs2nd-deck-select-slider-button.svelte-18a0dkd{position:absolute;border-top:solid 2px white;border-left:solid 2px white;border-bottom:solid 2px white;border-right:solid 4px black;background-color:black;border-radius:15px 0 0 15px;top:200px;left:-59px;width:60px;height:60px}#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-slider #bs2nd-deck-select-slider-button img.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-panel #bs2nd-deck-select-slider-button img.svelte-18a0dkd{width:40px;margin:8px auto;transition:0.5s 0.3s}#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-slider #bs2nd-deck-select-slider-button img.open.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-deck-select-panel #bs2nd-deck-select-slider-button img.open.svelte-18a0dkd{transform:rotate(180deg)}#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-slider.svelte-18a0dkd{position:fixed;bottom:80px;right:-300px;width:300px;height:600px;border:solid 2px white;border-radius:15px 0 0 15px}#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-panel.svelte-18a0dkd{width:300px;height:600px;border:solid 2px white;border-radius:10px}#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-slider.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-panel.svelte-18a0dkd{background:linear-gradient(45deg, black, rgba(0, 0, 0, 0.7));transition:0.3s;padding:5px}#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-slider.open.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-panel.open.svelte-18a0dkd{right:0}#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-slider #bs2nd-units-filter-slider-button.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-panel #bs2nd-units-filter-slider-button.svelte-18a0dkd{position:absolute;border-top:solid 2px white;border-left:solid 2px white;border-bottom:solid 2px white;border-right:solid 4px black;background-color:black;border-radius:15px 0 0 15px;bottom:10px;left:-59px;width:60px;height:60px}#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-slider #bs2nd-units-filter-slider-button img.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-panel #bs2nd-units-filter-slider-button img.svelte-18a0dkd{width:40px;margin:8px auto;transition:0.5s 0.3s}#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-slider #bs2nd-units-filter-slider-button img.open.svelte-18a0dkd,#bs2nd-screen.svelte-18a0dkd #bs2nd-units-filter-panel #bs2nd-units-filter-slider-button img.open.svelte-18a0dkd{transform:rotate(180deg)}",
-  map: null
-};
-var Edit$1 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $$unsubscribe_isDeckFullStore;
-  let $deckStore, $$unsubscribe_deckStore;
-  let $unitListStore, $$unsubscribe_unitListStore;
-  let $isListLoading, $$unsubscribe_isListLoading;
-  let $$unsubscribe_isBottomOfScroll;
-  let $$unsubscribe_filterConditionStore;
-  $$unsubscribe_isDeckFullStore = subscribe(isDeckFullStore, (value) => value);
-  $$unsubscribe_deckStore = subscribe(deckStore, (value) => $deckStore = value);
-  $$unsubscribe_unitListStore = subscribe(unitListStore, (value) => $unitListStore = value);
-  $$unsubscribe_isListLoading = subscribe(isListLoading, (value) => $isListLoading = value);
-  $$unsubscribe_isBottomOfScroll = subscribe(isBottomOfScroll, (value) => value);
-  $$unsubscribe_filterConditionStore = subscribe(filterConditionStore, (value) => value);
-  $$result.css.add(css$7);
-  $$unsubscribe_isDeckFullStore();
-  $$unsubscribe_deckStore();
-  $$unsubscribe_unitListStore();
-  $$unsubscribe_isListLoading();
-  $$unsubscribe_isBottomOfScroll();
-  $$unsubscribe_filterConditionStore();
-  return `<article id="${"bs2nd-screen"}" class="${"svelte-18a0dkd"}">${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
-    default: ({ matches }) => `${matches ? `
-        <section class="${"panel-box"}"><h2 class="${"svelte-18a0dkd"}">\u7D5E\u308A\u8FBC\u307F</h2>
-            <p class="${"svelte-18a0dkd"}">\u672C\u5BB6\u30B2\u30FC\u30E0\u3068\u307B\u307C\u540C\u3058\u8981\u9818\u3067\u3001<br>\u30AD\u30E3\u30E9\u306E\u7D5E\u308A\u8FBC\u307F\u691C\u7D22\u304C\u3067\u304D\u307E\u3059\u3002</p>
-            <section id="${"bs2nd-units-filter-panel"}" class="${escape(null_to_empty("")) + " svelte-18a0dkd"}">${validate_component(Main, "EditCompMain").$$render($$result, {}, {}, {})}
-                <div id="${"bs2nd-units-filter-slider-button"}" class="${"svelte-18a0dkd"}"><img class="${escape(null_to_empty("")) + " svelte-18a0dkd"}" src="${"/img/arrow-circle-left-solid.svg"}" alt="${"\u21E6"}"></div></section></section>
-        
-    ` : ``}`
-  })}
-    <section id="${"bs2nd-edit-panels"}" class="${"svelte-18a0dkd"}"><section id="${"bs2nd-deck-edit"}" class="${"svelte-18a0dkd"}"><section id="${"bs2nd-deck-edit-panel"}" class="${"svelte-18a0dkd"}">${each($deckStore, (unit) => `${unit == void 0 ? `<div class="${"unit-in-deck-blank-slot svelte-18a0dkd"}"></div>` : `${validate_component(Kotodaman, "Kotodaman").$$render($$result, { kotodaman: unit }, {}, {})}`}`)}</section>
-            <button class="${"svelte-18a0dkd"}">\u30EA\u30BB\u30C3\u30C8</button></section>
-        <section id="${"bs2nd-show-units-panel"}" class="${"svelte-18a0dkd"}">${each($unitListStore, (unit) => `${validate_component(Kotodaman, "Kotodaman").$$render($$result, { kotodaman: unit, full: true }, {}, {})}`)}
-            ${$isListLoading ? `<div style="${"margin-top:80px"}">${validate_component(Bs2ndLoader, "Bs2ndLoader").$$render($$result, {}, {}, {})}</div>` : ``}
-            ${``}
-            ${validate_component(InfiniteScroll, "InfiniteScroll").$$render($$result, { threshold: 100 }, {}, {})}</section></section>
-    ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
-    default: ({ matches }) => `${matches ? `
-    <section id="${"bs2nd-deck-select-slider"}" class="${escape(null_to_empty("")) + " svelte-18a0dkd"}">${validate_component(Storage, "Storage").$$render($$result, {}, {}, {})}
-        <div id="${"bs2nd-deck-select-slider-button"}" class="${"svelte-18a0dkd"}"><img class="${escape(null_to_empty("")) + " svelte-18a0dkd"}" src="${"/img/arrow-circle-left-solid.svg"}" alt="${"\u21E6"}"></div></section>
-    <section id="${"bs2nd-units-filter-slider"}" class="${escape(null_to_empty("")) + " svelte-18a0dkd"}">${validate_component(Main, "EditCompMain").$$render($$result, {}, {}, {})}
-        <div id="${"bs2nd-units-filter-slider-button"}" class="${"svelte-18a0dkd"}"><img class="${escape(null_to_empty("")) + " svelte-18a0dkd"}" src="${"/img/arrow-circle-left-solid.svg"}" alt="${"\u21E6"}"></div></section>
-    ` : ``}`
-  })}
-
-    ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
-    default: ({ matches }) => `${matches ? `
-    <section class="${"panel-box"}"><h2 class="${"svelte-18a0dkd"}">\u30C7\u30C3\u30AD\u30B9\u30C8\u30EC\u30FC\u30B8</h2>
-        <p class="${"svelte-18a0dkd"}">\u7DE8\u6210\u3057\u305F\u30C7\u30C3\u30AD\u3092\u4FDD\u5B58\u3067\u304D\u307E\u3059\u3002<br>\u30C7\u30C3\u30AD\u306F\u3001\u3053\u306E\u30D6\u30E9\u30A6\u30B6\u306E<br>\u30ED\u30FC\u30AB\u30EB\u30B9\u30C8\u30EC\u30FC\u30B8\u306B\u4FDD\u5B58\u3055\u308C\u307E\u3059\u3002</p>
-        <section id="${"bs2nd-deck-select-panel"}" class="${"svelte-18a0dkd"}">${validate_component(Storage, "Storage").$$render($$result, {}, {}, {})}</section></section>
-    ` : ``}`
-  })}
-</article>`;
-});
-var edit$1 = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": Edit$1
-});
-var Post = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  return ``;
-});
-var post = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": Post
-});
-var Collect = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  return ``;
-});
-var collect = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": Collect
-});
-var cardWidth = readable(90);
-readable(110);
-var modeStore = writable("dark");
-var movingStore = writable(false);
-var exDeckListStore = writable([]);
-var deckListStore = writable([]);
-var handListStore = writable([]);
-var boardListStore = writable([]);
-var unshuffleDeckListStore = writable([]);
-var unshuffleExDeckListStore = writable([]);
-var boardAreaInfoStore = writable({ top: 0, left: 0, right: 0, bottom: 0 });
-var handAreaInfoStore = writable({ top: 0, left: 0, right: 0, bottom: 0 });
-var deckAreaInfoStore = writable({ top: 0, left: 0, right: 0, bottom: 0 });
-var css$6 = {
-  code: '@charset "UTF-8";:root{--header-height:40px;--cw:90px;--ch:110px}#tcg-all-compnents.svelte-s84rdq.svelte-s84rdq{display:flex;justify-content:space-between;top:0;left:0;right:0;bottom:0;overflow-y:scroll;-ms-overflow-style:none;scrollbar-width:none}#tcg-all-compnents.svelte-s84rdq.svelte-s84rdq::-webkit-scrollbar{display:none}header.svelte-s84rdq.svelte-s84rdq{display:flex;justify-content:space-between;height:var(--header-height)}header.svelte-s84rdq .n2-logo.svelte-s84rdq{padding:10px}header.svelte-s84rdq .n2-logo img.svelte-s84rdq{height:20px}header.svelte-s84rdq .color-config.svelte-s84rdq{margin:0 20px 0 0;display:flex;align-items:center}header.svelte-s84rdq .color-config button.svelte-s84rdq{width:25px;height:25px;margin:0 7px;border-radius:7px}header.svelte-s84rdq .color-config .light.svelte-s84rdq{background:white}header.svelte-s84rdq .color-config .dark.svelte-s84rdq{background:darkblue}#screen.svelte-s84rdq.svelte-s84rdq{display:flex;flex-direction:column;justify-content:center;width:calc(100vw - 70px);height:calc(100vh - 40px)}#screen.svelte-s84rdq #base.svelte-s84rdq{width:1100px;height:760px;margin:0 auto;-moz-perspective:500;-webkit-perspective:500;-o-perspective:500;-ms-perspective:500;perspective:500}#screen.svelte-s84rdq #base.light.svelte-s84rdq{background:white;background:radial-gradient(circle at bottom, white 0%, #ffecc0 100%)}#screen.svelte-s84rdq #base.dark.svelte-s84rdq{background:#24186e;background:radial-gradient(circle at bottom, #24186e 0%, black 100%)}footer.svelte-s84rdq.svelte-s84rdq{top:0;bottom:0;right:0;width:70px;display:flex;flex-direction:column;justify-content:space-around}footer.light.svelte-s84rdq.svelte-s84rdq{background:white}footer.dark.svelte-s84rdq.svelte-s84rdq{background:black}footer.svelte-s84rdq a div.svelte-s84rdq{width:50px;height:50px;background:yellow}',
-  map: null
-};
-var _layout_reset = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $modeStore, $$unsubscribe_modeStore;
-  $$unsubscribe_modeStore = subscribe(modeStore, (value) => $modeStore = value);
-  $$result.css.add(css$6);
-  $$unsubscribe_modeStore();
-  return `<header class="${"svelte-s84rdq"}"><div class="${"n2-logo svelte-s84rdq"}"><a href="${"/"}"><img src="${"/img/n2-icon-white.svg"}" alt="${""}" class="${"svelte-s84rdq"}"></a></div>
-    <div class="${"color-config svelte-s84rdq"}"><button class="${"light svelte-s84rdq"}"></button>
-        <button class="${"dark svelte-s84rdq"}"></button></div></header>
-<div id="${"tcg-all-compnents"}" class="${"svelte-s84rdq"}"><article id="${"screen"}" class="${"svelte-s84rdq"}"><section id="${"base"}" class="${escape(null_to_empty($modeStore)) + " svelte-s84rdq"}">${slots.default ? slots.default({}) : ``}</section></article>
-    
-    <footer class="${escape(null_to_empty($modeStore)) + " svelte-s84rdq"}"><a href="${"/app/tcg-simulator/game"}"><div class="${"svelte-s84rdq"}"></div></a>
-        <a href="${"/app/tcg-simulator/edit"}"><div class="${"svelte-s84rdq"}"></div></a></footer></div>
-${validate_component(ToastArea, "ToastArea").$$render($$result, {}, {}, {})}`;
-});
-var __layout_reset = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": _layout_reset
-});
-var css$5 = {
-  code: ":root{--guide-color:#ffbb00}img.svelte-e02kpp.svelte-e02kpp{-webkit-user-drag:none;border-radius:5px}.card-body.svelte-e02kpp.svelte-e02kpp{position:absolute;z-index:100;left:var(--pos_x);top:var(--pos_y);width:var(--cw);height:var(--ch);cursor:move}.card-body.noBoard.svelte-e02kpp.svelte-e02kpp{transition:0.2s}.card-body.movin.svelte-e02kpp.svelte-e02kpp{transition:none}.card-body.movin.svelte-e02kpp .card-surface.svelte-e02kpp{filter:grayscale(100%) blur(2px)}.card-body.noGuide.svelte-e02kpp .card-surface.svelte-e02kpp{filter:none}.card-body.svelte-e02kpp .card-surface.svelte-e02kpp{position:absolute;transform:rotate(var(--rotate));transition:0.2s;width:100%;height:100%;-moz-perspective:500;-webkit-perspective:500;-o-perspective:500;-ms-perspective:500;perspective:500;transition:0.2s}.card-body.svelte-e02kpp .card-surface .front.svelte-e02kpp,.card-body.svelte-e02kpp .card-surface .back.svelte-e02kpp{transition:0.2s;position:absolute;left:8px;backface-visibility:hidden}.card-body.svelte-e02kpp .card-surface .front img.svelte-e02kpp,.card-body.svelte-e02kpp .card-surface .back img.svelte-e02kpp{width:calc(var(--cw) - 16px);z-index:10000}.card-body.svelte-e02kpp .card-surface .back.svelte-e02kpp{transform:rotateY(-180deg)}.card-body.svelte-e02kpp .card-surface.flippin .front.svelte-e02kpp{transform:rotateY(-180deg)}.card-body.svelte-e02kpp .card-surface.flippin .back.svelte-e02kpp{transform:rotateY(0deg)}.card-body.svelte-e02kpp .card-guide.svelte-e02kpp{position:absolute;--scaleup-width:10px;--scaleup-height:50px;left:calc(-1 * var(--scaleup-width) / 2);top:calc(-1 * var(--scaleup-height) / 2);width:calc(var(--cw) + var(--scaleup-width));height:calc(var(--ch) + var(--scaleup-height));border-radius:10px}.card-body.svelte-e02kpp .card-guide.hover.svelte-e02kpp{border:solid 2px var(--guide-color)}.card-body.svelte-e02kpp .card-guide.hover button.svelte-e02kpp{opacity:0.6;padding:0;position:absolute;--b-width:50%;--b-height:25px;--b-width-long:60px;--b-height-long:70px;--b-bradius:8px;width:var(--b-width);height:var(--b-height);background-color:var(--guide-color)}.card-body.svelte-e02kpp .card-guide.hover button.left-rotate.svelte-e02kpp{top:0;left:0}.card-body.svelte-e02kpp .card-guide.hover button.right-rotate.svelte-e02kpp{top:0;right:0}.card-body.svelte-e02kpp .card-guide.hover button.flip.svelte-e02kpp{bottom:0;left:0;right:0;width:100%;height:var(--b-height)}.card-body.svelte-e02kpp .card-shadow.svelte-e02kpp{position:absolute;--scaleup-width:20px;--scaleup-height:50px;left:calc(-1 * var(--scaleup-width) / 2);top:calc(-1 * var(--scaleup-height) * 2);width:calc(var(--cw) + var(--scaleup-width));height:calc(var(--ch) + var(--scaleup-height))}",
-  map: null
-};
-var Card = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $$unsubscribe_boardListStore;
-  let $movingStore, $$unsubscribe_movingStore;
-  let $$unsubscribe_deckAreaInfoStore;
-  let $$unsubscribe_handAreaInfoStore;
-  let $$unsubscribe_boardAreaInfoStore;
-  $$unsubscribe_boardListStore = subscribe(boardListStore, (value) => value);
-  $$unsubscribe_movingStore = subscribe(movingStore, (value) => $movingStore = value);
-  $$unsubscribe_deckAreaInfoStore = subscribe(deckAreaInfoStore, (value) => value);
-  $$unsubscribe_handAreaInfoStore = subscribe(handAreaInfoStore, (value) => value);
-  $$unsubscribe_boardAreaInfoStore = subscribe(boardAreaInfoStore, (value) => value);
-  createEventDispatcher();
-  let { id } = $$props;
-  let { pos_x } = $$props;
-  let { pos_y } = $$props;
-  let { onArea = "board" } = $$props;
-  let { img_url } = $$props;
-  let { sleeve_url } = $$props;
-  let { rotate = 0 } = $$props;
-  let { noGuide = false } = $$props;
-  let { flippin = false } = $$props;
-  if ($$props.id === void 0 && $$bindings.id && id !== void 0)
-    $$bindings.id(id);
-  if ($$props.pos_x === void 0 && $$bindings.pos_x && pos_x !== void 0)
-    $$bindings.pos_x(pos_x);
-  if ($$props.pos_y === void 0 && $$bindings.pos_y && pos_y !== void 0)
-    $$bindings.pos_y(pos_y);
-  if ($$props.onArea === void 0 && $$bindings.onArea && onArea !== void 0)
-    $$bindings.onArea(onArea);
-  if ($$props.img_url === void 0 && $$bindings.img_url && img_url !== void 0)
-    $$bindings.img_url(img_url);
-  if ($$props.sleeve_url === void 0 && $$bindings.sleeve_url && sleeve_url !== void 0)
-    $$bindings.sleeve_url(sleeve_url);
-  if ($$props.rotate === void 0 && $$bindings.rotate && rotate !== void 0)
-    $$bindings.rotate(rotate);
-  if ($$props.noGuide === void 0 && $$bindings.noGuide && noGuide !== void 0)
-    $$bindings.noGuide(noGuide);
-  if ($$props.flippin === void 0 && $$bindings.flippin && flippin !== void 0)
-    $$bindings.flippin(flippin);
-  $$result.css.add(css$5);
-  $$unsubscribe_boardListStore();
-  $$unsubscribe_movingStore();
-  $$unsubscribe_deckAreaInfoStore();
-  $$unsubscribe_handAreaInfoStore();
-  $$unsubscribe_boardAreaInfoStore();
-  return `
-
-
-<section class="${"card-body " + escape("") + " " + escape(noGuide ? "noGuide" : "") + " " + escape(onArea != "board" ? "noBoard" : "") + " svelte-e02kpp"}" style="${"--pos_x:" + escape(pos_x) + "px; --pos_y:" + escape(pos_y) + "px;--img:" + escape(img_url) + "; --rotate:" + escape(rotate) + "deg;"}">${!$movingStore ? `<div class="${"card-guide " + escape("") + " svelte-e02kpp"}">${``}</div>` : ``}
-    <div class="${"card-surface " + escape(flippin ? "flippin" : "") + " svelte-e02kpp"}"><div class="${"front svelte-e02kpp"}"><img${add_attribute("src", img_url, 0)} alt="${""}" class="${"svelte-e02kpp"}"></div>
-        <div class="${"back svelte-e02kpp"}"><img${add_attribute("src", sleeve_url, 0)} alt="${""}" class="${"svelte-e02kpp"}"></div></div>
-
-    ${``}
-    
-</section>`;
-});
-var css$4 = {
-  code: "#deckArea.svelte-1kk6kdi.svelte-1kk6kdi{position:relative}#deckArea.light.svelte-1kk6kdi.svelte-1kk6kdi{--deck-bg-color-top:#0a2ea5;--deck-bg-color-center:#324892;--deck-bg-color-bottom:#130069}#deckArea.dark.svelte-1kk6kdi.svelte-1kk6kdi{--deck-bg-color-top:#0a2ea5;--deck-bg-color-center:#83a0ff;--deck-bg-color-bottom:#130069}#deckPiling.svelte-1kk6kdi.svelte-1kk6kdi{position:relative;width:var(--ch);height:var(--cw)}#deckPiling.svelte-1kk6kdi .deckbottom.svelte-1kk6kdi{position:absolute;--round-len:300px;width:calc(var(--round-len) / 2);height:var(--round-len);top:-90px;left:0;overflow:hidden}#deckPiling.svelte-1kk6kdi .deckbottom .round.svelte-1kk6kdi{position:absolute;right:0;width:var(--round-len);height:var(--round-len);border-radius:200px;overflow:hidden}#deckPiling.svelte-1kk6kdi .deckbottom .round .round-top.svelte-1kk6kdi,#deckPiling.svelte-1kk6kdi .deckbottom .round .round-center.svelte-1kk6kdi,#deckPiling.svelte-1kk6kdi .deckbottom .round .round-bottom.svelte-1kk6kdi{position:absolute;width:var(--round-len);height:calc(var(--round-len) / 3)}#deckPiling.svelte-1kk6kdi .deckbottom .round .round-top.svelte-1kk6kdi{top:0;background:var(--deck-bg-color-top)}#deckPiling.svelte-1kk6kdi .deckbottom .round .round-center.svelte-1kk6kdi{top:50%;transform:translate(0, -50%);background:var(--deck-bg-color-center)}#deckPiling.svelte-1kk6kdi .deckbottom .round .round-bottom.svelte-1kk6kdi{bottom:0;background:var(--deck-bg-color-bottom)}",
-  map: null
-};
-var Deck = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $deckListStore, $$unsubscribe_deckListStore;
-  let $modeStore, $$unsubscribe_modeStore;
-  $$unsubscribe_deckListStore = subscribe(deckListStore, (value) => $deckListStore = value);
-  $$unsubscribe_modeStore = subscribe(modeStore, (value) => $modeStore = value);
-  createEventDispatcher();
-  $$result.css.add(css$4);
-  $$unsubscribe_deckListStore();
-  $$unsubscribe_modeStore();
-  return `<section id="${"deckArea"}" class="${escape(null_to_empty($modeStore)) + " svelte-1kk6kdi"}"><section id="${"deckPiling"}" class="${"svelte-1kk6kdi"}"><div class="${"deckbottom svelte-1kk6kdi"}"><div class="${"round svelte-1kk6kdi"}"><div class="${"round-top svelte-1kk6kdi"}"></div>
-                <div class="${"round-center svelte-1kk6kdi"}"></div>
-                <div class="${"round-bottom svelte-1kk6kdi"}"></div></div></div>
-        ${each($deckListStore, (d, i) => `${validate_component(Card, "Card").$$render($$result, {
-    id: d.id,
-    pos_x: d.x + i * -0.5 + 25,
-    pos_y: d.y + i * -0.8 + 10,
-    flippin: d.flip,
-    onArea: "deck",
-    img_url: d.url,
-    sleeve_url: d.burl,
-    noGuide: true
-  }, {}, {})}`)}</section>
-</section>`;
-});
-var css$3 = {
-  code: ":root{--card-width:85px;--card-margin:5px}img.svelte-ds7p2u{border-radius:10px;width:var(--card-width);margin:var(--card-margin)}#deck.svelte-ds7p2u,#exdeck.svelte-ds7p2u{display:flex;width:calc(var(--card-width) * 10 + var(--card-margin) * 20);margin:0 auto;flex-wrap:wrap}",
-  map: null
-};
-var Edit = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $$unsubscribe_exDeckListStore;
-  let $$unsubscribe_deckListStore;
-  let $unshuffleDeckListStore, $$unsubscribe_unshuffleDeckListStore;
-  let $unshuffleExDeckListStore, $$unsubscribe_unshuffleExDeckListStore;
-  $$unsubscribe_exDeckListStore = subscribe(exDeckListStore, (value) => value);
-  $$unsubscribe_deckListStore = subscribe(deckListStore, (value) => value);
-  $$unsubscribe_unshuffleDeckListStore = subscribe(unshuffleDeckListStore, (value) => $unshuffleDeckListStore = value);
-  $$unsubscribe_unshuffleExDeckListStore = subscribe(unshuffleExDeckListStore, (value) => $unshuffleExDeckListStore = value);
-  $$result.css.add(css$3);
-  $$unsubscribe_exDeckListStore();
-  $$unsubscribe_deckListStore();
-  $$unsubscribe_unshuffleDeckListStore();
-  $$unsubscribe_unshuffleExDeckListStore();
-  return `<input type="${"file"}" webkitdirectory>
-<section id="${"deck"}" class="${"svelte-ds7p2u"}">${each($unshuffleDeckListStore, (d) => `<img${add_attribute("src", d.url, 0)} alt="${""}" class="${"svelte-ds7p2u"}">`)}</section>
-<section id="${"exdeck"}" class="${"svelte-ds7p2u"}">${each($unshuffleExDeckListStore, (e) => `<img${add_attribute("src", e.url, 0)} alt="${""}" class="${"svelte-ds7p2u"}">`)}
-</section>`;
-});
-var edit = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": Edit
-});
-var css$2 = {
-  code: "#handArea.svelte-11la4tw.svelte-11la4tw{position:absolute;margin:0 auto;width:500px;height:75px;left:calc(50% - 250px);bottom:0}#handArea.light.svelte-11la4tw.svelte-11la4tw{--hand-bg-color:#0a2ea5}#handArea.dark.svelte-11la4tw.svelte-11la4tw{--hand-bg-color:#081081}#handArea.svelte-11la4tw #handArea-bg.svelte-11la4tw{overflow:hidden;width:inherit;height:inherit}#handArea.svelte-11la4tw #handArea-bg #handArea-bg-radius.svelte-11la4tw{position:relative;margin:0 auto;width:inherit;height:500px;border-radius:250px}#handArea.svelte-11la4tw #handArea-bg #handArea-bg-radius.light.svelte-11la4tw{background:yellow}#handArea.svelte-11la4tw #handArea-bg #handArea-bg-radius.dark.svelte-11la4tw{background:var(--hand-bg-color)}",
-  map: null
-};
-var handLineupGuideRadius = 250;
-function handLineupGuideFunction(x) {
-  return -1 * Math.sqrt(Math.pow(handLineupGuideRadius, 2) - Math.pow(x, 2));
-}
-var Hand = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $handListStore, $$unsubscribe_handListStore;
-  let $cardWidth, $$unsubscribe_cardWidth;
-  let $modeStore, $$unsubscribe_modeStore;
-  $$unsubscribe_handListStore = subscribe(handListStore, (value) => $handListStore = value);
-  $$unsubscribe_cardWidth = subscribe(cardWidth, (value) => $cardWidth = value);
-  $$unsubscribe_modeStore = subscribe(modeStore, (value) => $modeStore = value);
-  createEventDispatcher();
-  $$result.css.add(css$2);
-  {
-    {
-      let hand = $handListStore;
-      const handLen = hand.length;
-      let xSpacing = (handLineupGuideRadius * 2 - 150) / handLen;
-      let degSpaning = 100 / handLen;
-      if (xSpacing > 50) {
-        xSpacing = 50;
-      }
-      if (degSpaning > 20) {
-        degSpaning = 20;
-      }
-      let temp = [];
-      for (let i = 0; i < handLen; i++) {
-        if (hand[i]) {
-          const x = xSpacing * (i - handLen / 2 + 0.5);
-          const y = handLineupGuideFunction(x);
-          const deg = (i - Math.floor(handLen / 2)) * degSpaning;
-          temp.push({
-            id: hand[i].id,
-            url: hand[i].url,
-            burl: hand[i].burl,
-            x: x + handLineupGuideRadius - $cardWidth / 2,
-            y: y + 150,
-            rotate: deg,
-            flip: false
-          });
-        } else {
-          temp.push(void 0);
-        }
-      }
-      set_store_value(handListStore, $handListStore = temp, $handListStore);
-    }
-  }
-  $$unsubscribe_handListStore();
-  $$unsubscribe_cardWidth();
-  $$unsubscribe_modeStore();
-  return `<section id="${"handArea"}" class="${escape(null_to_empty($modeStore)) + " svelte-11la4tw"}"><div id="${"handArea-bg"}" class="${"svelte-11la4tw"}"><div id="${"handArea-bg-radius"}" class="${escape(null_to_empty($modeStore)) + " svelte-11la4tw"}"></div></div>
-    ${each($handListStore, (h) => `${h ? `${validate_component(Card, "Card").$$render($$result, {
-    id: h.id,
-    pos_x: h.x,
-    pos_y: h.y,
-    rotate: h.rotate,
-    onArea: "hand",
-    img_url: h.url,
-    sleeve_url: h.burl,
-    flippin: h.flip
-  }, {}, {})}` : ``}`)}
-</section>`;
-});
-var css$1 = {
-  code: "#board.svelte-wvq7x7.svelte-wvq7x7{width:825px;height:550px;z-index:1;margin:0 auto 0 200px;transform:rotateX(10deg);border-radius:30px;position:relative}#board.light.svelte-wvq7x7.svelte-wvq7x7{background:radial-gradient(ellipse, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 70%, rgba(0, 0, 0, 0.2) 100%)}#board.dark.svelte-wvq7x7.svelte-wvq7x7{background:radial-gradient(ellipse, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.4) 70%, rgba(255, 255, 255, 0.1) 100%)}#myHand.svelte-wvq7x7.svelte-wvq7x7{position:fixed;z-index:0;width:100%;height:75px;bottom:0}#myHand.svelte-wvq7x7 #handArea-main.svelte-wvq7x7{position:absolute;width:500px;height:180px;left:50%;transform:translate(-50%, 0);bottom:0;pointer-events:none}#myDeck.svelte-wvq7x7.svelte-wvq7x7{position:fixed;z-index:0;bottom:130px;left:0px}#myDeck.svelte-wvq7x7 #deckArea-main.svelte-wvq7x7{position:absolute;width:200px;height:300px;top:50%;left:-50%;transform:translate(0, -50%);bottom:0;pointer-events:none}#is-not-PC-alert.svelte-wvq7x7.svelte-wvq7x7{margin:100px 20px;background:black;border:solid 1px white;border-radius:20px;width:70%;max-width:600px}#is-not-PC-alert.svelte-wvq7x7 .clear.svelte-wvq7x7{color:yellow}#is-not-PC-alert.svelte-wvq7x7 .panel.svelte-wvq7x7{padding:20px}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp.svelte-wvq7x7{color:white;position:relative;max-width:310px;margin:50px auto}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp .device-figure.svelte-wvq7x7{width:80%;margin:0 auto;font-size:18px}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp .device-figure span.svelte-wvq7x7{font-size:15px;line-height:18px}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp .device-figure .width.svelte-wvq7x7{position:absolute;left:50%;top:-30px;transform:translate(-50%, 0)}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp .device-figure .height.svelte-wvq7x7{position:absolute;top:50%;right:-55px;transform:rotate(90deg)}",
-  map: null
-};
-var Game = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $$unsubscribe_deckListStore;
-  let $boardListStore, $$unsubscribe_boardListStore;
-  let $$unsubscribe_handListStore;
-  let $$unsubscribe_cardWidth;
-  let $$unsubscribe_deckAreaInfoStore;
-  let $$unsubscribe_handAreaInfoStore;
-  let $$unsubscribe_boardAreaInfoStore;
-  let $modeStore, $$unsubscribe_modeStore;
-  $$unsubscribe_deckListStore = subscribe(deckListStore, (value) => value);
-  $$unsubscribe_boardListStore = subscribe(boardListStore, (value) => $boardListStore = value);
-  $$unsubscribe_handListStore = subscribe(handListStore, (value) => value);
-  $$unsubscribe_cardWidth = subscribe(cardWidth, (value) => value);
-  $$unsubscribe_deckAreaInfoStore = subscribe(deckAreaInfoStore, (value) => value);
-  $$unsubscribe_handAreaInfoStore = subscribe(handAreaInfoStore, (value) => value);
-  $$unsubscribe_boardAreaInfoStore = subscribe(boardAreaInfoStore, (value) => value);
-  $$unsubscribe_modeStore = subscribe(modeStore, (value) => $modeStore = value);
-  $$result.css.add(css$1);
-  $$unsubscribe_deckListStore();
-  $$unsubscribe_boardListStore();
-  $$unsubscribe_handListStore();
-  $$unsubscribe_cardWidth();
-  $$unsubscribe_deckAreaInfoStore();
-  $$unsubscribe_handAreaInfoStore();
-  $$unsubscribe_boardAreaInfoStore();
-  $$unsubscribe_modeStore();
-  return `
-${`<article id="${"board"}" class="${escape(null_to_empty($modeStore)) + " svelte-wvq7x7"}">${each($boardListStore, (bs) => `${validate_component(Card, "Card").$$render($$result, {
-    id: bs.id,
-    pos_x: bs.x,
-    pos_y: bs.y,
-    flippin: bs.flip,
-    onArea: "board",
-    img_url: bs.url,
-    sleeve_url: bs.burl
-  }, {}, {})}`)}</article>
-<article id="${"myHand"}" class="${"svelte-wvq7x7"}"><div id="${"handArea-main"}" class="${"svelte-wvq7x7"}"></div>
-    ${validate_component(Hand, "Hand").$$render($$result, {}, {}, {})}</article>
-<article id="${"myDeck"}" class="${"svelte-wvq7x7"}"><div id="${"deckArea-main"}" class="${"svelte-wvq7x7"}"></div>
-    ${validate_component(Deck, "Deck").$$render($$result, {}, {}, {})}</article>`}`;
-});
-var game = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": Game
-});
-var css = {
-  code: 'article.svelte-18s83uh.svelte-18s83uh{width:90vw;max-width:350px;margin:0 auto}article.svelte-18s83uh h1.svelte-18s83uh{margin:20px 0 10px 0}#phone-flame.svelte-18s83uh.svelte-18s83uh{padding:10px;border:solid 2px white;background:white;min-height:555px;border-radius:20px;position:relative}#phone-flame.svelte-18s83uh.svelte-18s83uh::before{content:"";position:absolute;background:white;--width:160px;left:calc(50% - var(--width) / 2);right:calc(50% - var(--width) / 2);height:25px;border-radius:0 0 20px 20px/0 0 15px 15px}#phone-flame.svelte-18s83uh.svelte-18s83uh::after{content:"";position:absolute;background:black;top:17px;--width:50px;left:calc(50% - var(--width) / 2);right:calc(50% - var(--width) / 2);height:10px;border-radius:5px}#phone-flame.svelte-18s83uh section.svelte-18s83uh{font-family:"Kosugi Maru", sans-serif;border:solid 2px white;padding:50px 20px 20px 20px;background:linear-gradient(135deg, black, black, rgba(0, 0, 0, 0.85));border-radius:10px;min-height:535px;display:flex;flex-wrap:wrap;grid-template-columns:repeat(auto-fill, 80px);justify-content:space-between}#phone-flame.svelte-18s83uh section .app-icon.svelte-18s83uh{display:flex;flex-direction:column;align-items:center;margin:0 0 45px 0;width:80px;height:80px}#phone-flame.svelte-18s83uh section .app-icon.active.svelte-18s83uh{border:solid 2px white;border-radius:20px}#phone-flame.svelte-18s83uh section .app-icon img.svelte-18s83uh{margin:0 auto;padding:10px;height:75px;cursor:pointer}#phone-flame.svelte-18s83uh section .app-icon .app-name.svelte-18s83uh{margin:10px 0 0 0;font-size:10px;text-align:center}',
-  map: null
-};
-var App = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let apps = [
-    {
-      name: "\u3070\u304F\u305C\u3064\u3055\u3042\u3061",
-      icon: "/img/bs2nd/ba_gray.svg",
-      href: "/app/bakuzetsu-searcher-2nd/edit",
-      description: "\u30B3\u30C8\u30C0\u30DE\u30F3\u3067\u697D\u3057\u3066\u52DD\u3061\u305F\u3044\u4EBA\u306B\u5411\u3051\u305F\u30C4\u30FC\u30EB"
-    },
-    {
-      name: "TCG\u30B7\u30DF\u30E5",
-      icon: "/img/tcg-sim/card_naname.svg",
-      href: "/app/tcg-simulator/game",
-      description: "\u30C8\u30EC\u30FC\u30C7\u30A3\u30F3\u30B0\u30AB\u30FC\u30C9\u3092\u30A4\u30F3\u30DD\u30FC\u30C8\u3057\u3066\u30D7\u30EC\u30A4"
-    },
-    {
-      name: "DM\u30C0\u30A6\u30F3\u30ED\u30FC\u30C0",
-      icon: "/img/tcg-sim/card_naname.svg",
-      href: "/app/DM-Downloader/collect",
-      description: "\u30AB\u30FC\u30C9\u753B\u50CF\u3092\u53CE\u96C6"
-    }
-  ];
-  $$result.css.add(css);
-  return `<article class="${"svelte-18s83uh"}"><h1 class="${"svelte-18s83uh"}">APP LIST</h1>
-    <div id="${"phone-flame"}" class="${"svelte-18s83uh"}"><section class="${"svelte-18s83uh"}">${each(apps, (a) => `<div class="${"app-icon active svelte-18s83uh"}"><a${add_attribute("href", a.href, 0)}><img${add_attribute("src", a.icon, 0)} alt="${""}" class="${"svelte-18s83uh"}">
-                    <div class="${"app-name svelte-18s83uh"}">${escape(a.name)}</div></a>
-            </div>`)}
-        <div class="${"app-icon svelte-18s83uh"}"></div>
-        <div class="${"app-icon svelte-18s83uh"}"></div>
-        <div class="${"app-icon svelte-18s83uh"}"></div></section></div>
-</article>`;
-});
-var app = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": App
-});
-
-// .svelte-kit/vercel/entry.js
-init();
+// .svelte-kit/vercel-tmp/entry.js
+var server = new Server(manifest);
 var entry_default = async (req, res) => {
-  const { pathname, searchParams } = new URL(req.url || "", "http://localhost");
-  let body;
+  let request;
   try {
-    body = await getRawBody(req);
+    request = await getRequest(`https://${req.headers.host}`, req);
   } catch (err) {
     res.statusCode = err.status || 400;
     return res.end(err.reason || "Invalid request body");
   }
-  const rendered = await render({
-    method: req.method,
-    headers: req.headers,
-    path: pathname,
-    query: searchParams,
-    rawBody: body
-  });
-  if (rendered) {
-    const { status, headers, body: body2 } = rendered;
-    return res.writeHead(status, headers).end(body2);
-  }
-  return res.writeHead(404).end();
+  setResponse(res, await server.respond(request, {
+    getClientAddress() {
+      return request.headers.get("x-forwarded-for");
+    }
+  }));
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {});
+/*! fetch-blob. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
+/*! formdata-polyfill. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
