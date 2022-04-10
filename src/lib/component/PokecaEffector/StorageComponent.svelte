@@ -7,7 +7,7 @@
     
     let dx = 40;
     let dy = 250;
-    let moving = false
+    // let moving = false
 
     const initPositionPoisonKan = {id:100,x:180,y:25,damage:10}
     const initPositionBurnKan = {id:100,x:280,y:25,damage:10}
@@ -45,7 +45,7 @@
     function resetDamageKanPosition(){
         let i = 0
         damageKanArray.forEach(item => {
-            item.x = 0,
+            item.x = 30,
             item.y = 0 + (i*2)
             item.counter = 0
             i += 1
