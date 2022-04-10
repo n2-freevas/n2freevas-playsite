@@ -15,7 +15,7 @@ let apps: App[] = [
     },
     {
         name:"Webダメカン",
-        icon:"/img/tcg-sim/card_naname.svg",
+        icon:"/img/pokeca/icon_white.svg",
         href: "/app/pokemon-card-game-effector/game",
         description:"ポケカのダメカンをWebでやっちゃう。"
     },

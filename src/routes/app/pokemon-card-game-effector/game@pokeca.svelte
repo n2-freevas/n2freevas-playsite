@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import StorageComponent from "$lib/component/PokecaEffector/StorageComponent.svelte";
+import CoinComponent from "$lib/component/PokecaEffector/CoinComponent.svelte";
 
     onMount(()=>{
         const video = document.getElementById("web-video")
@@ -27,6 +28,9 @@
 <section id='effect-layor'>
     <StorageComponent></StorageComponent>
 </section>
+<section id='coin-layor'>
+    <CoinComponent></CoinComponent>
+</section>
 
 <style lang="scss">
     section{
@@ -50,5 +54,12 @@
         right:0;
         width:0px;
         height:100vh;
+    }
+    #coin-layor{
+        position: fixed;
+        width:0;
+        height:0;
+        bottom:120px;
+        left:40px;
     }
 </style>
