@@ -1,24 +1,24 @@
 <script lang="ts">
-    export let path :string
-    export let icon_url :string
-    export let explain :string
-
+    import type {MainMenu} from '$lib/model/Menu'
+    export let model : MainMenu
+    
     let isFocus = false;
     function focusInteractionON(){isFocus = true}
     function focusInteractionOFF(){isFocus = false}
 </script>
 
-<div class='homebutton-box {isFocus? 'focus' : ''}'>
-    <a href={path}>
-
-        <div class='homebutton_background {isFocus? 'focus' : ''}'></div>
+<div class='homebutton-box {isFocus&&model.active? 'focus' : ''} {model.active ? "" : "disactive"}'>
+    <a href={model.active ? model.path : ""}>
+        <div class='homebutton_background {isFocus&&model.active? 'focus' : ''}'></div>
         <div class='icons'>
-            <img src={icon_url} alt='{explain}ボタン'>
-            <h1>{explain}</h1>
+            <img src={model.img} alt='{model.explain}ボタン'>
+            <h1>{model.name}</h1>
         </div>
         <div class='hover_area' on:mouseenter={focusInteractionON} on:mouseleave={focusInteractionOFF}></div>
     </a>
-    
+    {#if !model.active}
+        <p>comming soon</p>
+    {/if}
 </div>
 
 <style lang="scss">
@@ -34,6 +34,12 @@
             
             border-radius: 0px;
         }
+        &.disactive{
+            background: rgba(255,255,255,0.3);
+            img, h1{
+                opacity: 0.3;
+            }
+        }
         .icons{
             position: absolute;
             display: flex;
@@ -45,8 +51,8 @@
             height:calc(100% - (var(--topval) * 2 ));
             
             img{
-            height:60%;
-            margin:0 auto;
+                height:60%;
+                margin:0 auto;
             }
             h1{
                 text-align: center;
@@ -74,6 +80,16 @@
             position: absolute;
             top:0;left:0;
             width:100%;height:100%;
+        }
+        p{
+            position: absolute;
+            top:35px;
+            left:-5px;
+            font-weight: bold;
+            opacity: 1;
+            width:120px;
+            z-index: 100;
+            color:white;
         }
     }
 

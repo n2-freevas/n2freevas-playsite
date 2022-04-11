@@ -13,7 +13,7 @@
         {#if matches}
         <div class="icon_box">
             {#each mainmenu_array as menu}
-                <HomeButton path={menu.path} icon_url={menu.img} explain={menu.name}></HomeButton>
+                <HomeButton model={menu}></HomeButton>
             {/each}
         </div>
         {/if}
@@ -22,7 +22,7 @@
         {#if matches}
         <div class="icon_box">
             {#each mainmenu_array as menu}
-                <HomeButton path={menu.path} icon_url={menu.img} explain={menu.name}></HomeButton>
+                <HomeButton model={menu}></HomeButton>
             {/each}
         </div>
         {/if}

@@ -1,21 +1,5 @@
 import { writable } from 'svelte/store'
-
-/* Models */
-export type SubMenu = {
-    name: string,
-    path: string,
-    img: string,
-    explain: string,
-    root: string,
-    submenu: SubMenu[]
-}
-export type MainMenu = {
-  name: string, //親メニュー名称
-  path: string,
-  img: string,
-  explain: string
-  submenu: SubMenu[]
-}
+import type { MainMenu } from '$lib/model/Menu'
 
 
 /* Initialize */
@@ -24,6 +8,7 @@ export const mainmenus = writable<MainMenu[]>([
         name: 'profile',
         path: '/introduce',
         img: '/img/profile_icon.svg',
+        active: true,
         explain: 'Taro Nonoyamaの<br>プロフィールを表示します。',
         submenu:[]
     },
@@ -31,6 +16,7 @@ export const mainmenus = writable<MainMenu[]>([
         name: 'blog',
         path: '/blog/list',
         img: '/img/blog_icon.svg',
+        active: false,
         explain: 'ブログを表示します<br> (Powered by Notion API)',
         submenu:[]
     },
@@ -38,6 +24,7 @@ export const mainmenus = writable<MainMenu[]>([
         name: 'portfolio',
         path: '/portfolio',
         img: '/img/portfolio_icon.svg',
+        active: false,
         explain: 'ポートフォリオを表示し、<br>クリエイティブのヒントを提示します。',
         submenu:[]
     },
@@ -45,6 +32,7 @@ export const mainmenus = writable<MainMenu[]>([
         name: 'app',
         path: '/app',
         img: '/img/app_icon.svg',
+        active: true,
         explain: '制作したWebアプリの<br>一覧を表示します。',
         submenu:[
             {
@@ -58,6 +46,7 @@ export const mainmenus = writable<MainMenu[]>([
         name: 'contact',
         path: '/contact',
         img: '/img/contacts_icon.svg',
+        active: false,
         explain: '連絡先・SNSアカウントを<br>表示します。',
         submenu:[]
     },
@@ -65,6 +54,7 @@ export const mainmenus = writable<MainMenu[]>([
         name: 'bonus',
         path: '/show',
         img: '/img/app_icon.svg',
+        active: true,
         explain: 'オマケ',
         submenu:[]
     },

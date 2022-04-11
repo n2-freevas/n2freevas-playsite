@@ -468,8 +468,8 @@ async function* toIterator(parts, clone2 = true) {
         let position = part.byteOffset;
         const end = part.byteOffset + part.byteLength;
         while (position !== end) {
-          const size2 = Math.min(end - position, POOL_SIZE);
-          const chunk = part.buffer.slice(position, position + size2);
+          const size = Math.min(end - position, POOL_SIZE);
+          const chunk = part.buffer.slice(position, position + size);
           position += chunk.byteLength;
           yield new Uint8Array(chunk);
         }
@@ -1496,12 +1496,12 @@ var init_install_fetch = __esm({
           }
           return pair.value;
         }
-        function EnqueueValueWithSize(container, value, size2) {
-          if (!IsNonNegativeNumber(size2) || size2 === Infinity) {
+        function EnqueueValueWithSize(container, value, size) {
+          if (!IsNonNegativeNumber(size) || size === Infinity) {
             throw new RangeError("Size must be a finite, non-NaN, non-negative number.");
           }
-          container._queue.push({ value, size: size2 });
-          container._queueTotalSize += size2;
+          container._queue.push({ value, size });
+          container._queueTotalSize += size;
         }
         function PeekQueueValue(container) {
           const pair = container._queue.peek();
@@ -1629,10 +1629,10 @@ var init_install_fetch = __esm({
           [PullSteps](readRequest) {
             const stream = this._controlledReadableByteStream;
             if (this._queueTotalSize > 0) {
-              const entry20 = this._queue.shift();
-              this._queueTotalSize -= entry20.byteLength;
+              const entry21 = this._queue.shift();
+              this._queueTotalSize -= entry21.byteLength;
               ReadableByteStreamControllerHandleQueueDrain(this);
-              const view = new Uint8Array(entry20.buffer, entry20.byteOffset, entry20.byteLength);
+              const view = new Uint8Array(entry21.buffer, entry21.byteOffset, entry21.byteLength);
               readRequest._chunkSteps(view);
               return;
             }
@@ -1768,8 +1768,8 @@ var init_install_fetch = __esm({
           }
           return ready;
         }
-        function ReadableByteStreamControllerFillHeadPullIntoDescriptor(controller, size2, pullIntoDescriptor) {
-          pullIntoDescriptor.bytesFilled += size2;
+        function ReadableByteStreamControllerFillHeadPullIntoDescriptor(controller, size, pullIntoDescriptor) {
+          pullIntoDescriptor.bytesFilled += size;
         }
         function ReadableByteStreamControllerHandleQueueDrain(controller) {
           if (controller._queueTotalSize === 0 && controller._closeRequested) {
@@ -2237,19 +2237,19 @@ var init_install_fetch = __esm({
           return highWaterMark;
         }
         function ExtractSizeAlgorithm(strategy) {
-          const { size: size2 } = strategy;
-          if (!size2) {
+          const { size } = strategy;
+          if (!size) {
             return () => 1;
           }
-          return size2;
+          return size;
         }
         function convertQueuingStrategy(init2, context) {
           assertDictionary(init2, context);
           const highWaterMark = init2 === null || init2 === void 0 ? void 0 : init2.highWaterMark;
-          const size2 = init2 === null || init2 === void 0 ? void 0 : init2.size;
+          const size = init2 === null || init2 === void 0 ? void 0 : init2.size;
           return {
             highWaterMark: highWaterMark === void 0 ? void 0 : convertUnrestrictedDouble(highWaterMark),
-            size: size2 === void 0 ? void 0 : convertQueuingStrategySize(size2, `${context} has member 'size' that`)
+            size: size === void 0 ? void 0 : convertQueuingStrategySize(size, `${context} has member 'size' that`)
           };
         }
         function convertQueuingStrategySize(fn, context) {
@@ -4626,9 +4626,9 @@ var init_install_fetch = __esm({
         });
       }
       slice(start = 0, end = this.size, type = "") {
-        const { size: size2 } = this;
-        let relativeStart = start < 0 ? Math.max(size2 + start, 0) : Math.min(start, size2);
-        let relativeEnd = end < 0 ? Math.max(size2 + end, 0) : Math.min(end, size2);
+        const { size } = this;
+        let relativeStart = start < 0 ? Math.max(size + start, 0) : Math.min(start, size);
+        let relativeEnd = end < 0 ? Math.max(size + end, 0) : Math.min(end, size);
         const span = Math.max(relativeEnd - relativeStart, 0);
         const parts = __privateGet(this, _parts);
         const blobParts = [];
@@ -4637,20 +4637,20 @@ var init_install_fetch = __esm({
           if (added >= span) {
             break;
           }
-          const size3 = ArrayBuffer.isView(part) ? part.byteLength : part.size;
-          if (relativeStart && size3 <= relativeStart) {
-            relativeStart -= size3;
-            relativeEnd -= size3;
+          const size2 = ArrayBuffer.isView(part) ? part.byteLength : part.size;
+          if (relativeStart && size2 <= relativeStart) {
+            relativeStart -= size2;
+            relativeEnd -= size2;
           } else {
             let chunk;
             if (ArrayBuffer.isView(part)) {
-              chunk = part.subarray(relativeStart, Math.min(size3, relativeEnd));
+              chunk = part.subarray(relativeStart, Math.min(size2, relativeEnd));
               added += chunk.byteLength;
             } else {
-              chunk = part.slice(relativeStart, Math.min(size3, relativeEnd));
+              chunk = part.slice(relativeStart, Math.min(size2, relativeEnd));
               added += chunk.size;
             }
-            relativeEnd -= size3;
+            relativeEnd -= size2;
             blobParts.push(chunk);
             relativeStart = 0;
           }
@@ -4817,7 +4817,7 @@ var init_install_fetch = __esm({
     INTERNALS$2 = Symbol("Body internals");
     Body = class {
       constructor(body, {
-        size: size2 = 0
+        size = 0
       } = {}) {
         let boundary = null;
         if (body === null) {
@@ -4853,7 +4853,7 @@ var init_install_fetch = __esm({
           disturbed: false,
           error: null
         };
-        this.size = size2;
+        this.size = size;
         if (body instanceof import_node_stream.default) {
           body.on("error", (error_) => {
             const error2 = error_ instanceof FetchBaseError ? error_ : new FetchError(`Invalid response body while trying to fetch ${this.url}: ${error_.message}`, "system", error_);
@@ -5544,7 +5544,7 @@ function create_ssr_component(fn) {
       return {
         html,
         css: {
-          code: Array.from(result.css).map((css36) => css36.code).join("\n"),
+          code: Array.from(result.css).map((css38) => css38.code).join("\n"),
           map: null
         },
         head: result.title + result.head
@@ -5615,8 +5615,8 @@ var entry, js, css;
 var init__ = __esm({
   ".svelte-kit/output/server/nodes/0.js"() {
     init_layout_svelte();
-    entry = "layout.svelte-22614f57.js";
-    js = ["layout.svelte-22614f57.js", "chunks/index-ce8d78cd.js"];
+    entry = "layout.svelte-cd1fb33f.js";
+    js = ["layout.svelte-cd1fb33f.js", "chunks/index-7e81b4c7.js"];
     css = [];
   }
 });
@@ -5665,8 +5665,8 @@ var entry2, js2, css2;
 var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     init_error_svelte();
-    entry2 = "error.svelte-00c8f1b9.js";
-    js2 = ["error.svelte-00c8f1b9.js", "chunks/index-ce8d78cd.js"];
+    entry2 = "error.svelte-f699d84f.js";
+    js2 = ["error.svelte-f699d84f.js", "chunks/index-7e81b4c7.js"];
     css2 = [];
   }
 });
@@ -5726,16 +5726,17 @@ var init_index_96622166 = __esm({
   }
 });
 
-// .svelte-kit/output/server/chunks/MainMenu-4783409c.js
+// .svelte-kit/output/server/chunks/MainMenu-48049949.js
 var mainmenus;
-var init_MainMenu_4783409c = __esm({
-  ".svelte-kit/output/server/chunks/MainMenu-4783409c.js"() {
+var init_MainMenu_48049949 = __esm({
+  ".svelte-kit/output/server/chunks/MainMenu-48049949.js"() {
     init_index_96622166();
     mainmenus = writable2([
       {
         name: "profile",
         path: "/introduce",
         img: "/img/profile_icon.svg",
+        active: true,
         explain: "Taro Nonoyama\u306E<br>\u30D7\u30ED\u30D5\u30A3\u30FC\u30EB\u3092\u8868\u793A\u3057\u307E\u3059\u3002",
         submenu: []
       },
@@ -5743,6 +5744,7 @@ var init_MainMenu_4783409c = __esm({
         name: "blog",
         path: "/blog/list",
         img: "/img/blog_icon.svg",
+        active: false,
         explain: "\u30D6\u30ED\u30B0\u3092\u8868\u793A\u3057\u307E\u3059<br> (Powered by Notion API)",
         submenu: []
       },
@@ -5750,6 +5752,7 @@ var init_MainMenu_4783409c = __esm({
         name: "portfolio",
         path: "/portfolio",
         img: "/img/portfolio_icon.svg",
+        active: false,
         explain: "\u30DD\u30FC\u30C8\u30D5\u30A9\u30EA\u30AA\u3092\u8868\u793A\u3057\u3001<br>\u30AF\u30EA\u30A8\u30A4\u30C6\u30A3\u30D6\u306E\u30D2\u30F3\u30C8\u3092\u63D0\u793A\u3057\u307E\u3059\u3002",
         submenu: []
       },
@@ -5757,6 +5760,7 @@ var init_MainMenu_4783409c = __esm({
         name: "app",
         path: "/app",
         img: "/img/app_icon.svg",
+        active: true,
         explain: "\u5236\u4F5C\u3057\u305FWeb\u30A2\u30D7\u30EA\u306E<br>\u4E00\u89A7\u3092\u8868\u793A\u3057\u307E\u3059\u3002",
         submenu: [
           {
@@ -5773,6 +5777,7 @@ var init_MainMenu_4783409c = __esm({
         name: "contact",
         path: "/contact",
         img: "/img/contacts_icon.svg",
+        active: false,
         explain: "\u9023\u7D61\u5148\u30FBSNS\u30A2\u30AB\u30A6\u30F3\u30C8\u3092<br>\u8868\u793A\u3057\u307E\u3059\u3002",
         submenu: []
       },
@@ -5780,6 +5785,7 @@ var init_MainMenu_4783409c = __esm({
         name: "bonus",
         path: "/show",
         img: "/img/app_icon.svg",
+        active: true,
         explain: "\u30AA\u30DE\u30B1",
         submenu: []
       }
@@ -5802,134 +5808,384 @@ var init_MediaQuery_021992e5 = __esm({
   }
 });
 
-// .svelte-kit/output/server/entries/pages/index.svelte.js
-var index_svelte_exports = {};
-__export(index_svelte_exports, {
-  default: () => Routes
-});
-var css$2, HomeButton, css$1, N2Clock, css3, Routes;
-var init_index_svelte = __esm({
-  ".svelte-kit/output/server/entries/pages/index.svelte.js"() {
+// .svelte-kit/output/server/chunks/ToastArea-32d9fee1.js
+function is_date(obj) {
+  return Object.prototype.toString.call(obj) === "[object Date]";
+}
+function get_interpolator(a, b) {
+  if (a === b || a !== a)
+    return () => a;
+  const type = typeof a;
+  if (type !== typeof b || Array.isArray(a) !== Array.isArray(b)) {
+    throw new Error("Cannot interpolate values of different type");
+  }
+  if (Array.isArray(a)) {
+    const arr = b.map((bi, i2) => {
+      return get_interpolator(a[i2], bi);
+    });
+    return (t2) => arr.map((fn) => fn(t2));
+  }
+  if (type === "object") {
+    if (!a || !b)
+      throw new Error("Object cannot be null");
+    if (is_date(a) && is_date(b)) {
+      a = a.getTime();
+      b = b.getTime();
+      const delta = b - a;
+      return (t2) => new Date(a + t2 * delta);
+    }
+    const keys = Object.keys(b);
+    const interpolators = {};
+    keys.forEach((key2) => {
+      interpolators[key2] = get_interpolator(a[key2], b[key2]);
+    });
+    return (t2) => {
+      const result = {};
+      keys.forEach((key2) => {
+        result[key2] = interpolators[key2](t2);
+      });
+      return result;
+    };
+  }
+  if (type === "number") {
+    const delta = b - a;
+    return (t2) => a + t2 * delta;
+  }
+  throw new Error(`Cannot interpolate ${type} values`);
+}
+function tweened(value, defaults2 = {}) {
+  const store = writable2(value);
+  let task;
+  let target_value = value;
+  function set(new_value, opts) {
+    if (value == null) {
+      store.set(value = new_value);
+      return Promise.resolve();
+    }
+    target_value = new_value;
+    let previous_task = task;
+    let started = false;
+    let { delay = 0, duration = 400, easing = identity, interpolate = get_interpolator } = assign(assign({}, defaults2), opts);
+    if (duration === 0) {
+      if (previous_task) {
+        previous_task.abort();
+        previous_task = null;
+      }
+      store.set(value = target_value);
+      return Promise.resolve();
+    }
+    const start = now() + delay;
+    let fn;
+    task = loop((now2) => {
+      if (now2 < start)
+        return true;
+      if (!started) {
+        fn = interpolate(value, new_value);
+        if (typeof duration === "function")
+          duration = duration(value, new_value);
+        started = true;
+      }
+      if (previous_task) {
+        previous_task.abort();
+        previous_task = null;
+      }
+      const elapsed = now2 - start;
+      if (elapsed > duration) {
+        store.set(value = new_value);
+        return false;
+      }
+      store.set(value = fn(easing(elapsed / duration)));
+      return true;
+    });
+    return task.promise;
+  }
+  return {
+    set,
+    update: (fn, opts) => set(fn(target_value, value), opts),
+    subscribe: store.subscribe
+  };
+}
+var defaults, createToast, toast, css$2, ToastItem, css$1, SvelteToast, css3, ToastArea;
+var init_ToastArea_32d9fee1 = __esm({
+  ".svelte-kit/output/server/chunks/ToastArea-32d9fee1.js"() {
     init_index_2e97bc70();
-    init_MainMenu_4783409c();
-    init_MediaQuery_021992e5();
     init_index_96622166();
+    defaults = {
+      duration: 4e3,
+      initial: 1,
+      next: 0,
+      pausable: false,
+      dismissable: true,
+      reversed: false,
+      intro: { x: 256 },
+      theme: {}
+    };
+    createToast = () => {
+      const { subscribe: subscribe2, update } = writable2([]);
+      let count = 0;
+      const options = {};
+      const _obj = (obj) => obj instanceof Object;
+      const push = (msg, opts = {}) => {
+        const param = __spreadValues({ target: "default" }, _obj(msg) ? msg : __spreadProps(__spreadValues({}, opts), { msg }));
+        const conf = options[param.target] || {};
+        const entry21 = __spreadProps(__spreadValues(__spreadValues(__spreadValues({}, defaults), conf), param), {
+          theme: __spreadValues(__spreadValues({}, conf.theme), param.theme),
+          id: ++count
+        });
+        update((n) => entry21.reversed ? [...n, entry21] : [entry21, ...n]);
+        return count;
+      };
+      const pop = (id) => {
+        update((n) => {
+          if (!n.length || id === 0)
+            return [];
+          if (_obj(id))
+            return n.filter((i2) => id(i2));
+          const target = id || Math.max(...n.map((i2) => i2.id));
+          return n.filter((i2) => i2.id !== target);
+        });
+      };
+      const set = (id, opts = {}) => {
+        const param = _obj(id) ? __spreadValues({}, id) : __spreadProps(__spreadValues({}, opts), { id });
+        update((n) => {
+          const idx = n.findIndex((i2) => i2.id === param.id);
+          if (idx > -1) {
+            n[idx] = __spreadValues(__spreadValues({}, n[idx]), param);
+          }
+          return n;
+        });
+      };
+      const _init = (target = "default", opts = {}) => {
+        options[target] = opts;
+        return options;
+      };
+      return { subscribe: subscribe2, push, pop, set, _init };
+    };
+    toast = createToast();
     css$2 = {
-      code: ".homebutton-box.svelte-10fykjs.svelte-10fykjs{position:relative;width:100px;height:100px;background:white;border-radius:15px;margin:15px;transition:0.5s}.homebutton-box.focus.svelte-10fykjs.svelte-10fykjs{border-radius:0px}.homebutton-box.svelte-10fykjs .icons.svelte-10fykjs{position:absolute;display:flex;flex-direction:column;justify-content:space-around;--topval:10px;top:var(--topval);left:var(--topval);width:calc(100% - var(--topval) * 2);height:calc(100% - var(--topval) * 2)}.homebutton-box.svelte-10fykjs .icons img.svelte-10fykjs{height:60%;margin:0 auto}.homebutton-box.svelte-10fykjs .icons h1.svelte-10fykjs{text-align:center;font-size:14px;color:white}.homebutton-box.svelte-10fykjs .homebutton_background.svelte-10fykjs{position:absolute;--positioning:5px;top:var(--positioning);left:var(--positioning);width:calc(100% - var(--positioning) * 2);height:calc(100% - var(--positioning) * 2);background:black;border-radius:25px;transition:0.5s}.homebutton-box.svelte-10fykjs .homebutton_background.focus.svelte-10fykjs{transform:rotate(45deg);background:red;border-radius:0px}.homebutton-box.svelte-10fykjs .hover_area.svelte-10fykjs{position:absolute;top:0;left:0;width:100%;height:100%}",
+      code: "._toastItem.svelte-j9nwjb{width:var(--toastWidth, 16rem);height:var(--toastHeight, auto);min-height:var(--toastMinHeight, 3.5rem);margin:var(--toastMargin, 0 0 0.5rem 0);padding:var(--toastPadding, 0);background:var(--toastBackground, rgba(66, 66, 66, 0.9));color:var(--toastColor, #fff);box-shadow:var(--toastBoxShadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06));border:var(--toastBorder, none);border-radius:var(--toastBorderRadius, 0.125rem);position:relative;display:flex;flex-direction:row;align-items:center;overflow:hidden;will-change:transform, opacity;-webkit-tap-highlight-color:transparent}._toastMsg.svelte-j9nwjb{padding:var(--toastMsgPadding, 0.75rem 0.5rem);flex:1 1 0%}.pe.svelte-j9nwjb,._toastMsg.svelte-j9nwjb a{pointer-events:auto}._toastBtn.svelte-j9nwjb{width:2rem;height:100%;font:1rem sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;outline:none}._toastBar.svelte-j9nwjb{top:var(--toastBarTop, auto);right:var(--toastBarRight, auto);bottom:var(--toastBarBottom, 0);left:var(--toastBarLeft, 0);height:var(--toastBarHeight, 6px);width:var(--toastBarWidth, 100%);position:absolute;display:block;-webkit-appearance:none;-moz-appearance:none;appearance:none;border:none;background:transparent;pointer-events:none}._toastBar.svelte-j9nwjb::-webkit-progress-bar{background:transparent}._toastBar.svelte-j9nwjb::-webkit-progress-value{background:var(--toastProgressBackground, var(--toastBarBackground, rgba(33, 150, 243, 0.75)))}._toastBar.svelte-j9nwjb::-moz-progress-bar{background:var(--toastProgressBackground, var(--toastBarBackground, rgba(33, 150, 243, 0.75)))}",
       map: null
     };
-    HomeButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      let { path } = $$props;
-      let { icon_url } = $$props;
-      let { explain } = $$props;
-      if ($$props.path === void 0 && $$bindings.path && path !== void 0)
-        $$bindings.path(path);
-      if ($$props.icon_url === void 0 && $$bindings.icon_url && icon_url !== void 0)
-        $$bindings.icon_url(icon_url);
-      if ($$props.explain === void 0 && $$bindings.explain && explain !== void 0)
-        $$bindings.explain(explain);
+    ToastItem = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $progress, $$unsubscribe_progress;
+      let { item } = $$props;
+      const progress = tweened(item.initial, { duration: item.duration, easing: identity });
+      $$unsubscribe_progress = subscribe(progress, (value) => $progress = value);
+      const close = () => toast.pop(item.id);
+      const autoclose = () => {
+        if ($progress === 1 || $progress === 0) {
+          close();
+        }
+      };
+      let next = item.initial;
+      const getProps = () => {
+        const { props = {}, sendIdTo } = item.component;
+        if (sendIdTo) {
+          props[sendIdTo] = item.id;
+        }
+        return props;
+      };
+      onDestroy(() => {
+        if (typeof item.onpop === "function") {
+          item.onpop(item.id);
+        }
+      });
+      if ($$props.item === void 0 && $$bindings.item && item !== void 0)
+        $$bindings.item(item);
       $$result.css.add(css$2);
-      return `<div class="${"homebutton-box " + escape("") + " svelte-10fykjs"}"><a${add_attribute("href", path, 0)}><div class="${"homebutton_background " + escape("") + " svelte-10fykjs"}"></div>
-        <div class="${"icons svelte-10fykjs"}"><img${add_attribute("src", icon_url, 0)} alt="${escape(explain) + "\u30DC\u30BF\u30F3"}" class="${"svelte-10fykjs"}">
-            <h1 class="${"svelte-10fykjs"}">${escape(explain)}</h1></div>
-        <div class="${"hover_area svelte-10fykjs"}"></div></a>
-    
-</div>`;
+      {
+        if (typeof item.progress !== "undefined") {
+          item.next = item.progress;
+        }
+      }
+      {
+        if (next !== item.next) {
+          next = item.next;
+          progress.set(next).then(autoclose);
+        }
+      }
+      $$unsubscribe_progress();
+      return `<div class="${["_toastItem svelte-j9nwjb", item.pausable ? "pe" : ""].join(" ").trim()}"><div role="${"status"}" class="${["_toastMsg svelte-j9nwjb", item.component ? "pe" : ""].join(" ").trim()}">${item.component ? `${validate_component(item.component.src || missing_component, "svelte:component").$$render($$result, Object.assign(getProps()), {}, {})}` : `<!-- HTML_TAG_START -->${item.msg}<!-- HTML_TAG_END -->`}</div>
+  ${item.dismissable ? `<div class="${"_toastBtn pe svelte-j9nwjb"}" role="${"button"}" tabindex="${"-1"}">\u2715</div>` : ``}
+  <progress class="${"_toastBar svelte-j9nwjb"}"${add_attribute("value", $progress, 0)}></progress></div>`;
     });
     css$1 = {
-      code: "#bg_clock.svelte-gfjuk8.svelte-gfjuk8{position:absolute;overflow:hidden;height:100%;width:100%;top:0;left:0;z-index:-1}#bg_clock.svelte-gfjuk8 #clockbody.svelte-gfjuk8{position:absolute;top:40vh;left:25vw;width:120vw;height:120vw;-webkit-animation:svelte-gfjuk8-clockrotate 60s cubic-bezier(1, 0, 0.95, 0.38) infinite;animation:svelte-gfjuk8-clockrotate 60s cubic-bezier(1, 0, 0.95, 0.38) infinite;transition:1s}@keyframes svelte-gfjuk8-clockslide{0%{left:25vw;transform:rotate(0deg)}100%{left:-200%;transform:rotate(-270deg)}}@-webkit-keyframes svelte-gfjuk8-clockslide{0%{left:25vw;-webkit-transform:rotate(0deg)}100%{left:-200%;-webkit-transform:rotate(-270deg)}}#bg_clock.svelte-gfjuk8 #clockbody img.svelte-gfjuk8{width:100%}@keyframes svelte-gfjuk8-clockrotate{0%{transform:rotate(0deg)}2%{transform:rotate(7deg)}4%{transform:rotate(14deg)}6%{transform:rotate(21deg)}8%{transform:rotate(28deg)}10%{transform:rotate(36deg)}12%{transform:rotate(43deg)}14%{transform:rotate(50deg)}16%{transform:rotate(57deg)}18%{transform:rotate(64deg)}20%{transform:rotate(72deg)}22%{transform:rotate(79deg)}24%{transform:rotate(86deg)}26%{transform:rotate(93deg)}28%{transform:rotate(100deg)}30%{transform:rotate(108deg)}32%{transform:rotate(115deg)}34%{transform:rotate(122deg)}36%{transform:rotate(129deg)}38%{transform:rotate(136deg)}40%{transform:rotate(144deg)}42%{transform:rotate(151deg)}44%{transform:rotate(158deg)}46%{transform:rotate(165deg)}48%{transform:rotate(172deg)}50%{transform:rotate(180deg)}52%{transform:rotate(187deg)}54%{transform:rotate(194deg)}56%{transform:rotate(201deg)}58%{transform:rotate(208deg)}60%{transform:rotate(216deg)}62%{transform:rotate(223deg)}64%{transform:rotate(230deg)}66%{transform:rotate(237deg)}68%{transform:rotate(244deg)}70%{transform:rotate(252deg)}72%{transform:rotate(259deg)}74%{transform:rotate(266deg)}76%{transform:rotate(273deg)}78%{transform:rotate(280deg)}80%{transform:rotate(288deg)}82%{transform:rotate(295deg)}84%{transform:rotate(302deg)}86%{transform:rotate(309deg)}88%{transform:rotate(316deg)}90%{transform:rotate(324deg)}92%{transform:rotate(331deg)}94%{transform:rotate(338deg)}96%{transform:rotate(345deg)}98%{transform:rotate(352deg)}100%{transform:rotate(360deg)}}@-webkit-keyframes svelte-gfjuk8-clockrotate{0%{-webkit-transform:rotate(0deg)}2%{-webkit-transform:rotate(7deg)}4%{-webkit-transform:rotate(14deg)}6%{-webkit-transform:rotate(21deg)}8%{-webkit-transform:rotate(28deg)}10%{-webkit-transform:rotate(36deg)}12%{-webkit-transform:rotate(43deg)}14%{-webkit-transform:rotate(50deg)}16%{-webkit-transform:rotate(57deg)}18%{-webkit-transform:rotate(64deg)}20%{-webkit-transform:rotate(72deg)}22%{-webkit-transform:rotate(79deg)}24%{-webkit-transform:rotate(86deg)}26%{-webkit-transform:rotate(93deg)}28%{-webkit-transform:rotate(100deg)}30%{-webkit-transform:rotate(108deg)}32%{-webkit-transform:rotate(115deg)}34%{-webkit-transform:rotate(122deg)}36%{-webkit-transform:rotate(129deg)}38%{-webkit-transform:rotate(136deg)}40%{-webkit-transform:rotate(144deg)}42%{-webkit-transform:rotate(151deg)}44%{-webkit-transform:rotate(158deg)}46%{-webkit-transform:rotate(165deg)}48%{-webkit-transform:rotate(172deg)}50%{-webkit-transform:rotate(180deg)}52%{-webkit-transform:rotate(187deg)}54%{-webkit-transform:rotate(194deg)}56%{-webkit-transform:rotate(201deg)}58%{-webkit-transform:rotate(208deg)}60%{-webkit-transform:rotate(216deg)}62%{-webkit-transform:rotate(223deg)}64%{-webkit-transform:rotate(230deg)}66%{-webkit-transform:rotate(237deg)}68%{-webkit-transform:rotate(244deg)}70%{-webkit-transform:rotate(252deg)}72%{-webkit-transform:rotate(259deg)}74%{-webkit-transform:rotate(266deg)}76%{-webkit-transform:rotate(273deg)}78%{-webkit-transform:rotate(280deg)}80%{-webkit-transform:rotate(288deg)}82%{-webkit-transform:rotate(295deg)}84%{-webkit-transform:rotate(302deg)}86%{-webkit-transform:rotate(309deg)}88%{-webkit-transform:rotate(316deg)}90%{-webkit-transform:rotate(324deg)}92%{-webkit-transform:rotate(331deg)}94%{-webkit-transform:rotate(338deg)}96%{-webkit-transform:rotate(345deg)}98%{-webkit-transform:rotate(352deg)}100%{-webkit-transform:rotate(360deg)}}@keyframes svelte-gfjuk8-clockspin{0%{transform:rotate(0deg)}100%{transform:rotate(720deg)}}@-webkit-keyframes svelte-gfjuk8-clockspin{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(720deg)}}#bg_clock.svelte-gfjuk8 #clockbody img.time.svelte-gfjuk8{position:absolute;width:10%;animation:svelte-gfjuk8-wheelrotate 10s linear infinite;-webkit-animation:svelte-gfjuk8-wheelrotate 10s linear infinite}#bg_clock.svelte-gfjuk8 #clockbody img#insidewheel.svelte-gfjuk8{position:absolute;width:25%;animation:svelte-gfjuk8-wheelrotate 10s linear infinite reverse;-webkit-animation:svelte-gfjuk8-wheelrotate 10s linear infinite reverse;top:37.5%;left:37.5%}.time-3.svelte-gfjuk8.svelte-gfjuk8{top:45%;left:63.5%}.time-2.svelte-gfjuk8.svelte-gfjuk8{top:35.75%;left:61.021%}.time-1.svelte-gfjuk8.svelte-gfjuk8{top:28.979%;left:54.25%}.time-12.svelte-gfjuk8.svelte-gfjuk8{top:26.5%;left:45%}.time-11.svelte-gfjuk8.svelte-gfjuk8{top:28.979%;left:35.75%}.time-10.svelte-gfjuk8.svelte-gfjuk8{top:35.75%;left:28.979%}.time-9.svelte-gfjuk8.svelte-gfjuk8{top:45%;left:26.5%}.time-8.svelte-gfjuk8.svelte-gfjuk8{top:54.25%;left:28.979%}.time-7.svelte-gfjuk8.svelte-gfjuk8{top:61.021%;left:35.75%}.time-6.svelte-gfjuk8.svelte-gfjuk8{top:63.5%;left:45%}.time-5.svelte-gfjuk8.svelte-gfjuk8{top:61.021%;left:54.25%}.time-4.svelte-gfjuk8.svelte-gfjuk8{top:54.25%;left:61.021%}#bg_clock.svelte-gfjuk8 #clockbody img.time-2.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-4.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-6.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-8.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-10.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-12.svelte-gfjuk8{animation-direction:reverse;-webkit-animation-direction:reverse}@keyframes svelte-gfjuk8-wheelrotate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}@-webkit-keyframes svelte-gfjuk8-wheelrotate{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg)}}@media screen and (min-width: 600px){}@media screen and (min-width: 700px){#bg_clock.svelte-gfjuk8 #clockbody.svelte-gfjuk8{top:35vh;left:50vw;height:850px;width:850px}#bg_clock.svelte-gfjuk8 #clockbody img.svelte-gfjuk8{width:850px}#bg_clock.svelte-gfjuk8 img.time.svelte-gfjuk8{width:85px}}",
+      code: "._toastContainer.svelte-7xr3c1{top:var(--toastContainerTop, 1.5rem);right:var(--toastContainerRight, 2rem);bottom:var(--toastContainerBottom, auto);left:var(--toastContainerLeft, auto);position:fixed;margin:0;padding:0;list-style-type:none;pointer-events:none;z-index:9999}",
       map: null
     };
-    N2Clock = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+    SvelteToast = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $toast, $$unsubscribe_toast;
+      $$unsubscribe_toast = subscribe(toast, (value) => $toast = value);
+      let { options = {} } = $$props;
+      let { target = "default" } = $$props;
+      let items;
+      const getCss = (theme) => Object.keys(theme).reduce((a, c) => `${a}${c}:${theme[c]};`, "");
+      if ($$props.options === void 0 && $$bindings.options && options !== void 0)
+        $$bindings.options(options);
+      if ($$props.target === void 0 && $$bindings.target && target !== void 0)
+        $$bindings.target(target);
       $$result.css.add(css$1);
-      return `<div id="${"bg_clock"}" class="${"svelte-gfjuk8"}"><div id="${"clockbody"}" class="${"svelte-gfjuk8"}">
-        <img class="${"time time-1 svelte-gfjuk8"}" src="${"/img/n2_clock/time-1.svg"}" alt="${""}">\u3000
-        <img class="${"time time-2 svelte-gfjuk8"}" src="${"/img/n2_clock/time-2.svg"}" alt="${""}">
-        <img class="${"time time-3 svelte-gfjuk8"}" src="${"/img/n2_clock/time-3.svg"}" alt="${""}">
-        <img class="${"time time-4 svelte-gfjuk8"}" src="${"/img/n2_clock/time-4.svg"}" alt="${""}">
-        <img class="${"time time-5 svelte-gfjuk8"}" src="${"/img/n2_clock/time-5.svg"}" alt="${""}">
-        <img class="${"time time-6 svelte-gfjuk8"}" src="${"/img/n2_clock/time-6.svg"}" alt="${""}">
-        <img class="${"time time-7 svelte-gfjuk8"}" src="${"/img/n2_clock/time-7.svg"}" alt="${""}">
-        <img class="${"time time-8 svelte-gfjuk8"}" src="${"/img/n2_clock/time-8.svg"}" alt="${""}">
-        <img class="${"time time-9 svelte-gfjuk8"}" src="${"/img/n2_clock/time-9.svg"}" alt="${""}">
-        <img class="${"time time-10 svelte-gfjuk8"}" src="${"/img/n2_clock/time-10.svg"}" alt="${""}">
-        <img class="${"time time-11 svelte-gfjuk8"}" src="${"/img/n2_clock/time-11.svg"}" alt="${""}">
-        <img class="${"time time-12 svelte-gfjuk8"}" src="${"/img/n2_clock/time-12.svg"}" alt="${""}">
-        <img id="${"insidewheel"}" src="${"/img/n2_clock/clock_insidewheel.svg"}" alt="${""}" class="${"svelte-gfjuk8"}">
-        <img src="${"/img/n2_clock/clock_body.svg"}" alt="${""}" class="${"svelte-gfjuk8"}"></div>    
-</div>`;
+      {
+        toast._init(target, options);
+      }
+      items = $toast.filter((i2) => i2.target === target);
+      $$unsubscribe_toast();
+      return `<ul class="${"_toastContainer svelte-7xr3c1"}">${each(items, (item) => {
+        return `<li${add_attribute("style", getCss(item.theme), 0)}>${validate_component(ToastItem, "ToastItem").$$render($$result, { item }, {}, {})}
+    </li>`;
+      })}</ul>`;
     });
     css3 = {
-      code: "#menu_box.svelte-9tmjw9{max-height:700px;max-width:500px;margin:0 auto}.icon_box.svelte-9tmjw9{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:space-around;border:solid 1px white;max-width:400px;padding:20px 10px;margin:100px 30px}",
+      code: ".toast_wrap.svelte-dznte4{--toastMsgPadding:10px 20px;font-size:0.85rem}.error_wrap.svelte-dznte4{--toastWidth:100%;--toastMaxWidth:500px;--toastMinHeight:1.5rem}",
       map: null
     };
-    Routes = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      let $mainmenus, $$unsubscribe_mainmenus;
-      $$unsubscribe_mainmenus = subscribe(mainmenus, (value) => $mainmenus = value);
-      let mainmenu_array = $mainmenus;
+    ToastArea = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       $$result.css.add(css3);
-      $$unsubscribe_mainmenus();
-      return `<div id="${"menu_box"}" class="${"svelte-9tmjw9"}">${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
-        default: ({ matches }) => {
-          return `${matches ? `<div class="${"icon_box svelte-9tmjw9"}">${each(mainmenu_array, (menu) => {
-            return `${validate_component(HomeButton, "HomeButton").$$render($$result, {
-              path: menu.path,
-              icon_url: menu.img,
-              explain: menu.name
-            }, {}, {})}`;
-          })}</div>` : ``}`;
-        }
-      })}
-    ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
-        default: ({ matches }) => {
-          return `${matches ? `<div class="${"icon_box svelte-9tmjw9"}">${each(mainmenu_array, (menu) => {
-            return `${validate_component(HomeButton, "HomeButton").$$render($$result, {
-              path: menu.path,
-              icon_url: menu.img,
-              explain: menu.name
-            }, {}, {})}`;
-          })}</div>` : ``}`;
-        }
-      })}
-    ${validate_component(N2Clock, "N2Clock").$$render($$result, {}, {}, {})}</div>
+      return `<div class="${"toast_wrap svelte-dznte4"}">${validate_component(SvelteToast, "SvelteToast").$$render($$result, {}, {}, {})}</div>
 
-${slots.default ? slots.default({}) : ``}`;
+<div class="${"toast_wrap error_wrap svelte-dznte4"}">${validate_component(SvelteToast, "SvelteToast").$$render($$result, { target: "error" }, {}, {})}
+</div>`;
     });
   }
 });
 
-// .svelte-kit/output/server/nodes/17.js
-var __exports3 = {};
-__export(__exports3, {
-  css: () => css4,
-  entry: () => entry3,
-  js: () => js3,
-  module: () => index_svelte_exports
+// .svelte-kit/output/server/entries/pages/__layout-root@default.svelte.js
+var layout_root_default_svelte_exports = {};
+__export(layout_root_default_svelte_exports, {
+  default: () => _layout_root_default
 });
-var entry3, js3, css4;
-var init__3 = __esm({
-  ".svelte-kit/output/server/nodes/17.js"() {
-    init_index_svelte();
-    entry3 = "pages/index.svelte-f1f4949d.js";
-    js3 = ["pages/index.svelte-f1f4949d.js", "chunks/index-ce8d78cd.js", "chunks/MainMenu-2961464d.js", "chunks/index-c399c12f.js", "chunks/MediaQuery-bc67bc2a.js"];
-    css4 = ["assets/pages/index.svelte-7ded9e66.css"];
+var css$22, HeaderMenuBox, css$12, HambergerMenuBox, css4, _layout_root_default;
+var init_layout_root_default_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/__layout-root@default.svelte.js"() {
+    init_index_2e97bc70();
+    init_MainMenu_48049949();
+    init_MediaQuery_021992e5();
+    init_ToastArea_32d9fee1();
+    init_index_96622166();
+    css$22 = {
+      code: ".menu-box.svelte-fl8s9g.svelte-fl8s9g{position:relative;display:inline-block}.menu-box.svelte-fl8s9g .menu-name.svelte-fl8s9g{border-radius:20px;padding:5px 20px}.menu-box.svelte-fl8s9g .menu-name.svelte-fl8s9g:hover{background:white}.menu-box.svelte-fl8s9g .menu-name:hover p.svelte-fl8s9g{color:black}.menu-box.svelte-fl8s9g .explain-box.svelte-fl8s9g{z-index:100;position:absolute;margin-top:30px;right:0;opacity:0;background:linear-gradient(90deg, rgb(20, 20, 20), rgba(20, 20, 20, 0.5));padding:20px;display:flex;flex-direction:row;align-items:center;transition:0.2s}.menu-box.svelte-fl8s9g .explain-box.open.svelte-fl8s9g{opacity:1}.menu-box.svelte-fl8s9g .explain-box img.svelte-fl8s9g{width:50px}.menu-box.svelte-fl8s9g .explain-box p.svelte-fl8s9g{padding:20px;width:300px;color:white}",
+      map: null
+    };
+    HeaderMenuBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { name } = $$props;
+      let { path } = $$props;
+      let { img } = $$props;
+      let { explain } = $$props;
+      if ($$props.name === void 0 && $$bindings.name && name !== void 0)
+        $$bindings.name(name);
+      if ($$props.path === void 0 && $$bindings.path && path !== void 0)
+        $$bindings.path(path);
+      if ($$props.img === void 0 && $$bindings.img && img !== void 0)
+        $$bindings.img(img);
+      if ($$props.explain === void 0 && $$bindings.explain && explain !== void 0)
+        $$bindings.explain(explain);
+      $$result.css.add(css$22);
+      return `<div class="${"menu-box svelte-fl8s9g"}"><div class="${"menu-name svelte-fl8s9g"}"><a${add_attribute("href", path, 0)}><p class="${"svelte-fl8s9g"}">${escape(name)}</p></a></div>
+    <div class="${"explain-box " + escape("") + " svelte-fl8s9g"}"><img${add_attribute("src", img, 0)} alt="${""}" class="${"svelte-fl8s9g"}">
+        <p class="${"svelte-fl8s9g"}"><!-- HTML_TAG_START -->${explain}<!-- HTML_TAG_END --></p></div>
+</div>`;
+    });
+    css$12 = {
+      code: ".menu-box.svelte-13vu3ny.svelte-13vu3ny{padding:15px 10px;display:flex;height:100px;flex-direction:row}.menu-box.svelte-13vu3ny img.icon.svelte-13vu3ny{margin:0 10px;height:50px}.menu-box.svelte-13vu3ny img.arrow.svelte-13vu3ny{transform:rotate(-90deg);height:15px;margin:auto 0}.menu-box.svelte-13vu3ny .text.svelte-13vu3ny{padding:0 5px;width:230px}.menu-box.svelte-13vu3ny .text .name.svelte-13vu3ny{font-size:13px;margin:0 0 5px 0}.menu-box.svelte-13vu3ny .text .explain.svelte-13vu3ny{font-size:10px}",
+      map: null
+    };
+    HambergerMenuBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { name } = $$props;
+      let { path } = $$props;
+      let { img } = $$props;
+      let { explain } = $$props;
+      if ($$props.name === void 0 && $$bindings.name && name !== void 0)
+        $$bindings.name(name);
+      if ($$props.path === void 0 && $$bindings.path && path !== void 0)
+        $$bindings.path(path);
+      if ($$props.img === void 0 && $$bindings.img && img !== void 0)
+        $$bindings.img(img);
+      if ($$props.explain === void 0 && $$bindings.explain && explain !== void 0)
+        $$bindings.explain(explain);
+      $$result.css.add(css$12);
+      return `<a${add_attribute("href", path, 0)}><div class="${"menu-box svelte-13vu3ny"}"><img class="${"icon svelte-13vu3ny"}"${add_attribute("src", img, 0)} alt="${""}">
+        <div class="${"text svelte-13vu3ny"}"><p class="${"name svelte-13vu3ny"}">${escape(name)}</p>
+            <p class="${"explain svelte-13vu3ny"}"><!-- HTML_TAG_START -->${explain}<!-- HTML_TAG_END --></p></div>
+        <img class="${"arrow svelte-13vu3ny"}" src="${"/img/arrow-osha.svg"}" alt="${">"}"></div>
+</a>`;
+    });
+    css4 = {
+      code: "header.svelte-16nqr66.svelte-16nqr66{background:black;display:flex;justify-content:space-between;align-items:center;height:60px}header.svelte-16nqr66 .n2-logo.svelte-16nqr66{padding:10px}header.svelte-16nqr66 .n2-logo img.svelte-16nqr66{height:30px}header.svelte-16nqr66 .menu-row-list.svelte-16nqr66{margin:0 20px}header.svelte-16nqr66 .hamburger-menu.svelte-16nqr66{position:relative;padding:10px}header.svelte-16nqr66 .hamburger-menu .hamburger-button .bar.svelte-16nqr66{display:block;background-color:#fff;height:4px;width:30px;border-radius:1px}header.svelte-16nqr66 .hamburger-menu .hamburger-button .bar1.svelte-16nqr66{transform:translateY(-6px);transition:transform 0.3s}header.svelte-16nqr66 .hamburger-menu .hamburger-button .bar3.svelte-16nqr66{transform:translateY(6px);transition:transform 0.3s}header.svelte-16nqr66 .hamburger-menu .hamburger-slider.svelte-16nqr66{position:fixed;z-index:100;width:300px;top:100px;right:-320px;background:linear-gradient(90deg, rgb(0, 0, 0), rgba(0, 0, 0, 0.8));transition:0.3s}header.svelte-16nqr66 .hamburger-menu .hamburger-slider.open.svelte-16nqr66{right:0}",
+      map: null
+    };
+    _layout_root_default = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $mainmenus, $$unsubscribe_mainmenus;
+      $$unsubscribe_mainmenus = subscribe(mainmenus, (value) => $mainmenus = value);
+      $$result.css.add(css4);
+      $$unsubscribe_mainmenus();
+      return `<header class="${"svelte-16nqr66"}"><div class="${"n2-logo svelte-16nqr66"}"><a href="${"/"}"><img src="${"/img/n2-icon-white.svg"}" alt="${""}" class="${"svelte-16nqr66"}"></a></div>
+    ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
+        default: ({ matches }) => {
+          return `${matches ? `<div class="${"menu-row-list svelte-16nqr66"}">${each($mainmenus, (menu) => {
+            return `${validate_component(HeaderMenuBox, "HeaderMenuBox").$$render($$result, {
+              name: menu.name,
+              path: menu.path,
+              img: menu.img,
+              explain: menu.explain
+            }, {}, {})}`;
+          })}</div>` : ``}`;
+        }
+      })}
+    
+    ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
+        default: ({ matches }) => {
+          return `${matches ? `<div class="${"hamburger-menu svelte-16nqr66"}"><span class="${"hamburger-button"}"><span class="${"bar bar1 svelte-16nqr66"}"></span>
+                <span class="${"bar bar2 svelte-16nqr66"}"></span>
+                <span class="${"bar bar3 svelte-16nqr66"}"></span></span>
+            <div class="${"hamburger-slider " + escape("") + " svelte-16nqr66"}">${each($mainmenus, (menu) => {
+            return `${validate_component(HambergerMenuBox, "HambergerMenuBox").$$render($$result, {
+              name: menu.name,
+              path: menu.path,
+              img: menu.img,
+              explain: menu.explain
+            }, {}, {})}`;
+          })}</div></div>` : ``}`;
+        }
+      })}</header>
+
+${slots.default ? slots.default({}) : ``}
+${validate_component(ToastArea, "ToastArea").$$render($$result, {}, {}, {})}`;
+    });
   }
 });
 
-// .svelte-kit/output/server/entries/pages/app.svelte.js
-var app_svelte_exports = {};
-__export(app_svelte_exports, {
-  default: () => App
+// .svelte-kit/output/server/nodes/2.js
+var __exports3 = {};
+__export(__exports3, {
+  css: () => css5,
+  entry: () => entry3,
+  js: () => js3,
+  module: () => layout_root_default_svelte_exports
 });
-var css5, App;
-var init_app_svelte = __esm({
-  ".svelte-kit/output/server/entries/pages/app.svelte.js"() {
+var entry3, js3, css5;
+var init__3 = __esm({
+  ".svelte-kit/output/server/nodes/2.js"() {
+    init_layout_root_default_svelte();
+    entry3 = "pages/__layout-root@default.svelte-24e0a9c2.js";
+    js3 = ["pages/__layout-root@default.svelte-24e0a9c2.js", "chunks/index-7e81b4c7.js", "chunks/MainMenu-804ce1a3.js", "chunks/index-c0f974cf.js", "chunks/MediaQuery-7add008a.js", "chunks/ToastArea-eba10419.js", "chunks/SvelteToast.svelte_svelte_type_style_lang-960f1691.js"];
+    css5 = ["assets/pages/__layout-root@default.svelte-2d087689.css", "assets/ToastArea-00e911a5.css", "assets/SvelteToast.svelte_svelte_type_style_lang-00aa1808.css"];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/app@root.svelte.js
+var app_root_svelte_exports = {};
+__export(app_root_svelte_exports, {
+  default: () => App_root
+});
+var css6, App_root;
+var init_app_root_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/app@root.svelte.js"() {
     init_index_2e97bc70();
-    css5 = {
+    css6 = {
       code: 'article.svelte-18s83uh.svelte-18s83uh{width:90vw;max-width:350px;margin:0 auto}article.svelte-18s83uh h1.svelte-18s83uh{margin:20px 0 10px 0}#phone-flame.svelte-18s83uh.svelte-18s83uh{padding:10px;border:solid 2px white;background:white;min-height:555px;border-radius:20px;position:relative}#phone-flame.svelte-18s83uh.svelte-18s83uh::before{content:"";position:absolute;background:white;--width:160px;left:calc(50% - var(--width) / 2);right:calc(50% - var(--width) / 2);height:25px;border-radius:0 0 20px 20px/0 0 15px 15px}#phone-flame.svelte-18s83uh.svelte-18s83uh::after{content:"";position:absolute;background:black;top:17px;--width:50px;left:calc(50% - var(--width) / 2);right:calc(50% - var(--width) / 2);height:10px;border-radius:5px}#phone-flame.svelte-18s83uh section.svelte-18s83uh{font-family:"Kosugi Maru", sans-serif;border:solid 2px white;padding:50px 20px 20px 20px;background:linear-gradient(135deg, black, black, rgba(0, 0, 0, 0.85));border-radius:10px;min-height:535px;display:flex;flex-wrap:wrap;grid-template-columns:repeat(auto-fill, 80px);justify-content:space-between}#phone-flame.svelte-18s83uh section .app-icon.svelte-18s83uh{display:flex;flex-direction:column;align-items:center;margin:0 0 45px 0;width:80px;height:80px}#phone-flame.svelte-18s83uh section .app-icon.active.svelte-18s83uh{border:solid 2px white;border-radius:20px}#phone-flame.svelte-18s83uh section .app-icon img.svelte-18s83uh{margin:0 auto;padding:10px;height:75px;cursor:pointer}#phone-flame.svelte-18s83uh section .app-icon .app-name.svelte-18s83uh{margin:10px 0 0 0;font-size:10px;text-align:center}',
       map: null
     };
-    App = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+    App_root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let apps = [
         {
           name: "\u3070\u304F\u305C\u3064\u3055\u3042\u3061",
@@ -5939,7 +6195,7 @@ var init_app_svelte = __esm({
         },
         {
           name: "Web\u30C0\u30E1\u30AB\u30F3",
-          icon: "/img/tcg-sim/card_naname.svg",
+          icon: "/img/pokeca/icon_white.svg",
           href: "/app/pokemon-card-game-effector/game",
           description: "\u30DD\u30B1\u30AB\u306E\u30C0\u30E1\u30AB\u30F3\u3092Web\u3067\u3084\u3063\u3061\u3083\u3046\u3002"
         },
@@ -5956,7 +6212,7 @@ var init_app_svelte = __esm({
           description: "\u30AB\u30FC\u30C9\u753B\u50CF\u3092\u53CE\u96C6"
         }
       ];
-      $$result.css.add(css5);
+      $$result.css.add(css6);
       return `<article class="${"svelte-18s83uh"}"><h1 class="${"svelte-18s83uh"}">APP LIST</h1>
     <div id="${"phone-flame"}" class="${"svelte-18s83uh"}"><section class="${"svelte-18s83uh"}">${each(apps, (a) => {
         return `<div class="${"app-icon active svelte-18s83uh"}"><a${add_attribute("href", a.href, 0)}><img${add_attribute("src", a.icon, 0)} alt="${""}" class="${"svelte-18s83uh"}">
@@ -5974,36 +6230,36 @@ var init_app_svelte = __esm({
 // .svelte-kit/output/server/nodes/13.js
 var __exports4 = {};
 __export(__exports4, {
-  css: () => css6,
+  css: () => css7,
   entry: () => entry4,
   js: () => js4,
-  module: () => app_svelte_exports
+  module: () => app_root_svelte_exports
 });
-var entry4, js4, css6;
+var entry4, js4, css7;
 var init__4 = __esm({
   ".svelte-kit/output/server/nodes/13.js"() {
-    init_app_svelte();
-    entry4 = "pages/app.svelte-beb424f3.js";
-    js4 = ["pages/app.svelte-beb424f3.js", "chunks/index-ce8d78cd.js"];
-    css6 = ["assets/pages/app.svelte-1db43c81.css"];
+    init_app_root_svelte();
+    entry4 = "pages/app@root.svelte-1cd0b096.js";
+    js4 = ["pages/app@root.svelte-1cd0b096.js", "chunks/index-7e81b4c7.js"];
+    css7 = ["assets/pages/app@root.svelte-a39030f5.css"];
   }
 });
 
-// .svelte-kit/output/server/entries/pages/contact.svelte.js
-var contact_svelte_exports = {};
-__export(contact_svelte_exports, {
-  default: () => Contact
+// .svelte-kit/output/server/entries/pages/contact@root.svelte.js
+var contact_root_svelte_exports = {};
+__export(contact_root_svelte_exports, {
+  default: () => Contact_root
 });
-var css7, Contact;
-var init_contact_svelte = __esm({
-  ".svelte-kit/output/server/entries/pages/contact.svelte.js"() {
+var css8, Contact_root;
+var init_contact_root_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/contact@root.svelte.js"() {
     init_index_2e97bc70();
-    css7 = {
+    css8 = {
       code: "article.svelte-11yu7j3{width:90%;max-width:700px;margin:0 auto}",
       map: null
     };
-    Contact = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      $$result.css.add(css7);
+    Contact_root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      $$result.css.add(css8);
       return `<article class="${"svelte-11yu7j3"}">
 
 </article>`;
@@ -6014,31 +6270,131 @@ var init_contact_svelte = __esm({
 // .svelte-kit/output/server/nodes/16.js
 var __exports5 = {};
 __export(__exports5, {
-  css: () => css8,
+  css: () => css9,
   entry: () => entry5,
   js: () => js5,
-  module: () => contact_svelte_exports
+  module: () => contact_root_svelte_exports
 });
-var entry5, js5, css8;
+var entry5, js5, css9;
 var init__5 = __esm({
   ".svelte-kit/output/server/nodes/16.js"() {
-    init_contact_svelte();
-    entry5 = "pages/contact.svelte-df7d2b86.js";
-    js5 = ["pages/contact.svelte-df7d2b86.js", "chunks/index-ce8d78cd.js"];
-    css8 = ["assets/pages/contact.svelte-297997af.css"];
+    init_contact_root_svelte();
+    entry5 = "pages/contact@root.svelte-bce1ac95.js";
+    js5 = ["pages/contact@root.svelte-bce1ac95.js", "chunks/index-7e81b4c7.js"];
+    css9 = ["assets/pages/contact@root.svelte-58dee529.css"];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/index@root.svelte.js
+var index_root_svelte_exports = {};
+__export(index_root_svelte_exports, {
+  default: () => Index_root
+});
+var css$23, HomeButton, css$13, N2Clock, css10, Index_root;
+var init_index_root_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/index@root.svelte.js"() {
+    init_index_2e97bc70();
+    init_MainMenu_48049949();
+    init_MediaQuery_021992e5();
+    init_index_96622166();
+    css$23 = {
+      code: ".homebutton-box.svelte-1mc03rw.svelte-1mc03rw{position:relative;width:100px;height:100px;background:white;border-radius:15px;margin:15px;transition:0.5s}.homebutton-box.focus.svelte-1mc03rw.svelte-1mc03rw{border-radius:0px}.homebutton-box.disactive.svelte-1mc03rw.svelte-1mc03rw{background:rgba(255, 255, 255, 0.3)}.homebutton-box.disactive.svelte-1mc03rw img.svelte-1mc03rw,.homebutton-box.disactive.svelte-1mc03rw h1.svelte-1mc03rw{opacity:0.3}.homebutton-box.svelte-1mc03rw .icons.svelte-1mc03rw{position:absolute;display:flex;flex-direction:column;justify-content:space-around;--topval:10px;top:var(--topval);left:var(--topval);width:calc(100% - var(--topval) * 2);height:calc(100% - var(--topval) * 2)}.homebutton-box.svelte-1mc03rw .icons img.svelte-1mc03rw{height:60%;margin:0 auto}.homebutton-box.svelte-1mc03rw .icons h1.svelte-1mc03rw{text-align:center;font-size:14px;color:white}.homebutton-box.svelte-1mc03rw .homebutton_background.svelte-1mc03rw{position:absolute;--positioning:5px;top:var(--positioning);left:var(--positioning);width:calc(100% - var(--positioning) * 2);height:calc(100% - var(--positioning) * 2);background:black;border-radius:25px;transition:0.5s}.homebutton-box.svelte-1mc03rw .homebutton_background.focus.svelte-1mc03rw{transform:rotate(45deg);background:red;border-radius:0px}.homebutton-box.svelte-1mc03rw .hover_area.svelte-1mc03rw{position:absolute;top:0;left:0;width:100%;height:100%}.homebutton-box.svelte-1mc03rw p.svelte-1mc03rw{position:absolute;top:35px;left:-5px;font-weight:bold;opacity:1;width:120px;z-index:100;color:white}",
+      map: null
+    };
+    HomeButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { model } = $$props;
+      if ($$props.model === void 0 && $$bindings.model && model !== void 0)
+        $$bindings.model(model);
+      $$result.css.add(css$23);
+      return `<div class="${"homebutton-box " + escape("") + " " + escape(model.active ? "" : "disactive") + " svelte-1mc03rw"}"><a${add_attribute("href", model.active ? model.path : "", 0)}><div class="${"homebutton_background " + escape("") + " svelte-1mc03rw"}"></div>
+        <div class="${"icons svelte-1mc03rw"}"><img${add_attribute("src", model.img, 0)} alt="${escape(model.explain) + "\u30DC\u30BF\u30F3"}" class="${"svelte-1mc03rw"}">
+            <h1 class="${"svelte-1mc03rw"}">${escape(model.name)}</h1></div>
+        <div class="${"hover_area svelte-1mc03rw"}"></div></a>
+    ${!model.active ? `<p class="${"svelte-1mc03rw"}">comming soon</p>` : ``}
+</div>`;
+    });
+    css$13 = {
+      code: "#bg_clock.svelte-gfjuk8.svelte-gfjuk8{position:absolute;overflow:hidden;height:100%;width:100%;top:0;left:0;z-index:-1}#bg_clock.svelte-gfjuk8 #clockbody.svelte-gfjuk8{position:absolute;top:40vh;left:25vw;width:120vw;height:120vw;-webkit-animation:svelte-gfjuk8-clockrotate 60s cubic-bezier(1, 0, 0.95, 0.38) infinite;animation:svelte-gfjuk8-clockrotate 60s cubic-bezier(1, 0, 0.95, 0.38) infinite;transition:1s}@keyframes svelte-gfjuk8-clockslide{0%{left:25vw;transform:rotate(0deg)}100%{left:-200%;transform:rotate(-270deg)}}@-webkit-keyframes svelte-gfjuk8-clockslide{0%{left:25vw;-webkit-transform:rotate(0deg)}100%{left:-200%;-webkit-transform:rotate(-270deg)}}#bg_clock.svelte-gfjuk8 #clockbody img.svelte-gfjuk8{width:100%}@keyframes svelte-gfjuk8-clockrotate{0%{transform:rotate(0deg)}2%{transform:rotate(7deg)}4%{transform:rotate(14deg)}6%{transform:rotate(21deg)}8%{transform:rotate(28deg)}10%{transform:rotate(36deg)}12%{transform:rotate(43deg)}14%{transform:rotate(50deg)}16%{transform:rotate(57deg)}18%{transform:rotate(64deg)}20%{transform:rotate(72deg)}22%{transform:rotate(79deg)}24%{transform:rotate(86deg)}26%{transform:rotate(93deg)}28%{transform:rotate(100deg)}30%{transform:rotate(108deg)}32%{transform:rotate(115deg)}34%{transform:rotate(122deg)}36%{transform:rotate(129deg)}38%{transform:rotate(136deg)}40%{transform:rotate(144deg)}42%{transform:rotate(151deg)}44%{transform:rotate(158deg)}46%{transform:rotate(165deg)}48%{transform:rotate(172deg)}50%{transform:rotate(180deg)}52%{transform:rotate(187deg)}54%{transform:rotate(194deg)}56%{transform:rotate(201deg)}58%{transform:rotate(208deg)}60%{transform:rotate(216deg)}62%{transform:rotate(223deg)}64%{transform:rotate(230deg)}66%{transform:rotate(237deg)}68%{transform:rotate(244deg)}70%{transform:rotate(252deg)}72%{transform:rotate(259deg)}74%{transform:rotate(266deg)}76%{transform:rotate(273deg)}78%{transform:rotate(280deg)}80%{transform:rotate(288deg)}82%{transform:rotate(295deg)}84%{transform:rotate(302deg)}86%{transform:rotate(309deg)}88%{transform:rotate(316deg)}90%{transform:rotate(324deg)}92%{transform:rotate(331deg)}94%{transform:rotate(338deg)}96%{transform:rotate(345deg)}98%{transform:rotate(352deg)}100%{transform:rotate(360deg)}}@-webkit-keyframes svelte-gfjuk8-clockrotate{0%{-webkit-transform:rotate(0deg)}2%{-webkit-transform:rotate(7deg)}4%{-webkit-transform:rotate(14deg)}6%{-webkit-transform:rotate(21deg)}8%{-webkit-transform:rotate(28deg)}10%{-webkit-transform:rotate(36deg)}12%{-webkit-transform:rotate(43deg)}14%{-webkit-transform:rotate(50deg)}16%{-webkit-transform:rotate(57deg)}18%{-webkit-transform:rotate(64deg)}20%{-webkit-transform:rotate(72deg)}22%{-webkit-transform:rotate(79deg)}24%{-webkit-transform:rotate(86deg)}26%{-webkit-transform:rotate(93deg)}28%{-webkit-transform:rotate(100deg)}30%{-webkit-transform:rotate(108deg)}32%{-webkit-transform:rotate(115deg)}34%{-webkit-transform:rotate(122deg)}36%{-webkit-transform:rotate(129deg)}38%{-webkit-transform:rotate(136deg)}40%{-webkit-transform:rotate(144deg)}42%{-webkit-transform:rotate(151deg)}44%{-webkit-transform:rotate(158deg)}46%{-webkit-transform:rotate(165deg)}48%{-webkit-transform:rotate(172deg)}50%{-webkit-transform:rotate(180deg)}52%{-webkit-transform:rotate(187deg)}54%{-webkit-transform:rotate(194deg)}56%{-webkit-transform:rotate(201deg)}58%{-webkit-transform:rotate(208deg)}60%{-webkit-transform:rotate(216deg)}62%{-webkit-transform:rotate(223deg)}64%{-webkit-transform:rotate(230deg)}66%{-webkit-transform:rotate(237deg)}68%{-webkit-transform:rotate(244deg)}70%{-webkit-transform:rotate(252deg)}72%{-webkit-transform:rotate(259deg)}74%{-webkit-transform:rotate(266deg)}76%{-webkit-transform:rotate(273deg)}78%{-webkit-transform:rotate(280deg)}80%{-webkit-transform:rotate(288deg)}82%{-webkit-transform:rotate(295deg)}84%{-webkit-transform:rotate(302deg)}86%{-webkit-transform:rotate(309deg)}88%{-webkit-transform:rotate(316deg)}90%{-webkit-transform:rotate(324deg)}92%{-webkit-transform:rotate(331deg)}94%{-webkit-transform:rotate(338deg)}96%{-webkit-transform:rotate(345deg)}98%{-webkit-transform:rotate(352deg)}100%{-webkit-transform:rotate(360deg)}}@keyframes svelte-gfjuk8-clockspin{0%{transform:rotate(0deg)}100%{transform:rotate(720deg)}}@-webkit-keyframes svelte-gfjuk8-clockspin{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(720deg)}}#bg_clock.svelte-gfjuk8 #clockbody img.time.svelte-gfjuk8{position:absolute;width:10%;animation:svelte-gfjuk8-wheelrotate 10s linear infinite;-webkit-animation:svelte-gfjuk8-wheelrotate 10s linear infinite}#bg_clock.svelte-gfjuk8 #clockbody img#insidewheel.svelte-gfjuk8{position:absolute;width:25%;animation:svelte-gfjuk8-wheelrotate 10s linear infinite reverse;-webkit-animation:svelte-gfjuk8-wheelrotate 10s linear infinite reverse;top:37.5%;left:37.5%}.time-3.svelte-gfjuk8.svelte-gfjuk8{top:45%;left:63.5%}.time-2.svelte-gfjuk8.svelte-gfjuk8{top:35.75%;left:61.021%}.time-1.svelte-gfjuk8.svelte-gfjuk8{top:28.979%;left:54.25%}.time-12.svelte-gfjuk8.svelte-gfjuk8{top:26.5%;left:45%}.time-11.svelte-gfjuk8.svelte-gfjuk8{top:28.979%;left:35.75%}.time-10.svelte-gfjuk8.svelte-gfjuk8{top:35.75%;left:28.979%}.time-9.svelte-gfjuk8.svelte-gfjuk8{top:45%;left:26.5%}.time-8.svelte-gfjuk8.svelte-gfjuk8{top:54.25%;left:28.979%}.time-7.svelte-gfjuk8.svelte-gfjuk8{top:61.021%;left:35.75%}.time-6.svelte-gfjuk8.svelte-gfjuk8{top:63.5%;left:45%}.time-5.svelte-gfjuk8.svelte-gfjuk8{top:61.021%;left:54.25%}.time-4.svelte-gfjuk8.svelte-gfjuk8{top:54.25%;left:61.021%}#bg_clock.svelte-gfjuk8 #clockbody img.time-2.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-4.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-6.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-8.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-10.svelte-gfjuk8,#bg_clock.svelte-gfjuk8 #clockbody img.time-12.svelte-gfjuk8{animation-direction:reverse;-webkit-animation-direction:reverse}@keyframes svelte-gfjuk8-wheelrotate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}@-webkit-keyframes svelte-gfjuk8-wheelrotate{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg)}}@media screen and (min-width: 600px){}@media screen and (min-width: 700px){#bg_clock.svelte-gfjuk8 #clockbody.svelte-gfjuk8{top:35vh;left:50vw;height:850px;width:850px}#bg_clock.svelte-gfjuk8 #clockbody img.svelte-gfjuk8{width:850px}#bg_clock.svelte-gfjuk8 img.time.svelte-gfjuk8{width:85px}}",
+      map: null
+    };
+    N2Clock = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      $$result.css.add(css$13);
+      return `<div id="${"bg_clock"}" class="${"svelte-gfjuk8"}"><div id="${"clockbody"}" class="${"svelte-gfjuk8"}">
+        <img class="${"time time-1 svelte-gfjuk8"}" src="${"/img/n2_clock/time-1.svg"}" alt="${""}">\u3000
+        <img class="${"time time-2 svelte-gfjuk8"}" src="${"/img/n2_clock/time-2.svg"}" alt="${""}">
+        <img class="${"time time-3 svelte-gfjuk8"}" src="${"/img/n2_clock/time-3.svg"}" alt="${""}">
+        <img class="${"time time-4 svelte-gfjuk8"}" src="${"/img/n2_clock/time-4.svg"}" alt="${""}">
+        <img class="${"time time-5 svelte-gfjuk8"}" src="${"/img/n2_clock/time-5.svg"}" alt="${""}">
+        <img class="${"time time-6 svelte-gfjuk8"}" src="${"/img/n2_clock/time-6.svg"}" alt="${""}">
+        <img class="${"time time-7 svelte-gfjuk8"}" src="${"/img/n2_clock/time-7.svg"}" alt="${""}">
+        <img class="${"time time-8 svelte-gfjuk8"}" src="${"/img/n2_clock/time-8.svg"}" alt="${""}">
+        <img class="${"time time-9 svelte-gfjuk8"}" src="${"/img/n2_clock/time-9.svg"}" alt="${""}">
+        <img class="${"time time-10 svelte-gfjuk8"}" src="${"/img/n2_clock/time-10.svg"}" alt="${""}">
+        <img class="${"time time-11 svelte-gfjuk8"}" src="${"/img/n2_clock/time-11.svg"}" alt="${""}">
+        <img class="${"time time-12 svelte-gfjuk8"}" src="${"/img/n2_clock/time-12.svg"}" alt="${""}">
+        <img id="${"insidewheel"}" src="${"/img/n2_clock/clock_insidewheel.svg"}" alt="${""}" class="${"svelte-gfjuk8"}">
+        <img src="${"/img/n2_clock/clock_body.svg"}" alt="${""}" class="${"svelte-gfjuk8"}"></div>    
+</div>`;
+    });
+    css10 = {
+      code: "#menu_box.svelte-9tmjw9{max-height:700px;max-width:500px;margin:0 auto}.icon_box.svelte-9tmjw9{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:space-around;border:solid 1px white;max-width:400px;padding:20px 10px;margin:100px 30px}",
+      map: null
+    };
+    Index_root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $mainmenus, $$unsubscribe_mainmenus;
+      $$unsubscribe_mainmenus = subscribe(mainmenus, (value) => $mainmenus = value);
+      let mainmenu_array = $mainmenus;
+      $$result.css.add(css10);
+      $$unsubscribe_mainmenus();
+      return `<div id="${"menu_box"}" class="${"svelte-9tmjw9"}">${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min-width: 701px)" }, {}, {
+        default: ({ matches }) => {
+          return `${matches ? `<div class="${"icon_box svelte-9tmjw9"}">${each(mainmenu_array, (menu) => {
+            return `${validate_component(HomeButton, "HomeButton").$$render($$result, { model: menu }, {}, {})}`;
+          })}</div>` : ``}`;
+        }
+      })}
+    ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
+        default: ({ matches }) => {
+          return `${matches ? `<div class="${"icon_box svelte-9tmjw9"}">${each(mainmenu_array, (menu) => {
+            return `${validate_component(HomeButton, "HomeButton").$$render($$result, { model: menu }, {}, {})}`;
+          })}</div>` : ``}`;
+        }
+      })}
+    ${validate_component(N2Clock, "N2Clock").$$render($$result, {}, {}, {})}</div>
+
+${slots.default ? slots.default({}) : ``}`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/17.js
+var __exports6 = {};
+__export(__exports6, {
+  css: () => css11,
+  entry: () => entry6,
+  js: () => js6,
+  module: () => index_root_svelte_exports
+});
+var entry6, js6, css11;
+var init__6 = __esm({
+  ".svelte-kit/output/server/nodes/17.js"() {
+    init_index_root_svelte();
+    entry6 = "pages/index@root.svelte-d51e67c8.js";
+    js6 = ["pages/index@root.svelte-d51e67c8.js", "chunks/index-7e81b4c7.js", "chunks/MainMenu-804ce1a3.js", "chunks/index-c0f974cf.js", "chunks/MediaQuery-7add008a.js"];
+    css11 = ["assets/pages/index@root.svelte-218c4e0b.css"];
   }
 });
 
 // .svelte-kit/output/server/entries/pages/introduce/index.svelte.js
-var index_svelte_exports2 = {};
-__export(index_svelte_exports2, {
+var index_svelte_exports = {};
+__export(index_svelte_exports, {
   default: () => Introduce
 });
-var css9, myname, mySex, myBloodType, Introduce;
-var init_index_svelte2 = __esm({
+var css12, myname, mySex, myBloodType, Introduce;
+var init_index_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/introduce/index.svelte.js"() {
     init_index_2e97bc70();
-    css9 = {
+    css12 = {
       code: "#introduce-box.svelte-muuo5r.svelte-muuo5r{position:relative;width:80%;max-width:700px;margin:30px auto 0 auto;height:700px}#introduce-box.svelte-muuo5r #introduce-text.svelte-muuo5r{padding:30px}#introduce-box.svelte-muuo5r #introduce-text div.svelte-muuo5r{margin:5px}#introduce-box.svelte-muuo5r #introduce-text h1.svelte-muuo5r{margin:10px 0}#introduce-box.svelte-muuo5r #introduce-text .job.svelte-muuo5r{margin:10px 5px;font-size:16px}#introduce-box.svelte-muuo5r #introduce-text .birthday .birthday-count.svelte-muuo5r{display:inline;font-size:13px}#introduce-box.svelte-muuo5r .image.svelte-muuo5r{z-index:-1;position:absolute;filter:blur(2px);background-image:var(--url);background-position:center;width:100%;height:100%}",
       map: null
     };
@@ -6055,7 +6411,7 @@ var init_index_svelte2 = __esm({
       const backgroundIllust = [
         "https://lh3.googleusercontent.com/bcvBUbA1fI0nUqannPAJxes6L1JmFm4VdhfjCwq6fkvqgoBHlGoVJhMk-L20s5zscQZe8FO9d3x4u757Gk35od1rhy8wbOlOEHDt0GULdy7Af2oI_TMadzt4mohs-okGaJoaYaxq27I9HXPCNyoO_cv5nSEM2WlUNF_KKNMW-Hv-0RJkpREnBwzn-HPzuP9lXk5VVIhIcNEwspqsh4n_byo-SlBOOnDX6YDSI_iPzQOftJTfIoZupSXt7yT0eTX4X3G4iU7l0oJd72Mm72_4xAgAw9Ogoyy2wOx_f9TY3hLZWqO1n94DOM0GxWtE-YbfX_LxLRbAzbIUk4IGhl0eNUNfY-w-zg6DjNe0EgQ0MlgBbQH7GDUa-0va2ppQwNTdU_nJIlBBlFa5MCEaBrc3WJZuN1uC7Od7bgY2w3l9_zTajyvYMDRK40k0jlJjqUov2v5QmbAOwVap49VF1bNQrqZsKN-KaCuVeBZHOsA33U28f7qE5Pw2V1g0nUvcYGjBgSyIjX0d-4abQnpNO_AAP5mKUhiMHPAxc1SJne8b_AQMPQNk0qAdO_-I68Eb1nN2LdKyk2Ca4YWqGb2OTQyyewAaxnYhPY9tTXCMxU18r2NVuJWDmrzXaNab3s_rjdMwn1zW5sxrJEpqFu2Av7wPWQ5PRbbPBZVVid_jh8slBbZLULwQ7qLRbn3L-opMCJzUq748fEL2GXe1wWK1G87Fw_I=s700-no"
       ];
-      $$result.css.add(css9);
+      $$result.css.add(css12);
       return `<section id="${"introduce-box"}" class="${"svelte-muuo5r"}"><div class="${"image svelte-muuo5r"}" style="${"--url:url(" + escape(backgroundIllust[0]) + ")"}"></div>
     <div id="${"introduce-text"}" class="${"svelte-muuo5r"}"><h1 class="${"svelte-muuo5r"}"><!-- HTML_TAG_START -->${myname}<!-- HTML_TAG_END --></h1>
         <div class="${"job svelte-muuo5r"}">${escape(myJob.join(", "))}</div>
@@ -6069,29 +6425,29 @@ var init_index_svelte2 = __esm({
 });
 
 // .svelte-kit/output/server/nodes/18.js
-var __exports6 = {};
-__export(__exports6, {
-  css: () => css10,
-  entry: () => entry6,
-  js: () => js6,
-  module: () => index_svelte_exports2
+var __exports7 = {};
+__export(__exports7, {
+  css: () => css13,
+  entry: () => entry7,
+  js: () => js7,
+  module: () => index_svelte_exports
 });
-var entry6, js6, css10;
-var init__6 = __esm({
+var entry7, js7, css13;
+var init__7 = __esm({
   ".svelte-kit/output/server/nodes/18.js"() {
-    init_index_svelte2();
-    entry6 = "pages/introduce/index.svelte-6e4d96b7.js";
-    js6 = ["pages/introduce/index.svelte-6e4d96b7.js", "chunks/index-ce8d78cd.js"];
-    css10 = ["assets/pages/introduce/index.svelte-627fe975.css"];
+    init_index_svelte();
+    entry7 = "pages/introduce/index.svelte-8d83ec0f.js";
+    js7 = ["pages/introduce/index.svelte-8d83ec0f.js", "chunks/index-7e81b4c7.js"];
+    css13 = ["assets/pages/introduce/index.svelte-627fe975.css"];
   }
 });
 
 // .svelte-kit/output/server/chunks/bs2ndLoader-cf0653eb.js
-var css11, Bs2ndLoader;
+var css14, Bs2ndLoader;
 var init_bs2ndLoader_cf0653eb = __esm({
   ".svelte-kit/output/server/chunks/bs2ndLoader-cf0653eb.js"() {
     init_index_2e97bc70();
-    css11 = {
+    css14 = {
       code: ".loader.svelte-v9q609.svelte-v9q609{width:100%;height:100%}.loader.svelte-v9q609 .kotodama-box.svelte-v9q609{--size:30px;display:flex;flex-direction:row;justify-content:center;flex-wrap:wrap;align-items:center;max-width:150px;height:100%;margin:0 auto}.loader.svelte-v9q609 .kotodama-box .kotodama.svelte-v9q609{position:relative;width:var(--size);height:var(--size);margin:3px}.loader.svelte-v9q609 .kotodama-box .kotodama img.svelte-v9q609{position:absolute;bottom:0;left:0;width:var(--size);height:var(--size);animation:svelte-v9q609-popinkotodama linear 1.3s var(--delay) infinite}@keyframes svelte-v9q609-popinkotodama{0%{bottom:0}20%{bottom:var(--size)}40%{bottom:0;height:var(--size)}43%{bottom:0;height:calc(var(--size) / 3)}46%{bottom:0;height:var(--size)}}",
       map: null
     };
@@ -6099,7 +6455,7 @@ var init_bs2ndLoader_cf0653eb = __esm({
       let { popindelay = 0.15 } = $$props;
       if ($$props.popindelay === void 0 && $$bindings.popindelay && popindelay !== void 0)
         $$bindings.popindelay(popindelay);
-      $$result.css.add(css11);
+      $$result.css.add(css14);
       return `<div class="${"loader svelte-v9q609"}"><div class="${"kotodama-box svelte-v9q609"}"><div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay}s`) + ";"}" src="${"/img/bs2nd/ba_gray.png"}" alt="${"\u3070"}" class="${"svelte-v9q609"}"></div>
         <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 2}s`) + ";"}" src="${"/img/bs2nd/ku_gray.png"}" alt="${"\u304F"}" class="${"svelte-v9q609"}"></div>
         <div class="${"kotodama svelte-v9q609"}"><img style="${"--delay:" + escape(`${popindelay * 3}s`) + ";"}" src="${"/img/bs2nd/ze_gray.png"}" alt="${"\u305C"}" class="${"svelte-v9q609"}"></div>
@@ -6113,12 +6469,12 @@ var init_bs2ndLoader_cf0653eb = __esm({
 });
 
 // .svelte-kit/output/server/entries/pages/show/index.svelte.js
-var index_svelte_exports3 = {};
-__export(index_svelte_exports3, {
+var index_svelte_exports2 = {};
+__export(index_svelte_exports2, {
   default: () => Show
 });
-var css$5, PendulumLoader, css$4, RectWaveLoader, css$3, RoundFloweringLoader, css$22, Show_item, css$12, DotStringLoader, css12, Show;
-var init_index_svelte3 = __esm({
+var css$5, PendulumLoader, css$4, RectWaveLoader, css$3, RoundFloweringLoader, css$24, Show_item, css$14, DotStringLoader, css15, Show;
+var init_index_svelte2 = __esm({
   ".svelte-kit/output/server/entries/pages/show/index.svelte.js"() {
     init_index_2e97bc70();
     init_bs2ndLoader_cf0653eb();
@@ -6282,7 +6638,7 @@ var init_index_svelte3 = __esm({
       })}</div></div>
 </div>`;
     });
-    css$22 = {
+    css$24 = {
       code: ".loader-animation-box.svelte-yop039{padding:30px 0;border:solid 1px white;min-height:290px;width:100%;height:100%}",
       map: null
     };
@@ -6293,11 +6649,11 @@ var init_index_svelte3 = __esm({
         $$bindings.name(name);
       if ($$props.component === void 0 && $$bindings.component && component !== void 0)
         $$bindings.component(component);
-      $$result.css.add(css$22);
+      $$result.css.add(css$24);
       return `<div class="${"loader-animation-box svelte-yop039"}">${validate_component(component || missing_component, "svelte:component").$$render($$result, {}, {}, {})}</div>
 <p>${escape(name)}</p>`;
     });
-    css$12 = {
+    css$14 = {
       code: ".loader.svelte-1o1dzs3.svelte-1o1dzs3{width:100%;height:100%}.loader.svelte-1o1dzs3 .board.svelte-1o1dzs3{display:flex;flex-direction:row;justify-content:space-around;width:100%;height:100%}.loader.svelte-1o1dzs3 .board .dot_area.svelte-1o1dzs3{padding:5px;flex-basis:var(--dot_area_width);display:flex;flex-direction:row;justify-content:center;flex-wrap:wrap}.loader.svelte-1o1dzs3 .board .dot_area .dot.svelte-1o1dzs3,.loader.svelte-1o1dzs3 .board .dot_area .blank.svelte-1o1dzs3{flex-basis:32%;width:var(--dot_size);height:var(--dot_size)}.loader.svelte-1o1dzs3 .board .dot_area .dot.svelte-1o1dzs3{background:var(--color)}",
       map: null
     };
@@ -6333,7 +6689,7 @@ var init_index_svelte3 = __esm({
         $$bindings.dot_size(dot_size);
       if ($$props.input === void 0 && $$bindings.input && input !== void 0)
         $$bindings.input(input);
-      $$result.css.add(css$12);
+      $$result.css.add(css$14);
       return `<div class="${"loader svelte-1o1dzs3"}"><div class="${"board svelte-1o1dzs3"}" style="${"--color:" + escape(color) + "; --dot_area_width:" + escape(Math.floor(100 / input_tostr.length)) + "%; --dot_size:" + escape(`${dot_size}px`)}">${each(dot_args, (args) => {
         return `<div class="${"dot_area svelte-1o1dzs3"}">${each(args.dots, (dot) => {
           return `${dot == 0 ? `<div class="${"blank svelte-1o1dzs3"}"></div>` : `<div class="${"dot svelte-1o1dzs3"}"></div>`}`;
@@ -6342,7 +6698,7 @@ var init_index_svelte3 = __esm({
       })}</div>
 </div>`;
     });
-    css12 = {
+    css15 = {
       code: ".show-room.svelte-7jgice.svelte-7jgice{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:space-around}.show-room.svelte-7jgice .show-box.svelte-7jgice{flex-basis:40%}.show-room.svelte-7jgice .show-box-phone.svelte-7jgice{flex-basis:90%}",
       map: null
     };
@@ -6366,7 +6722,7 @@ var init_index_svelte3 = __esm({
           component: DotStringLoader
         }
       ];
-      $$result.css.add(css12);
+      $$result.css.add(css15);
       return `<section class="${"show-room svelte-7jgice"}">${each(show_item_args, (arg) => {
         return `${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
           default: ({ matches }) => {
@@ -6390,20 +6746,20 @@ var init_index_svelte3 = __esm({
 });
 
 // .svelte-kit/output/server/nodes/19.js
-var __exports7 = {};
-__export(__exports7, {
-  css: () => css13,
-  entry: () => entry7,
-  js: () => js7,
-  module: () => index_svelte_exports3
+var __exports8 = {};
+__export(__exports8, {
+  css: () => css16,
+  entry: () => entry8,
+  js: () => js8,
+  module: () => index_svelte_exports2
 });
-var entry7, js7, css13;
-var init__7 = __esm({
+var entry8, js8, css16;
+var init__8 = __esm({
   ".svelte-kit/output/server/nodes/19.js"() {
-    init_index_svelte3();
-    entry7 = "pages/show/index.svelte-b3faca6c.js";
-    js7 = ["pages/show/index.svelte-b3faca6c.js", "chunks/index-ce8d78cd.js", "chunks/bs2ndLoader-5a7ce381.js", "chunks/MediaQuery-bc67bc2a.js"];
-    css13 = ["assets/pages/show/index.svelte-e2989a52.css", "assets/bs2ndLoader-8a29ed63.css"];
+    init_index_svelte2();
+    entry8 = "pages/show/index.svelte-42b79b8b.js";
+    js8 = ["pages/show/index.svelte-42b79b8b.js", "chunks/index-7e81b4c7.js", "chunks/bs2ndLoader-e7191b2f.js", "chunks/MediaQuery-7add008a.js"];
+    css16 = ["assets/pages/show/index.svelte-e2989a52.css", "assets/bs2ndLoader-8a29ed63.css"];
   }
 });
 
@@ -9074,7 +9430,7 @@ var list_svelte_exports = {};
 __export(list_svelte_exports, {
   default: () => List
 });
-var import_axios2, notion_pages, css$13, List_item, css14, List;
+var import_axios2, notion_pages, css$15, List_item, css17, List;
 var init_list_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/blog/list.svelte.js"() {
     init_index_2e97bc70();
@@ -9083,7 +9439,7 @@ var init_list_svelte = __esm({
     init_MediaQuery_021992e5();
     import_axios2 = __toESM(require_axios2(), 1);
     notion_pages = writable2([]);
-    css$13 = {
+    css$15 = {
       code: ".items.svelte-g7z64q.svelte-g7z64q.svelte-g7z64q{margin:20px 0px;border:solid 1px black;display:flex;flex-direction:row;justify-content:space-between;height:175px}.items.svelte-g7z64q .info_container.svelte-g7z64q.svelte-g7z64q{padding:20px 40px;width:50%;display:flex;flex-direction:column;justify-content:space-between}.items.svelte-g7z64q .info_container.svelte-g7z64q h3.svelte-g7z64q{font-size:25px;color:black}.items.svelte-g7z64q .thumbnail_container.svelte-g7z64q.svelte-g7z64q{overflow:hidden;width:50%;max-width:432px}.items_phone.svelte-g7z64q.svelte-g7z64q.svelte-g7z64q{margin:20px 0px;border:solid 1px black;display:flex;flex-direction:column;justify-content:space-between}.items_phone.svelte-g7z64q .info_container.svelte-g7z64q.svelte-g7z64q{padding:15px 30px}.items_phone.svelte-g7z64q .info_container.svelte-g7z64q h3.svelte-g7z64q{font-size:20px;color:black;margin:10px 0}.items_phone.svelte-g7z64q .thumbnail_container.svelte-g7z64q.svelte-g7z64q{overflow:hidden;width:100%;height:200px}.tag_container.svelte-g7z64q.svelte-g7z64q.svelte-g7z64q{display:flex;flex-direction:row;flex-wrap:wrap}.tag_container.svelte-g7z64q .tag_box.svelte-g7z64q.svelte-g7z64q{margin:5px;padding:5px 10px;border-radius:2px;background:rgb(133, 133, 133);font-size:13px}.tag_container.svelte-g7z64q .tag_box.default.svelte-g7z64q.svelte-g7z64q{background:black;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.gray.svelte-g7z64q.svelte-g7z64q{background:#525252;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.brown.svelte-g7z64q.svelte-g7z64q{background:#613c1a;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.orange.svelte-g7z64q.svelte-g7z64q{background:#b95a00;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.yellow.svelte-g7z64q.svelte-g7z64q{background:#e4a700;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.green.svelte-g7z64q.svelte-g7z64q{background:#135e00;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.blue.svelte-g7z64q.svelte-g7z64q{background:#000a9b;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.purple.svelte-g7z64q.svelte-g7z64q{background:#3d008d;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.pink.svelte-g7z64q.svelte-g7z64q{background:#a80076;border:solid 1px #444444}.tag_container.svelte-g7z64q .tag_box.red.svelte-g7z64q.svelte-g7z64q{background:#880000;border:solid 1px #880000}",
       map: null
     };
@@ -9100,7 +9456,7 @@ var init_list_svelte = __esm({
         $$bindings.title(title);
       if ($$props.thumbnail === void 0 && $$bindings.thumbnail && thumbnail !== void 0)
         $$bindings.thumbnail(thumbnail);
-      $$result.css.add(css$13);
+      $$result.css.add(css$15);
       return `${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(max-width: 700px)" }, {}, {
         default: ({ matches }) => {
           return `${matches ? `<div class="${"items_phone svelte-g7z64q"}"><div class="${"info_container svelte-g7z64q"}"><a href="${"/blog/page?page_id=" + escape(id)}"><h3 class="${"svelte-g7z64q"}"><!-- HTML_TAG_START -->${title}<!-- HTML_TAG_END --></h3></a>
@@ -9123,14 +9479,14 @@ ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min
         }
       })}`;
     });
-    css14 = {
+    css17 = {
       code: "h2.svelte-13h619c{color:black}.background.svelte-13h619c{padding:30px 20px;width:100%;height:100%;background:white}",
       map: null
     };
     List = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let $notion_pages, $$unsubscribe_notion_pages;
       $$unsubscribe_notion_pages = subscribe(notion_pages, (value) => $notion_pages = value);
-      $$result.css.add(css14);
+      $$result.css.add(css17);
       $$unsubscribe_notion_pages();
       return `<div class="${"background svelte-13h619c"}"><section class="${"title"}"><h2 class="${"svelte-13h619c"}">BLOG LIST</h2></section>
 <section class="${"blog_list"}">${each($notion_pages, (page) => {
@@ -9148,20 +9504,20 @@ ${validate_component(MediaQuery, "MediaQuery").$$render($$result, { query: "(min
 });
 
 // .svelte-kit/output/server/nodes/14.js
-var __exports8 = {};
-__export(__exports8, {
-  css: () => css15,
-  entry: () => entry8,
-  js: () => js8,
+var __exports9 = {};
+__export(__exports9, {
+  css: () => css18,
+  entry: () => entry9,
+  js: () => js9,
   module: () => list_svelte_exports
 });
-var entry8, js8, css15;
-var init__8 = __esm({
+var entry9, js9, css18;
+var init__9 = __esm({
   ".svelte-kit/output/server/nodes/14.js"() {
     init_list_svelte();
-    entry8 = "pages/blog/list.svelte-88c7237c.js";
-    js8 = ["pages/blog/list.svelte-88c7237c.js", "chunks/index-ce8d78cd.js", "chunks/index-c399c12f.js", "chunks/api-e2b0109c.js", "chunks/MediaQuery-bc67bc2a.js"];
-    css15 = ["assets/pages/blog/list.svelte-fa9025ee.css"];
+    entry9 = "pages/blog/list.svelte-3891e1f8.js";
+    js9 = ["pages/blog/list.svelte-3891e1f8.js", "chunks/index-7e81b4c7.js", "chunks/index-c0f974cf.js", "chunks/api-e2b0109c.js", "chunks/MediaQuery-7add008a.js"];
+    css18 = ["assets/pages/blog/list.svelte-fa9025ee.css"];
   }
 });
 
@@ -9184,20 +9540,20 @@ var init_page_svelte = __esm({
 });
 
 // .svelte-kit/output/server/nodes/15.js
-var __exports9 = {};
-__export(__exports9, {
-  css: () => css16,
-  entry: () => entry9,
-  js: () => js9,
+var __exports10 = {};
+__export(__exports10, {
+  css: () => css19,
+  entry: () => entry10,
+  js: () => js10,
   module: () => page_svelte_exports
 });
-var entry9, js9, css16;
-var init__9 = __esm({
+var entry10, js10, css19;
+var init__10 = __esm({
   ".svelte-kit/output/server/nodes/15.js"() {
     init_page_svelte();
-    entry9 = "pages/blog/page.svelte-4188cfb6.js";
-    js9 = ["pages/blog/page.svelte-4188cfb6.js", "chunks/index-ce8d78cd.js"];
-    css16 = [];
+    entry10 = "pages/blog/page.svelte-7f27c59d.js";
+    js10 = ["pages/blog/page.svelte-7f27c59d.js", "chunks/index-7e81b4c7.js"];
+    css19 = [];
   }
 });
 
@@ -9219,261 +9575,20 @@ var init_collect_svelte = __esm({
 });
 
 // .svelte-kit/output/server/nodes/6.js
-var __exports10 = {};
-__export(__exports10, {
-  css: () => css17,
-  entry: () => entry10,
-  js: () => js10,
+var __exports11 = {};
+__export(__exports11, {
+  css: () => css20,
+  entry: () => entry11,
+  js: () => js11,
   module: () => collect_svelte_exports
 });
-var entry10, js10, css17;
-var init__10 = __esm({
+var entry11, js11, css20;
+var init__11 = __esm({
   ".svelte-kit/output/server/nodes/6.js"() {
     init_collect_svelte();
-    entry10 = "pages/app/DM-Downloader/collect.svelte-677ce410.js";
-    js10 = ["pages/app/DM-Downloader/collect.svelte-677ce410.js", "chunks/index-ce8d78cd.js", "chunks/api-e2b0109c.js"];
-    css17 = [];
-  }
-});
-
-// .svelte-kit/output/server/chunks/ToastArea-32d9fee1.js
-function is_date(obj) {
-  return Object.prototype.toString.call(obj) === "[object Date]";
-}
-function get_interpolator(a, b) {
-  if (a === b || a !== a)
-    return () => a;
-  const type = typeof a;
-  if (type !== typeof b || Array.isArray(a) !== Array.isArray(b)) {
-    throw new Error("Cannot interpolate values of different type");
-  }
-  if (Array.isArray(a)) {
-    const arr = b.map((bi, i2) => {
-      return get_interpolator(a[i2], bi);
-    });
-    return (t2) => arr.map((fn) => fn(t2));
-  }
-  if (type === "object") {
-    if (!a || !b)
-      throw new Error("Object cannot be null");
-    if (is_date(a) && is_date(b)) {
-      a = a.getTime();
-      b = b.getTime();
-      const delta = b - a;
-      return (t2) => new Date(a + t2 * delta);
-    }
-    const keys = Object.keys(b);
-    const interpolators = {};
-    keys.forEach((key2) => {
-      interpolators[key2] = get_interpolator(a[key2], b[key2]);
-    });
-    return (t2) => {
-      const result = {};
-      keys.forEach((key2) => {
-        result[key2] = interpolators[key2](t2);
-      });
-      return result;
-    };
-  }
-  if (type === "number") {
-    const delta = b - a;
-    return (t2) => a + t2 * delta;
-  }
-  throw new Error(`Cannot interpolate ${type} values`);
-}
-function tweened(value, defaults2 = {}) {
-  const store = writable2(value);
-  let task;
-  let target_value = value;
-  function set(new_value, opts) {
-    if (value == null) {
-      store.set(value = new_value);
-      return Promise.resolve();
-    }
-    target_value = new_value;
-    let previous_task = task;
-    let started = false;
-    let { delay = 0, duration = 400, easing = identity, interpolate = get_interpolator } = assign(assign({}, defaults2), opts);
-    if (duration === 0) {
-      if (previous_task) {
-        previous_task.abort();
-        previous_task = null;
-      }
-      store.set(value = target_value);
-      return Promise.resolve();
-    }
-    const start = now() + delay;
-    let fn;
-    task = loop((now2) => {
-      if (now2 < start)
-        return true;
-      if (!started) {
-        fn = interpolate(value, new_value);
-        if (typeof duration === "function")
-          duration = duration(value, new_value);
-        started = true;
-      }
-      if (previous_task) {
-        previous_task.abort();
-        previous_task = null;
-      }
-      const elapsed = now2 - start;
-      if (elapsed > duration) {
-        store.set(value = new_value);
-        return false;
-      }
-      store.set(value = fn(easing(elapsed / duration)));
-      return true;
-    });
-    return task.promise;
-  }
-  return {
-    set,
-    update: (fn, opts) => set(fn(target_value, value), opts),
-    subscribe: store.subscribe
-  };
-}
-var defaults, createToast, toast, css$23, ToastItem, css$14, SvelteToast, css18, ToastArea;
-var init_ToastArea_32d9fee1 = __esm({
-  ".svelte-kit/output/server/chunks/ToastArea-32d9fee1.js"() {
-    init_index_2e97bc70();
-    init_index_96622166();
-    defaults = {
-      duration: 4e3,
-      initial: 1,
-      next: 0,
-      pausable: false,
-      dismissable: true,
-      reversed: false,
-      intro: { x: 256 },
-      theme: {}
-    };
-    createToast = () => {
-      const { subscribe: subscribe2, update } = writable2([]);
-      let count = 0;
-      const options = {};
-      const _obj = (obj) => obj instanceof Object;
-      const push = (msg, opts = {}) => {
-        const param = __spreadValues({ target: "default" }, _obj(msg) ? msg : __spreadProps(__spreadValues({}, opts), { msg }));
-        const conf = options[param.target] || {};
-        const entry20 = __spreadProps(__spreadValues(__spreadValues(__spreadValues({}, defaults), conf), param), {
-          theme: __spreadValues(__spreadValues({}, conf.theme), param.theme),
-          id: ++count
-        });
-        update((n) => entry20.reversed ? [...n, entry20] : [entry20, ...n]);
-        return count;
-      };
-      const pop = (id) => {
-        update((n) => {
-          if (!n.length || id === 0)
-            return [];
-          if (_obj(id))
-            return n.filter((i2) => id(i2));
-          const target = id || Math.max(...n.map((i2) => i2.id));
-          return n.filter((i2) => i2.id !== target);
-        });
-      };
-      const set = (id, opts = {}) => {
-        const param = _obj(id) ? __spreadValues({}, id) : __spreadProps(__spreadValues({}, opts), { id });
-        update((n) => {
-          const idx = n.findIndex((i2) => i2.id === param.id);
-          if (idx > -1) {
-            n[idx] = __spreadValues(__spreadValues({}, n[idx]), param);
-          }
-          return n;
-        });
-      };
-      const _init = (target = "default", opts = {}) => {
-        options[target] = opts;
-        return options;
-      };
-      return { subscribe: subscribe2, push, pop, set, _init };
-    };
-    toast = createToast();
-    css$23 = {
-      code: "._toastItem.svelte-j9nwjb{width:var(--toastWidth, 16rem);height:var(--toastHeight, auto);min-height:var(--toastMinHeight, 3.5rem);margin:var(--toastMargin, 0 0 0.5rem 0);padding:var(--toastPadding, 0);background:var(--toastBackground, rgba(66, 66, 66, 0.9));color:var(--toastColor, #fff);box-shadow:var(--toastBoxShadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06));border:var(--toastBorder, none);border-radius:var(--toastBorderRadius, 0.125rem);position:relative;display:flex;flex-direction:row;align-items:center;overflow:hidden;will-change:transform, opacity;-webkit-tap-highlight-color:transparent}._toastMsg.svelte-j9nwjb{padding:var(--toastMsgPadding, 0.75rem 0.5rem);flex:1 1 0%}.pe.svelte-j9nwjb,._toastMsg.svelte-j9nwjb a{pointer-events:auto}._toastBtn.svelte-j9nwjb{width:2rem;height:100%;font:1rem sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;outline:none}._toastBar.svelte-j9nwjb{top:var(--toastBarTop, auto);right:var(--toastBarRight, auto);bottom:var(--toastBarBottom, 0);left:var(--toastBarLeft, 0);height:var(--toastBarHeight, 6px);width:var(--toastBarWidth, 100%);position:absolute;display:block;-webkit-appearance:none;-moz-appearance:none;appearance:none;border:none;background:transparent;pointer-events:none}._toastBar.svelte-j9nwjb::-webkit-progress-bar{background:transparent}._toastBar.svelte-j9nwjb::-webkit-progress-value{background:var(--toastProgressBackground, var(--toastBarBackground, rgba(33, 150, 243, 0.75)))}._toastBar.svelte-j9nwjb::-moz-progress-bar{background:var(--toastProgressBackground, var(--toastBarBackground, rgba(33, 150, 243, 0.75)))}",
-      map: null
-    };
-    ToastItem = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      let $progress, $$unsubscribe_progress;
-      let { item } = $$props;
-      const progress = tweened(item.initial, { duration: item.duration, easing: identity });
-      $$unsubscribe_progress = subscribe(progress, (value) => $progress = value);
-      const close = () => toast.pop(item.id);
-      const autoclose = () => {
-        if ($progress === 1 || $progress === 0) {
-          close();
-        }
-      };
-      let next = item.initial;
-      const getProps = () => {
-        const { props = {}, sendIdTo } = item.component;
-        if (sendIdTo) {
-          props[sendIdTo] = item.id;
-        }
-        return props;
-      };
-      onDestroy(() => {
-        if (typeof item.onpop === "function") {
-          item.onpop(item.id);
-        }
-      });
-      if ($$props.item === void 0 && $$bindings.item && item !== void 0)
-        $$bindings.item(item);
-      $$result.css.add(css$23);
-      {
-        if (typeof item.progress !== "undefined") {
-          item.next = item.progress;
-        }
-      }
-      {
-        if (next !== item.next) {
-          next = item.next;
-          progress.set(next).then(autoclose);
-        }
-      }
-      $$unsubscribe_progress();
-      return `<div class="${["_toastItem svelte-j9nwjb", item.pausable ? "pe" : ""].join(" ").trim()}"><div role="${"status"}" class="${["_toastMsg svelte-j9nwjb", item.component ? "pe" : ""].join(" ").trim()}">${item.component ? `${validate_component(item.component.src || missing_component, "svelte:component").$$render($$result, Object.assign(getProps()), {}, {})}` : `<!-- HTML_TAG_START -->${item.msg}<!-- HTML_TAG_END -->`}</div>
-  ${item.dismissable ? `<div class="${"_toastBtn pe svelte-j9nwjb"}" role="${"button"}" tabindex="${"-1"}">\u2715</div>` : ``}
-  <progress class="${"_toastBar svelte-j9nwjb"}"${add_attribute("value", $progress, 0)}></progress></div>`;
-    });
-    css$14 = {
-      code: "._toastContainer.svelte-7xr3c1{top:var(--toastContainerTop, 1.5rem);right:var(--toastContainerRight, 2rem);bottom:var(--toastContainerBottom, auto);left:var(--toastContainerLeft, auto);position:fixed;margin:0;padding:0;list-style-type:none;pointer-events:none;z-index:9999}",
-      map: null
-    };
-    SvelteToast = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      let $toast, $$unsubscribe_toast;
-      $$unsubscribe_toast = subscribe(toast, (value) => $toast = value);
-      let { options = {} } = $$props;
-      let { target = "default" } = $$props;
-      let items;
-      const getCss = (theme) => Object.keys(theme).reduce((a, c) => `${a}${c}:${theme[c]};`, "");
-      if ($$props.options === void 0 && $$bindings.options && options !== void 0)
-        $$bindings.options(options);
-      if ($$props.target === void 0 && $$bindings.target && target !== void 0)
-        $$bindings.target(target);
-      $$result.css.add(css$14);
-      {
-        toast._init(target, options);
-      }
-      items = $toast.filter((i2) => i2.target === target);
-      $$unsubscribe_toast();
-      return `<ul class="${"_toastContainer svelte-7xr3c1"}">${each(items, (item) => {
-        return `<li${add_attribute("style", getCss(item.theme), 0)}>${validate_component(ToastItem, "ToastItem").$$render($$result, { item }, {}, {})}
-    </li>`;
-      })}</ul>`;
-    });
-    css18 = {
-      code: ".toast_wrap.svelte-dznte4{--toastMsgPadding:10px 20px;font-size:0.85rem}.error_wrap.svelte-dznte4{--toastWidth:100%;--toastMaxWidth:500px;--toastMinHeight:1.5rem}",
-      map: null
-    };
-    ToastArea = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      $$result.css.add(css18);
-      return `<div class="${"toast_wrap svelte-dznte4"}">${validate_component(SvelteToast, "SvelteToast").$$render($$result, {}, {}, {})}</div>
-
-<div class="${"toast_wrap error_wrap svelte-dznte4"}">${validate_component(SvelteToast, "SvelteToast").$$render($$result, { target: "error" }, {}, {})}
-</div>`;
-    });
+    entry11 = "pages/app/DM-Downloader/collect.svelte-7c08b160.js";
+    js11 = ["pages/app/DM-Downloader/collect.svelte-7c08b160.js", "chunks/index-7e81b4c7.js", "chunks/api-e2b0109c.js"];
+    css20 = [];
   }
 });
 
@@ -9482,18 +9597,18 @@ var layout_bs2nd_svelte_exports = {};
 __export(layout_bs2nd_svelte_exports, {
   default: () => _layout_bs2nd
 });
-var css19, _layout_bs2nd;
+var css21, _layout_bs2nd;
 var init_layout_bs2nd_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/app/bakuzetsu-searcher-2nd/__layout-bs2nd.svelte.js"() {
     init_index_2e97bc70();
     init_ToastArea_32d9fee1();
     init_index_96622166();
-    css19 = {
+    css21 = {
       code: "header.svelte-yl89mf.svelte-yl89mf.svelte-yl89mf{display:flex;justify-content:space-between;height:40px}header.svelte-yl89mf .n2-logo.svelte-yl89mf.svelte-yl89mf{padding:10px}header.svelte-yl89mf .n2-logo img.svelte-yl89mf.svelte-yl89mf{height:20px}#base.svelte-yl89mf.svelte-yl89mf.svelte-yl89mf{background:black}footer.svelte-yl89mf.svelte-yl89mf.svelte-yl89mf{position:fixed;z-index:50;bottom:0;width:100%;height:75px;box-shadow:0 -1px 2px white;padding:10px;background:black}footer.svelte-yl89mf .footer-icon-box.svelte-yl89mf.svelte-yl89mf{display:flex;justify-content:space-around;max-width:700px;margin:0 auto}footer.svelte-yl89mf .footer-icon-box a.svelte-yl89mf.svelte-yl89mf{display:flex;flex-direction:column;align-items:center;justify-content:space-between;position:relative;width:40px;height:40px;border-radius:27px}footer.svelte-yl89mf .footer-icon-box a.active .footer-icon-bg.svelte-yl89mf.svelte-yl89mf{position:absolute;width:30px;height:30px;border:solid 2px var(--active-yellow);border-radius:15px}footer.svelte-yl89mf .footer-icon-box a.active p.svelte-yl89mf.svelte-yl89mf{color:var(--active-yellow)}footer.svelte-yl89mf .footer-icon-box a.svelte-yl89mf img.svelte-yl89mf{height:25px}footer.svelte-yl89mf .footer-icon-box a p.svelte-yl89mf.svelte-yl89mf{font-size:12px;font-weight:bold}",
       map: null
     };
     _layout_bs2nd = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      $$result.css.add(css19);
+      $$result.css.add(css21);
       return `${$$result.head += `${$$result.title = `<title>\u3070\u304F\u305C\u3064\u3055\u3042\u3061 | \u30B3\u30C8\u30C0\u30DE\u30F3\u5358\u8A9E \u691C\u7D22 | \u30B3\u30C8\u30C0\u30DE\u30F3\u8F9E\u66F8 \u691C\u7D22</title>`, ""}<meta name="${"google-site-verification"}" content="${"3OjGMRDR5lkfKidGxk6ZUvUpS8GTtV2Hs8mCtnf8m3M"}" data-svelte="svelte-s74sy5">`, ""}
 
 <header class="${"svelte-yl89mf"}"><div class="${"n2-logo svelte-yl89mf"}"><a href="${"/"}" class="${"svelte-yl89mf"}"><img src="${"/img/n2-icon-white.svg"}" alt="${""}" class="${"svelte-yl89mf"}"></a></div></header>
@@ -9513,20 +9628,20 @@ ${validate_component(ToastArea, "ToastArea").$$render($$result, {}, {}, {})}
 });
 
 // .svelte-kit/output/server/nodes/3.js
-var __exports11 = {};
-__export(__exports11, {
-  css: () => css20,
-  entry: () => entry11,
-  js: () => js11,
+var __exports12 = {};
+__export(__exports12, {
+  css: () => css22,
+  entry: () => entry12,
+  js: () => js12,
   module: () => layout_bs2nd_svelte_exports
 });
-var entry11, js11, css20;
-var init__11 = __esm({
+var entry12, js12, css22;
+var init__12 = __esm({
   ".svelte-kit/output/server/nodes/3.js"() {
     init_layout_bs2nd_svelte();
-    entry11 = "pages/app/bakuzetsu-searcher-2nd/__layout-bs2nd.svelte-baaa44b4.js";
-    js11 = ["pages/app/bakuzetsu-searcher-2nd/__layout-bs2nd.svelte-baaa44b4.js", "chunks/index-ce8d78cd.js", "chunks/ToastArea-fcd0e930.js", "chunks/SvelteToast.svelte_svelte_type_style_lang-58682665.js", "chunks/index-c399c12f.js"];
-    css20 = ["assets/pages/app/bakuzetsu-searcher-2nd/__layout-bs2nd.svelte-3f0373ed.css", "assets/ToastArea-00e911a5.css", "assets/SvelteToast.svelte_svelte_type_style_lang-00aa1808.css"];
+    entry12 = "pages/app/bakuzetsu-searcher-2nd/__layout-bs2nd.svelte-3eba4e7c.js";
+    js12 = ["pages/app/bakuzetsu-searcher-2nd/__layout-bs2nd.svelte-3eba4e7c.js", "chunks/index-7e81b4c7.js", "chunks/ToastArea-eba10419.js", "chunks/SvelteToast.svelte_svelte_type_style_lang-960f1691.js", "chunks/index-c0f974cf.js"];
+    css22 = ["assets/pages/app/bakuzetsu-searcher-2nd/__layout-bs2nd.svelte-3f0373ed.css", "assets/ToastArea-00e911a5.css", "assets/SvelteToast.svelte_svelte_type_style_lang-00aa1808.css"];
   }
 });
 
@@ -9736,7 +9851,7 @@ var analyze_bs2nd_svelte_exports = {};
 __export(analyze_bs2nd_svelte_exports, {
   default: () => Analyze_bs2nd
 });
-var import_axios4, css$15, Advent, css21, Analyze_bs2nd;
+var import_axios4, css$16, Advent, css23, Analyze_bs2nd;
 var init_analyze_bs2nd_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/app/bakuzetsu-searcher-2nd/analyze@bs2nd.svelte.js"() {
     init_index_2e97bc70();
@@ -9744,7 +9859,7 @@ var init_analyze_bs2nd_svelte = __esm({
     init_InfiniteScroll_eaf736c0();
     import_axios4 = __toESM(require_axios2(), 1);
     init_index_96622166();
-    css$15 = {
+    css$16 = {
       code: '.advent.svelte-12z7jfs.svelte-12z7jfs{font-family:"Kosugi Maru", sans-serif;width:71px;margin:10px}.advent.svelte-12z7jfs .smart-info-box.svelte-12z7jfs{display:flex;flex-direction:row;justify-content:space-around}.advent.svelte-12z7jfs .smart-info-box img.svelte-12z7jfs{width:60px;height:50px}.advent.svelte-12z7jfs .smart-info-box img.disable.svelte-12z7jfs{filter:grayscale(85%)}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box.svelte-12z7jfs{position:relative}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box.svelte-12z7jfs{height:100%;display:flex;flex-direction:column-reverse}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box .elem.svelte-12z7jfs{width:11px;height:11px;border-radius:6px;margin:0 0 2px 0;border:solid 2px}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box .elem.fire.svelte-12z7jfs{background-color:rgb(219, 70, 70);border-color:rgb(255, 145, 0)}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box .elem.water.svelte-12z7jfs{background-color:rgb(41, 126, 255);border-color:rgb(167, 215, 255)}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box .elem.wood.svelte-12z7jfs{background-color:rgb(105, 172, 105);border-color:rgb(175, 216, 171)}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box .elem.light.svelte-12z7jfs{background-color:rgb(255, 210, 62);border-color:rgb(255, 240, 158)}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box .elem.dark.svelte-12z7jfs{background-color:rgb(146, 85, 165);border-color:rgb(208, 172, 255)}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box .elem.hell.svelte-12z7jfs{background-color:rgb(49, 31, 4);border-color:rgb(214, 166, 9)}.advent.svelte-12z7jfs .smart-info-box .elems-tribe-box .elems-box .elem.heaven.svelte-12z7jfs{background-color:rgb(250, 243, 248);border-color:rgb(255, 175, 248)}.advent.scaleup.svelte-12z7jfs.svelte-12z7jfs{width:120px}.advent.scaleup.svelte-12z7jfs img.svelte-12z7jfs{width:120px;height:100px}.advent.svelte-12z7jfs .name.svelte-12z7jfs{text-align:center;line-height:10px;font-size:10px;width:100%;margin:3px 0 0 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.advent.svelte-12z7jfs .name.disable.svelte-12z7jfs{color:gray}',
       map: null
     };
@@ -9756,7 +9871,7 @@ var init_analyze_bs2nd_svelte = __esm({
         $$bindings.advent(advent);
       if ($$props.full === void 0 && $$bindings.full && full !== void 0)
         $$bindings.full(full);
-      $$result.css.add(css$15);
+      $$result.css.add(css$16);
       return `<div class="${"advent " + escape(!full ? "scaleup" : "") + " svelte-12z7jfs"}"><div class="${"smart-info-box svelte-12z7jfs"}"><img class="${escape(null_to_empty(advent.disable ? "disable" : "")) + " svelte-12z7jfs"}"${add_attribute("src", advent.figure, 0)}${add_attribute("alt", advent.name, 0)}>
         ${full ? `<div class="${"elems-tribe-box svelte-12z7jfs"}"><div class="${"elems-box svelte-12z7jfs"}">${advent.elem.includes("\u706B") ? `<div class="${"elem fire svelte-12z7jfs"}"></div>` : ``}
                 ${advent.elem.includes("\u6C34") ? `<div class="${"elem water svelte-12z7jfs"}"></div>` : ``}
@@ -9769,7 +9884,7 @@ var init_analyze_bs2nd_svelte = __esm({
     
 </div>`;
     });
-    css21 = {
+    css23 = {
       code: "button.svelte-4h12hp.svelte-4h12hp{font-size:14px;width:70px;color:white;border:solid 2px white;border-radius:5px}article.svelte-4h12hp.svelte-4h12hp{height:calc(100vh - 150px);overflow-y:scroll}article.svelte-4h12hp section.svelte-4h12hp{margin:0 auto;width:90vw;max-width:700px}article.svelte-4h12hp #elem-filter-box.svelte-4h12hp{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:right}article.svelte-4h12hp #elem-filter-box .elem.svelte-4h12hp{width:25px;font-size:12px;font-weight:900;text-align:center;margin:5px;border-radius:5px;border:solid 2px rgb(146, 146, 146);padding:3px}article.svelte-4h12hp #elem-filter-box .elem div.svelte-4h12hp{width:25px;height:25px;margin:0 auto;border-radius:12px}article.svelte-4h12hp #elem-filter-box .elem.active.fire.svelte-4h12hp{border-color:rgb(255, 0, 0);color:rgb(255, 0, 0);text-shadow:2px 1px 0px rgb(255, 115, 0)}article.svelte-4h12hp #elem-filter-box .elem.active.water.svelte-4h12hp{border-color:rgb(44, 128, 255);color:rgb(44, 128, 255);text-shadow:2px 1px 0px rgb(162, 191, 255)}article.svelte-4h12hp #elem-filter-box .elem.active.wood.svelte-4h12hp{border-color:rgb(53, 175, 0);color:rgb(53, 175, 0);text-shadow:2px 1px 0px rgb(46, 115, 0)}article.svelte-4h12hp #elem-filter-box .elem.active.light.svelte-4h12hp{border-color:rgb(255, 244, 195);color:rgb(255, 232, 131);text-shadow:2px 1px 0px rgb(255, 196, 0)}article.svelte-4h12hp #elem-filter-box .elem.active.dark.svelte-4h12hp{border-color:rgb(200, 62, 255);color:rgb(200, 62, 255);text-shadow:2px 1px 0px rgb(219, 129, 255)}article.svelte-4h12hp #elem-filter-box .elem.active.hell.svelte-4h12hp{border-color:rgb(255, 196, 0);color:rgb(61, 45, 0);text-shadow:2px 1px 0px rgb(255, 196, 0)}article.svelte-4h12hp #elem-filter-box .elem.active.heaven.svelte-4h12hp{border-color:rgb(255, 180, 245);color:rgb(241, 218, 222);text-shadow:2px 1px 0px rgb(255, 95, 234)}article.svelte-4h12hp #elem-filter-box button.svelte-4h12hp{--green:#6fffcf;color:var(--green);border:solid 2px var(--green);margin:0 0 0 15px}article.svelte-4h12hp #advent-list-box.svelte-4h12hp{width:90vw}article.svelte-4h12hp #advent-list-box p.svelte-4h12hp{font-size:11px}article.svelte-4h12hp #advent-list-box #advent-list.svelte-4h12hp{max-width:700px;margin:0 auto 10px auto;height:170px;display:flex;flex-direction:column;justify-content:start;flex-wrap:wrap;overflow-x:scroll}article.svelte-4h12hp #advent-detail-box.svelte-4h12hp{margin:30px auto;width:90vw}article.svelte-4h12hp #advent-detail-box #advent-overview.svelte-4h12hp{display:flex}article.svelte-4h12hp #advent-detail-box #advent-overview #advent-overview-text.svelte-4h12hp{display:flex;flex-direction:column;justify-content:center}article.svelte-4h12hp #advent-detail-box #advent-overview #advent-overview-text h5.svelte-4h12hp{margin:5px 0}article.svelte-4h12hp #advent-detail-box #banmen-list.svelte-4h12hp{margin:10px 0 400px 0}article.svelte-4h12hp #advent-detail-box #banmen-list #banmen-moj-length-config-box.svelte-4h12hp{margin:10px 0 20px 0;max-width:350px;display:flex;justify-content:space-between}article.svelte-4h12hp #advent-detail-box #banmen-list #banmen-moj-length-config-box button.active.svelte-4h12hp{color:var(--active-yellow);border-color:var(--active-yellow)}article.svelte-4h12hp #advent-detail-box #banmen-list .banmen.svelte-4h12hp{display:flex;justify-content:space-between;align-items:center;font-size:20px;font-weight:bold;letter-spacing:3px;border-bottom:solid 1px white;padding:0 0 5px 0;margin:0 0 15px 0}article.svelte-4h12hp #advent-detail-box #banmen-list .banmen img.svelte-4h12hp{width:8px;height:15px;margin:0 20px 0 0;transition:0.5s}article.svelte-4h12hp #advent-detail-box #banmen-list .banmen.active.svelte-4h12hp{color:var(--active-yellow)}article.svelte-4h12hp #advent-detail-box #banmen-list .banmen.active img.svelte-4h12hp{transform:rotate(90deg)}article.svelte-4h12hp #advent-detail-box #answers-box.svelte-4h12hp{position:fixed;padding:15px 15px 60px 15px;z-index:100;bottom:-520px;left:0;width:100vw;height:480px;background:linear-gradient(225deg, black, rgba(0, 0, 0, 0.8));border-top:solid 2px white;transition:0.3s}article.svelte-4h12hp #advent-detail-box #answers-box.active.svelte-4h12hp{bottom:0}article.svelte-4h12hp #advent-detail-box #answers-box .answer-count.svelte-4h12hp{max-width:650px;margin:0 auto 20px auto}article.svelte-4h12hp #advent-detail-box #answers-box #answer-box-close-button.svelte-4h12hp{position:absolute;top:-30px;right:50px;width:80px;height:30px;border:solid 1px white;border-bottom:solid 2px black;border-radius:7px 7px 0 0;background:black}article.svelte-4h12hp #advent-detail-box #answers-box #answer-box-close-button-tap-area.svelte-4h12hp{position:absolute;top:-30px;right:50px;width:80px;height:100px;padding:15px 30px}article.svelte-4h12hp #advent-detail-box #answers-box #answers-list.svelte-4h12hp{width:90vw;max-width:650px;margin:0 auto;color:white;height:100%;overflow-y:scroll;display:flex;justify-content:left;flex-wrap:wrap}article.svelte-4h12hp #advent-detail-box #answers-box #answers-list .ans-box.svelte-4h12hp{width:160px;padding:0 0 0 15px;border-left:solid 3px white;margin:10px 0}article.svelte-4h12hp #advent-detail-box #answers-box #answers-list .ans-box .answer-word.svelte-4h12hp{font-size:18px}article.svelte-4h12hp #advent-detail-box #answers-box #answers-list .ans-box .answer-nessesary.svelte-4h12hp{font-size:12px}",
       map: null
     };
@@ -9790,7 +9905,7 @@ var init_analyze_bs2nd_svelte = __esm({
       $$unsubscribe_deckStore = subscribe(deckStore, (value) => value);
       let answerCount = 0;
       let answerList = [];
-      $$result.css.add(css21);
+      $$result.css.add(css23);
       $$unsubscribe_adventBanmenStore();
       $$unsubscribe_mojiLengthConfigStore();
       $$unsubscribe_adventTargetStore();
@@ -9836,20 +9951,20 @@ var init_analyze_bs2nd_svelte = __esm({
 });
 
 // .svelte-kit/output/server/nodes/7.js
-var __exports12 = {};
-__export(__exports12, {
-  css: () => css22,
-  entry: () => entry12,
-  js: () => js12,
+var __exports13 = {};
+__export(__exports13, {
+  css: () => css24,
+  entry: () => entry13,
+  js: () => js13,
   module: () => analyze_bs2nd_svelte_exports
 });
-var entry12, js12, css22;
-var init__12 = __esm({
+var entry13, js13, css24;
+var init__13 = __esm({
   ".svelte-kit/output/server/nodes/7.js"() {
     init_analyze_bs2nd_svelte();
-    entry12 = "pages/app/bakuzetsu-searcher-2nd/analyze@bs2nd.svelte-5ef9e33d.js";
-    js12 = ["pages/app/bakuzetsu-searcher-2nd/analyze@bs2nd.svelte-5ef9e33d.js", "chunks/index-ce8d78cd.js", "chunks/summon-b3e2b8ec.js", "chunks/api-e2b0109c.js", "chunks/index-c399c12f.js", "chunks/SvelteToast.svelte_svelte_type_style_lang-58682665.js", "chunks/bs2ndLoader-5a7ce381.js"];
-    css22 = ["assets/pages/app/bakuzetsu-searcher-2nd/analyze@bs2nd.svelte-628f48fe.css", "assets/SvelteToast.svelte_svelte_type_style_lang-00aa1808.css", "assets/bs2ndLoader-8a29ed63.css"];
+    entry13 = "pages/app/bakuzetsu-searcher-2nd/analyze@bs2nd.svelte-b320702c.js";
+    js13 = ["pages/app/bakuzetsu-searcher-2nd/analyze@bs2nd.svelte-b320702c.js", "chunks/index-7e81b4c7.js", "chunks/summon-9a72bcab.js", "chunks/api-e2b0109c.js", "chunks/index-c0f974cf.js", "chunks/SvelteToast.svelte_svelte_type_style_lang-960f1691.js", "chunks/bs2ndLoader-e7191b2f.js"];
+    css24 = ["assets/pages/app/bakuzetsu-searcher-2nd/analyze@bs2nd.svelte-628f48fe.css", "assets/SvelteToast.svelte_svelte_type_style_lang-00aa1808.css", "assets/bs2ndLoader-8a29ed63.css"];
   }
 });
 
@@ -9858,7 +9973,7 @@ var edit_bs2nd_svelte_exports = {};
 __export(edit_bs2nd_svelte_exports, {
   default: () => Edit_bs2nd
 });
-var import_axios5, css$52, Kotodaman, css$42, Specify, css$32, Kana, css$24, Main, css$16, Storage, css23, Edit_bs2nd;
+var import_axios5, css$52, Kotodaman, css$42, Specify, css$32, Kana, css$25, Main, css$17, Storage, css25, Edit_bs2nd;
 var init_edit_bs2nd_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/app/bakuzetsu-searcher-2nd/edit@bs2nd.svelte.js"() {
     init_index_2e97bc70();
@@ -9944,7 +10059,7 @@ var init_edit_bs2nd_svelte = __esm({
     <p class="${"svelte-1dnb1gp"}">* \u6FC1\u97F3\u3084\u4FC3\u97F3\u306A\u3069\u306F\u3001\u5168\u3066\u305D\u306E\u76F4\u97F3\u306B\u542B\u307E\u308C\u307E\u3059\u3002</p>
 </article>`;
     });
-    css$24 = {
+    css$25 = {
       code: "#bs2nd-edit-filter-panel.svelte-lv4ubr.svelte-lv4ubr.svelte-lv4ubr{padding:5px;width:100%;height:100%;position:relative}#bs2nd-edit-filter-panel.svelte-lv4ubr .tabbox.svelte-lv4ubr.svelte-lv4ubr{margin-bottom:10px;padding:10px;border:1px solid #dee2e6;border-radius:0 0 0.5rem 0.5rem;border-top:0}#bs2nd-edit-filter-panel.svelte-lv4ubr ul.svelte-lv4ubr.svelte-lv4ubr{display:flex;flex-wrap:wrap;padding-left:0;margin:0 0;list-style:none;border-bottom:1px solid #dee2e6}#bs2nd-edit-filter-panel.svelte-lv4ubr li.svelte-lv4ubr.svelte-lv4ubr{width:50%;text-align:center;margin-bottom:-1px}#bs2nd-edit-filter-panel.svelte-lv4ubr span.svelte-lv4ubr.svelte-lv4ubr{border:1px solid transparent;border-top-left-radius:0.25rem;border-top-right-radius:0.25rem;display:block;padding:0.5rem 1rem;cursor:pointer;transition:0.3s}#bs2nd-edit-filter-panel.svelte-lv4ubr span.svelte-lv4ubr.svelte-lv4ubr:hover{border-color:#e9ecef #e9ecef #dee2e6}#bs2nd-edit-filter-panel.svelte-lv4ubr li.active.svelte-lv4ubr>span.svelte-lv4ubr{border-color:#dee2e6 #dee2e6 #fff}#bs2nd-edit-filter-panel.svelte-lv4ubr #filter-execute-box.svelte-lv4ubr.svelte-lv4ubr{position:absolute;bottom:25px;width:100%;text-align:center}#bs2nd-edit-filter-panel.svelte-lv4ubr #filter-execute-box button.svelte-lv4ubr.svelte-lv4ubr{margin:0 10px;border:solid 1px white;border-radius:5px;color:white;width:110px;height:35px}",
       map: null
     };
@@ -9979,7 +10094,7 @@ var init_edit_bs2nd_svelte = __esm({
         { label: "50\u97F3", value: 2, component: Kana }
       ];
       let activeTabs = 1;
-      $$result.css.add(css$24);
+      $$result.css.add(css$25);
       $$unsubscribe_gimmickStore();
       $$unsubscribe_tribeStore();
       $$unsubscribe_elemStore();
@@ -10002,7 +10117,7 @@ var init_edit_bs2nd_svelte = __esm({
         <button id="${"reset-button"}" class="${"svelte-lv4ubr"}">\u30EA\u30BB\u30C3\u30C8</button></section>
 </article>`;
     });
-    css$16 = {
+    css$17 = {
       code: '#deck-list-panel.svelte-zpytjz.svelte-zpytjz{font-family:"Kosugi Maru", sans-serif;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-between}#deck-list-panel.svelte-zpytjz .deck-box.svelte-zpytjz{width:100%;height:100px;position:relative}#deck-list-panel.svelte-zpytjz .deck-box .deck-name.svelte-zpytjz{position:absolute;color:white;background:none;border:none;z-index:15;width:150px;font-size:15px;top:20px;left:10px}#deck-list-panel.svelte-zpytjz .deck-box .deck-name.svelte-zpytjz:focus{outline:none;border:solid 1px var(--active-yellow);border-radius:5px}#deck-list-panel.svelte-zpytjz .deck-box .deck-thumbnail.svelte-zpytjz{position:absolute;top:10px;right:0;width:70%;height:80px}#deck-list-panel.svelte-zpytjz .deck-box .deck-thumbnail .deck-img.svelte-zpytjz{position:absolute;width:100%;height:inherit;background-image:var(--url);background-size:cover;background-position:50% 30%;background-repeat:no-repeat;background-blend-mode:screen}#deck-list-panel.svelte-zpytjz .deck-box .deck-thumbnail .deck-img-blank.svelte-zpytjz{position:absolute;right:40px;top:20px;width:auto;height:40px;background-image:var(--url-blank)}#deck-list-panel.svelte-zpytjz .deck-box .deck-thumbnail .deck-img-filter.svelte-zpytjz{position:absolute;width:100%;height:100%;background:linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0))}#deck-list-panel.svelte-zpytjz .deck-box .deck-list.svelte-zpytjz{position:absolute;z-index:10;left:10px;bottom:0px;width:180px;display:flex;flex-direction:row;flex-wrap:wrap-reverse}#deck-list-panel.svelte-zpytjz .deck-box .deck-list img.svelte-zpytjz{width:25px;margin:0 3px 0 0}#deck-list-panel.svelte-zpytjz .deck-box .deck-delete-button.svelte-zpytjz{position:absolute;bottom:0;right:10px}#deck-list-panel.svelte-zpytjz .deck-box .deck-delete-button img.svelte-zpytjz{width:30px}',
       map: null
     };
@@ -10017,7 +10132,7 @@ var init_edit_bs2nd_svelte = __esm({
       $$unsubscribe_isDeckFullStore = subscribe(isDeckFullStore, (value) => value);
       createEventDispatcher();
       console.log($decks);
-      $$result.css.add(css$16);
+      $$result.css.add(css$17);
       $$unsubscribe_unitListStore();
       $$unsubscribe_deckStore();
       $$unsubscribe_decks();
@@ -10036,7 +10151,7 @@ var init_edit_bs2nd_svelte = __esm({
       })}
 </section>`;
     });
-    css23 = {
+    css25 = {
       code: "#bs2nd-screen.svelte-haop3e.svelte-haop3e{margin:0 auto;height:calc(100vh - 120px);overflow:hidden;display:flex;flex-direction:row;justify-content:space-evenly}#bs2nd-screen.svelte-haop3e #bs2nd-edit-panels.svelte-haop3e{max-width:90vw;height:100%;display:flex;flex-direction:column;justify-content:space-around}#bs2nd-screen.svelte-haop3e #bs2nd-edit-panels #bs2nd-deck-edit.svelte-haop3e{margin:10px auto 10px auto}#bs2nd-screen.svelte-haop3e #bs2nd-edit-panels #bs2nd-deck-edit #bs2nd-deck-edit-panel.svelte-haop3e{height:225px;width:300px;margin:0 0 5px 0;background:white;border-radius:20px;display:flex;flex-direction:row;justify-content:space-evenly;flex-wrap:wrap}#bs2nd-screen.svelte-haop3e #bs2nd-edit-panels #bs2nd-deck-edit #bs2nd-deck-edit-panel .unit-in-deck-blank-slot.svelte-haop3e{width:50px;height:50px;border-radius:25px;margin:10px;background-color:rgb(51, 51, 51)}#bs2nd-screen.svelte-haop3e #bs2nd-edit-panels #bs2nd-deck-edit button.svelte-haop3e{width:100px;margin:0 0 0 15px;border:solid 1px white;border-radius:10px;color:white;font-size:12px}#bs2nd-screen.svelte-haop3e #bs2nd-edit-panels #bs2nd-show-units-panel.svelte-haop3e{flex-grow:2;overflow-y:scroll;display:flex;flex-direction:row;justify-content:center;flex-wrap:wrap;margin:10px 0 15px 0;width:100%;max-width:400px;border:solid 2px white;border-radius:20px;padding:25px 0 200px 0}#bs2nd-screen.svelte-haop3e #bs2nd-edit-panels #bs2nd-show-units-panel.svelte-haop3e::-webkit-scrollbar{width:5px}#bs2nd-screen.svelte-haop3e #bs2nd-edit-panels #bs2nd-show-units-panel.svelte-haop3e::-webkit-scrollbar-thumb{border-radius:2px}#bs2nd-screen.svelte-haop3e .panel-box h2.svelte-haop3e{margin:0 0 5px 0}#bs2nd-screen.svelte-haop3e .panel-box p.svelte-haop3e{margin:0 0 25px 0;font-size:12px}#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-slider.svelte-haop3e{position:fixed;top:50px;right:-250px;border:solid 2px white;border-radius:20px 0 0 20px}#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-panel.svelte-haop3e{border:solid 2px white;border-radius:10px}#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-slider.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-panel.svelte-haop3e{width:250px;height:550px;background:linear-gradient(90deg, black, rgba(0, 0, 0, 0.7));transition:0.3s;padding:5px 0 5px 5px}#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-slider.open.svelte-haop3e{right:-3px}#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-slider #bs2nd-deck-select-slider-button.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-panel #bs2nd-deck-select-slider-button.svelte-haop3e{position:absolute;border-top:solid 2px white;border-left:solid 2px white;border-bottom:solid 2px white;border-right:solid 4px black;background-color:black;border-radius:15px 0 0 15px;top:200px;left:-59px;width:60px;height:60px}#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-slider #bs2nd-deck-select-slider-button img.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-panel #bs2nd-deck-select-slider-button img.svelte-haop3e{width:40px;margin:8px auto;transition:0.5s 0.3s}#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-slider #bs2nd-deck-select-slider-button img.open.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-deck-select-panel #bs2nd-deck-select-slider-button img.open.svelte-haop3e{transform:rotate(180deg)}#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-slider.svelte-haop3e{position:fixed;bottom:80px;right:-300px;width:300px;height:600px;border:solid 2px white;border-radius:15px 0 0 15px}#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-panel.svelte-haop3e{width:300px;height:600px;border:solid 2px white;border-radius:10px}#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-slider.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-panel.svelte-haop3e{background:linear-gradient(45deg, black, rgba(0, 0, 0, 0.7));transition:0.3s;padding:5px}#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-slider.open.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-panel.open.svelte-haop3e{right:0}#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-slider #bs2nd-units-filter-slider-button.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-panel #bs2nd-units-filter-slider-button.svelte-haop3e{position:absolute;border-top:solid 2px white;border-left:solid 2px white;border-bottom:solid 2px white;border-right:solid 4px black;background-color:black;border-radius:15px 0 0 15px;bottom:10px;left:-59px;width:60px;height:60px}#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-slider #bs2nd-units-filter-slider-button img.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-panel #bs2nd-units-filter-slider-button img.svelte-haop3e{width:40px;margin:8px auto;transition:0.5s 0.3s}#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-slider #bs2nd-units-filter-slider-button img.open.svelte-haop3e,#bs2nd-screen.svelte-haop3e #bs2nd-units-filter-panel #bs2nd-units-filter-slider-button img.open.svelte-haop3e{transform:rotate(180deg)}",
       map: null
     };
@@ -10053,7 +10168,7 @@ var init_edit_bs2nd_svelte = __esm({
       $$unsubscribe_isListLoading = subscribe(isListLoading, (value) => $isListLoading = value);
       $$unsubscribe_isBottomOfScroll = subscribe(isBottomOfScroll, (value) => value);
       $$unsubscribe_filterConditionStore = subscribe(filterConditionStore, (value) => value);
-      $$result.css.add(css23);
+      $$result.css.add(css25);
       $$unsubscribe_isDeckFullStore();
       $$unsubscribe_deckStore();
       $$unsubscribe_unitListStore();
@@ -10107,20 +10222,20 @@ var init_edit_bs2nd_svelte = __esm({
 });
 
 // .svelte-kit/output/server/nodes/8.js
-var __exports13 = {};
-__export(__exports13, {
-  css: () => css24,
-  entry: () => entry13,
-  js: () => js13,
+var __exports14 = {};
+__export(__exports14, {
+  css: () => css26,
+  entry: () => entry14,
+  js: () => js14,
   module: () => edit_bs2nd_svelte_exports
 });
-var entry13, js13, css24;
-var init__13 = __esm({
+var entry14, js14, css26;
+var init__14 = __esm({
   ".svelte-kit/output/server/nodes/8.js"() {
     init_edit_bs2nd_svelte();
-    entry13 = "pages/app/bakuzetsu-searcher-2nd/edit@bs2nd.svelte-9547f691.js";
-    js13 = ["pages/app/bakuzetsu-searcher-2nd/edit@bs2nd.svelte-9547f691.js", "chunks/index-ce8d78cd.js", "chunks/summon-b3e2b8ec.js", "chunks/api-e2b0109c.js", "chunks/index-c399c12f.js", "chunks/SvelteToast.svelte_svelte_type_style_lang-58682665.js", "chunks/MediaQuery-bc67bc2a.js", "chunks/bs2ndLoader-5a7ce381.js"];
-    css24 = ["assets/pages/app/bakuzetsu-searcher-2nd/edit@bs2nd.svelte-df52c3c1.css", "assets/SvelteToast.svelte_svelte_type_style_lang-00aa1808.css", "assets/bs2ndLoader-8a29ed63.css"];
+    entry14 = "pages/app/bakuzetsu-searcher-2nd/edit@bs2nd.svelte-0a86deca.js";
+    js14 = ["pages/app/bakuzetsu-searcher-2nd/edit@bs2nd.svelte-0a86deca.js", "chunks/index-7e81b4c7.js", "chunks/summon-9a72bcab.js", "chunks/api-e2b0109c.js", "chunks/index-c0f974cf.js", "chunks/SvelteToast.svelte_svelte_type_style_lang-960f1691.js", "chunks/MediaQuery-7add008a.js", "chunks/bs2ndLoader-e7191b2f.js"];
+    css26 = ["assets/pages/app/bakuzetsu-searcher-2nd/edit@bs2nd.svelte-df52c3c1.css", "assets/SvelteToast.svelte_svelte_type_style_lang-00aa1808.css", "assets/bs2ndLoader-8a29ed63.css"];
   }
 });
 
@@ -10140,20 +10255,20 @@ var init_post_bs2nd_svelte = __esm({
 });
 
 // .svelte-kit/output/server/nodes/9.js
-var __exports14 = {};
-__export(__exports14, {
-  css: () => css25,
-  entry: () => entry14,
-  js: () => js14,
+var __exports15 = {};
+__export(__exports15, {
+  css: () => css27,
+  entry: () => entry15,
+  js: () => js15,
   module: () => post_bs2nd_svelte_exports
 });
-var entry14, js14, css25;
-var init__14 = __esm({
+var entry15, js15, css27;
+var init__15 = __esm({
   ".svelte-kit/output/server/nodes/9.js"() {
     init_post_bs2nd_svelte();
-    entry14 = "pages/app/bakuzetsu-searcher-2nd/post@bs2nd.svelte-5f54d359.js";
-    js14 = ["pages/app/bakuzetsu-searcher-2nd/post@bs2nd.svelte-5f54d359.js", "chunks/index-ce8d78cd.js"];
-    css25 = [];
+    entry15 = "pages/app/bakuzetsu-searcher-2nd/post@bs2nd.svelte-92259ba7.js";
+    js15 = ["pages/app/bakuzetsu-searcher-2nd/post@bs2nd.svelte-92259ba7.js", "chunks/index-7e81b4c7.js"];
+    css27 = [];
   }
 });
 
@@ -10162,16 +10277,16 @@ var layout_pokeca_svelte_exports = {};
 __export(layout_pokeca_svelte_exports, {
   default: () => _layout_pokeca
 });
-var css26, _layout_pokeca;
+var css28, _layout_pokeca;
 var init_layout_pokeca_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/app/pokemon-card-game-effector/__layout-pokeca.svelte.js"() {
     init_index_2e97bc70();
-    css26 = {
+    css28 = {
       code: "header.svelte-8xc0wm.svelte-8xc0wm{position:fixed;width:60%;max-width:500px;right:50px;padding:20px;z-index:100}header.svelte-8xc0wm .n2-logo.svelte-8xc0wm{display:flex;background:linear-gradient(135deg, rgb(0, 0, 0), rgba(0, 0, 0, 0.2));padding:20px}header.svelte-8xc0wm .n2-logo img.svelte-8xc0wm{width:40px}header.svelte-8xc0wm .n2-logo h1.svelte-8xc0wm{font-size:14px;margin:0 20px}article.svelte-8xc0wm.svelte-8xc0wm{position:relative;height:100vh;overflow:hidden}",
       map: null
     };
     _layout_pokeca = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      $$result.css.add(css26);
+      $$result.css.add(css28);
       return `<header class="${"svelte-8xc0wm"}"><div class="${"n2-logo svelte-8xc0wm"}"><a href="${"/"}"><img src="${"/img/n2-icon-white.svg"}" alt="${""}" class="${"svelte-8xc0wm"}"></a>
         <h1 class="${"svelte-8xc0wm"}">Pokemon Card Game<br>Damage Counter Web Effector</h1></div></header>
 
@@ -10182,20 +10297,20 @@ var init_layout_pokeca_svelte = __esm({
 });
 
 // .svelte-kit/output/server/nodes/4.js
-var __exports15 = {};
-__export(__exports15, {
-  css: () => css27,
-  entry: () => entry15,
-  js: () => js15,
+var __exports16 = {};
+__export(__exports16, {
+  css: () => css29,
+  entry: () => entry16,
+  js: () => js16,
   module: () => layout_pokeca_svelte_exports
 });
-var entry15, js15, css27;
-var init__15 = __esm({
+var entry16, js16, css29;
+var init__16 = __esm({
   ".svelte-kit/output/server/nodes/4.js"() {
     init_layout_pokeca_svelte();
-    entry15 = "pages/app/pokemon-card-game-effector/__layout-pokeca.svelte-af95da08.js";
-    js15 = ["pages/app/pokemon-card-game-effector/__layout-pokeca.svelte-af95da08.js", "chunks/index-ce8d78cd.js"];
-    css27 = ["assets/pages/app/pokemon-card-game-effector/__layout-pokeca.svelte-0a8911ca.css"];
+    entry16 = "pages/app/pokemon-card-game-effector/__layout-pokeca.svelte-a511ce2c.js";
+    js16 = ["pages/app/pokemon-card-game-effector/__layout-pokeca.svelte-a511ce2c.js", "chunks/index-7e81b4c7.js"];
+    css29 = ["assets/pages/app/pokemon-card-game-effector/__layout-pokeca.svelte-0a8911ca.css"];
   }
 });
 
@@ -10204,73 +10319,130 @@ var game_pokeca_svelte_exports = {};
 __export(game_pokeca_svelte_exports, {
   default: () => Game_pokeca
 });
-var css$25, size, DamageKanComponent, css$17, StorageComponent, css28, Game_pokeca;
+var css$53, init_size, init_font_size, DamageKanComponent, css$43, PoisonKanComponent, css$33, BurnKanComponent, css$26, dx, dy, StorageComponent, css$18, CoinComponent, css30, Game_pokeca;
 var init_game_pokeca_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/app/pokemon-card-game-effector/game@pokeca.svelte.js"() {
     init_index_2e97bc70();
-    css$25 = {
-      code: ".damage_kan.svelte-um7kxu.svelte-um7kxu{position:absolute;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:var(--id);top:var(--x);left:var(--y);width:var(--size);height:var(--size);border-radius:calc(var(--size) / 2);background:yellow}.damage_kan.svelte-um7kxu p.svelte-um7kxu{user-select:none;color:black;font-size:20px;font-weight:bold}",
+    css$53 = {
+      code: ".damage_kan.svelte-1ir98wy.svelte-1ir98wy{position:absolute;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:var(--id);top:var(--x);left:var(--y);width:var(--size);height:var(--size);border-radius:calc(var(--size) / 2);background:linear-gradient(45deg, rgb(0, 0, 0), rgba(0, 0, 0, 0.4));transform-origin:50%, 50%;transform:scale(var(--scale))}.damage_kan.svelte-1ir98wy img.svelte-1ir98wy{z-index:1;position:absolute;width:100%}.damage_kan.svelte-1ir98wy .damege_kan_mask.svelte-1ir98wy{z-index:2;position:absolute;width:100%;height:100%;border-radius:calc(var(--size) / 2);background-color:var(--color);opacity:0.8}.damage_kan.svelte-1ir98wy .effect-1.svelte-1ir98wy,.damage_kan.svelte-1ir98wy .effect-2.svelte-1ir98wy{position:absolute;width:var(--size);height:var(--size);border-radius:calc(var(--size) / 2);border-style:solid;border-width:3px;opacity:0;transform:scale(1)}.damage_kan.svelte-1ir98wy .effect-1.svelte-1ir98wy{z-index:3;border-color:#ffd000}.damage_kan.svelte-1ir98wy .effect-1.action-1.svelte-1ir98wy{animation:svelte-1ir98wy-damekanEffect 0.3s ease-out}.damage_kan.svelte-1ir98wy .effect-2.svelte-1ir98wy{z-index:4;border-color:#fe5420}.damage_kan.svelte-1ir98wy .effect-2.action-2.svelte-1ir98wy{animation:svelte-1ir98wy-damekanEffect 0.3s ease-out}@keyframes svelte-1ir98wy-damekanEffect{0%{transform:scale(1);border-width:5px;opacity:1}50%{transform:scale(1.2);border-width:5px;opacity:1}100%{transform:scale(1.2);border-width:0px;opacity:0}}.damage_kan.svelte-1ir98wy p.svelte-1ir98wy{z-index:5;user-select:none;color:white;font-size:var(--font_size);font-weight:bold;text-shadow:3px 3px 2px black}",
       map: null
     };
-    size = 100;
+    init_size = 100;
+    init_font_size = 40;
     DamageKanComponent = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      let { model = { id: 1, x: 0, y: 0, counter: 100 } } = $$props;
+      let { model = { id: 1, x: 0, y: 0, counter: 0 } } = $$props;
+      const init_color = [255, 200, 0];
+      let size = init_size;
+      let font_size = init_font_size;
+      let scale = 1;
+      let color = init_color;
       if ($$props.model === void 0 && $$bindings.model && model !== void 0)
         $$bindings.model(model);
-      $$result.css.add(css$25);
+      $$result.css.add(css$53);
+      {
+        {
+          color[1] = 200 - model.counter / 2;
+          scale = 1 + model.counter / 1e3;
+        }
+      }
       return `
 
-<div class="${"damage_kan svelte-um7kxu"}" style="${"--id:" + escape(model.id) + ";--x:" + escape(model.x) + "px; --y:" + escape(model.y) + "px; --size:" + escape(size) + "px"}"><p class="${"svelte-um7kxu"}">${escape(model.counter)}</p>
+<div class="${"damage_kan svelte-1ir98wy"}" style="${"--id:" + escape(model.id) + ";--x:" + escape(model.x) + "px; --y:" + escape(model.y) + "px; --size:" + escape(size) + "px; --scale:" + escape(scale) + ";"}"><img src="${"/img/pokeca/icon_white.svg"}" alt="${""}" class="${"svelte-1ir98wy"}">
+    <div class="${"damege_kan_mask svelte-1ir98wy"}" style="${"--color:rgb(" + escape(color[0]) + "," + escape(color[1]) + "," + escape(color[2]) + ")"}"></div>
+    <div class="${"effect-1 " + escape("") + " svelte-1ir98wy"}"></div>
+    <div class="${"effect-2 " + escape("") + " svelte-1ir98wy"}"></div>
+    <p style="${"--font_size:" + escape(font_size) + "px"}" class="${"svelte-1ir98wy"}">${escape(model.counter)}</p>
 </div>`;
     });
-    css$17 = {
-      code: ".storage-box.svelte-1jmy6x1{position:absolute;right:var(--dx);top:var(--dy);width:120px;height:500px;background:linear-gradient(\n            127deg,\n            rgb(0, 0, 0),\n            rgb(26, 32, 53)\n        );box-shadow:-5px 10px 0 rgba(0,0,0,0.5);border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center}button.svelte-1jmy6x1{position:absolute;right:10px;bottom:10px;background:white;--size:40px;width:var(--size);height:var(--size);border-radius:calc( var(--size) / 2)}",
+    css$43 = {
+      code: ".poison_marker.svelte-7gru3j{position:absolute;z-index:var(--id);top:var(--x);left:var(--y);display:flex;align-items:center;padding:5px;width:70px;height:70px;border-radius:35px;background:linear-gradient(45deg, #b051b7, #ff0088);border:solid 2px rgb(106, 0, 56);transform-origin:50%, 50%;transform:scale(1)}.poison_marker.mouse_up_action.svelte-7gru3j{animation:svelte-7gru3j-iconInPlay 1s ease-in-out}@keyframes svelte-7gru3j-iconInPlay{0%{transform:scale(1) rotateY(0)}80%{transform:scale(2) rotateY(1080deg)}100%{transform:scale(1) rotateY(1080deg)}}",
       map: null
     };
-    StorageComponent = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      createEventDispatcher();
-      let dx = 50;
-      let dy = 300;
-      let damageKanArray = [];
-      $$result.css.add(css$17);
+    PoisonKanComponent = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { model = { id: 1, x: 0, y: 0, damage: 10 } } = $$props;
+      if ($$props.model === void 0 && $$bindings.model && model !== void 0)
+        $$bindings.model(model);
+      $$result.css.add(css$43);
       return `
 
-<div class="${"storage-box svelte-1jmy6x1"}" style="${"--dx:" + escape(dx) + "px;--dy:" + escape(dy) + "px;"}">${each(damageKanArray, (item) => {
-        return `${validate_component(DamageKanComponent, "DamageKanComponent").$$render($$result, { model: item }, {}, {})}`;
-      })}
-
-<button class="${"svelte-1jmy6x1"}">\u6574</button>
+<div class="${"poison_marker " + escape("") + " svelte-7gru3j"}" style="${"--id:" + escape(model.id) + ";--x:" + escape(model.x) + "px; --y:" + escape(model.y) + "px;"}"><svg xmlns="${"http://www.w3.org/2000/svg"}" viewBox="${"0 0 522 416"}"><path d="${"M295.3 5.1 339.6 45c13.6 12.2 5.8 20.9 2 25l-8.9 10a170.9 170.9 0 0 1 33 71.8c1.8-1.2 3.5-2.4 5.3-3.4l-4.3-8.5c-1.3-2.6-5.1-10 .7-13l22.8-11.7c7-3.5 10.5 3.2 12.2 6.5l7 13.8a94.2 94.2 0 0 1 57.8 12.4l9.7-10.7c2-2.2 7.8-8.7 12.7-4.3l19 17.1c5.9 5.3.6 11-2 14l-9.9 11a94 94 0 0 1 13.9 79.7l2.8 1.3c2.6 1.2 10.3 4.6 7.7 10.6L510.7 290c-3.2 7.1-10.2 4-13.6 2.5l-5.2-2.3a94.4 94.4 0 0 1-53.7 32l-8.3 14.3-.4-.3-7.6 13.1a43 43 0 1 1-78.9 24.8 29 29 0 0 1-1-.3L299.3 359v-.1l-38-13.1-1.4-.5c-19 7.8-39.6 12.5-61.2 13.5l-1.2 18c-.3 4.3-1.2 17.2-10.8 16.5l-21.3-1.5-1.8-.1-14.6-1c-11.6-.8-10.8-12.4-10.4-18.1l1.5-20.5c-31.8-9-60-26.3-81.8-49.3L46.4 312c-3.5 2.7-13.6 10.7-19.6 3.1l-12.5-16-1.7-2.2-9-11.6c-7.2-9.1 2-16.3 6.5-19.8l15.3-12A169.8 169.8 0 0 1 41.8 87.3L25.3 66c-2.7-3.5-10.6-13.6 1.3-23 6.6-5 15.8-12.3 25.1-19.5l1.5-1.2.7-.6 1.7-1.3 18-14C87.9-5 95 4.3 98.5 8.7l14.8 19A183 183 0 0 1 258 24l14.6-16.1c3-3.3 11.6-12.9 22.8-2.8Zm44.5 275.2-.6.9a177.4 177.4 0 0 1-47 46.7l20.6 7.1v.1l38 13.1a43 43 0 0 1 56-12.8l6.3-10.9.4.3.6-1a94.4 94.4 0 0 1-74.3-43.5Zm-64.1-97.5c-3-6-10.5-8.5-16.6-5.5l-69 34.4-68.2-34.4a12.3 12.3 0 1 0-11 22.1l52 26.1-52 26a12.4 12.4 0 0 0 11 22.2l68.3-34.4 69 34.4a12.3 12.3 0 1 0 11-22.1l-52-26.1 52-26c6-3.1 8.5-10.5 5.5-16.7ZM189.8 77c-30.4 0-55.8 22-55.8 49.3a48.7 48.7 0 0 0 24.8 41v8.4c0 6.8 5.9 12.3 12.4 12.3h37.6c6.8 0 12.4-5.5 12.4-12.3v-8.4a48 48 0 0 0 24.8-41c0-27.2-25-49.3-56.2-49.3Zm-21.3 43c7.3 0 12.5 5.6 12.5 12.5 0 7-5.2 12.5-12.5 12.5-6.6 0-12.5-5.6-12.5-12.5 0-7 6-12.5 12.5-12.5Zm44 0a12.5 12.5 0 1 1 0 25 12.5 12.5 0 0 1 0-25Z"}" fill="${"#000"}" fill-rule="${"evenodd"}"></path></svg>
 </div>`;
     });
-    css28 = {
-      code: "section.svelte-93faju.svelte-93faju{position:absolute;width:100vw;height:100vh}#video-layor.svelte-93faju.svelte-93faju{display:flex;justify-content:center;overflow:hidden}#video-layor.svelte-93faju video.svelte-93faju{position:absolute;top:0;bottom:0;height:95%;margin:auto 0}#effect-layor.svelte-93faju.svelte-93faju{right:0;width:0px;height:100vh}",
+    css$33 = {
+      code: ".burn_marker.svelte-4lckll{position:absolute;z-index:var(--id);top:var(--x);left:var(--y);display:flex;justify-content:center;width:70px;height:70px;border-radius:35px;background:linear-gradient(45deg, #fc0000, #ff991d);border:solid 2px rgb(255, 238, 124);transform-origin:50%, 50%;transform:scale(1)}.burn_marker.mouse_up_action.svelte-4lckll{animation:svelte-4lckll-iconInPlay 1s ease-in-out}svg.svelte-4lckll{position:absolute;top:-5px;width:90%;height:90%;margin-bottom:20px}@keyframes svelte-4lckll-iconInPlay{0%{transform:scale(1) rotateX(0)}80%{transform:scale(2) rotateX(1080deg)}100%{transform:scale(1) rotateX(1080deg)}}",
+      map: null
+    };
+    BurnKanComponent = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { model = { id: 1, x: 0, y: 0, damage: 10 } } = $$props;
+      if ($$props.model === void 0 && $$bindings.model && model !== void 0)
+        $$bindings.model(model);
+      $$result.css.add(css$33);
+      return `
+
+<div class="${"burn_marker " + escape("") + " svelte-4lckll"}" style="${"--id:" + escape(model.id) + ";--x:" + escape(model.x) + "px; --y:" + escape(model.y) + "px;"}"><svg xmlns="${"http://www.w3.org/2000/svg"}" viewBox="${"0 0 358 391"}" class="${"svelte-4lckll"}"><path d="${"M170.5 319.9V391a172 172 0 0 1-53.4-9.7c-2.5-18.3-4-34-4.8-47.4 6-2.2 10.6-7.3 12-13.6l.2-.4h46Zm10.4 0h45.6c1.4 6.6 6.3 12 12.6 14.1-.8 13.3-2.3 29-4.7 47.2-16 5.7-34.1 9.2-53.5 9.8v-71.1Zm157.9-83c0 7-.3 15-1 22.5l.3.3.3.4.7.8 1 1.3c2.2 2.5 4.4 5.2 6.2 8.2 7.5 12.4 7.7 34 7.7 40.6l4-8.1v43.4c0 15.2-11.7 34.7-25.8 34.7-14 0-25.2-19.5-25.2-34.7a327 327 0 0 1 4.2-35c0-6.1 1-17.7 11.8-31.5 3.6-4.6 7-12.7 10.2-22.3l.2-.7-.2-1-.4-2.3-.2-1.1-.2-.3c-5-8.5-7.3-20.1.1-42.7 17.5-53 15.4-11.5 6.3 27.6Zm-319.9-1c-8.9-38.8-10.7-79 6.6-26.5 7.4 22.6 5.2 34.2 0 42.7v.3l-.3 1-.4 2.3-.2 1.1.2.7A78.5 78.5 0 0 0 35 279.8a49.8 49.8 0 0 1 11.8 31.4 327 327 0 0 1 4.2 35c0 15.3-11.1 34.8-25.2 34.8S0 361.5 0 346.3v-43.4l4 8.1c0-6.6.2-28.2 7.7-40.6 1.8-3 4-5.7 6.2-8.2l1-1.3.7-.8.3-.4.3-.3-.1-1.3c-.6-7.1-1-14.7-.9-21.1Zm90.2 18c-3 16.4-5 30.8-6.2 43.1a19.1 19.1 0 0 0-.2 37.8c1 12.3 3 26.7 6.2 43.3C77.6 364.6 57 341.8 57 316c0-25.7 20.4-48.4 51.5-62l.6-.2Zm133.2.1c31.2 13.5 51.7 36.2 51.7 62 0 25.7-20.4 48.4-51.5 61.9 3.1-16.5 5.2-30.9 6.2-43.2a19.1 19.1 0 0 0-.2-37.6 512.8 512.8 0 0 0-6.1-42.8v-.3Zm94.3 14.9c-.3 2-.6 4-1 5.7-2.2 9.8-6.8 9.8-12 20.3a88.8 88.8 0 0 0-7.5 21.1l6.8 13.6 9.6-26.7 11.8 25.6c2.6-3.4 4-8 4.2-13.2v-.7c0-3.1-.4-23.6-6-32.6-2-3-3.9-7.4-5.6-12.3l-.2-.7v-.1Zm-315.2 0v.1l-.3.7c-1.7 5-3.7 9.2-5.6 12.3-5.6 9-6 29.5-6 32.6v.7c.1 5.2 1.6 9.8 4.2 13.2l11.8-25.6 9.6 26.7L42 316c-.7-4.8-4-13.8-7.5-21-5.2-10.6-9.8-10.6-12-20.4l-1-5.6v-.1Zm207-219c-31.8 29-45 42.5-50 50a27 27 0 0 0 .3 11.9l.7.1 1.4.3c23.2 5 44.3 10.8 41.9 25.6 4.7 4.1 6.2 9.7 2.3 17.4l-3.2 6.7-.4 1c11-.6 34-7.3 75-22.3 23.6-8.6-49.5 74-105.9 94l4 7.3h.6l29.9-23.8v29.7c3.2.9 6.2 1.9 9.2 3 2.3 18.2 4 33.9 4.7 47a19.1 19.1 0 0 0-12.3 13.8v.3h-45.7V252h-10.4v60h-46c-1.4-6.5-6-11.8-12-14a748 748 0 0 1 4.7-47.4c2.9-1 5.8-2 8.8-2.8v-14.2c-30.1-8.8-46.8-27.6-47-52.3-.2-23.2 40.7-68 30.7-40.7-12 32.3 31.6 21.8 44.1 7.3 10-11.6 15.7-19.3 18.9-24.7l.1-.3c-18.4-3.7-33.8-8.3-31.6-19.6l.1-.6c-11-4-17.9-9.5-15.5-18.2 8.4-31 231.6-151.3 102.7-34.5Zm105.7 204.7-.4 1.2-.3 1c.8 3.8 1.7 7.4 2.8 10.8l.3.9.1.4.1-.7 1-7.7v-1.1l-.5-.8-2.4-3-.6-.8-.1-.2Zm-310.2 0-.1.2-.6.8-2.4 3-.6.8.1 1.1 1 7.7v.7l.2-.4.3-1c1-3.3 2-7 2.8-10.7l-.2-.5-.1-.5-.4-1.2Zm309.5-28.2c-2.3 7.7-2.2 17-.8 26l.9 1.3.4.7.2.2.1-.4c1.5-5 3-10.3 4.2-15.6l.4-1.6v-.4c-.1-13.8-1.8-22.3-5.4-10.2Zm-308.8 0c-3.6-12-5.3-3.6-5.4 10.2v.4l.4 1.6c1.3 5.3 2.7 10.6 4.2 15.6l.1.4.2-.2.4-.7 1-1.3v-.8a60.6 60.6 0 0 0-.9-25.2Zm126.6 11.8 4.7 3.8 1.8-3.3-6.5-.5ZM184 125.1l.3.6c3 8 3.5 18-8.6 37.5-7.5 12-56.8 46.1-49.7 19.2 6-22.7-20.3-10.4-20.2 9 .1 15 8 27.2 20.2 35.6V218l23.5 18.8a83 83 0 0 0 8.4 1.5l17.3-31.4 14.2 25.6c35.3-18.3 80.4-69 67.3-62.4-42.4 21.5-41.4 7.2-35.3-7.4-11.3.6-10.1-5.2-3.4-14.9 2.6-3.6 4-6.9 4.6-9.8v-.3c-6.7-6-20-9-34-11.8l-1.3-.3-1.4-.3-.7-.1-1.2-.2Zm-7.8-13.8v.2c.4 2.3 0 5.4-3.4 11.4l11 2.1h.2c-1.6-4.1-3.8-7.9-5.1-12.4l-.2-.8-1.8-.4-.7-.1Zm-34.8-8.8v.2l.7.3c8.3 3 19 5.2 29.7 7.4l3.4.7 1 .2v-.1l-.4-1.7-.1-.4c-.6-2.1-.7-4.2 2.4-9l.3-.3c1.8-9.6 8.5-23 25.4-44.4 76.5-96.2-55 19.7-62.4 47.1Z"}" fill="${"#000"}" fill-rule="${"evenodd"}"></path></svg>
+</div>`;
+    });
+    css$26 = {
+      code: ".storage-box.svelte-4zrbs2{position:absolute;right:var(--dx);top:var(--dy);width:120px;height:500px;background:linear-gradient(\n            127deg,\n            rgb(0, 0, 0),\n            rgb(26, 32, 53)\n        );box-shadow:5px 10px 2px rgba(255,255,255,0.3);border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center}button.svelte-4zrbs2{position:absolute;right:10px;bottom:10px;background:white;--size:40px;width:var(--size);height:var(--size);border-radius:calc( var(--size) / 2)}",
+      map: null
+    };
+    dx = 40;
+    dy = 250;
+    StorageComponent = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      const initPositionPoisonKan = { id: 100, x: 180, y: 25, damage: 10 };
+      const initPositionBurnKan = { id: 100, x: 280, y: 25, damage: 10 };
+      let damageKanArray = [];
+      let poisonKan = Object.assign({}, initPositionPoisonKan);
+      let burnKan = Object.assign({}, initPositionBurnKan);
+      $$result.css.add(css$26);
+      return `<div class="${"storage-box svelte-4zrbs2"}" style="${"--dx:" + escape(dx) + "px;--dy:" + escape(dy) + "px;"}">${each(damageKanArray, (item) => {
+        return `${validate_component(DamageKanComponent, "DamageKanComponent").$$render($$result, { model: item }, {}, {})}`;
+      })}
+    ${validate_component(PoisonKanComponent, "PoisonKanComponent").$$render($$result, { model: poisonKan }, {}, {})}
+    ${validate_component(BurnKanComponent, "BurnKanComponent").$$render($$result, { model: burnKan }, {}, {})}
+<button class="${"svelte-4zrbs2"}"><svg xmlns="${"http://www.w3.org/2000/svg"}" viewBox="${"0 0 501 503"}"><path d="${"m300.2 272.2 36.2 60.2a43 43 0 0 0 47.8 18.9l84.1-24v110c0 14.6-9.9 27.2-24 30.8l-134.6 33.6a41.3 41.3 0 0 1-20.4 0l-134.6-33.6a31.7 31.7 0 0 1-24-30.7V327.3l84.1 24a43 43 0 0 0 47.8-18.9l36.2-60.2h1.4ZM138.4 209l161.1 19.5-54.9 91.6a20.7 20.7 0 0 1-23.8 10l-107.5-30.8a21 21 0 0 1-13-29.7l27.4-54.9c2-4 6.3-6.3 10.7-5.7Zm333 5.7 27.4 55c5.8 11.7-.4 26-13.1 29.6l-107.5 30.8c-9.1 2.5-19-1.3-23.8-10l-54.9-91.6 161.1-19.5c4.4-.6 8.7 1.7 10.7 5.7ZM181.5 1.5c58.8 9.2 109 42.5 150.7 100.1l21-5.4-6-35L369.4 92l3.8-1-9-31.4 23.1 27.7 33.2-8.6c22.1-6-66.4 126.3-83.1 130.1-16.7 4-182-60.6-156.8-67.5l32.2-8.6-2.2-30.6 14.3 27.5 6.7-1.8-5.7-33 20.5 29.1 12.5-3.2C239.3 82.3 201.8 59.9 146 53.5c-63-7.3-111.3 14.2-145 64.5l-1 1.5 1.6-2.6C57.7 30 117.6-8.4 181.7 1.5ZM269 164l3.3 18.4 38.1 15v-4.8L269 164Zm101-21-19 40v8l19-27.5V143Z"}" fill="${"#000"}" fill-rule="${"nonzero"}"></path></svg></button>
+</div>`;
+    });
+    css$18 = {
+      code: '@charset "UTF-8";.coin.svelte-5wjeil.svelte-5wjeil{position:absolute;width:70px;position:relative;cursor:pointer}.coin.svelte-5wjeil.svelte-5wjeil::before{content:"";display:block;padding-top:142.5%}.coin.svelte-5wjeil svg.svelte-5wjeil{width:100%}.coin.svelte-5wjeil .back.svelte-5wjeil,.coin.svelte-5wjeil .front.svelte-5wjeil{transition:all 1s;position:absolute;top:0;left:0;height:100%;width:100%;backface-visibility:hidden;animation-fill-mode:forwards;--duration:1.0s;--timing:ease-in-out}.coin.svelte-5wjeil .back.svelte-5wjeil{transform:rotateX(-180deg)}.coin.flip.svelte-5wjeil .front.svelte-5wjeil{transform:rotateX(-180deg)}.coin.flip.svelte-5wjeil .back.svelte-5wjeil{transform:rotateX(0)}.coin.openFrontFlip.svelte-5wjeil .front.svelte-5wjeil{animation:svelte-5wjeil-parabolicMovement var(--duration) var(--timing), svelte-5wjeil-frontOpenFrontFlip var(--duration) linear forwards}.coin.openFrontFlip.svelte-5wjeil .back.svelte-5wjeil{animation:svelte-5wjeil-parabolicMovement var(--duration) var(--timing), svelte-5wjeil-backOpenFrontFlip var(--duration) linear forwards}.coin.openBackFlip.svelte-5wjeil .front.svelte-5wjeil{animation:svelte-5wjeil-parabolicMovement var(--duration) var(--timing), svelte-5wjeil-frontOpenBackFlip var(--duration) linear forwards}.coin.openBackFlip.svelte-5wjeil .back.svelte-5wjeil{animation:svelte-5wjeil-parabolicMovement var(--duration) var(--timing), svelte-5wjeil-backOpenBackFlip var(--duration) linear forwards}@keyframes svelte-5wjeil-frontOpenFrontFlip{0%{transform:rotateX(0deg)}100%{transform:rotateX(2160deg)}}@keyframes svelte-5wjeil-backOpenFrontFlip{0%{transform:rotateX(-180deg)}100%{transform:rotateX(1980deg)}}@keyframes svelte-5wjeil-frontOpenBackFlip{0%{transform:rotateX(0deg)}100%{transform:rotateX(1980deg)}}@keyframes svelte-5wjeil-backOpenBackFlip{0%{transform:rotateX(-180deg)}100%{transform:rotateX(1800deg)}}@keyframes svelte-5wjeil-parabolicMovement{0%{top:0;transform:rotateZ(0)}50%{top:-120px}100%{top:0;transform:rotateZ(720deg)}}',
+      map: null
+    };
+    CoinComponent = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      $$result.css.add(css$18);
+      return `<div class="${"coin " + escape("") + " " + escape("") + " " + escape("") + " svelte-5wjeil"}"><div class="${"front svelte-5wjeil"}"><svg xmlns="${"http://www.w3.org/2000/svg"}" viewBox="${"0 0 284 284"}" class="${"svelte-5wjeil"}"><g fill="${"none"}" fill-rule="${"evenodd"}"><circle fill="${"#000"}" cx="${"142"}" cy="${"142"}" r="${"142"}"></circle><circle fill="${"#F2EE9D"}" cx="${"142.5"}" cy="${"142.5"}" r="${"131.5"}"></circle><path d="${"M92.2 21C114 29.8 125 36 125 39.4c0 1.8-6.3 5.5-13 9.3l-1.3.7c-7.2 4-14.3 8.2-14.3 10 0 2 7.4 6.4 14.7 10.7l.9.5c6.7 4 13 8 13 10.1 0 3.3-71.6 71.5-71.6 104 0 12 14.7 39.2 44.2 81.3A130.5 130.5 0 0 1 34.9 64.5c2-2.7 3-6.4 3.9-10.1l.4-1.5c1-4.5 2.2-8.8 5-11.5 5.2-4.9 17-3.4 23-7.4 7.6-5 15.8-9.4 24.5-12.8Z"}" fill="${"#C0A06E"}"></path><path d="${"M192.8 21C171 29.8 160 36 160 39.4c0 1.8 6.3 5.5 13 9.3l1.3.7c7.2 4 14.3 8.2 14.3 10 0 2-7.4 6.4-14.7 10.7l-.9.5c-6.7 4-13 8-13 10.1 0 3.3 71.6 71.5 71.6 104 0 12-14.7 39.2-44.2 81.3a130.5 130.5 0 0 0 62.7-201.5c-2-2.7-3-6.4-3.9-10.1l-.4-1.5c-1-4.5-2.2-8.8-5-11.5-5.2-4.9-17-3.4-23-7.4-7.6-5-15.8-9.4-24.5-12.8Z"}" fill="${"#6B6B6B"}"></path><g transform="${"translate(54 106)"}"><circle fill="${"#000"}" cx="${"27.5"}" cy="${"27.5"}" r="${"27.5"}"></circle><circle fill="${"#FFF"}" cx="${"27.7"}" cy="${"27.3"}" r="${"10.5"}"></circle></g><g transform="${"translate(175 106)"}"><circle fill="${"#000"}" cx="${"27.5"}" cy="${"27.5"}" r="${"27.5"}"></circle><circle fill="${"#FFF"}" cx="${"27.7"}" cy="${"27.3"}" r="${"10.5"}"></circle></g><circle fill="${"#E9ACB5"}" cx="${"49"}" cy="${"174"}" r="${"24"}"></circle><circle fill="${"#E9ACB5"}" cx="${"233"}" cy="${"180"}" r="${"24"}"></circle><ellipse fill="${"#000"}" cx="${"142.5"}" cy="${"170.5"}" rx="${"7.5"}" ry="${"3.5"}"></ellipse></g></svg></div>
+    <div class="${"back svelte-5wjeil"}"><svg xmlns="${"http://www.w3.org/2000/svg"}" viewBox="${"0 0 284 284"}" class="${"svelte-5wjeil"}"><g fill="${"none"}" fill-rule="${"evenodd"}"><circle fill="${"#000"}" cx="${"142"}" cy="${"142"}" r="${"142"}"></circle><circle fill="${"#805593"}" cx="${"142.5"}" cy="${"142.5"}" r="${"131.5"}"></circle><path d="${"M92.2 21C114 29.8 125 36 125 39.4c0 1.8-6.3 5.5-13 9.3l-1.3.7c-7.2 4-14.3 8.2-14.3 10 0 2 7.4 6.4 14.7 10.7l.9.5c6.7 4 13 8 13 10.1 0 3.3-71.6 71.5-71.6 104 0 12 14.7 39.2 44.2 81.3A130.5 130.5 0 0 1 34.9 64.5c2-2.7 3-6.4 3.9-10.1l.4-1.5c1-4.5 2.2-8.8 5-11.5 5.2-4.9 17-3.4 23-7.4 7.6-5 15.8-9.4 24.5-12.8ZM192.8 21C171 29.8 160 36 160 39.4c0 1.8 6.3 5.5 13 9.3l1.3.7c7.2 4 14.3 8.2 14.3 10 0 2-7.4 6.4-14.7 10.7l-.9.5c-6.7 4-13 8-13 10.1 0 3.3 71.6 71.5 71.6 104 0 12-14.7 39.2-44.2 81.3a130.5 130.5 0 0 0 62.7-201.5c-2-2.7-3-6.4-3.9-10.1l-.4-1.5c-1-4.5-2.2-8.8-5-11.5-5.2-4.9-17-3.4-23-7.4-7.6-5-15.8-9.4-24.5-12.8Z"}" fill="${"#6B6B6B"}"></path><circle fill="${"#E9ACB5"}" cx="${"49"}" cy="${"174"}" r="${"24"}"></circle><circle fill="${"#E9ACB5"}" cx="${"233"}" cy="${"174"}" r="${"24"}"></circle><ellipse fill="${"#000"}" cx="${"142.5"}" cy="${"170.5"}" rx="${"7.5"}" ry="${"3.5"}"></ellipse><path d="${"M41.7 94.7a257.3 257.3 0 0 0 34.8 23.6c9.5 5.1 25 12.4 46.5 21.7-24.7 16.9-44 21.4-58 13.5-14-7.9-21.7-27.5-23.3-58.8Z"}" fill="${"#000"}"></path><path d="${"M47.6 102c11.4 8.9 21.2 15.5 29.2 19.8 8 4.3 21 10.4 39.1 18.2-20.8 14.3-37 18.1-48.8 11.5C55.4 145 49 128.4 47.6 102Z"}" fill="${"#C52621"}"></path><g><path d="${"M243 94.7a257.3 257.3 0 0 1-34.7 23.6c-9.6 5.1-25 12.4-46.5 21.7 24.7 16.9 44 21.4 58 13.5 14-7.9 21.7-27.5 23.3-58.8Z"}" fill="${"#000"}"></path><path d="${"M237.2 102c-11.5 8.9-21.2 15.5-29.2 19.8-8 4.3-21 10.4-39.1 18.2 20.7 14.3 37 18.1 48.8 11.5 11.7-6.6 18.2-23.1 19.5-49.6Z"}" fill="${"#C52621"}"></path></g></g></svg></div>
+</div>`;
+    });
+    css30 = {
+      code: "section.svelte-36c78a.svelte-36c78a{position:absolute;width:100vw;height:100vh}#video-layor.svelte-36c78a.svelte-36c78a{display:flex;justify-content:center;overflow:hidden}#video-layor.svelte-36c78a video.svelte-36c78a{position:absolute;top:0;bottom:0;height:95%;margin:auto 0}#effect-layor.svelte-36c78a.svelte-36c78a{right:0;width:0px;height:100vh}#coin-layor.svelte-36c78a.svelte-36c78a{position:fixed;width:0;height:0;bottom:120px;left:40px}",
       map: null
     };
     Game_pokeca = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      $$result.css.add(css28);
-      return `<section id="${"video-layor"}" class="${"svelte-93faju"}"><video id="${"web-video"}" class="${"svelte-93faju"}"><track kind="${"captions"}"></video></section>
+      $$result.css.add(css30);
+      return `<section id="${"video-layor"}" class="${"svelte-36c78a"}"><video id="${"web-video"}" class="${"svelte-36c78a"}"><track kind="${"captions"}"></video></section>
 
-<section id="${"effect-layor"}" class="${"svelte-93faju"}">${validate_component(StorageComponent, "StorageComponent").$$render($$result, {}, {}, {})}
+<section id="${"effect-layor"}" class="${"svelte-36c78a"}">${validate_component(StorageComponent, "StorageComponent").$$render($$result, {}, {}, {})}</section>
+<section id="${"coin-layor"}" class="${"svelte-36c78a"}">${validate_component(CoinComponent, "CoinComponent").$$render($$result, {}, {}, {})}
 </section>`;
     });
   }
 });
 
 // .svelte-kit/output/server/nodes/10.js
-var __exports16 = {};
-__export(__exports16, {
-  css: () => css29,
-  entry: () => entry16,
-  js: () => js16,
+var __exports17 = {};
+__export(__exports17, {
+  css: () => css31,
+  entry: () => entry17,
+  js: () => js17,
   module: () => game_pokeca_svelte_exports
 });
-var entry16, js16, css29;
-var init__16 = __esm({
+var entry17, js17, css31;
+var init__17 = __esm({
   ".svelte-kit/output/server/nodes/10.js"() {
     init_game_pokeca_svelte();
-    entry16 = "pages/app/pokemon-card-game-effector/game@pokeca.svelte-47807604.js";
-    js16 = ["pages/app/pokemon-card-game-effector/game@pokeca.svelte-47807604.js", "chunks/index-ce8d78cd.js"];
-    css29 = ["assets/pages/app/pokemon-card-game-effector/game@pokeca.svelte-c622562f.css"];
+    entry17 = "pages/app/pokemon-card-game-effector/game@pokeca.svelte-0db8197e.js";
+    js17 = ["pages/app/pokemon-card-game-effector/game@pokeca.svelte-0db8197e.js", "chunks/index-7e81b4c7.js"];
+    css31 = ["assets/pages/app/pokemon-card-game-effector/game@pokeca.svelte-bedc7923.css"];
   }
 });
 
@@ -10300,21 +10472,21 @@ var layout_tcg_svelte_exports = {};
 __export(layout_tcg_svelte_exports, {
   default: () => _layout_tcg
 });
-var css30, _layout_tcg;
+var css32, _layout_tcg;
 var init_layout_tcg_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/app/tcg-simulator/__layout-tcg.svelte.js"() {
     init_index_2e97bc70();
     init_ToastArea_32d9fee1();
     init_TCGsimStore_f57989de();
     init_index_96622166();
-    css30 = {
+    css32 = {
       code: '@charset "UTF-8";:root{--header-height:40px;--cw:90px;--ch:110px}#tcg-all-compnents.svelte-c83jr6.svelte-c83jr6{display:flex;justify-content:space-between;top:0;left:0;right:0;bottom:0;overflow-y:scroll;-ms-overflow-style:none;scrollbar-width:none}#tcg-all-compnents.svelte-c83jr6.svelte-c83jr6::-webkit-scrollbar{display:none}header.svelte-c83jr6.svelte-c83jr6{display:flex;justify-content:space-between;height:var(--header-height)}header.svelte-c83jr6 .n2-logo.svelte-c83jr6{padding:10px}header.svelte-c83jr6 .n2-logo img.svelte-c83jr6{height:20px}header.svelte-c83jr6 .color-config.svelte-c83jr6{margin:0 20px 0 0;display:flex;align-items:center}header.svelte-c83jr6 .color-config button.svelte-c83jr6{width:25px;height:25px;margin:0 7px;border-radius:7px}header.svelte-c83jr6 .color-config .light.svelte-c83jr6{background:white}header.svelte-c83jr6 .color-config .dark.svelte-c83jr6{background:darkblue}#screen.svelte-c83jr6.svelte-c83jr6{display:flex;flex-direction:column;justify-content:center;width:calc(100vw - 70px);height:calc(100vh - 40px)}#screen.svelte-c83jr6 #base.svelte-c83jr6{width:1100px;height:760px;margin:0 auto;-moz-perspective:500;-webkit-perspective:500;-o-perspective:500;-ms-perspective:500;perspective:500}#screen.svelte-c83jr6 #base.light.svelte-c83jr6{background:rgb(255, 255, 255);background:radial-gradient(circle at bottom, rgb(255, 255, 255) 0%, rgb(255, 236, 192) 100%)}#screen.svelte-c83jr6 #base.dark.svelte-c83jr6{background:rgb(36, 24, 110);background:radial-gradient(circle at bottom, rgb(36, 24, 110) 0%, rgb(0, 0, 0) 100%)}footer.svelte-c83jr6.svelte-c83jr6{top:0;bottom:0;right:0;width:70px;display:flex;flex-direction:column;justify-content:space-around}footer.light.svelte-c83jr6.svelte-c83jr6{background:white}footer.dark.svelte-c83jr6.svelte-c83jr6{background:black}footer.svelte-c83jr6 a div.svelte-c83jr6{width:50px;height:50px;background:yellow}',
       map: null
     };
     _layout_tcg = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let $modeStore, $$unsubscribe_modeStore;
       $$unsubscribe_modeStore = subscribe(modeStore, (value) => $modeStore = value);
-      $$result.css.add(css30);
+      $$result.css.add(css32);
       $$unsubscribe_modeStore();
       return `<header class="${"svelte-c83jr6"}"><div class="${"n2-logo svelte-c83jr6"}"><a href="${"/"}"><img src="${"/img/n2-icon-white.svg"}" alt="${""}" class="${"svelte-c83jr6"}"></a></div>
     <div class="${"color-config svelte-c83jr6"}"><button class="${"light svelte-c83jr6"}"></button>
@@ -10329,20 +10501,20 @@ ${validate_component(ToastArea, "ToastArea").$$render($$result, {}, {}, {})}`;
 });
 
 // .svelte-kit/output/server/nodes/5.js
-var __exports17 = {};
-__export(__exports17, {
-  css: () => css31,
-  entry: () => entry17,
-  js: () => js17,
+var __exports18 = {};
+__export(__exports18, {
+  css: () => css33,
+  entry: () => entry18,
+  js: () => js18,
   module: () => layout_tcg_svelte_exports
 });
-var entry17, js17, css31;
-var init__17 = __esm({
+var entry18, js18, css33;
+var init__18 = __esm({
   ".svelte-kit/output/server/nodes/5.js"() {
     init_layout_tcg_svelte();
-    entry17 = "pages/app/tcg-simulator/__layout-tcg.svelte-a6a07103.js";
-    js17 = ["pages/app/tcg-simulator/__layout-tcg.svelte-a6a07103.js", "chunks/index-ce8d78cd.js", "chunks/ToastArea-fcd0e930.js", "chunks/SvelteToast.svelte_svelte_type_style_lang-58682665.js", "chunks/index-c399c12f.js", "chunks/TCGsimStore-816ca726.js"];
-    css31 = ["assets/pages/app/tcg-simulator/__layout-tcg.svelte-19e6123b.css", "assets/ToastArea-00e911a5.css", "assets/SvelteToast.svelte_svelte_type_style_lang-00aa1808.css"];
+    entry18 = "pages/app/tcg-simulator/__layout-tcg.svelte-3d94c86d.js";
+    js18 = ["pages/app/tcg-simulator/__layout-tcg.svelte-3d94c86d.js", "chunks/index-7e81b4c7.js", "chunks/ToastArea-eba10419.js", "chunks/SvelteToast.svelte_svelte_type_style_lang-960f1691.js", "chunks/index-c0f974cf.js", "chunks/TCGsimStore-135f7582.js"];
+    css33 = ["assets/pages/app/tcg-simulator/__layout-tcg.svelte-19e6123b.css", "assets/ToastArea-00e911a5.css", "assets/SvelteToast.svelte_svelte_type_style_lang-00aa1808.css"];
   }
 });
 
@@ -10351,13 +10523,13 @@ var edit_tcg_svelte_exports = {};
 __export(edit_tcg_svelte_exports, {
   default: () => Edit_tcg
 });
-var css32, Edit_tcg;
+var css34, Edit_tcg;
 var init_edit_tcg_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/app/tcg-simulator/edit@tcg.svelte.js"() {
     init_index_2e97bc70();
     init_TCGsimStore_f57989de();
     init_index_96622166();
-    css32 = {
+    css34 = {
       code: ":root{--card-width:85px;--card-margin:5px}img.svelte-ds7p2u{border-radius:10px;width:var(--card-width);margin:var(--card-margin)}#deck.svelte-ds7p2u,#exdeck.svelte-ds7p2u{display:flex;width:calc(var(--card-width) * 10 + var(--card-margin) * 20);margin:0 auto;flex-wrap:wrap}",
       map: null
     };
@@ -10370,7 +10542,7 @@ var init_edit_tcg_svelte = __esm({
       $$unsubscribe_deckListStore = subscribe(deckListStore, (value) => value);
       $$unsubscribe_unshuffleDeckListStore = subscribe(unshuffleDeckListStore, (value) => $unshuffleDeckListStore = value);
       $$unsubscribe_unshuffleExDeckListStore = subscribe(unshuffleExDeckListStore, (value) => $unshuffleExDeckListStore = value);
-      $$result.css.add(css32);
+      $$result.css.add(css34);
       $$unsubscribe_exDeckListStore();
       $$unsubscribe_deckListStore();
       $$unsubscribe_unshuffleDeckListStore();
@@ -10388,20 +10560,20 @@ var init_edit_tcg_svelte = __esm({
 });
 
 // .svelte-kit/output/server/nodes/11.js
-var __exports18 = {};
-__export(__exports18, {
-  css: () => css33,
-  entry: () => entry18,
-  js: () => js18,
+var __exports19 = {};
+__export(__exports19, {
+  css: () => css35,
+  entry: () => entry19,
+  js: () => js19,
   module: () => edit_tcg_svelte_exports
 });
-var entry18, js18, css33;
-var init__18 = __esm({
+var entry19, js19, css35;
+var init__19 = __esm({
   ".svelte-kit/output/server/nodes/11.js"() {
     init_edit_tcg_svelte();
-    entry18 = "pages/app/tcg-simulator/edit@tcg.svelte-78583680.js";
-    js18 = ["pages/app/tcg-simulator/edit@tcg.svelte-78583680.js", "chunks/index-ce8d78cd.js", "chunks/TCGsimStore-816ca726.js", "chunks/index-c399c12f.js", "chunks/deck-c6d33012.js"];
-    css33 = ["assets/pages/app/tcg-simulator/edit@tcg.svelte-ae052115.css", "assets/deck-d908b596.css"];
+    entry19 = "pages/app/tcg-simulator/edit@tcg.svelte-58cf6ffe.js";
+    js19 = ["pages/app/tcg-simulator/edit@tcg.svelte-58cf6ffe.js", "chunks/index-7e81b4c7.js", "chunks/TCGsimStore-135f7582.js", "chunks/index-c0f974cf.js", "chunks/deck-b8dd20f8.js"];
+    css35 = ["assets/pages/app/tcg-simulator/edit@tcg.svelte-ae052115.css", "assets/deck-d908b596.css"];
   }
 });
 
@@ -10413,13 +10585,13 @@ __export(game_tcg_svelte_exports, {
 function handLineupGuideFunction(x2) {
   return -1 * Math.sqrt(Math.pow(handLineupGuideRadius, 2) - Math.pow(x2, 2));
 }
-var css$33, Card, css$26, Deck, css$18, handLineupGuideRadius, Hand, css34, Game_tcg;
+var css$34, Card, css$27, Deck, css$19, handLineupGuideRadius, Hand, css36, Game_tcg;
 var init_game_tcg_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/app/tcg-simulator/game@tcg.svelte.js"() {
     init_index_2e97bc70();
     init_TCGsimStore_f57989de();
     init_index_96622166();
-    css$33 = {
+    css$34 = {
       code: ":root{--guide-color:#ffbb00}img.svelte-e02kpp.svelte-e02kpp{-webkit-user-drag:none;border-radius:5px}.card-body.svelte-e02kpp.svelte-e02kpp{position:absolute;z-index:100;left:var(--pos_x);top:var(--pos_y);width:var(--cw);height:var(--ch);cursor:move}.card-body.noBoard.svelte-e02kpp.svelte-e02kpp{transition:0.2s}.card-body.movin.svelte-e02kpp.svelte-e02kpp{transition:none}.card-body.movin.svelte-e02kpp .card-surface.svelte-e02kpp{filter:grayscale(100%) blur(2px)}.card-body.noGuide.svelte-e02kpp .card-surface.svelte-e02kpp{filter:none}.card-body.svelte-e02kpp .card-surface.svelte-e02kpp{position:absolute;transform:rotate(var(--rotate));transition:0.2s;width:100%;height:100%;-moz-perspective:500;-webkit-perspective:500;-o-perspective:500;-ms-perspective:500;perspective:500;transition:0.2s}.card-body.svelte-e02kpp .card-surface .front.svelte-e02kpp,.card-body.svelte-e02kpp .card-surface .back.svelte-e02kpp{transition:0.2s;position:absolute;left:8px;backface-visibility:hidden}.card-body.svelte-e02kpp .card-surface .front img.svelte-e02kpp,.card-body.svelte-e02kpp .card-surface .back img.svelte-e02kpp{width:calc(var(--cw) - 16px);z-index:10000}.card-body.svelte-e02kpp .card-surface .back.svelte-e02kpp{transform:rotateY(-180deg)}.card-body.svelte-e02kpp .card-surface.flippin .front.svelte-e02kpp{transform:rotateY(-180deg)}.card-body.svelte-e02kpp .card-surface.flippin .back.svelte-e02kpp{transform:rotateY(0deg)}.card-body.svelte-e02kpp .card-guide.svelte-e02kpp{position:absolute;--scaleup-width:10px;--scaleup-height:50px;left:calc(-1 * var(--scaleup-width) / 2);top:calc(-1 * var(--scaleup-height) / 2);width:calc(var(--cw) + var(--scaleup-width));height:calc(var(--ch) + var(--scaleup-height));border-radius:10px}.card-body.svelte-e02kpp .card-guide.hover.svelte-e02kpp{border:solid 2px var(--guide-color)}.card-body.svelte-e02kpp .card-guide.hover button.svelte-e02kpp{opacity:0.6;padding:0;position:absolute;--b-width:50%;--b-height:25px;--b-width-long:60px;--b-height-long:70px;--b-bradius:8px;width:var(--b-width);height:var(--b-height);background-color:var(--guide-color)}.card-body.svelte-e02kpp .card-guide.hover button.left-rotate.svelte-e02kpp{top:0;left:0}.card-body.svelte-e02kpp .card-guide.hover button.right-rotate.svelte-e02kpp{top:0;right:0}.card-body.svelte-e02kpp .card-guide.hover button.flip.svelte-e02kpp{bottom:0;left:0;right:0;width:100%;height:var(--b-height)}.card-body.svelte-e02kpp .card-shadow.svelte-e02kpp{position:absolute;--scaleup-width:20px;--scaleup-height:50px;left:calc(-1 * var(--scaleup-width) / 2);top:calc(-1 * var(--scaleup-height) * 2);width:calc(var(--cw) + var(--scaleup-width));height:calc(var(--ch) + var(--scaleup-height))}",
       map: null
     };
@@ -10462,7 +10634,7 @@ var init_game_tcg_svelte = __esm({
         $$bindings.noGuide(noGuide);
       if ($$props.flippin === void 0 && $$bindings.flippin && flippin !== void 0)
         $$bindings.flippin(flippin);
-      $$result.css.add(css$33);
+      $$result.css.add(css$34);
       $$unsubscribe_boardListStore();
       $$unsubscribe_movingStore();
       $$unsubscribe_deckAreaInfoStore();
@@ -10479,7 +10651,7 @@ var init_game_tcg_svelte = __esm({
     
 </section>`;
     });
-    css$26 = {
+    css$27 = {
       code: "#deckArea.svelte-1kk6kdi.svelte-1kk6kdi{position:relative}#deckArea.light.svelte-1kk6kdi.svelte-1kk6kdi{--deck-bg-color-top:#0a2ea5;--deck-bg-color-center:#324892;--deck-bg-color-bottom:#130069}#deckArea.dark.svelte-1kk6kdi.svelte-1kk6kdi{--deck-bg-color-top:#0a2ea5;--deck-bg-color-center:#83a0ff;--deck-bg-color-bottom:#130069}#deckPiling.svelte-1kk6kdi.svelte-1kk6kdi{position:relative;width:var(--ch);height:var(--cw)}#deckPiling.svelte-1kk6kdi .deckbottom.svelte-1kk6kdi{position:absolute;--round-len:300px;width:calc(var(--round-len) / 2);height:var(--round-len);top:-90px;left:0;overflow:hidden}#deckPiling.svelte-1kk6kdi .deckbottom .round.svelte-1kk6kdi{position:absolute;right:0;width:var(--round-len);height:var(--round-len);border-radius:200px;overflow:hidden}#deckPiling.svelte-1kk6kdi .deckbottom .round .round-top.svelte-1kk6kdi,#deckPiling.svelte-1kk6kdi .deckbottom .round .round-center.svelte-1kk6kdi,#deckPiling.svelte-1kk6kdi .deckbottom .round .round-bottom.svelte-1kk6kdi{position:absolute;width:var(--round-len);height:calc(var(--round-len) / 3)}#deckPiling.svelte-1kk6kdi .deckbottom .round .round-top.svelte-1kk6kdi{top:0;background:var(--deck-bg-color-top)}#deckPiling.svelte-1kk6kdi .deckbottom .round .round-center.svelte-1kk6kdi{top:50%;transform:translate(0, -50%);background:var(--deck-bg-color-center)}#deckPiling.svelte-1kk6kdi .deckbottom .round .round-bottom.svelte-1kk6kdi{bottom:0;background:var(--deck-bg-color-bottom)}",
       map: null
     };
@@ -10489,7 +10661,7 @@ var init_game_tcg_svelte = __esm({
       $$unsubscribe_deckListStore = subscribe(deckListStore, (value) => $deckListStore = value);
       $$unsubscribe_modeStore = subscribe(modeStore, (value) => $modeStore = value);
       createEventDispatcher();
-      $$result.css.add(css$26);
+      $$result.css.add(css$27);
       $$unsubscribe_deckListStore();
       $$unsubscribe_modeStore();
       return `<section id="${"deckArea"}" class="${escape(null_to_empty($modeStore)) + " svelte-1kk6kdi"}"><section id="${"deckPiling"}" class="${"svelte-1kk6kdi"}"><div class="${"deckbottom svelte-1kk6kdi"}"><div class="${"round svelte-1kk6kdi"}"><div class="${"round-top svelte-1kk6kdi"}"></div>
@@ -10509,7 +10681,7 @@ var init_game_tcg_svelte = __esm({
       })}</section>
 </section>`;
     });
-    css$18 = {
+    css$19 = {
       code: "#handArea.svelte-11la4tw.svelte-11la4tw{position:absolute;margin:0 auto;width:500px;height:75px;left:calc(50% - 250px);bottom:0}#handArea.light.svelte-11la4tw.svelte-11la4tw{--hand-bg-color:#0a2ea5}#handArea.dark.svelte-11la4tw.svelte-11la4tw{--hand-bg-color:#081081}#handArea.svelte-11la4tw #handArea-bg.svelte-11la4tw{overflow:hidden;width:inherit;height:inherit}#handArea.svelte-11la4tw #handArea-bg #handArea-bg-radius.svelte-11la4tw{position:relative;margin:0 auto;width:inherit;height:500px;border-radius:250px}#handArea.svelte-11la4tw #handArea-bg #handArea-bg-radius.light.svelte-11la4tw{background:yellow}#handArea.svelte-11la4tw #handArea-bg #handArea-bg-radius.dark.svelte-11la4tw{background:var(--hand-bg-color)}",
       map: null
     };
@@ -10522,7 +10694,7 @@ var init_game_tcg_svelte = __esm({
       $$unsubscribe_cardWidth = subscribe(cardWidth, (value) => $cardWidth = value);
       $$unsubscribe_modeStore = subscribe(modeStore, (value) => $modeStore = value);
       createEventDispatcher();
-      $$result.css.add(css$18);
+      $$result.css.add(css$19);
       {
         {
           let hand = $handListStore;
@@ -10575,7 +10747,7 @@ var init_game_tcg_svelte = __esm({
       })}
 </section>`;
     });
-    css34 = {
+    css36 = {
       code: "#board.svelte-wvq7x7.svelte-wvq7x7{width:825px;height:550px;z-index:1;margin:0 auto 0 200px;transform:rotateX(10deg);border-radius:30px;position:relative}#board.light.svelte-wvq7x7.svelte-wvq7x7{background:radial-gradient(ellipse, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 70%, rgba(0, 0, 0, 0.2) 100%)}#board.dark.svelte-wvq7x7.svelte-wvq7x7{background:radial-gradient(ellipse, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.4) 70%, rgba(255, 255, 255, 0.1) 100%)}#myHand.svelte-wvq7x7.svelte-wvq7x7{position:fixed;z-index:0;width:100%;height:75px;bottom:0}#myHand.svelte-wvq7x7 #handArea-main.svelte-wvq7x7{position:absolute;width:500px;height:180px;left:50%;transform:translate(-50%, 0);bottom:0;pointer-events:none}#myDeck.svelte-wvq7x7.svelte-wvq7x7{position:fixed;z-index:0;bottom:130px;left:0px}#myDeck.svelte-wvq7x7 #deckArea-main.svelte-wvq7x7{position:absolute;width:200px;height:300px;top:50%;left:-50%;transform:translate(0, -50%);bottom:0;pointer-events:none}#is-not-PC-alert.svelte-wvq7x7.svelte-wvq7x7{margin:100px 20px;background:black;border:solid 1px white;border-radius:20px;width:70%;max-width:600px}#is-not-PC-alert.svelte-wvq7x7 .clear.svelte-wvq7x7{color:yellow}#is-not-PC-alert.svelte-wvq7x7 .panel.svelte-wvq7x7{padding:20px}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp.svelte-wvq7x7{color:white;position:relative;max-width:310px;margin:50px auto}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp .device-figure.svelte-wvq7x7{width:80%;margin:0 auto;font-size:18px}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp .device-figure span.svelte-wvq7x7{font-size:15px;line-height:18px}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp .device-figure .width.svelte-wvq7x7{position:absolute;left:50%;top:-30px;transform:translate(-50%, 0)}#is-not-PC-alert.svelte-wvq7x7 .panel .device-exp .device-figure .height.svelte-wvq7x7{position:absolute;top:50%;right:-55px;transform:rotate(90deg)}",
       map: null
     };
@@ -10596,7 +10768,7 @@ var init_game_tcg_svelte = __esm({
       $$unsubscribe_handAreaInfoStore = subscribe(handAreaInfoStore, (value) => value);
       $$unsubscribe_boardAreaInfoStore = subscribe(boardAreaInfoStore, (value) => value);
       $$unsubscribe_modeStore = subscribe(modeStore, (value) => $modeStore = value);
-      $$result.css.add(css34);
+      $$result.css.add(css36);
       $$unsubscribe_deckListStore();
       $$unsubscribe_boardListStore();
       $$unsubscribe_handListStore();
@@ -10626,20 +10798,20 @@ ${`<article id="${"board"}" class="${escape(null_to_empty($modeStore)) + " svelt
 });
 
 // .svelte-kit/output/server/nodes/12.js
-var __exports19 = {};
-__export(__exports19, {
-  css: () => css35,
-  entry: () => entry19,
-  js: () => js19,
+var __exports20 = {};
+__export(__exports20, {
+  css: () => css37,
+  entry: () => entry20,
+  js: () => js20,
   module: () => game_tcg_svelte_exports
 });
-var entry19, js19, css35;
-var init__19 = __esm({
+var entry20, js20, css37;
+var init__20 = __esm({
   ".svelte-kit/output/server/nodes/12.js"() {
     init_game_tcg_svelte();
-    entry19 = "pages/app/tcg-simulator/game@tcg.svelte-3450ef64.js";
-    js19 = ["pages/app/tcg-simulator/game@tcg.svelte-3450ef64.js", "chunks/index-ce8d78cd.js", "chunks/deck-c6d33012.js", "chunks/TCGsimStore-816ca726.js", "chunks/index-c399c12f.js"];
-    css35 = ["assets/pages/app/tcg-simulator/game@tcg.svelte-481aa717.css", "assets/deck-d908b596.css"];
+    entry20 = "pages/app/tcg-simulator/game@tcg.svelte-9bc4148e.js";
+    js20 = ["pages/app/tcg-simulator/game@tcg.svelte-9bc4148e.js", "chunks/index-7e81b4c7.js", "chunks/deck-b8dd20f8.js", "chunks/TCGsimStore-135f7582.js", "chunks/index-c0f974cf.js"];
+    css37 = ["assets/pages/app/tcg-simulator/game@tcg.svelte-481aa717.css", "assets/deck-d908b596.css"];
   }
 });
 
@@ -10986,12 +11158,12 @@ function devalue(value) {
   }
   walk(value);
   var names = /* @__PURE__ */ new Map();
-  Array.from(counts).filter(function(entry20) {
-    return entry20[1] > 1;
+  Array.from(counts).filter(function(entry21) {
+    return entry21[1] > 1;
   }).sort(function(a, b) {
     return b[1] - a[1];
-  }).forEach(function(entry20, i2) {
-    names.set(entry20[0], getName(i2));
+  }).forEach(function(entry21, i2) {
+    names.set(entry21[0], getName(i2));
   });
   function stringify(thing) {
     if (names.has(thing)) {
@@ -11333,8 +11505,8 @@ function reverse_endianness(bytes) {
 function encode(str) {
   const encoded = encoder.encode(str);
   const length = encoded.length * 8;
-  const size2 = 512 * Math.ceil((length + 65) / 512);
-  const bytes = new Uint8Array(size2 / 8);
+  const size = 512 * Math.ceil((length + 65) / 512);
+  const bytes = new Uint8Array(size / 8);
   bytes.set(encoded);
   bytes[encoded.length] = 128;
   reverse_endianness(bytes);
@@ -12732,10 +12904,10 @@ var Server = class {
 // .svelte-kit/vercel-tmp/manifest.js
 var manifest = {
   appDir: "_app",
-  assets: /* @__PURE__ */ new Set(["favicon.png", "img/.DS_Store", "img/add_people.svg", "img/app_icon.svg", "img/arrow-circle-left-solid.svg", "img/arrow-osha.svg", "img/arrow_simple_bottom.svg", "img/arrow_simple_right.svg", "img/blog_icon.svg", "img/bs2nd/a_gray.png", "img/bs2nd/a_gray_fill.svg", "img/bs2nd/ba_gray.png", "img/bs2nd/ba_gray.svg", "img/bs2nd/bakuzetsu-searchico-effect.png", "img/bs2nd/bakuzetsu-searchico.png", "img/bs2nd/biribiri.svg", "img/bs2nd/change.svg", "img/bs2nd/chi_gray.png", "img/bs2nd/copy.svg", "img/bs2nd/e_gray_fill.svg", "img/bs2nd/heal.svg", "img/bs2nd/ku_gray.png", "img/bs2nd/needle.svg", "img/bs2nd/sa_gray.png", "img/bs2nd/shield.svg", "img/bs2nd/tsu_gray.png", "img/bs2nd/wall.svg", "img/bs2nd/week.svg", "img/bs2nd/ze_gray.png", "img/contacts_icon.svg", "img/n2-icon-white.svg", "img/n2_clock/.DS_Store", "img/n2_clock/clock_body.svg", "img/n2_clock/clock_insidewheel.svg", "img/n2_clock/time-1.svg", "img/n2_clock/time-10.svg", "img/n2_clock/time-10_white.svg", "img/n2_clock/time-11.svg", "img/n2_clock/time-12.svg", "img/n2_clock/time-2.svg", "img/n2_clock/time-3.svg", "img/n2_clock/time-4.svg", "img/n2_clock/time-5.svg", "img/n2_clock/time-6.svg", "img/n2_clock/time-7.svg", "img/n2_clock/time-8.svg", "img/n2_clock/time-9.svg", "img/portfolio_icon.svg", "img/profile_icon.svg", "img/tcg-sim/card.svg", "img/tcg-sim/card_naname.svg", "img/tcg-sim/dmbd13-002a.jpeg", "img/tcg-sim/dmbd16-011-[4].jpeg", "img/tcg-sim/dmex17-003-[4].jpeg", "img/tcg-sim/dmr21-l02-[4].jpeg", "img/tcg-sim/ellipse.svg", "img/tcg-sim/require_device.svg", "img/trash.svg", "style/common.css", "style/reset.css"]),
+  assets: /* @__PURE__ */ new Set(["favicon.png", "img/.DS_Store", "img/add_people.svg", "img/app_icon.svg", "img/arrow-circle-left-solid.svg", "img/arrow-osha.svg", "img/arrow_simple_bottom.svg", "img/arrow_simple_right.svg", "img/blog_icon.svg", "img/bs2nd/a_gray.png", "img/bs2nd/a_gray_fill.svg", "img/bs2nd/ba_gray.png", "img/bs2nd/ba_gray.svg", "img/bs2nd/bakuzetsu-searchico-effect.png", "img/bs2nd/bakuzetsu-searchico.png", "img/bs2nd/biribiri.svg", "img/bs2nd/change.svg", "img/bs2nd/chi_gray.png", "img/bs2nd/copy.svg", "img/bs2nd/e_gray_fill.svg", "img/bs2nd/heal.svg", "img/bs2nd/ku_gray.png", "img/bs2nd/needle.svg", "img/bs2nd/sa_gray.png", "img/bs2nd/shield.svg", "img/bs2nd/tsu_gray.png", "img/bs2nd/wall.svg", "img/bs2nd/week.svg", "img/bs2nd/ze_gray.png", "img/contacts_icon.svg", "img/n2-icon-white.svg", "img/n2_clock/.DS_Store", "img/n2_clock/clock_body.svg", "img/n2_clock/clock_insidewheel.svg", "img/n2_clock/time-1.svg", "img/n2_clock/time-10.svg", "img/n2_clock/time-10_white.svg", "img/n2_clock/time-11.svg", "img/n2_clock/time-12.svg", "img/n2_clock/time-2.svg", "img/n2_clock/time-3.svg", "img/n2_clock/time-4.svg", "img/n2_clock/time-5.svg", "img/n2_clock/time-6.svg", "img/n2_clock/time-7.svg", "img/n2_clock/time-8.svg", "img/n2_clock/time-9.svg", "img/pokeca/icon_white.svg", "img/portfolio_icon.svg", "img/profile_icon.svg", "img/tcg-sim/card.svg", "img/tcg-sim/card_naname.svg", "img/tcg-sim/dmbd13-002a.jpeg", "img/tcg-sim/dmbd16-011-[4].jpeg", "img/tcg-sim/dmex17-003-[4].jpeg", "img/tcg-sim/dmr21-l02-[4].jpeg", "img/tcg-sim/ellipse.svg", "img/tcg-sim/require_device.svg", "img/trash.svg", "style/common.css", "style/reset.css"]),
   mimeTypes: { ".png": "image/png", ".svg": "image/svg+xml", ".jpeg": "image/jpeg", ".css": "text/css" },
   _: {
-    entry: { "file": "start-97894e38.js", "js": ["start-97894e38.js", "chunks/index-ce8d78cd.js", "chunks/index-c399c12f.js"], "css": [] },
+    entry: { "file": "start-4affbeea.js", "js": ["start-4affbeea.js", "chunks/index-7e81b4c7.js", "chunks/index-c0f974cf.js"], "css": [] },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2)),
@@ -12755,41 +12927,42 @@ var manifest = {
       () => Promise.resolve().then(() => (init__16(), __exports16)),
       () => Promise.resolve().then(() => (init__17(), __exports17)),
       () => Promise.resolve().then(() => (init__18(), __exports18)),
-      () => Promise.resolve().then(() => (init__19(), __exports19))
+      () => Promise.resolve().then(() => (init__19(), __exports19)),
+      () => Promise.resolve().then(() => (init__20(), __exports20))
     ],
     routes: [
       {
         type: "page",
-        id: "",
-        pattern: /^\/$/,
-        names: [],
-        types: [],
-        path: "/",
-        shadow: null,
-        a: [0, 2],
-        b: [1]
-      },
-      {
-        type: "page",
-        id: "app",
+        id: "app@root",
         pattern: /^\/app\/?$/,
         names: [],
         types: [],
         path: "/app",
         shadow: null,
-        a: [0, 3],
-        b: [1]
+        a: [0, 2, 3],
+        b: [1, 1]
       },
       {
         type: "page",
-        id: "contact",
+        id: "contact@root",
         pattern: /^\/contact\/?$/,
         names: [],
         types: [],
         path: "/contact",
         shadow: null,
-        a: [0, 4],
-        b: [1]
+        a: [0, 2, 4],
+        b: [1, 1]
+      },
+      {
+        type: "page",
+        id: "@root",
+        pattern: /^\/?$/,
+        names: [],
+        types: [],
+        path: "/",
+        shadow: null,
+        a: [0, 2, 5],
+        b: [1, 1]
       },
       {
         type: "page",
@@ -12799,7 +12972,7 @@ var manifest = {
         types: [],
         path: "/introduce",
         shadow: null,
-        a: [0, 5],
+        a: [0, 6],
         b: [1]
       },
       {
@@ -12810,7 +12983,7 @@ var manifest = {
         types: [],
         path: "/show",
         shadow: null,
-        a: [0, 6],
+        a: [0, 7],
         b: [1]
       },
       {
@@ -12821,7 +12994,7 @@ var manifest = {
         types: [],
         path: "/blog/list",
         shadow: null,
-        a: [0, 7],
+        a: [0, 8],
         b: [1]
       },
       {
@@ -12832,7 +13005,7 @@ var manifest = {
         types: [],
         path: "/blog/page",
         shadow: null,
-        a: [0, 8],
+        a: [0, 9],
         b: [1]
       },
       {
@@ -12843,7 +13016,7 @@ var manifest = {
         types: [],
         path: "/app/DM-Downloader/collect",
         shadow: null,
-        a: [0, 9],
+        a: [0, 10],
         b: [1]
       },
       {
@@ -12854,7 +13027,7 @@ var manifest = {
         types: [],
         path: "/app/bakuzetsu-searcher-2nd/analyze",
         shadow: null,
-        a: [0, 10, 11],
+        a: [0, 11, 12],
         b: [1]
       },
       {
@@ -12865,7 +13038,7 @@ var manifest = {
         types: [],
         path: "/app/bakuzetsu-searcher-2nd/edit",
         shadow: null,
-        a: [0, 10, 12],
+        a: [0, 11, 13],
         b: [1]
       },
       {
@@ -12876,7 +13049,7 @@ var manifest = {
         types: [],
         path: "/app/bakuzetsu-searcher-2nd/post",
         shadow: null,
-        a: [0, 10, 13],
+        a: [0, 11, 14],
         b: [1]
       },
       {
@@ -12887,7 +13060,7 @@ var manifest = {
         types: [],
         path: "/app/pokemon-card-game-effector/game",
         shadow: null,
-        a: [0, 14, 15],
+        a: [0, 15, 16],
         b: [1]
       },
       {
@@ -12898,7 +13071,7 @@ var manifest = {
         types: [],
         path: "/app/tcg-simulator/edit",
         shadow: null,
-        a: [0, 16, 17],
+        a: [0, 17, 18],
         b: [1]
       },
       {
@@ -12909,7 +13082,7 @@ var manifest = {
         types: [],
         path: "/app/tcg-simulator/game",
         shadow: null,
-        a: [0, 16, 18],
+        a: [0, 17, 19],
         b: [1]
       }
     ],
