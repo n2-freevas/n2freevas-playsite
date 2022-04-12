@@ -74,6 +74,7 @@
             }
         }
         .effect{
+            user-select: none;
             img{
                 position: absolute;
                 top:-70px;
