@@ -28,12 +28,13 @@ import EmotionConponent from "$lib/component/PokecaEffector/EmotionConponent.sve
 <section id='effect-layor'>
     <StorageComponent></StorageComponent>
 </section>
+<!-- <section id='emotion-layor'>
+    <EmotionConponent></EmotionConponent>
+</section> -->
 <section id='coin-layor'>
     <CoinComponent></CoinComponent>
 </section>
-<section id='emotion-layor'>
-    <EmotionConponent></EmotionConponent>
-</section>
+
 
 <style lang="scss">
     section{
