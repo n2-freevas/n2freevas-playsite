@@ -1,36 +1,51 @@
 <script>
+import FukidashiConponent from "./FukidashiConponent.svelte";
+
     let flip = false
     let openBackFlip = false
     let openFrontFlip = false
     let flipping = false
+    let fukidashi_roll_in = false
+    let fukidashi_string = "Head"
     function getRandomInt(max) {
         return Math.floor(Math.random() * max);
     }
     function coinToss(){
         if (!flipping){
             flipping = true
+            fukidashi_roll_in = false
             //表を出す
             if(getRandomInt(100)%2 == 0){
                 openFrontFlip = true
                 flip = false
+                fukidashi_string = "Head"
             }
             //裏を出す
             else{
                 openBackFlip = true
                 flip = true
+                fukidashi_string = "Tail"
             }
             window.setTimeout(()=>{
+                fukidashi_roll_in = true    
                 flipping = false
                 openFrontFlip = false
                 openBackFlip = false
-            },1500)
+            },1100)
+            window.setTimeout(()=>{
+                fukidashi_roll_in = false
+            },6000)
             
         }
         
     }
 
 </script>
-
+<div class='coin_result_fukidashi'>
+    <FukidashiConponent width={150} left_roll_in = {fukidashi_roll_in}>
+        {fukidashi_string}
+    </FukidashiConponent>
+</div>
 <div class = 'coin {flip ? "flip":""} {openFrontFlip? "openFrontFlip" : ""} {openBackFlip? "openBackFlip" : ""}'
 on:click={coinToss}>
     <div class = 'front'>
@@ -42,7 +57,15 @@ on:click={coinToss}>
 </div>
 
 <style lang="scss">
+    .coin_result_fukidashi{
+        user-select: none;
+        position: absolute;
+        top:-100px;
+        left:50px;
+    }
+
     .coin {
+        user-select: none;
         position: absolute;
         width: 70px;
         position: relative;

@@ -24,13 +24,13 @@ let apps: App[] = [
         icon:"/img/tcg-sim/card_naname.svg",
         href: "/app/tcg-simulator/game",
         description:"トレーディングカードをインポートしてプレイ"
-    },
-    {
-        name:"DMダウンローダ",
-        icon:"/img/tcg-sim/card_naname.svg",
-        href: "/app/DM-Downloader/collect",
-        description:"カード画像を収集"
     }
+    // {
+    //     name:"DMダウンローダ",
+    //     icon:"/img/tcg-sim/card_naname.svg",
+    //     href: "/app/DM-Downloader/collect",
+    //     description:"カード画像を収集"
+    // }
 ]
 
 

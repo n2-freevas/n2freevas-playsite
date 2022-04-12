@@ -9,8 +9,9 @@
     let dy = 250;
     // let moving = false
 
-    const initPositionPoisonKan = {id:100,x:180,y:25,damage:10}
-    const initPositionBurnKan = {id:100,x:280,y:25,damage:10}
+    const initPositionDamageKan = {x:50, y:0}
+    const initPositionPoisonKan = {id:100,x:200,y:25,damage:10,active: false}
+    const initPositionBurnKan = {id:100,x:300,y:25,damage:10,active: false}
     
     let damageKanArray: DamageKan[] = []
     let poisonKan: PoisonKan =  Object.assign({},initPositionPoisonKan)
@@ -21,8 +22,8 @@
         for(let i = 0; i<10; i++){
             damageKanArray.push({
                 id:id_counter,
-                x:30,
-                y:0 + (id_counter*2),
+                x:initPositionDamageKan.x,
+                y:initPositionDamageKan.y + (id_counter*2),
                 counter: 0
             })
             id_counter += 1
@@ -45,8 +46,8 @@
     function resetDamageKanPosition(){
         let i = 0
         damageKanArray.forEach(item => {
-            item.x = 30,
-            item.y = 0 + (i*2)
+            item.x = initPositionDamageKan.x,
+            item.y = initPositionDamageKan.y + (i*2)
             item.counter = 0
             i += 1
         })
@@ -69,7 +70,7 @@
 </div>
 
 
-<style>
+<style lang='scss'>
     .storage-box{
         position: absolute;
         right:var(--dx);
@@ -78,24 +79,28 @@
         height:500px;
         background: linear-gradient(
             127deg,
-            rgb(0, 0, 0),
-            rgb(26, 32, 53)
+            rgb(1, 0, 12),
+            rgb(13, 22, 53)
         );
-        box-shadow: 5px 10px 2px rgba(255,255,255,0.3);
-        border-radius: 5px;
+        /* box-shadow: 10px 10px 1px rgba(255,255,255,0.3); */
+        border-radius: 100px / 40px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
     }
     button{
-        position: absolute;
-        right:10px;
-        bottom:10px;
-        background: white;
         --size:40px;
+        position: absolute;
+        right:40px;
+        bottom:20px;
+        background: white;
         width:var(--size);
         height:var(--size);
-        border-radius: calc( var(--size) / 2);
+        border-radius:calc( var(--size) / 2);
+        svg{
+            width:100%;
+            height:100%;
+        }
     }
 </style>

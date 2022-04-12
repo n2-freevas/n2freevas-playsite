@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import StorageComponent from "$lib/component/PokecaEffector/StorageComponent.svelte";
 import CoinComponent from "$lib/component/PokecaEffector/CoinComponent.svelte";
+import EmotionConponent from "$lib/component/PokecaEffector/EmotionConponent.svelte";
 
     onMount(()=>{
         const video = document.getElementById("web-video")
@@ -18,7 +19,6 @@ import CoinComponent from "$lib/component/PokecaEffector/CoinComponent.svelte";
         })
     })
 </script>
-
 <section id='video-layor'>
     <video id="web-video">
         <track kind="captions">
@@ -30,6 +30,9 @@ import CoinComponent from "$lib/component/PokecaEffector/CoinComponent.svelte";
 </section>
 <section id='coin-layor'>
     <CoinComponent></CoinComponent>
+</section>
+<section id='emotion-layor'>
+    <EmotionConponent></EmotionConponent>
 </section>
 
 <style lang="scss">
@@ -46,7 +49,7 @@ import CoinComponent from "$lib/component/PokecaEffector/CoinComponent.svelte";
             position: absolute;
             top:0;
             bottom:0;
-            height:95%;
+            height:98%;
             margin: auto 0;
         }
     }

@@ -11,11 +11,13 @@ export interface DamageKan extends BaseEffector {
 
 
 export interface PoisonKan extends BaseEffector {
-    damage: number   
+    damage: number
+    active: boolean
 }
 
 export interface BurnKan extends BaseEffector {
     damage: number
+    active: boolean
 }
 
 export interface UserKan extends BaseEffector{

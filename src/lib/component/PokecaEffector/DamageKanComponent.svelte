@@ -9,7 +9,7 @@
         counter: 0
     }
     const init_size = 100
-    const init_font_size = 40
+    const init_font_size = 30
     const init_color = [255, 200 ,0]
     let size = init_size
     let font_size = init_font_size
@@ -126,6 +126,7 @@
         // overflow: hidden;
         transform-origin: 50%, 50%;
         transform: scale(var(--scale));
+        user-select: none;
         img{
             z-index: 1;
             position: absolute;
@@ -172,7 +173,6 @@
         }
         p{
             z-index: 5;
-            user-select: none;
             color:white;
             font-size: var(--font_size);
             font-weight: bold;

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    const myname = 'Making' //'Taro <span style="color:#ff0000">N</span>onoyama'
+    const myname = 'Taro Nonoyama' //'Taro <span style="color:#ff0000">N</span>onoyama'
     const mySex = 'Male'
     const myBloodType = 'A Rh+'
     const myBirthDay = new Date('1996-09-30T00:26:29+09:00')
@@ -12,7 +12,7 @@
     let myAgeMillieSecond = 0
     let ticktockInterval = 1000
     const myJob = ['Engineer', 'Designer', 'Artist']
-    const backgroundIllust = ['https://lh3.googleusercontent.com/bcvBUbA1fI0nUqannPAJxes6L1JmFm4VdhfjCwq6fkvqgoBHlGoVJhMk-L20s5zscQZe8FO9d3x4u757Gk35od1rhy8wbOlOEHDt0GULdy7Af2oI_TMadzt4mohs-okGaJoaYaxq27I9HXPCNyoO_cv5nSEM2WlUNF_KKNMW-Hv-0RJkpREnBwzn-HPzuP9lXk5VVIhIcNEwspqsh4n_byo-SlBOOnDX6YDSI_iPzQOftJTfIoZupSXt7yT0eTX4X3G4iU7l0oJd72Mm72_4xAgAw9Ogoyy2wOx_f9TY3hLZWqO1n94DOM0GxWtE-YbfX_LxLRbAzbIUk4IGhl0eNUNfY-w-zg6DjNe0EgQ0MlgBbQH7GDUa-0va2ppQwNTdU_nJIlBBlFa5MCEaBrc3WJZuN1uC7Od7bgY2w3l9_zTajyvYMDRK40k0jlJjqUov2v5QmbAOwVap49VF1bNQrqZsKN-KaCuVeBZHOsA33U28f7qE5Pw2V1g0nUvcYGjBgSyIjX0d-4abQnpNO_AAP5mKUhiMHPAxc1SJne8b_AQMPQNk0qAdO_-I68Eb1nN2LdKyk2Ca4YWqGb2OTQyyewAaxnYhPY9tTXCMxU18r2NVuJWDmrzXaNab3s_rjdMwn1zW5sxrJEpqFu2Av7wPWQ5PRbbPBZVVid_jh8slBbZLULwQ7qLRbn3L-opMCJzUq748fEL2GXe1wWK1G87Fw_I=s700-no']
+    const backgroundIllust = ['']
     const calcElapsedYear = ( s , e )=>e.getFullYear() === s.getFullYear()
             ? 0
             : (e.getFullYear() - s.getFullYear() -1 )
@@ -59,7 +59,7 @@
         <div class='birthday'>
             {`Age ${myAgeYear}`}
             <div class='birthday-count'>
-                {`( ${myAgeDay}d ${myAgeHour}h ${myAgeMinutes}m ${myAgeSecond}s )`}
+                {`( ${myAgeDay}day ${myAgeHour}hour ${myAgeMinutes}minutes ${myAgeSecond}seconds )`}
             </div>
         </div>
         <div>{mySex}</div>
@@ -80,7 +80,7 @@
                 margin:5px;
             }
             h1{
-                margin:10px 0;
+                margin:30px 0;
             }
             .job{
                 margin:10px 5px;
