@@ -1,10 +1,17 @@
 <script lang="ts">
     import {deckListStore, exDeckListStore,
             unshuffleDeckListStore, unshuffleExDeckListStore} from '$lib/store/app/TCGsimStore'
-    import { deckShuffle } from '$lib/component/TCG-sim/deck.svelte'
+    import { deckShuffle } from '$lib/component/TCG-sim/deckAndHand.svelte'
+    
+    let deckLength:number = 0
+    let exDeckLength:number = 0
+
     function onFileSelected(e){
+        let deckList = []
+        let exDeckList = []
         $deckListStore = []
         $exDeckListStore = []
+        
         const files:File[] = e.target.files;
         let images:File[] = []
         let sleeve:string | ArrayBuffer = "/img/tcg-sim/card.svg"
@@ -36,7 +43,7 @@
                 console.log(match, images[i].name,count)
                 if(images[i].webkitRelativePath.includes('/extra')){
                     for(let j=0; j<count; j++){
-                        $unshuffleExDeckListStore.push({
+                        exDeckList.push({
                             id:id,
                             //@ts-ignore
                             url: e.target.result,
@@ -50,7 +57,7 @@
                 }
                 else{
                     for(let j=0; j<count; j++){
-                        $unshuffleDeckListStore.push({
+                        deckList.push({
                             id:id,
                             //@ts-ignore
                             url: e.target.result,
@@ -62,14 +69,18 @@
                     }
                 }
                 if(i == images.length -1){
+                    $unshuffleDeckListStore = deckList
+                    $unshuffleExDeckListStore = exDeckList
                     let usexd = $unshuffleExDeckListStore
                     let usd = $unshuffleDeckListStore
                     $unshuffleExDeckListStore = usexd
                     $unshuffleDeckListStore = usd
                     $exDeckListStore = deckShuffle(usexd)
                     $deckListStore  = deckShuffle(usd)
-                    console.log($deckListStore)
-                    console.log($exDeckListStore)
+                    deckLength = $deckListStore.length
+                    exDeckLength = $exDeckListStore.length
+                    // console.log($deckListStore)
+                    // console.log($exDeckListStore)
                 }
             };
         }
@@ -78,7 +89,8 @@
 
 
 <input type="file" webkitdirectory on:change={(e)=>onFileSelected(e)}/>
-<section id='deck'>
+<p>デッキ枚数：{$unshuffleDeckListStore.length}</p>
+<section id='deck' style="--wrap_num:{ deckLength > 40 ? '12': '10'}">
     {#each $unshuffleDeckListStore as d}
         <img src={d.url} alt =''>
     {/each}
@@ -101,7 +113,7 @@
     }
     #deck, #exdeck{
         display: flex;
-        width:calc(var(--card-width) * 10 + var(--card-margin) * 20);
+        width:calc(var(--card-width) * var(--wrap_num) + var(--card-margin) * ( var(--wrap_num) *2 ));
         margin:0 auto;
         flex-wrap: wrap;
     }

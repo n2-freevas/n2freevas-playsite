@@ -1,6 +1,24 @@
 <script lang="ts">
     import ToastArea from '$lib/component/toast/ToastArea.svelte'
     import { modeStore } from '$lib/store/app/TCGsimStore'
+    import { deckShuffle } from '$lib/component/TCG-sim/deckAndHand.svelte'
+    import {boardListStore, handListStore, 
+        deckListStore, unshuffleDeckListStore, 
+        unshuffleExDeckListStore, exDeckListStore } from '$lib/store/app/TCGsimStore'
+    import type { deckCardModel } from '$lib/model/app/TCGsimModel';
+
+    function reset(){
+        $boardListStore = []
+        $handListStore = []
+        let deck:deckCardModel[] = Object.assign([],$unshuffleDeckListStore)
+        $exDeckListStore = Object.assign([],$unshuffleExDeckListStore)
+        deck.forEach(item => {
+            item.x=0
+            item.y=0
+            item.flip = true
+        })
+        $deckListStore = deckShuffle(deck)
+    }
 </script>
 
 
@@ -11,6 +29,7 @@
         </a>
     </div>
     <div class='color-config'>
+        <button class='reset' on:click={reset}></button>
         <button class='light' on:click={()=>{$modeStore = 'light'}}></button>
         <button class='dark' on:click={()=>{$modeStore = 'dark'}}></button>
     </div>
@@ -31,6 +50,7 @@
         </a>
     </footer>
 </div>
+
 <ToastArea/>
 
 <style lang="scss">
@@ -74,6 +94,9 @@
                 margin:0 7px;
                 border-radius: 7px;
             }
+            .reset{
+                background: yellow;
+            }
             .light{
                 background: white;
             }
@@ -89,7 +112,7 @@
         width:calc(100vw - 70px);
         height:calc(100vh - 40px);
         #base{
-            width: 1100px;
+            width: 1400px;
             height:760px;
             margin:0 auto;
             -moz-perspective:500;

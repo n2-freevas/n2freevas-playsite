@@ -2,18 +2,16 @@
     import { onMount } from "svelte";
     // import Viewport from 'svelte-viewport-info'
     import Card from '$lib/component/TCG-sim/card.svelte'
-    import Hand from '$lib/component/TCG-sim/hand.svelte'
-    import Deck from '$lib/component/TCG-sim/deck.svelte'
+    import DeckAndHand from '$lib/component/TCG-sim/deckAndHand.svelte'
     import type { boardCardModel, deckCardModel, handCardModel } from '$lib/model/app/TCGsimModel'
     import { modeStore, boardAreaInfoStore, handAreaInfoStore, deckAreaInfoStore, cardWidth,
             deckListStore, handListStore, boardListStore}
     from '$lib/store/app/TCGsimStore'
     
-    let files
     let isPC = true
     let window_width = 0
     let window_height = 0 
-    let window_width_require = 1200
+    let window_width_require = 1500
     let window_height_require = 800
     
     function getBoardInfo(){
@@ -26,7 +24,7 @@
         }
     }
     function getHandInfo(){
-        const handInfo= document.getElementById('handArea-main').getBoundingClientRect()
+        const handInfo= document.getElementById('handArea').getBoundingClientRect()
         $handAreaInfoStore = {
             top: handInfo.top,
             left: handInfo.left,
@@ -36,7 +34,7 @@
     }
 
     function getDeckInfo(){
-        const deckInfo= document.getElementById('deckArea-main').getBoundingClientRect()
+        const deckInfo= document.getElementById('deckArea').getBoundingClientRect()
         $deckAreaInfoStore = {
             top: deckInfo.top,
             left: deckInfo.left,
@@ -47,30 +45,17 @@
 
     deckAreaInfoStore
     function windowChangeHandler(){
+        // 現在のブラウザの画面サイズを取得し、変数として確保
         window_width = window.innerWidth
         window_height = window.innerHeight
         if (window_width < window_width_require || window_height_require > window_height){isPC = false}
+        
+        //主要elementの座標位置とサイズなどを再取得。
         getBoardInfo()
         getHandInfo()
         getDeckInfo()
     }
     
-    function cardBoardInFromHand(event){
-        const id = event.detail.id
-        const position = event.detail.position
-        const flippin = event.detail.flip
-        const target = $handListStore.filter(card => card.id == id).pop()
-        $handListStore = $handListStore.map(card => {
-            return card.id != id ? card: null
-        })
-        $boardListStore = [...$boardListStore, {...target,x:position.top-($cardWidth), y:position.left, flip: flippin, rotate:0}]
-        window.setTimeout(
-            function(){
-                $handListStore = $handListStore.filter(card => card != undefined)
-            }
-            ,300
-        )
-    }
     function cardBoardInFromDeck(event){
         const id = event.detail.id
         const position = event.detail.position
@@ -106,12 +91,6 @@
         $boardListStore = $boardListStore.filter(card => card.id != id)
         $handListStore = [...$handListStore, target]
     }
-    function cardHandInFromDeck(event){
-        const id = event.detail.id
-        const target = $deckListStore.filter(card=> card.id==id).pop()
-        $deckListStore = $deckListStore.filter(card => card.id != id)
-        $handListStore = [...$handListStore, target]
-    }
     // DecK In Functions
     function cardDeckInFromBoard(event){
         const id = event.detail.id
@@ -128,6 +107,7 @@
         }
         
     }
+
     onMount(()=>{
         windowChangeHandler()
         getBoardInfo()
@@ -137,6 +117,12 @@
 <svelte:window bind:innerWidth={window_width} bind:innerHeight={window_height}
 />
 {#if isPC}
+<article id='myDeckAndHand'>
+    <DeckAndHand
+        on:boardInFromDeck = {cardBoardInFromDeck}
+    />
+</article>
+
 <article id='board' class={$modeStore}>
     {#each $boardListStore as bs}
     <Card
@@ -149,17 +135,14 @@
     />
     {/each}
 </article>
-<article id='myHand'>
-    <div id='handArea-main'></div>
-    <Hand on:boardInFromHand={cardBoardInFromHand}></Hand>
-</article>
-<article id='myDeck'>
-    <div id = 'deckArea-main'></div>
-    <Deck
-    on:handInFromDeck = {cardHandInFromDeck}
-    on:boardInFromDeck = {cardBoardInFromDeck}
-    />
-</article>
+
+<!-- <article id='myGraveyard'>
+    <div id='graveYard-main'></div>
+    
+
+</article> -->
+
+
 {:else}
     <section id='is-not-PC-alert'>
     <div class='panel'>
@@ -183,11 +166,11 @@
 
 <style lang="scss">
     #board{
-        width:825px;
+        width:1050px;
         height:550px;
         z-index:1;
         margin:0 auto 0 200px;
-        transform: rotateX(10deg);
+        transform: rotateX(7deg);
         border-radius: 30px;
         position: relative;
         &.light{
@@ -197,39 +180,28 @@
             background:radial-gradient(ellipse, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.4) 70%,rgba(255,255,255,0.1) 100%);
         }
     }
-    #myHand{
-        position:fixed;
-        z-index:0;
-        width:100%;
-        height:75px;
-        bottom:0;
-        #handArea-main{
-            position: absolute;
-            width:500px;
-            height:180px;
-            left:50%;
-            transform: translate(-50%, 0);
-            bottom: 0;
-            pointer-events: none;
-        }
-    }
-    #myDeck{
+    #myDeckAndHand{
         position: fixed;
-        z-index:0;
-        bottom:130px;
+        z-index:2;
+        bottom:0px;
         left:0px;
-        #deckArea-main{
+        width:100%;
+        height:150px;
+    }
+    #myGraveyard{
+        position: fixed;
+        z-index:1;
+        bottom: 0px;
+        right: 200px;
+        #graveYard-main{
             position: absolute;
             width:200px;
             height:300px;
-            top:50%;
-            left:-50%;
-            transform: translate(0, -50%);
+            background: white;
             bottom: 0;
             pointer-events: none;
         }
     }
-    
     #is-not-PC-alert{
         margin:100px 20px;
         background: black;

@@ -1,6 +1,7 @@
 <script lang="ts">
     import { boardAreaInfoStore, handAreaInfoStore, deckAreaInfoStore, boardListStore,
              movingStore } from '$lib/store/app/TCGsimStore'
+    import type { OnAreaModel } from '$lib/model/app/TCGsimModel'
     import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
     
@@ -9,7 +10,7 @@
     export let pos_y;
     let prev_pos_x = pos_x
     let prev_pos_y = pos_y
-    export let onArea = 'board'
+    export let onArea: OnAreaModel = 'deck'
     export let img_url;
     export let sleeve_url;
     export let rotate = 0
@@ -18,10 +19,8 @@
     let moving = false;
     let overing = false;
     export let flippin = false;
-    
 	
 	function onMouseDown() {
-        console.log(id)
 		if(!moving){
             moving = true;
             $movingStore = true
@@ -38,51 +37,61 @@
 		}
 	}
 
-    function onMouseUp(e: MouseEvent) {
+    function onMouseUp(e) {
         if(moving){
-            
+            //盤面に突入しているか判定する。
             if(($boardAreaInfoStore.left + 100<e.x && e.x<$boardAreaInfoStore.right)
-            && ($boardAreaInfoStore.top < e.y && e.y<$boardAreaInfoStore.bottom) && (onArea != 'board')){
-                dispatch('boardIn', {
-                    id: id,
-                    position: {
-                        top: e.x - $boardAreaInfoStore.left,
-                        left: e.y - $boardAreaInfoStore.top 
-                    },
-                    flip: flippin
-                })
+            && ($boardAreaInfoStore.top < e.y && e.y<$boardAreaInfoStore.bottom)){
+                console.log('check')
+                //ボード上の移動でないなら、外部からのボードへの移動であるので、
+                //dispatchによって上位要素にイベントを伝搬する。
+                if (onArea != 'board'){
+                    console.log(`[cardComponent] boardIn: card_id > ${id}`)
+                    dispatch('boardIn', {
+                        id: id,
+                        position: {
+                            top: e.x - $boardAreaInfoStore.left,
+                            left: e.y - $boardAreaInfoStore.top 
+                        },
+                        flip: flippin
+                    })
+                }
+                
+                //単純に、ボード上の移動であれば、その移動をStoreにも反映する。
+                else{
+                    console.log(`[cardComponent] boardMove: card_id > ${id}`)
+                    $boardListStore = $boardListStore.map(card=>{
+                        if(card.id == id){
+                            return {...card, x:pos_x, y:pos_y}
+                        } else { return card }
+                    })
+                }
             }
+            //手札エリアに突入しているか判定する。
             else if(($handAreaInfoStore.left <e.x && e.x<$handAreaInfoStore.right)
-            && ($handAreaInfoStore.top < e.y && e.y<$handAreaInfoStore.bottom) && (onArea != 'hand')){
-                dispatch('handIn', {
-                    id: id,
-                })
+            && ($handAreaInfoStore.top < e.y && e.y<$handAreaInfoStore.bottom)){
+                if (onArea != 'hand'){
+                    console.log('[cardComponent] handIn: card_id > ', id)
+                    dispatch('handIn', {
+                        id: id,
+                    })
+                }
             }
+            //デッキエリアに突入しているか判定する。
             else if(($deckAreaInfoStore.left <e.x && e.x<$deckAreaInfoStore.right)
-            && ($deckAreaInfoStore.top < e.y && e.y<$deckAreaInfoStore.bottom) && (onArea != 'deck')){
-                const height = $deckAreaInfoStore.bottom - $deckAreaInfoStore.top
-                const postPosition = e.y - $deckAreaInfoStore.top
-                const to = postPosition <= height/2 ? 'top':'bottom'
-                dispatch('deckIn', {
-                    id: id,
-                    post: to
-                })
+            && ($deckAreaInfoStore.top < e.y && e.y<$deckAreaInfoStore.bottom)){
+                if (onArea != 'deck'){
+                    const height = $deckAreaInfoStore.bottom - $deckAreaInfoStore.top
+                    const postPosition = e.y - $deckAreaInfoStore.top
+                    const to = postPosition <= height/2 ? 'top':'bottom'
+                    console.log('[cardComponent] deckIn: card_id > ', id)
+                    dispatch('deckIn', {
+                        id: id,
+                        post: to
+                    })
+                }
             }
-            else if(onArea == 'board'){
-                $boardListStore = $boardListStore.map(card=>{
-                    if(card.id == id){
-                        return {...card, x:pos_x, y:pos_y}
-                    } else { return card }
-                })
-            
-                dispatch('boardCardMove', {
-                    id: id,
-                    x: pos_x,
-                    y: pos_y,
-                    rotate: rotate,
-                    flip: flippin
-                })
-            }
+            // 手札上の移動であれば、その移動を反映する。
             else if(onArea == 'hand'){
                 pos_x = prev_pos_x
                 pos_y = prev_pos_y
@@ -93,6 +102,7 @@
         }
 	}
     function onMouseOver(){
+        console.log(`[cardComponent] mouseOver : card_id: ${id} / [${pos_x},${pos_y}] / onArea: ${onArea}`)
         overing = true;
     }
     function onMouseLeave(){
@@ -122,15 +132,15 @@
         })
     }
 </script>
+
 <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
 
-
 <section 
-    class= 'card-body {moving? 'movin':''} {noGuide? 'noGuide':''} {onArea!='board'?'noBoard':''}' style='--pos_x:{pos_x}px;
+    class= 'card-id-{id} card-body {moving? 'movin':''} {noGuide? 'noGuide':''} {onArea!='board'?'noBoard':''}' style='--pos_x:{pos_x}px;
             --pos_y:{pos_y}px;--img:{img_url};
             --rotate:{rotate}deg;'
-    on:mouseenter={onMouseOver}
-    on:mouseleave={onMouseLeave}
+        on:mouseenter={onMouseOver}
+        on:mouseleave={onMouseLeave}
     >
 
     {#if !$movingStore}

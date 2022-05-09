@@ -1,6 +1,7 @@
 import { writable, readable } from 'svelte/store'
 import type { Mode, handCardModel, boardCardModel,
-boardAreaInfoModel, handAreaInfoModel, deckAreaInfoModel, deckCardModel} from '$lib/model/app/TCGsimModel'
+boardAreaInfoModel, handAreaInfoModel, deckAreaInfoModel, deckCardModel, 
+boardGroupCardsModel} from '$lib/model/app/TCGsimModel'
 
 export const cardWidth = readable<number>(90)
 export const cardHeight = readable<number>(110)
