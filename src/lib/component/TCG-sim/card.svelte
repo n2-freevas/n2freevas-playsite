@@ -284,10 +284,10 @@ img{
     }
     .card-shadow{
         position: absolute;
-        --scaleup-width: 20px;
-        --scaleup-height: 50px;
+        --scaleup-width: 80px;
+        --scaleup-height: 200px;
         left: calc( -1 * (var(--scaleup-width) / 2));
-        top: calc(-1 * var(--scaleup-height) * 2);
+        top: calc(-1 * var(--scaleup-height));
         width:calc( var(--cw) + var(--scaleup-width));
         height:calc( var(--ch) + var(--scaleup-height));
     }

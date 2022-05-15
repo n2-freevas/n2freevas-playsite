@@ -16,7 +16,7 @@
         let images:File[] = []
         let sleeve:string | ArrayBuffer = "/img/tcg-sim/card.svg"
         let id = 0
-        console.log(files)
+        // console.log(files)
         for(let i=0; i < files.length; i++){
             if(files[i].type.includes('image')){
                 if(files[i].name.includes('sleeve')){
@@ -30,7 +30,7 @@
                 }
             }
         }
-        console.log(images)
+        // console.log(images)
         for(let i=0; i < images.length; i++){
             let reader = new FileReader();
             reader.readAsDataURL(images[i]);
@@ -40,7 +40,6 @@
                 if (match){
                     count = Number.parseInt(match[0].replace('[','').replace(']',''))
                 }
-                console.log(match, images[i].name,count)
                 if(images[i].webkitRelativePath.includes('/extra')){
                     for(let j=0; j<count; j++){
                         exDeckList.push({
@@ -68,7 +67,7 @@
                         id += 1
                     }
                 }
-                if(i == images.length -1){
+                if(i == images.length - 1){
                     $unshuffleDeckListStore = deckList
                     $unshuffleExDeckListStore = exDeckList
                     let usexd = $unshuffleExDeckListStore

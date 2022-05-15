@@ -76,6 +76,11 @@
         $handListStore = temp
     }
 
+    $:{
+        console.log($handListStore)
+        handLineUp()
+    }
+
     function cardBoardInFromHand(event){
         const id = event.detail.id
         const position = event.detail.position
@@ -194,8 +199,6 @@
             i += 1
         })
         $deckListStore = $handListStore.concat($deckListStore)
-        
-        console.log($deckListStore)
         $handListStore = []
         $deckListStore = $deckListStore
     }
@@ -225,7 +228,7 @@
 <div id='handArea'>
     <div id='handArea-radius'>
         <div id='handArea-radius-left' on:click={()=> {allHandsGoToDeck()}}></div>
-        <div id='handArea-radius-right' on:click={()=> {$handListStore = $handListStore}}></div>
+        <div id='handArea-radius-right' on:click={()=> {handLineUp()}}></div>
     </div>
 </div>
 {#each $deckListStore as d, i}

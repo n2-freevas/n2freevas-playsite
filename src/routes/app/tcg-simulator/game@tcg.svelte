@@ -7,6 +7,8 @@
     import { modeStore, boardAreaInfoStore, handAreaInfoStore, deckAreaInfoStore, cardWidth,
             deckListStore, handListStore, boardListStore}
     from '$lib/store/app/TCGsimStore'
+    import StorageComponent from "$lib/component/PokecaEffector/StorageComponent.svelte";
+    import CoinComponent from "$lib/component/PokecaEffector/CoinComponent.svelte";
     
     let isPC = true
     let window_width = 0
@@ -87,8 +89,10 @@
     }
     function cardHandInFromBoard(event){
         const id = event.detail.id
-        const target = $boardListStore.filter(card=> card.id==id).pop()
+        let target = $boardListStore.filter(card=> card.id==id).pop()
         $boardListStore = $boardListStore.filter(card => card.id != id)
+        target.x = 500
+        target.y = 0
         $handListStore = [...$handListStore, target]
     }
     // DecK In Functions
@@ -143,6 +147,17 @@
 </article> -->
 
 
+<section id='effect-layor'>
+    <StorageComponent></StorageComponent>
+</section>
+<!-- <section id='emotion-layor'>
+    <EmotionConponent></EmotionConponent>
+</section> -->
+<section id='coin-layor'>
+    <CoinComponent></CoinComponent>
+</section>
+
+
 {:else}
     <section id='is-not-PC-alert'>
     <div class='panel'>
@@ -182,7 +197,7 @@
     }
     #myDeckAndHand{
         position: fixed;
-        z-index:2;
+        z-index:5;
         bottom:0px;
         left:0px;
         width:100%;
@@ -244,6 +259,26 @@
                 }       
             }   
         }
+       }
     }
-}
+    section{
+        position: absolute;
+    }
+    #effect-layor{
+        right:0;
+        bottom: 100px;
+        z-index: 4;
+        width:0px;
+        height:100vh;
+        font-family: 'Press Start 2P', cursive;
+    }
+    #coin-layor{
+        position: fixed;
+        font-family: 'Press Start 2P', cursive;
+        z-index: 3;
+        width:0;
+        height:0;
+        top:50px;
+        left:10px;
+    }
 </style>

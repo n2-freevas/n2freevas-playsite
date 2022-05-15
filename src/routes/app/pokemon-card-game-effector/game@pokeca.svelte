@@ -1,8 +1,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import StorageComponent from "$lib/component/PokecaEffector/StorageComponent.svelte";
-import CoinComponent from "$lib/component/PokecaEffector/CoinComponent.svelte";
-import EmotionConponent from "$lib/component/PokecaEffector/EmotionConponent.svelte";
+    import CoinComponent from "$lib/component/PokecaEffector/CoinComponent.svelte";
+    import EmotionConponent from "$lib/component/PokecaEffector/EmotionConponent.svelte";
 
     onMount(()=>{
         const video = document.getElementById("web-video")
