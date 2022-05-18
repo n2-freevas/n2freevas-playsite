@@ -63,7 +63,7 @@
         const position = event.detail.position
         const target = $deckListStore.filter(card => card.id == id).pop()
         $deckListStore = $deckListStore.filter(card=>card.id != id)
-        $boardListStore = [...$boardListStore, {...target,x:position.top-($cardWidth), y:position.left, rotate:0}]
+        $boardListStore = [...$boardListStore, {...target,x:position.top-($cardWidth), y:position.left, z: 0, rotate:0}]
     }
 
     function cardBounceFromBoardToHand(event){
@@ -101,6 +101,7 @@
         const target:deckCardModel = {...$boardListStore.filter(card=> card.id==id).pop(),
                         x:0,
                         y:0,
+                        rotate:0,
                         flip:true}
         $boardListStore = $boardListStore.filter(card => card.id != id)
         if(event.detail.post == 'top'){
@@ -130,7 +131,7 @@
 <article id='board' class={$modeStore}>
     {#each $boardListStore as bs}
     <Card
-        id = {bs.id} pos_x={bs.x} pos_y={bs.y} flippin={bs.flip}
+        id = {bs.id} pos_x={bs.x} pos_y={bs.y} flippin={bs.flip} pos_z={bs.z}
         onArea={'board'} img_url={bs.url} sleeve_url={bs.burl}
         on:bounceHand={cardBounceFromBoardToHand}
         on:boardCardMove={cardMoveOnBoard}

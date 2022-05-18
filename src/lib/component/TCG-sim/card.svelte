@@ -6,8 +6,9 @@
     const dispatch = createEventDispatcher();
     
     export let id
-    export let pos_x;
-    export let pos_y;
+    export let pos_x:number;
+    export let pos_y:number;
+    export let pos_z:number = 0;
     let prev_pos_x = pos_x
     let prev_pos_y = pos_y
     export let onArea: OnAreaModel = 'deck'
@@ -21,6 +22,7 @@
     export let flippin = false;
 	
 	function onMouseDown() {
+        // console.log(`[cardComponent] mouseOver : card_id: ${id} / [${pos_x},${pos_y}] / onArea: ${onArea}`)
 		if(!moving){
             moving = true;
             $movingStore = true
@@ -38,11 +40,11 @@
 	}
 
     function onMouseUp(e) {
+        console.log('check')
         if(moving){
             //盤面に突入しているか判定する。
             if(($boardAreaInfoStore.left + 100<e.x && e.x<$boardAreaInfoStore.right)
             && ($boardAreaInfoStore.top < e.y && e.y<$boardAreaInfoStore.bottom)){
-                console.log('check')
                 //ボード上の移動でないなら、外部からのボードへの移動であるので、
                 //dispatchによって上位要素にイベントを伝搬する。
                 if (onArea != 'board'){
@@ -80,6 +82,7 @@
             //デッキエリアに突入しているか判定する。
             else if(($deckAreaInfoStore.left <e.x && e.x<$deckAreaInfoStore.right)
             && ($deckAreaInfoStore.top < e.y && e.y<$deckAreaInfoStore.bottom)){
+                
                 if (onArea != 'deck'){
                     const height = $deckAreaInfoStore.bottom - $deckAreaInfoStore.top
                     const postPosition = e.y - $deckAreaInfoStore.top
@@ -102,7 +105,6 @@
         }
 	}
     function onMouseOver(){
-        console.log(`[cardComponent] mouseOver : card_id: ${id} / [${pos_x},${pos_y}] / onArea: ${onArea}`)
         overing = true;
     }
     function onMouseLeave(){
@@ -136,9 +138,8 @@
 <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
 
 <section 
-    class= 'card-id-{id} card-body {moving? 'movin':''} {noGuide? 'noGuide':''} {onArea!='board'?'noBoard':''}' style='--pos_x:{pos_x}px;
-            --pos_y:{pos_y}px;--img:{img_url};
-            --rotate:{rotate}deg;'
+    class= 'card-id-{id} card-body {moving? 'movin':''} {noGuide? 'noGuide':''} {onArea!='board'?'noBoard':''}'
+    style='--pos_x:{pos_x}px; --pos_y:{pos_y}px; --img:{img_url}; --rotate:{rotate}deg; z-index:{pos_z}'
         on:mouseenter={onMouseOver}
         on:mouseleave={onMouseLeave}
     >

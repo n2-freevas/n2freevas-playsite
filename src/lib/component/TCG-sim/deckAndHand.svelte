@@ -34,6 +34,7 @@
     
     let continueDeckCenterAction = 0
     let isUntouchDeck = false
+    let z_index_controller = 0
 
     const handLineupGuideRadius = 250
 
@@ -96,7 +97,8 @@
             {
                 ...target,
                 x:position.top-($cardWidth), 
-                y:position.left, 
+                y:position.left,
+                z:0,
                 flip: flippin, 
                 rotate:0
             }
@@ -203,6 +205,22 @@
         $deckListStore = $deckListStore
     }
 
+    function deckInfromHand(event){
+        console.log('check',event)
+        const id = event.detail.id
+        const target:deckCardModel = {...$handListStore.filter(card=> card.id==id).pop(),
+                        x:0,
+                        y:0,
+                        flip:true}
+        $handListStore = $handListStore.filter(card => card.id != id)
+        if(event.detail.post == 'top'){
+            $deckListStore = [...$deckListStore, target]
+        }
+        else if(event.detail.post =='bottom'){
+            $deckListStore = [target, ...$deckListStore]
+        }
+    }
+
     onMount(()=>{
         //以下はセットで実行
         deckResetAction()
@@ -245,7 +263,8 @@
     <Card id={h.id}
         pos_x={h.x} pos_y={h.y} rotate={h.rotate} onArea={'hand'}
         img_url={h.url} sleeve_url={h.burl} flippin={h.flip}
-        on:boardIn={cardBoardInFromHand}/>
+        on:boardIn={cardBoardInFromHand}
+        on:deckIn = {deckInfromHand}/>
     {/if}
 {/each}
 

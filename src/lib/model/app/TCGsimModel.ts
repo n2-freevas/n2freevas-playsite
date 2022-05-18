@@ -28,6 +28,7 @@ export interface cardModel {
 export interface boardCardModel extends cardModel{
     x: number
     y: number
+    z: number
     rotate: number
     flip: boolean
 }
