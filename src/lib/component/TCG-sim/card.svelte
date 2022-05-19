@@ -40,7 +40,6 @@
 	}
 
     function onMouseUp(e) {
-        console.log('check')
         if(moving){
             //盤面に突入しているか判定する。
             if(($boardAreaInfoStore.left + 100<e.x && e.x<$boardAreaInfoStore.right)
@@ -78,20 +77,26 @@
                         id: id,
                     })
                 }
+                else{
+                    dispatchMove()
+                }
             }
             //デッキエリアに突入しているか判定する。
             else if(($deckAreaInfoStore.left <e.x && e.x<$deckAreaInfoStore.right)
             && ($deckAreaInfoStore.top < e.y && e.y<$deckAreaInfoStore.bottom)){
-                
                 if (onArea != 'deck'){
-                    const height = $deckAreaInfoStore.bottom - $deckAreaInfoStore.top
                     const postPosition = e.y - $deckAreaInfoStore.top
-                    const to = postPosition <= height/2 ? 'top':'bottom'
+                    // デッキの上か下、どちらに挿入するか判定する
+                    const to = (postPosition <= ($deckAreaInfoStore.bottom - $deckAreaInfoStore.top)/2) ? 'top':'bottom'
                     console.log('[cardComponent] deckIn: card_id > ', id)
                     dispatch('deckIn', {
                         id: id,
                         post: to
                     })
+                }
+                else{
+                    console.log('[cardComponent] move: card_id > ', id)
+                    dispatchMove()
                 }
             }
             // 手札上の移動であれば、その移動を反映する。
@@ -100,10 +105,17 @@
                 pos_y = prev_pos_y
                 rotate = prev_rotate
             }
+            else{
+                dispatchMove()
+            }
             $movingStore = false;
             moving = false;
         }
 	}
+    function dispatchMove(){
+        console.log('[cardComponent] move: card_id > ', id)
+        dispatch('move')
+    }
     function onMouseOver(){
         overing = true;
     }

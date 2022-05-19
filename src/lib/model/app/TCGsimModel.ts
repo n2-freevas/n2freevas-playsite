@@ -1,4 +1,4 @@
-export type Mode = 'light' | 'dark'
+export type Mode = 'pokemon' | 'other'
 
 export type OnAreaModel = 'board' | 'hand' | 'deck' | 'trash'
 export interface PositionModel {
@@ -46,6 +46,7 @@ export interface boardGroupCardsModel {
 export interface handCardModel extends cardModel {
     x: number
     y: number
+    z: number
     rotate: number
     flip: boolean
 }
@@ -54,6 +55,7 @@ export interface handCardModel extends cardModel {
 export interface deckCardModel extends cardModel{
     x: number
     y: number
+    z: number
     rotate: number
     flip: boolean
 }
