@@ -1,7 +1,6 @@
 <script lang="ts">
     import {deckListStore, exDeckListStore,
-            unshuffleDeckListStore, unshuffleExDeckListStore} from '$lib/store/app/TCGsimStore'
-    import { deckShuffle } from '$lib/component/TCG-sim/deckAndHand.svelte'
+        unshuffleDeckListStore, unshuffleExDeckListStore} from '$lib/store/app/TCGsimStore'
     import type { deckCardModel } from '$lib/model/app/TCGsimModel';
     
     let installComplete = true //fileLoaderが非同期なのでこやつを用いて強制的に同期させる
@@ -10,9 +9,37 @@
     let deckList: deckCardModel[] = []
     let exDeckList: deckCardModel[] = []
     
-    function onFileSelected(e){
+
+    async function onFileSelected(e){
         // インストール開始の合図
         installComplete = false
+
+        //一時的にクラスを定義
+        class FileReaderEx extends FileReader{
+            constructor(){
+                super();
+            }
+
+            _readAs(blob, ctx){
+                return new Promise((res, rej)=>{
+                    super.addEventListener("load", ({target}) => res(target.result));
+                    super.addEventListener("error", ({target}) => rej(target.error));
+                    super[ctx](blob);
+                });
+            }
+
+            readAsArrayBufferEx(blob){
+                return this._readAs(blob, "readAsArrayBuffer");
+            }
+
+            readAsDataURLEx(blob){
+                return this._readAs(blob, "readAsDataURL");
+            }
+
+            readAsTextEx(blob){
+                return this._readAs(blob, "readAsText");
+            }
+        }
         
         // リストを初期化
         deckList = []
@@ -40,67 +67,60 @@
         // この時点で、ファイルにある対象の画像のみを取得済み。
         console.log('[attempt images]:',images)
         for(let i=0; i < images.length; i++){
-            let reader = new FileReader();
-            reader.readAsDataURL(images[i]);
-            reader.onload = (e) => {
-                console.log(e)
-                // 画像のカードが何枚必要か取得。取得できない場合は1枚とみなす
-                let count = 1
-                let match:string[] = images[i].name.match(/\[[0-9]*\]/g)
-                if (match){
-                    count = Number.parseInt(match[0].replace('[','').replace(']',''))
+        
+            let result = await new FileReaderEx().readAsDataURLEx(images[i]);    
+            // 画像のカードが何枚必要か取得。取得できない場合は1枚とみなす
+            let count = 1
+            let match:string[] = images[i].name.match(/\[[0-9]*\]/g)
+            if (match){
+                count = Number.parseInt(match[0].replace('[','').replace(']',''))
+            }
+            // extraフォルダは別個管理する。
+            if(images[i].webkitRelativePath.includes('/extra')){
+                for(let j=0; j<count; j++){
+                    exDeckList.push({
+                        id:id,
+                        //@ts-ignore
+                        url: result,
+                        //@ts-ignore
+                        burl: sleeve,
+                        x:0,y:0,z:0,flip: true,rotate:0
+                    })
+                    id += 1
                 }
-                // extraフォルダは別個管理する。
-                if(images[i].webkitRelativePath.includes('/extra')){
-                    for(let j=0; j<count; j++){
-                        exDeckList.push({
-                            id:id,
-                            //@ts-ignore
-                            url: e.target.result,
-                            //@ts-ignore
-                            burl: sleeve,
-                            x:0,y:0,flip: true,rotate:0
-                        })
-                        id += 1
-                    }
-                    
+                
+            }
+            // extra以外のフォルダに格納されたカードデータをロードする
+            else{
+                for(let j=0; j<count; j++){
+                    deckList.push({
+                        id:id,
+                        //@ts-ignore
+                        url: result,
+                        //@ts-ignore
+                        burl: "/img/tcg-sim/card.svg",
+                        x:0,y:0,z:0,flip: true,rotate:0
+                    })
+                    id += 1
                 }
-                // extra以外のフォルダに格納されたカードデータをロードする
-                else{
-                    for(let j=0; j<count; j++){
-                        deckList.push({
-                            id:id,
-                            //@ts-ignore
-                            url: e.target.result,
-                            //@ts-ignore
-                            burl: "/img/tcg-sim/card.svg",
-                            x:0,y:0,flip: true,rotate:0
-                        })
-                        id += 1
-                    }
-                }
-                //最後のファイルを認識した場合
-                if(i == images.length){
-                    console.log('check')
-                }
-            };
+            }
         }
         $unshuffleDeckListStore = deckList //参照渡し
         $unshuffleExDeckListStore = exDeckList //参照渡し
-        $exDeckListStore = deckList.concat() //値渡し
-        $deckListStore  = exDeckList.concat() //値渡し
+        $exDeckListStore = exDeckList.concat() //実質値渡し
+        $deckListStore  = deckList.concat() //実質値渡し
         deckLength = deckList.length
         exDeckLength = deckList.length
-        console.log(deckList)
         console.log($unshuffleDeckListStore)
         console.log($deckListStore)
     }
+
 </script>
 
 
 <input type="file" webkitdirectory on:change={(e)=>onFileSelected(e)}/>
 <p>デッキ枚数：{$unshuffleDeckListStore.length}</p>
-<section id='deck' style="--wrap_num:{ deckLength > 40 ? '12': '10'}">
+<section id='deck' style="--wrap_num:12">
     {#each $unshuffleDeckListStore as d}
         <img src={d.url} alt =''>
     {/each}

@@ -7,7 +7,29 @@
     export function deckAlineY(i:number){
         return (i * -0.5) - 45
     }
-    export function deckShuffle(array: deckCardModel[]): deckCardModel[]{
+    export function deckShuffle(array: deckCardModel[]): Promise<deckCardModel[]>{
+        return new Promise(function (resolve, reject){
+            let list = Object.assign([], array)
+            let newlist:deckCardModel[] = []
+            while (list.length > 0){
+                const n = list.length
+                let k = Math.floor(Math.random() * n)
+                newlist.push(list[k])
+                list.splice(k,1)
+            }
+            // デッキの位置を整形
+            let i = 0
+            newlist.forEach(item=>{
+                item.x = deckAlineX(i),
+                item.y = deckAlineY(i),
+                item.flip = true
+                i += 1
+            })
+            resolve(newlist)
+        })
+        
+    }
+    export function asyncDeckShuffle(array: deckCardModel[]): deckCardModel[]{
         let list = Object.assign([], array)
         let newlist:deckCardModel[] = []
         while (list.length > 0){
@@ -31,17 +53,15 @@
 
 <script lang="ts">
     import Card from "./card.svelte"
-    import { createEventDispatcher, onMount } from 'svelte';
+    import { onMount } from 'svelte';
     import { deckListStore, modeStore, 
             handListStore, cardWidth,
             handAreaInfoStore, boardListStore, unshuffleDeckListStore } from "$lib/store/app/TCGsimStore";
     import type { handCardModel } from '$lib/model/app/TCGsimModel';
     import { cardInAnywhere, cardOutAnywhere } from "$lib/component/TCG-sim/util.svelte"
-
-    const dispatch = createEventDispatcher();
     
     let deckOpen = false
-    let continueDeckCenterAction = 1
+    let continueDeckCenterAction = 0
     let isUntouchDeck = false
     let z_index_controller = 0
 
@@ -198,34 +218,20 @@
         else{
             console.log('shuffle')
             isUntouchDeck = true
-            let newlist = []
-            let i = 0
             
             //　配列入れ替え
-            newlist = deckShuffle(decklist)
-            
-            //　シャッフルアニメーションの仕込み
-            newlist.forEach((item)=>{
-                item.rotate = (360 * i) % 1800 + 360
-                i += 1
-            })
-            $deckListStore = newlist
+            $deckListStore = asyncDeckShuffle(decklist)
             window.setTimeout(()=>{
-                newlist.forEach((item)=>{
-                    item.rotate = 0
-                    i += 1
-                })
                 isUntouchDeck = false
-                $deckListStore = newlist
-            },500)
+            },1000)
         }
-        
     }
     
     function allHandsGoToDeck(){
         const deckLen = $unshuffleDeckListStore.length
         let i = $deckListStore.length
         let handlist = $handListStore.filter(card=>card)
+        
         handlist.forEach(card=>{
             card.x = deckAlineX(deckLen - i)
             card.y = deckAlineY(deckLen - i)
@@ -241,9 +247,7 @@
     function deckInfromHand(event){
         const id = event.detail.id
         const target:deckCardModel = {...$handListStore.filter(card=> card.id==id).pop(),
-                        x:0,
-                        y:0,
-                        flip:true}
+                        x:0,y:0,flip:true,rotate:0}
         $handListStore = $handListStore.filter(card => card.id != id)
         if(event.detail.post == 'top'){
             $deckListStore = [...$deckListStore, target]
@@ -407,6 +411,11 @@
 
 #deckUntouchMask{
     position: absolute;
+    background: radial-gradient(
+        ellipse,
+        rgba(#ffffff, 1) 0%,
+        rgba(#ffffff, 0) 80%
+    );
     z-index: 100;
     width:200px;
     height:350px;

@@ -7,7 +7,7 @@
         unshuffleExDeckListStore, exDeckListStore } from '$lib/store/app/TCGsimStore'
     import type { deckCardModel } from '$lib/model/app/TCGsimModel';
 
-    function reset(){
+    async function reset(){
         $boardListStore = []
         $handListStore = []
         let deck:deckCardModel[] = Object.assign([],$unshuffleDeckListStore)
@@ -17,7 +17,7 @@
             item.y=0
             item.flip = true
         })
-        $deckListStore = deckShuffle(deck)
+        $deckListStore = await deckShuffle(deck)
     }
 </script>
 
