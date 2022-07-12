@@ -18,7 +18,9 @@
         {#if matches}
             <div class='menu-row-list'>
             {#each $mainmenus as menu}
+                {#if menu.active}
                 <HeaderMenuBox name={menu.name} path={menu.path} img={menu.img} explain={menu.explain}></HeaderMenuBox>
+                {/if}
             {/each}
             </div>
         {/if}
@@ -34,7 +36,9 @@
             </span>
             <div class='hamburger-slider {sliderOpen ? "open": ""}'>
                 {#each $mainmenus as menu}
+                    {#if menu.active}
                     <HambergerMenuBox name={menu.name} path={menu.path} img={menu.img} explain={menu.explain}></HambergerMenuBox>
+                    {/if}
                 {/each}
             </div>
         </div>
@@ -44,7 +48,9 @@
     
 </header>
 
+<section id='main'>
 <slot></slot>
+</section>
 <ToastArea></ToastArea>
 <style lang="scss">
 
@@ -54,6 +60,7 @@
         justify-content: space-between;
         align-items: center;
         height:60px;
+        z-index: 100;
         .n2-logo{
             padding:10px;
             img{
@@ -102,5 +109,7 @@
             }
         }
     }
-
+    main{
+        z-index: 0;
+    }
 </style>

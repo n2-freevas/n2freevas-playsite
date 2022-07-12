@@ -9,7 +9,7 @@ export const cardHeight = readable<number>(110)
 export const screenWidth = writable<number>(0)
 export const screenHeight = writable<number>(0)
 
-export const modeStore = writable<Mode>('dark')
+export const modeStore = writable<Mode>('other')
 
 export const movingStore = writable<boolean>(false)
 

@@ -1,7 +1,36 @@
 <script context='module' lang='ts'>
-    import type {deckCardModel} from '$lib/model/app/TCGsimModel'
-    export function deckShuffle(array: deckCardModel[]): deckCardModel[]{
-        let list = Object.assign([],array)
+    import type { deckCardModel} from '$lib/model/app/TCGsimModel'
+
+    export function deckAlineX(i:number){
+        return (i * -0.25) + 15
+    }
+    export function deckAlineY(i:number){
+        return (i * -0.5) - 45
+    }
+    export function deckShuffle(array: deckCardModel[]): Promise<deckCardModel[]>{
+        return new Promise(function (resolve, reject){
+            let list = Object.assign([], array)
+            let newlist:deckCardModel[] = []
+            while (list.length > 0){
+                const n = list.length
+                let k = Math.floor(Math.random() * n)
+                newlist.push(list[k])
+                list.splice(k,1)
+            }
+            // デッキの位置を整形
+            let i = 0
+            newlist.forEach(item=>{
+                item.x = deckAlineX(i),
+                item.y = deckAlineY(i),
+                item.flip = true
+                i += 1
+            })
+            resolve(newlist)
+        })
+        
+    }
+    export function asyncDeckShuffle(array: deckCardModel[]): deckCardModel[]{
+        let list = Object.assign([], array)
         let newlist:deckCardModel[] = []
         while (list.length > 0){
             const n = list.length
@@ -12,41 +41,37 @@
         // デッキの位置を整形
         let i = 0
         newlist.forEach(item=>{
-            item.x = (i * -0.25) + 15,
-            item.y = (i * -0.5) - 45,
+            item.x = deckAlineX(i),
+            item.y = deckAlineY(i),
             item.flip = true
             i += 1
         })
         return newlist
     }
+
 </script>
 
 <script lang="ts">
     import Card from "./card.svelte"
-    import { createEventDispatcher, onMount } from 'svelte';
+    import { onMount } from 'svelte';
     import { deckListStore, modeStore, 
             handListStore, cardWidth,
             handAreaInfoStore, boardListStore, unshuffleDeckListStore } from "$lib/store/app/TCGsimStore";
     import type { handCardModel } from '$lib/model/app/TCGsimModel';
+    import { cardInAnywhere, cardOutAnywhere } from "$lib/component/TCG-sim/util.svelte"
     
-    const dispatch = createEventDispatcher();
-
-    
+    let deckOpen = false
     let continueDeckCenterAction = 0
     let isUntouchDeck = false
     let z_index_controller = 0
 
     const handLineupGuideRadius = 250
 
-    // 手札を整列させる関数:1
-    function handLineupGuideFunction(x: number){
-        return -1 * (Math.sqrt(Math.pow(handLineupGuideRadius,2) - Math.pow(x,2)))
-    }
-    //手札を整列させる関数:2
+    //手札を整列させる関数
     function handLineUp(){
-        let hand = $handListStore
+        let hand = $handListStore.filter(card=>card)
         const handLen = hand.length;
-        const x_offset = ($handAreaInfoStore.left + $handAreaInfoStore.right)/2
+        const x_offset = ($handAreaInfoStore.left + $handAreaInfoStore.right)/2 - $cardWidth
         let xSpacing = ((handLineupGuideRadius * 2) - 150)/handLen;
         let degSpaning = 100/handLen
         if(xSpacing > 50){
@@ -57,16 +82,18 @@
         }
         let temp:handCardModel[] = []
         for(let i=0; i<handLen; i++){
+            // handがundefinedではないなら以下の整理を行う。
             if(hand[i]){
                 const x = (xSpacing * (i - handLen/2 + 0.5) )
-                const y = handLineupGuideFunction(x)
+                const y = -1 * (Math.sqrt(Math.pow(handLineupGuideRadius,2) - Math.pow(x,2)))
                 const deg = (i - Math.floor(handLen / 2)) * degSpaning
                 temp.push({
                     id: hand[i].id,
                     url: hand[i].url,
                     burl: hand[i].burl,
                     x: x - ($cardWidth / 2) + x_offset,
-                    y: y + 150,
+                    y: y + 220,
+                    z:0,
                     rotate: deg,
                     flip: false
                 })
@@ -77,11 +104,6 @@
         $handListStore = temp
     }
 
-    $:{
-        console.log($handListStore)
-        handLineUp()
-    }
-
     function cardBoardInFromHand(event){
         const id = event.detail.id
         const position = event.detail.position
@@ -89,7 +111,8 @@
         
         // 手札から指定カードを抜き出す。
         const target = $handListStore.filter(card => card.id == id).pop()
-        $handListStore = $handListStore.filter(card => card.id != id)
+        $handListStore = cardOutAnywhere(target.id, $handListStore)
+        // $handListStore = $handListStore.filter(card => card.id != id)
         
         // 盤面上にカードを配置
         $boardListStore = [
@@ -107,35 +130,29 @@
     }
     //デッキの一覧を表示する。
     function deckTopAction(){
-        let i = 0
-        continueDeckCenterAction = 0
-        // 山札のカードを、画面上にバーっと並べる。
-        const game_width = document.getElementById('base').getBoundingClientRect().width
-
-        const deck_top_position = document.getElementsByClassName(
-            `card-id-${$deckListStore[$deckListStore.length-1].id}`
-        ).item(0).getBoundingClientRect()
-        // height: 110
-        // width: 90
-        // left: 16.5
-        // right: 106.5
-        // top: 663.5
-        // bottom: 773.5
-        // x: 16.5
-        // y: 663.5
-        const basis_mod = Math.floor(game_width/deck_top_position.width)
-        $deckListStore.forEach(item => {
-            
-            const basic_x_pos = (i % basis_mod)* deck_top_position.width
-            const basic_y_pos =  (-1 * (deck_top_position.top)) 
-            + (deck_top_position.height * (Math.floor(i/basis_mod)))
-            item.x = basic_x_pos
-            item.y = basic_y_pos
-            item.flip = false
-            i += 1
-        })
-        $deckListStore = $deckListStore
+        if(!deckOpen){
+            let i = 0
+            continueDeckCenterAction = 0
+            deckOpen = true
+            // 山札のカードを、画面上にバーっと並べる。
+            const game_width = document.getElementById('base').getBoundingClientRect().width
+            const deck_top_position = document.getElementsByClassName(
+                `card-id-${$deckListStore[$deckListStore.length-1].id}`
+            ).item(0).getBoundingClientRect()
+            const basis_mod = Math.floor(game_width/deck_top_position.width)
+            $deckListStore.forEach(item => {    
+                const basic_x_pos = (i % basis_mod)* deck_top_position.width
+                const basic_y_pos =  (-1 * (deck_top_position.top)) 
+                + (deck_top_position.height * (Math.floor(i/basis_mod)))
+                item.x = basic_x_pos
+                item.y = basic_y_pos
+                item.flip = false
+                i += 1
+            })
+            $deckListStore = $deckListStore
+        }
     }
+
     function cardHandInFromDeck(event){
         const id = event.detail.id
         const target = $deckListStore.filter(card=> card.id==id).pop()
@@ -143,75 +160,94 @@
         $handListStore = [...$handListStore, target]
         handLineUp()
     }
+
     function cardBoardInFromDeck(event){
-        dispatch('boardInFromDeck', event.detail)
+        const id = event.detail.id
+        const position = event.detail.position
+        const target = $deckListStore.filter(card => {
+            if(card){ return card.id == id }
+            else{ return false }
+        }).pop()
+
+        $deckListStore = cardOutAnywhere(id, $deckListStore)
+        $boardListStore = cardInAnywhere(
+            {...target,x:position.top-($cardWidth), y:position.left, z: 0, rotate:0},
+            $boardListStore
+        )
     }
-    function deckBottomAction(){
-        let top = $deckListStore.pop()
-        $deckListStore = $deckListStore
-        $handListStore.push(top)
-        $handListStore = $handListStore
-        console.log($handListStore)
-        handLineUp()
+
+    // ドロー
+    function draw(){
+        let top = null
+        let count = 0
+        while(true){
+            if(count > 100){ break } //安全策
+            if($deckListStore.length == 0){ break }
+            top = $deckListStore.pop()
+            if(top){ break }
+            count += 1
+        }
+        if(top){
+            $deckListStore = $deckListStore
+            $handListStore.push(top)
+            $handListStore = $handListStore
+            handLineUp()
+        }
+        
+    }
+
+    function deckAline(decklist: deckCardModel[]){
+        let i = 0
+        decklist.forEach(item=>{
+            item.x = deckAlineX(i),
+            item.y = deckAlineY(i),
+            item.flip = true
+            item.rotate = 0
+            i += 1
+        })
+        return decklist
     }
     
     function deckResetAction(){
+        let decklist = $deckListStore.filter(item=>item)
         if (continueDeckCenterAction == 0){
+            deckOpen = false
             continueDeckCenterAction += 1
-            let i = 0
-            $deckListStore.forEach(item=>{
-                item.x = (i * -0.25) + 15,
-                item.y = (i * -0.5) - 45,
-                item.flip = true
-                item.rotate = 0
-                i += 1
-            })
-            $deckListStore = $deckListStore
+            $deckListStore = deckAline(decklist)
         }
         else{
+            console.log('shuffle')
             isUntouchDeck = true
-            continueDeckCenterAction = 0
-            let newlist = []
-            let i = 0
             
             //　配列入れ替え
-            newlist = deckShuffle($deckListStore)
-            
-            //　シャッフルアニメーションの仕込み
-            newlist.forEach((item)=>{
-                item.rotate = (360 * i) % 1800
-                i += 1
-            })
-                        
-            $deckListStore = newlist
-            isUntouchDeck = false
+            $deckListStore = asyncDeckShuffle(decklist)
+            window.setTimeout(()=>{
+                isUntouchDeck = false
+            },1000)
         }
-        
     }
     
     function allHandsGoToDeck(){
         const deckLen = $unshuffleDeckListStore.length
         let i = $deckListStore.length
-        console.log(i)
-        $handListStore.forEach(card=>{
-            card.x = ((deckLen - i) * -0.25) + 15
-            card.y = ((deckLen - i) * -0.5) - 45
+        let handlist = $handListStore.filter(card=>card)
+        
+        handlist.forEach(card=>{
+            card.x = deckAlineX(deckLen - i)
+            card.y = deckAlineY(deckLen - i)
             card.flip = true
             card.rotate = 0
             i += 1
         })
-        $deckListStore = $handListStore.concat($deckListStore)
+        $deckListStore = handlist.concat($deckListStore)
         $handListStore = []
         $deckListStore = $deckListStore
     }
 
     function deckInfromHand(event){
-        console.log('check',event)
         const id = event.detail.id
         const target:deckCardModel = {...$handListStore.filter(card=> card.id==id).pop(),
-                        x:0,
-                        y:0,
-                        flip:true}
+                        x:0,y:0,flip:true,rotate:0}
         $handListStore = $handListStore.filter(card => card.id != id)
         if(event.detail.post == 'top'){
             $deckListStore = [...$deckListStore, target]
@@ -224,19 +260,9 @@
     onMount(()=>{
         //以下はセットで実行
         deckResetAction()
-        continueDeckCenterAction = 0
     })
 </script>
 
-<section id='deckArea' class={$modeStore}>
-    <div class='deckbottom'>
-        <div class='round' >
-            <div class='round-top' on:click={deckTopAction}></div>
-            <div class='round-center' on:click={deckResetAction}></div>
-            <div class='round-bottom' on:click={deckBottomAction}></div>
-        </div>
-    </div>
-</section>
 
 {#if isUntouchDeck}
     <div id = 'deckUntouchMask'></div>
@@ -249,15 +275,7 @@
         <div id='handArea-radius-right' on:click={()=> {handLineUp()}}></div>
     </div>
 </div>
-{#each $deckListStore as d, i}
-    <Card
-        id = {d.id} pos_x={d.x + i * -0.25 + 15} pos_y={d.y} flippin={d.flip}
-        onArea={'deck'} img_url={d.url} sleeve_url={d.burl} rotate={d.rotate}
-        noGuide = {true}
-        on:handIn={cardHandInFromDeck}
-        on:boardIn={cardBoardInFromDeck}
-    />
-{/each}
+
 {#each $handListStore as h}
     {#if h}
     <Card id={h.id}
@@ -268,7 +286,33 @@
     {/if}
 {/each}
 
+{#if deckOpen}
+    <div id='deck-open-filter'></div>
 
+{/if}
+
+
+<section id='deckArea' class={$modeStore}>
+    <div class='deckbottom'>
+        <div class='round' >
+            <div class='round-top' on:click={deckTopAction}></div>
+            <div class='round-center' on:click={deckResetAction}></div>
+            <div class='round-bottom' on:click={draw}></div>
+        </div>
+    </div>
+</section>
+{#each $deckListStore as d, i}
+    {#if d}
+    <Card
+        id = {d.id} pos_x={d.x + i * -0.25 + 15} pos_y={d.y} flippin={d.flip}
+        onArea={'deck'} img_url={d.url} sleeve_url={d.burl} rotate={d.rotate}
+        noGuide = {true}
+        on:move={()=>{continueDeckCenterAction = 0}}
+        on:handIn={cardHandInFromDeck}
+        on:boardIn={cardBoardInFromDeck}
+    />
+    {/if}
+{/each}
 
 <style lang="scss">
 #handArea{
@@ -304,22 +348,28 @@
         }
     }    
 }
+#deck-open-filter{
+    position: fixed;
+    top:-300px;
+    left:0;
+    background: radial-gradient(
+        ellipse,
+        rgba(#ffffff, 1) 0%,
+        rgba(#ffffff, 0) 80%
+    );
+    width:100%;
+    height:900px;
+}
 #deckArea{
     position: absolute;
     --round-len: 300px;
     width:calc( var(--round-len) / 2);
     height:var(--round-len);
     bottom:0;
-    &.light{
-        --deck-bg-color-top: #0a2ea5;
-        --deck-bg-color-center: #324892;
-        --deck-bg-color-bottom: #130069;
-    }
-    &.dark{
-        --deck-bg-color-top: #0a2ea5;
-        --deck-bg-color-center: #83a0ff;
-        --deck-bg-color-bottom: #130069;
-    }
+    --deck-bg-color-top: #0a2ea5;
+    --deck-bg-color-center: #83a0ff;
+    --deck-bg-color-bottom: #130069;
+    
     .deckbottom{
         position: absolute;
         width:inherit;
@@ -361,6 +411,11 @@
 
 #deckUntouchMask{
     position: absolute;
+    background: radial-gradient(
+        ellipse,
+        rgba(#ffffff, 1) 0%,
+        rgba(#ffffff, 0) 80%
+    );
     z-index: 100;
     width:200px;
     height:350px;

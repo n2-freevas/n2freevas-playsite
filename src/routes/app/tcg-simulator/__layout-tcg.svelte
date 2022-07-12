@@ -7,7 +7,7 @@
         unshuffleExDeckListStore, exDeckListStore } from '$lib/store/app/TCGsimStore'
     import type { deckCardModel } from '$lib/model/app/TCGsimModel';
 
-    function reset(){
+    async function reset(){
         $boardListStore = []
         $handListStore = []
         let deck:deckCardModel[] = Object.assign([],$unshuffleDeckListStore)
@@ -17,7 +17,7 @@
             item.y=0
             item.flip = true
         })
-        $deckListStore = deckShuffle(deck)
+        $deckListStore = await deckShuffle(deck)
     }
 </script>
 
@@ -29,9 +29,8 @@
         </a>
     </div>
     <div class='color-config'>
-        <button class='reset' on:click={reset}></button>
-        <button class='light' on:click={()=>{$modeStore = 'light'}}></button>
-        <button class='dark' on:click={()=>{$modeStore = 'dark'}}></button>
+        <button class='pokemon' on:click={()=>{$modeStore = "pokemon"; reset()}}></button>
+        <button class='other' on:click={()=>{$modeStore = "other"; reset()}}></button>
     </div>
 </header>
 <div id='tcg-all-compnents'>
@@ -58,6 +57,9 @@
         --header-height: 40px;
         --cw:90px;
         --ch:110px;
+
+        // color
+        --color_pokemon: #ffd900;
     }
     #tcg-all-compnents{
         display: flex;
@@ -94,13 +96,10 @@
                 margin:0 7px;
                 border-radius: 7px;
             }
-            .reset{
-                background: yellow;
+            .pokemon{
+                background: var(--color_pokemon);
             }
-            .light{
-                background: white;
-            }
-            .dark{
+            .other{
                 background: darkblue;
             }
         }
@@ -120,15 +119,9 @@
             -o-perspective:500;
             -ms-perspective:500;
             perspective: 500;
-            // overflow: hidden;
-            &.light{
-                background: rgb(255,255,255);
-                background: radial-gradient(circle at bottom, rgba(255,255,255,1) 0%, rgba(255,236,192,1) 100%);
-            }
-            &.dark{
-                background: rgb(36,24,110);
-                background: radial-gradient(circle at bottom, rgba(36,24,110,1) 0%, rgba(0,0,0,1) 100%);
-            }
+            background: rgb(36,24,110);
+            background: radial-gradient(circle at bottom, rgba(36,24,110,1) 0%, rgba(0,0,0,1) 100%);
+        
         }
     }
     
@@ -139,12 +132,8 @@
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        &.light{
-            background: white;
-        }
-        &.dark{
-            background: black;
-        }
+        background: black;
+        
         a{
             div{
                 width:50px;

@@ -1,5 +1,5 @@
 <script>
-
+    import MediaQuery from 'svelte-media-query'
 
 </script>
 
@@ -16,11 +16,26 @@
     </div>
 </div>
 
-<article>
-<slot></slot>
+<article id='web-damekan-body'>
+    <MediaQuery query="(min-width: 701px)" let:matches>
+        {#if matches}
+            <slot></slot>
+        {/if}
+    </MediaQuery>
+    <MediaQuery query="(max-width: 700px)" let:matches>
+        {#if matches}
+            <p>このアプリは、<br>スマホサイズではお楽しみいただけません。</p>
+        {/if}
+    </MediaQuery>
 </article>
 
 <style lang="scss">
+    p{
+        position: fixed;
+        top:50%;left:50%;
+        transform: translate(-50%, -50%);
+        width: 90vw;
+    }
     .info{
         position: fixed;
         font-family: 'Press Start 2P', cursive;

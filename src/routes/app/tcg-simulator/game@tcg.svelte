@@ -3,12 +3,14 @@
     // import Viewport from 'svelte-viewport-info'
     import Card from '$lib/component/TCG-sim/card.svelte'
     import DeckAndHand from '$lib/component/TCG-sim/deckAndHand.svelte'
-    import type { boardCardModel, deckCardModel, handCardModel } from '$lib/model/app/TCGsimModel'
-    import { modeStore, boardAreaInfoStore, handAreaInfoStore, deckAreaInfoStore, cardWidth,
+    import type { deckCardModel } from '$lib/model/app/TCGsimModel'
+    import { modeStore, boardAreaInfoStore, handAreaInfoStore, deckAreaInfoStore,
             deckListStore, handListStore, boardListStore}
     from '$lib/store/app/TCGsimStore'
+    import { cardInAnywhere, cardOutAnywhere } from "$lib/component/TCG-sim/util.svelte"
     import StorageComponent from "$lib/component/PokecaEffector/StorageComponent.svelte";
     import CoinComponent from "$lib/component/PokecaEffector/CoinComponent.svelte";
+import PokemonUtil from "$lib/component/TCG-sim/pokemonUtil.svelte";
     
     let isPC = true
     let window_width = 0
@@ -16,7 +18,7 @@
     let window_width_require = 1500
     let window_height_require = 800
     
-    function getBoardInfo(){
+    function _getBoardInfo(){
         const boardInfo = document.getElementById('board').getBoundingClientRect()
         $boardAreaInfoStore = {
             top: boardInfo.top,
@@ -25,7 +27,8 @@
             bottom: boardInfo.bottom
         }
     }
-    function getHandInfo(){
+
+    function _getHandInfo(){
         const handInfo= document.getElementById('handArea').getBoundingClientRect()
         $handAreaInfoStore = {
             top: handInfo.top,
@@ -35,7 +38,7 @@
         }
     }
 
-    function getDeckInfo(){
+    function _getDeckInfo(){
         const deckInfo= document.getElementById('deckArea').getBoundingClientRect()
         $deckAreaInfoStore = {
             top: deckInfo.top,
@@ -44,49 +47,19 @@
             bottom: deckInfo.bottom
         }
     }
-
-    deckAreaInfoStore
-    function windowChangeHandler(){
+    
+    function _windowChangeHandler(){
         // 現在のブラウザの画面サイズを取得し、変数として確保
         window_width = window.innerWidth
         window_height = window.innerHeight
         if (window_width < window_width_require || window_height_require > window_height){isPC = false}
         
         //主要elementの座標位置とサイズなどを再取得。
-        getBoardInfo()
-        getHandInfo()
-        getDeckInfo()
-    }
-    
-    function cardBoardInFromDeck(event){
-        const id = event.detail.id
-        const position = event.detail.position
-        const target = $deckListStore.filter(card => card.id == id).pop()
-        $deckListStore = $deckListStore.filter(card=>card.id != id)
-        $boardListStore = [...$boardListStore, {...target,x:position.top-($cardWidth), y:position.left, z: 0, rotate:0}]
+        _getBoardInfo()
+        _getHandInfo()
+        _getDeckInfo()
     }
 
-    function cardBounceFromBoardToHand(event){
-        const id = event.detail
-        const bounced = $boardListStore.filter(card => card.id == id).pop()
-        $boardListStore = $boardListStore.filter(card => card.id != id)
-        $handListStore = [...$handListStore, bounced]
-        
-    }
-    function cardMoveOnBoard(event){
-        for (let i=0;i<$boardListStore.length;i++){
-            if($boardListStore[i].id == event.detail.id){
-                $boardListStore[i] = {
-                    ...$boardListStore[i],
-                    x: event.detail.x,
-                    y: event.detail.y,
-                    rotate: event.detail.rotate,
-                    flip: event.detail.flip
-                }
-            }
-        }
-        // board = board
-    }
     function cardHandInFromBoard(event){
         const id = event.detail.id
         let target = $boardListStore.filter(card=> card.id==id).pop()
@@ -114,8 +87,7 @@
     }
 
     onMount(()=>{
-        windowChangeHandler()
-        getBoardInfo()
+        _windowChangeHandler()
     })
 </script>
 
@@ -123,41 +95,33 @@
 />
 {#if isPC}
 <article id='myDeckAndHand'>
-    <DeckAndHand
-        on:boardInFromDeck = {cardBoardInFromDeck}
-    />
+    <DeckAndHand/>
 </article>
 
 <article id='board' class={$modeStore}>
     {#each $boardListStore as bs}
     <Card
         id = {bs.id} pos_x={bs.x} pos_y={bs.y} flippin={bs.flip} pos_z={bs.z}
-        onArea={'board'} img_url={bs.url} sleeve_url={bs.burl}
-        on:bounceHand={cardBounceFromBoardToHand}
-        on:boardCardMove={cardMoveOnBoard}
+        onArea={'board'} img_url={bs.url} sleeve_url={bs.burl} rotate={bs.rotate}
         on:handIn={cardHandInFromBoard}
         on:deckIn={cardDeckInFromBoard}
     />
     {/each}
 </article>
 
-<!-- <article id='myGraveyard'>
-    <div id='graveYard-main'></div>
-    
-
-</article> -->
-
-
-<section id='effect-layor'>
+{#if $modeStore == "pokemon"}
+<section id='pokemon-effect-layor'>
     <StorageComponent></StorageComponent>
 </section>
-<!-- <section id='emotion-layor'>
-    <EmotionConponent></EmotionConponent>
-</section> -->
-<section id='coin-layor'>
+
+<section id='pokemon-coin-layor'>
     <CoinComponent></CoinComponent>
 </section>
 
+<section id='pokemon-util-buttons'>
+    <PokemonUtil></PokemonUtil>    
+</section>
+{/if}
 
 {:else}
     <section id='is-not-PC-alert'>
@@ -189,12 +153,8 @@
         transform: rotateX(7deg);
         border-radius: 30px;
         position: relative;
-        &.light{
-            background:radial-gradient(ellipse, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 70%,rgba(0,0,0,0.2) 100%);
-        }
-        &.dark{
-            background:radial-gradient(ellipse, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.4) 70%,rgba(255,255,255,0.1) 100%);
-        }
+        background:radial-gradient(ellipse, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.4) 70%,rgba(255,255,255,0.1) 100%);
+        
     }
     #myDeckAndHand{
         position: fixed;
@@ -204,20 +164,7 @@
         width:100%;
         height:150px;
     }
-    #myGraveyard{
-        position: fixed;
-        z-index:1;
-        bottom: 0px;
-        right: 200px;
-        #graveYard-main{
-            position: absolute;
-            width:200px;
-            height:300px;
-            background: white;
-            bottom: 0;
-            pointer-events: none;
-        }
-    }
+    
     #is-not-PC-alert{
         margin:100px 20px;
         background: black;
@@ -265,21 +212,29 @@
     section{
         position: absolute;
     }
-    #effect-layor{
-        right:0;
+    #pokemon-effect-layor{
+        right:-30px;
         bottom: 100px;
         z-index: 4;
         width:0px;
         height:100vh;
         font-family: 'Press Start 2P', cursive;
     }
-    #coin-layor{
+    #pokemon-coin-layor{
         position: fixed;
         font-family: 'Press Start 2P', cursive;
         z-index: 3;
         width:0;
         height:0;
         top:50px;
+        left:10px;
+    }
+    #pokemon-util-buttons{
+        position: fixed;
+        z-index: 3;
+        width:auto;
+        height:auto;
+        top:150px;
         left:10px;
     }
 </style>
