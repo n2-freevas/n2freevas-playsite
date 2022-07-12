@@ -1,13 +1,14 @@
 <script lang="ts">
     import type {MainMenu} from '$lib/model/Menu'
     export let model : MainMenu
-    
+    export let size: number = 100
     let isFocus = false;
+    
     function focusInteractionON(){isFocus = true}
     function focusInteractionOFF(){isFocus = false}
 </script>
 
-<div class='homebutton-box {isFocus&&model.active? 'focus' : ''} {model.active ? "" : "disactive"}'>
+<div class='homebutton-box {isFocus&&model.active? 'focus' : ''} {model.active ? "" : "disactive"}' style="width:{size}px; height:{size}px; --topval: {size/10}px;">
     <a href={model.active ? model.path : ""}>
         <div class='homebutton_background {isFocus&&model.active? 'focus' : ''}'></div>
         <div class='icons'>
@@ -24,14 +25,11 @@
 <style lang="scss">
     .homebutton-box{
         position: relative;
-        width:100px;
-        height:100px;
         background: white;
         border-radius: 15px;
         margin:15px;
         transition: 0.5s;
         &.focus{
-            
             border-radius: 0px;
         }
         &.disactive{
@@ -45,7 +43,6 @@
             display: flex;
             flex-direction: column;
             justify-content: space-around;
-            --topval: 10px;
             top:var(--topval);left:var(--topval);
             width:calc(100% - (var(--topval) * 2 ));
             height:calc(100% - (var(--topval) * 2 ));
@@ -83,12 +80,13 @@
         }
         p{
             position: absolute;
-            top:35px;
-            left:-5px;
+            top:50%;
+            left:50%;
+            transform: translate(-50%, -50%);
             font-weight: bold;
             opacity: 1;
             width:120px;
-            z-index: 100;
+            z-index: 0;
             color:white;
         }
     }

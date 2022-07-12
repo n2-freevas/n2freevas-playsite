@@ -13,7 +13,7 @@
         {#if matches}
         <div class="icon_box">
             {#each mainmenu_array as menu}
-                <HomeButton model={menu}></HomeButton>
+                <HomeButton model={menu} size={100}></HomeButton>
             {/each}
         </div>
         {/if}
@@ -22,7 +22,7 @@
         {#if matches}
         <div class="icon_box">
             {#each mainmenu_array as menu}
-                <HomeButton model={menu}></HomeButton>
+                <HomeButton model={menu} size={85}></HomeButton>
             {/each}
         </div>
         {/if}
@@ -30,13 +30,16 @@
     <N2Clock></N2Clock>
 </div>
 
-<slot></slot>
-
 <style lang="scss">
     #menu_box{
-        max-height:700px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 70vh;
+        max-height: 700px;
         max-width:500px;
         margin:0 auto;
+        overflow: hidden;
     }
     .icon_box{
         display: flex;
@@ -44,9 +47,10 @@
         flex-wrap: wrap;
         justify-content: space-around;
         border: solid 1px white;
-        max-width: 400px;
+        max-width: 350px;
         padding:20px 10px;
-        margin: 100px 30px;
+        margin:0 40px;
+        
     }
 
 

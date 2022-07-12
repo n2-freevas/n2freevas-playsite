@@ -14,13 +14,13 @@ let apps: App[] = [
         description:"コトダマンで楽して勝ちたい人に向けたツール"
     },
     {
-        name:"Webダメカン",
+        name:"Webダメカン*",
         icon:"/img/pokeca/icon_white.svg",
         href: "/app/pokemon-card-game-effector/game",
         description:"ポケカのダメカンをWebでやっちゃう。"
     },
     {
-        name:"TCGシミュ",
+        name:"TCGシミュ*",
         icon:"/img/tcg-sim/card_naname.svg",
         href: "/app/tcg-simulator/game",
         description:"トレーディングカードをインポートしてプレイ"
@@ -36,7 +36,10 @@ let apps: App[] = [
 
 </script>
 <article>
-    <h1>APP LIST</h1>
+    <div class='head'>
+        <h1>APP LIST</h1>
+        <p>*がついているものはPCでお楽しみください。</p>
+    </div>
     <div id='phone-flame'>
     <section>
         {#each apps as a}
@@ -62,16 +65,18 @@ let apps: App[] = [
         width:90vw;
         max-width: 350px;
         margin:0 auto;
-        h1{
-            margin: 20px 0 10px 0;
+        .head{
+            margin: 20px;
+            p{
+                font-size: 11px;
+            }
         }
     }
     #phone-flame{
-        
         padding:10px;
+        margin:0 20px;
         border: solid 2px white;
         background: white;
-        min-height: 555px;
         border-radius: 20px;
         position: relative;
         &::before{
@@ -103,11 +108,10 @@ let apps: App[] = [
             padding: 50px 20px 20px 20px;
             background: linear-gradient(135deg, rgba(black,1),rgba(black,1), rgba(black,0.85));
             border-radius: 10px;
-            min-height:535px;
             display: flex;
             flex-wrap: wrap;
             grid-template-columns: repeat(auto-fill, 80px);
-            justify-content: space-between;
+            justify-content: space-around;
             
             .app-icon{
                 display: flex;
