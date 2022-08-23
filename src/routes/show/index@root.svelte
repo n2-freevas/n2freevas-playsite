@@ -16,11 +16,12 @@
         {name: "Pendulum", component: PendulumLoader},
         {name: "Rect Wave", component: RectWaveLoader},
         {name: "Round Flowering", component: RoundFloweringLoader},
-        {name: "Dot Strings", component: DotStringLoader}
+        // {name: "Dot Strings", component: DotStringLoader}
     ]
 </script>
 
 <section class='show-room'>
+    
     {#each show_item_args as arg}
     <MediaQuery query="(max-width: 700px)" let:matches>
         {#if matches}
@@ -49,9 +50,11 @@
         justify-content: space-around;
         .show-box{
             flex-basis: 40%;
+            margin: 20px 0;
         }
         .show-box-phone{
             flex-basis: 90%;
+            margin: 20px 0;
         }
     }
     
