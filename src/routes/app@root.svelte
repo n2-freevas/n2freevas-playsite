@@ -74,7 +74,6 @@ let apps: App[] = [
     }
     #phone-flame{
         padding:10px;
-        margin:0 20px;
         border: solid 2px white;
         background: white;
         border-radius: 20px;
@@ -105,7 +104,7 @@ let apps: App[] = [
         section{
             font-family: 'Kosugi Maru', sans-serif;
             border: solid 2px white;
-            padding: 50px 20px 20px 20px;
+            padding: 50px 10px 20px 10px;
             background: linear-gradient(135deg, rgba(black,1),rgba(black,1), rgba(black,0.85));
             border-radius: 10px;
             display: flex;
