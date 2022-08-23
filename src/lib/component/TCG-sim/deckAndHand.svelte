@@ -1,5 +1,6 @@
 <script context='module' lang='ts'>
     import type { deckCardModel} from '$lib/model/app/TCGsimModel'
+    import FukidashiConponent from "$lib/component/PokecaEffector/FukidashiConponent.svelte";
 
     export function deckAlineX(i:number){
         return (i * -0.25) + 15
@@ -62,6 +63,9 @@
     
     let deckOpen = false
     let continueDeckCenterAction = 0
+    let continueDeckTopAction = 0
+    let deckFukidashiRollIn = false
+    let shufflingMessage = ""
     let isUntouchDeck = false
     let z_index_controller = 0
 
@@ -130,7 +134,10 @@
     }
     //デッキの一覧を表示する。
     function deckTopAction(){
-        if(!deckOpen){
+        if(deckOpen){
+            deckResetAction()
+            deckOpen = false
+        } else {
             let i = 0
             continueDeckCenterAction = 0
             deckOpen = true
@@ -216,6 +223,7 @@
             $deckListStore = deckAline(decklist)
         }
         else{
+            deckFukidashiRollIn = false
             console.log('shuffle')
             isUntouchDeck = true
             
@@ -223,6 +231,8 @@
             $deckListStore = asyncDeckShuffle(decklist)
             window.setTimeout(()=>{
                 isUntouchDeck = false
+                shufflingMessage = 'Done!'
+                deckFukidashiRollIn = true
             },1000)
         }
     }
@@ -263,12 +273,6 @@
     })
 </script>
 
-
-{#if isUntouchDeck}
-    <div id = 'deckUntouchMask'></div>
-{/if}
-
-
 <div id='handArea'>
     <div id='handArea-radius'>
         <div id='handArea-radius-left' on:click={()=> {allHandsGoToDeck()}}></div>
@@ -299,6 +303,11 @@
             <div class='round-center' on:click={deckResetAction}></div>
             <div class='round-bottom' on:click={draw}></div>
         </div>
+    </div>
+    <div class='fukidashi'>
+        <FukidashiConponent width={180} left_roll_in = {deckFukidashiRollIn}>
+            <p>{shufflingMessage}</p>
+        </FukidashiConponent>
     </div>
 </section>
 {#each $deckListStore as d, i}
@@ -407,15 +416,18 @@
             }
         }   
     }
+    .fukidashi{
+        font-family: 'Press Start 2P', cursive;
+        user-select: none;
+        position: absolute;
+        top:-50px;
+        left:100px;
+    }
 }
 
 #deckUntouchMask{
     position: absolute;
-    background: radial-gradient(
-        ellipse,
-        rgba(#ffffff, 1) 0%,
-        rgba(#ffffff, 0) 80%
-    );
+    background: white;
     z-index: 100;
     width:200px;
     height:350px;

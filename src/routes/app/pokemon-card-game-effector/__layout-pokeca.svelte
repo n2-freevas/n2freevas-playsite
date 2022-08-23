@@ -38,7 +38,6 @@
     }
     .info{
         position: fixed;
-        font-family: 'Press Start 2P', cursive;
         width:60%;
         max-width: 400px;
         right:20px;
