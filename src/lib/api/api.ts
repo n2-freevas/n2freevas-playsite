@@ -1,10 +1,10 @@
 // Api.js
+import { ENV_N2FREEVAS_API_KEY } from '$lib/K/env';
 import axios from 'axios'
 
-
 function switchBaseURL() {
-  //return 'http://127.0.0.1:8000/api'
-  return 'https://n2freevas-api.herokuapp.com/api'
+  return 'http://127.0.0.1:8000/api'
+  // return 'https://n2freevas-api.herokuapp.com/api'
 }
 
 // Create a instance of axios to use the same base url.
@@ -12,7 +12,7 @@ axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 const n2AxiosAPI = axios.create({
   baseURL: switchBaseURL(),
   headers: {
-    'authorization': 'n2freevas-api-token-Nx2gFhrRaEwEadVxxAadawS',
+    'authorization': ENV_N2FREEVAS_API_KEY.toString(),
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*'
   },

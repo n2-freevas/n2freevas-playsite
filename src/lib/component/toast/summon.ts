@@ -41,12 +41,27 @@ function errorToastPush(errormsg: string) {
   })
 }
 
+function errorToastStaying(errormsg: string) {
+  toast.pop()
+  const errorMsg = '<strong>Error</strong><br>' + errormsg
+  toast.push(errorMsg, {
+    theme: {
+      '--toastBackground': '#F56565',
+      '--toastProgressBackground': '#C53030'
+    },
+    target: 'error',
+    initial: 0,
+    next: 0,
+  })
+}
+
 const easytoast = {
   toastPush,
   processingPush,
   remove,
   successToastPush,
-  errorToastPush
+  errorToastPush,
+  errorToastStaying
 }
 
 export default easytoast
