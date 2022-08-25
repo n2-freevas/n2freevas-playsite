@@ -232,7 +232,6 @@
                             transform: translate(-50%, -50%);
                             background: #444444;
                         }
-
                     }
                     &.active{
                         background: white;
@@ -244,8 +243,5 @@
             }
         }
     }
-        
-
-    
 
 </style>
