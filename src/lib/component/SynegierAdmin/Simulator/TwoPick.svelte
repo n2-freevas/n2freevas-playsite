@@ -191,9 +191,9 @@
         return true
     }
     onMount(()=>{
-        pickedCards = cardDatus.slice(0,16)
-        nowPhaseOf2pick = "end"
-        // checkDisplayRequirement(window.innerWidth, window.innerHeight)
+        // pickedCards = cardDatus.slice(0,16)
+        // nowPhaseOf2pick = "end"
+        checkDisplayRequirement(window.innerWidth, window.innerHeight)
     })
 </script>
 
