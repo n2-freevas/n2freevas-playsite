@@ -3,19 +3,24 @@
     export let onAppear: boolean = false
     export let onChoised: boolean = false
     export let onUnChoised: boolean = false
+    export let delay: number = 0
     let onAppearDriver: boolean = false
     let onChoisedDriver: boolean = false
     let onUnChoisedDriver: boolean = false
+    let onDelayDriver: number = 0
     $: {onAppearDriver = onAppear}
     $: {onChoisedDriver = onChoised}
     $: {onUnChoisedDriver = onUnChoised}
+    $: {onDelayDriver = delay}
 
 </script>
 
 <div class="anime
     {onAppearDriver?"onAppear":""}
     {onChoisedDriver?"onChoised":""}
-    {onUnChoisedDriver?"onUnChoised":""}">
+    {onUnChoisedDriver?"onUnChoised":""}"
+    style="--delay:{onDelayDriver}s"
+    >
     
     <slot></slot>
     <div class='flash {onChoisedDriver?"onChoised":""}'></div>
@@ -23,22 +28,21 @@
 
 <style lang="scss">
     .anime{
-        position: absolute;
+        position: relative;
         top:0;
-        // opacity: 1;
+        opacity: 0;
         transition: 0.3s;
-        transform: translate(-50%, 0);
         &.onAppear{
-            animation: appear ease-in-out forwards 0.3s;
+            animation: appear ease-in-out forwards 0.3s var(--delay);
             &:hover{top:-20px}    
         }
         &.onChoised{
             &:hover{top:0}
-            animation: selected ease-in-out forwards 0.5s;
+            animation: selected ease-in-out forwards 0.5s var(--delay);
         }
         &.onUnChoised{
             &:hover{top:0}
-            animation: disappear ease-in-out forwards 0.3s;
+            animation: disappear ease-in-out forwards 0.3s var(--delay);
         }
         .flash{
             position: absolute;
@@ -61,8 +65,8 @@
         100%{opacity: 1; top:0;}
     }
     @keyframes selected{
-        0%{transform:translate(-50%, 0) scale(1);}
-        100%{transform:translate(-50%, 0) scale(1.5)}
+        0%{opacity: 1;transform:scale(1);}
+        100%{opacity: 1;transform:scale(1.5)}
     }
     @keyframes flash{
         0%{opacity:0;transform:scale(1);}
@@ -70,8 +74,8 @@
         100%{opacity:0;transform:scale(1.4);}
     }
     @keyframes disappear{
-        0%{opacity:1;transform:translate(-50%, 0) scale(1);}
-        100%{opacity:0;transform:translate(-50%, 0) scale(0);}
+        0%{opacity:1;transform: scale(1);}
+        100%{opacity:0;transform: scale(0);}
     }
     
 </style>

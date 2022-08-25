@@ -5,6 +5,13 @@ function toastPush(msg: string) {
   toast.push(msg)
 }
 
+function toastStay(msg: string) {
+  toast.push(msg, {
+    initial: 0,
+    next: 0
+  })
+}
+
 async function processingPush(msg: string) {
   const process = toast.push(msg, {
     initial: 0,
@@ -57,6 +64,7 @@ function errorToastStaying(errormsg: string) {
 
 const easytoast = {
   toastPush,
+  toastStay,
   processingPush,
   remove,
   successToastPush,

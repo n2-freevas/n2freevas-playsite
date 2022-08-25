@@ -1,6 +1,14 @@
+export type SynegierTextType = "s" | "v" // subject or verbus
+
+export type SynegierTextColor = "blue" | "green" | "yellow" | "red" | "purple"
+
+export type CardCost = "C" | "R" | "SR" | "LE"
+
+export type CardRarity = "C" | "R" | "SR" | "LE"
+
 export interface SynegierText {
-    color: "blue" | "green" | "yellow" | "red" | "purple"
-    type: "s" | "v" |"subject" | "verbus"
+    color: SynegierTextColor
+    type: SynegierTextType
     text: string
 }
 
@@ -22,11 +30,11 @@ export const MovementMap: Movement[] = [
 export interface SynegierCard {
     name: string
     img: string
-    cost: 0 | 1 | 2 | 3
+    cost: CardCost
     synegierText: SynegierText[]
     text: string
     movement: Movement[]
     redTiles: Movement[]
-    rarity: "C" | "R" | "SR" | "LE"
+    rarity: CardRarity
 }
 

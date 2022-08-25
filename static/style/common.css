@@ -8,10 +8,10 @@ body{
     font-family:Arial, Helvetica, sans-serif;
 }
 
-.com_scroll-x::-webkit-scrollbar{overflow:hidden;height:2px;background:#fafafa;}
+.com_scroll-x::-webkit-scrollbar{overflow-x:hidden;height:1px;background:gray;}
 .com_scroll-x::-webkit-scrollbar-button{display:none;}
-.com_scroll-x::-webkit-scrollbar-piece{background:#eee;}
-.com_scroll-x::-webkit-scrollbar-piece:start{background:#eee;}
+.com_scroll-x::-webkit-scrollbar-piece{background:gray;}
+.com_scroll-x::-webkit-scrollbar-piece:start{background:gray;}
 .com_scroll-x::-webkit-scrollbar-thumb{border-radius: 2px;border: solid 1px white;background:rgb(0, 0, 0);}
 
 .com_scroll-y{overflow-y: scroll;-ms-overflow-style: none;scrollbar-width: none;}

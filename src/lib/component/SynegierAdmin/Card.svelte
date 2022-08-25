@@ -37,7 +37,7 @@
                         {#if model.movement.find(m => m.v ==  mm.v && m.h == mm.h)}
                             <div class="active"></div>
                         {:else if model.redTiles?.find(m => m.v ==  mm.v && m.h == mm.h)}
-                            <div class="fuck"></div>
+                            <div class="red"></div>
                         {:else}
                             <div></div>
                         {/if}
@@ -236,6 +236,9 @@
                     }
                     &.active{
                         background: white;
+                    }
+                    &.red{
+                        background: red;
                     }
                 }
             }
