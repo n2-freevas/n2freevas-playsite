@@ -126,7 +126,4 @@
             }
         }
     }
-    main {
-        z-index: 0;
-    }
 </style>

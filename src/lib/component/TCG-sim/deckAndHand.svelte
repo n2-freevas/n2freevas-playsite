@@ -455,12 +455,12 @@
         }
     }
 
-    #deckUntouchMask {
-        position: absolute;
-        background: white;
-        z-index: 100;
-        width: 200px;
-        height: 350px;
-        top: -100px;
-    }
+    // #deckUntouchMask {
+    //     position: absolute;
+    //     background: white;
+    //     z-index: 100;
+    //     width: 200px;
+    //     height: 350px;
+    //     top: -100px;
+    // }
 </style>

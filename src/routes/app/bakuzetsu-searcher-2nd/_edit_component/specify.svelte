@@ -94,12 +94,12 @@
         border-radius: 5px;
         border: solid 2px white;
         padding: 3px;
-        div {
-            width: 25px;
-            height: 25px;
-            margin: 0 auto;
-            border-radius: 12px;
-        }
+        // div {
+        //     width: 25px;
+        //     height: 25px;
+        //     margin: 0 auto;
+        //     border-radius: 12px;
+        // }
         &.active {
             &.fire {
                 border-color: rgb(255, 0, 0);

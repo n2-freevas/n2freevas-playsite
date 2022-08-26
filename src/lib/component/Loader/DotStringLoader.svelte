@@ -1,6 +1,6 @@
 <script lang="ts">
     export let color: string = 'white'
-    export let is_animate: boolean = true
+    // export let is_animate: boolean = true
     export let dot_size: number = 10
     export let input: number = 1056194
 

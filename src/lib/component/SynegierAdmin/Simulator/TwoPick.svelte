@@ -8,7 +8,7 @@
     import DeckSummary from './deckSummary.svelte'
 
     export let cardDatus: SynegierCard[]
-    export let soldierDatus = []
+    // export let soldierDatus = []
     type phaseOf2pickList = 'prepare' | 'processing' | 'end'
     let nowPhaseOf2pick: phaseOf2pickList = 'prepare'
 

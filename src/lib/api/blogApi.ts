@@ -35,11 +35,7 @@ function thinOutNotionPagesColumn(pagesRes) {
 
 export const getPage = async (page_id?: string) => {
     try {
-        let res = await Api.get(
-            notionPageUrl + page_id + '/children?page_size=100',
-            undefined,
-            api_header
-        )
+        let res = await Api.get(notionPageUrl + page_id + '/children?page_size=100', api_header)
         return res
     } catch (error) {
         throw error

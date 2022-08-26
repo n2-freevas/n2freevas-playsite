@@ -42,14 +42,14 @@
         animation: clockrotate 60s cubic-bezier(1, 0, 0.95, 0.38) infinite;
         transition: 1s;
     }
-    #bg_clock #clockbody.showmove {
-        top: -50px;
-        left: -10vw;
-    }
-    #bg_clock #clockbody.slideleft {
-        -webkit-animation: clockslide ease-out 4s;
-        animation: clockslide ease-out 4s;
-    }
+    // #bg_clock #clockbody.showmove {
+    //     top: -50px;
+    //     left: -10vw;
+    // }
+    // #bg_clock #clockbody.slideleft {
+    //     -webkit-animation: clockslide ease-out 4s;
+    //     animation: clockslide ease-out 4s;
+    // }
 
     @keyframes clockslide {
         0% {
@@ -417,12 +417,12 @@
         top: 37.5%;
         left: 37.5%;
     }
-    #bg_clock #clockbody.spin,
-    #bg_clock #clockbody img.time.spin,
-    #bg_clock #clockbody img#insidewheel.spin {
-        -webkit-animation: clockspin 1s;
-        animation: clockspin 1s;
-    }
+    // #bg_clock #clockbody.spin,
+    // #bg_clock #clockbody img.time.spin,
+    // #bg_clock #clockbody img#insidewheel.spin {
+    //     -webkit-animation: clockspin 1s;
+    //     animation: clockspin 1s;
+    // }
     .time-3 {
         top: 45%;
         left: 63.5%;
@@ -499,16 +499,16 @@
     }
 
     @media screen and (min-width: 600px) {
-        #menu_box {
-            margin-left: calc((100vw - 500px) / 2);
-            margin-right: calc((100vw - 500px) / 2);
-        }
+        // #menu_box {
+        //     margin-left: calc((100vw - 500px) / 2);
+        //     margin-right: calc((100vw - 500px) / 2);
+        // }
     }
     @media screen and (min-width: 700px) {
-        .box {
-            margin-left: calc((100vw - 600px) / 2);
-            margin-right: calc((100vw - 600px) / 2);
-        }
+        // .box {
+        //     margin-left: calc((100vw - 600px) / 2);
+        //     margin-right: calc((100vw - 600px) / 2);
+        // }
 
         #bg_clock #clockbody {
             top: 35vh;
@@ -521,9 +521,9 @@
             width: 850px;
         }
 
-        #bg_clock img.insidewheel {
-            width: 212.5px;
-        }
+        // #bg_clock img.insidewheel {
+        //     width: 212.5px;
+        // }
         #bg_clock img.time {
             width: 85px;
         }

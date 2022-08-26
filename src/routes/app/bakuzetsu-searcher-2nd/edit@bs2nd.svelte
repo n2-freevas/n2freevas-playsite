@@ -420,9 +420,6 @@
 
             transition: 0.3s;
             padding: 5px 0 5px 5px;
-            &.open {
-                right: -3px;
-            }
             #bs2nd-deck-select-slider-button {
                 position: absolute;
                 border-top: solid 2px white;
