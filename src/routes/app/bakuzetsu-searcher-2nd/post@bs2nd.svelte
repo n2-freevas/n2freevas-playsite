@@ -1,11 +1,10 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-    
-    onMount(async()=>{
+    import { onMount } from 'svelte'
+
+    onMount(async () => {
         console.log('post')
     })
-    </script>
-    
-    <style lang="scss">
-    
-    </style>
+</script>
+
+<style lang="scss">
+</style>

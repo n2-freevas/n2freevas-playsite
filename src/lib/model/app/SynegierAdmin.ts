@@ -1,10 +1,10 @@
-export type SynegierTextType = "s" | "v" // subject or verbus
+export type SynegierTextType = 's' | 'v' // subject or verbus
 
-export type SynegierTextColor = "blue" | "green" | "yellow" | "red" | "purple"
+export type SynegierTextColor = 'blue' | 'green' | 'yellow' | 'red' | 'purple'
 
-export type CardCost = "C" | "R" | "SR" | "LE"
+export type CardCost = 'C' | 'R' | 'SR' | 'LE'
 
-export type CardRarity = "C" | "R" | "SR" | "LE"
+export type CardRarity = 'C' | 'R' | 'SR' | 'LE'
 
 export interface SynegierText {
     color: SynegierTextColor
@@ -13,18 +13,60 @@ export interface SynegierText {
 }
 
 export interface Movement {
-    v: number,
+    v: number
     h: number
 }
 
 export const MovementMap: Movement[] = [
-    {v:-3,h: 3},{v:-2,h: 3},{v:-1,h: 3},{v: 0,h: 3},{v: 1,h: 3},{v: 2,h: 3},{v: 3,h: 3},
-    {v:-3,h: 2},{v:-2,h: 2},{v:-1,h: 2},{v: 0,h: 2},{v: 1,h: 2},{v: 2,h: 2},{v: 3,h: 2},
-    {v:-3,h: 1},{v:-2,h: 1},{v:-1,h: 1},{v: 0,h: 1},{v: 1,h: 1},{v: 2,h: 1},{v: 3,h: 1},
-    {v:-3,h: 0},{v:-2,h: 0},{v:-1,h: 0},{v: 0,h: 0},{v: 1,h: 0},{v: 2,h: 0},{v: 3,h: 0},
-    {v:-3,h:-1},{v:-2,h:-1},{v:-1,h:-1},{v: 0,h:-1},{v: 1,h:-1},{v: 2,h:-1},{v: 3,h:-1},
-    {v:-3,h:-2},{v:-2,h:-2},{v:-1,h:-2},{v: 0,h:-2},{v: 1,h:-2},{v: 2,h:-2},{v: 3,h:-2},
-    {v:-3,h:-3},{v:-2,h:-3},{v:-1,h:-3},{v: 0,h:-3},{v: 1,h:-3},{v: 2,h:-3},{v: 3,h:-3}
+    { v: -3, h: 3 },
+    { v: -2, h: 3 },
+    { v: -1, h: 3 },
+    { v: 0, h: 3 },
+    { v: 1, h: 3 },
+    { v: 2, h: 3 },
+    { v: 3, h: 3 },
+    { v: -3, h: 2 },
+    { v: -2, h: 2 },
+    { v: -1, h: 2 },
+    { v: 0, h: 2 },
+    { v: 1, h: 2 },
+    { v: 2, h: 2 },
+    { v: 3, h: 2 },
+    { v: -3, h: 1 },
+    { v: -2, h: 1 },
+    { v: -1, h: 1 },
+    { v: 0, h: 1 },
+    { v: 1, h: 1 },
+    { v: 2, h: 1 },
+    { v: 3, h: 1 },
+    { v: -3, h: 0 },
+    { v: -2, h: 0 },
+    { v: -1, h: 0 },
+    { v: 0, h: 0 },
+    { v: 1, h: 0 },
+    { v: 2, h: 0 },
+    { v: 3, h: 0 },
+    { v: -3, h: -1 },
+    { v: -2, h: -1 },
+    { v: -1, h: -1 },
+    { v: 0, h: -1 },
+    { v: 1, h: -1 },
+    { v: 2, h: -1 },
+    { v: 3, h: -1 },
+    { v: -3, h: -2 },
+    { v: -2, h: -2 },
+    { v: -1, h: -2 },
+    { v: 0, h: -2 },
+    { v: 1, h: -2 },
+    { v: 2, h: -2 },
+    { v: 3, h: -2 },
+    { v: -3, h: -3 },
+    { v: -2, h: -3 },
+    { v: -1, h: -3 },
+    { v: 0, h: -3 },
+    { v: 1, h: -3 },
+    { v: 2, h: -3 },
+    { v: 3, h: -3 }
 ]
 
 export interface SynegierCard {
@@ -37,4 +79,3 @@ export interface SynegierCard {
     redTiles: Movement[]
     rarity: CardRarity
 }
-

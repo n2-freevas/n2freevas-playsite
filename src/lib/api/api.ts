@@ -1,24 +1,23 @@
 // Api.js
-import { ENV_N2FREEVAS_API_DOMAIN, ENV_N2FREEVAS_API_KEY } from '$lib/K/env';
+import { ENV_N2FREEVAS_API_DOMAIN, ENV_N2FREEVAS_API_KEY } from '$lib/K/env'
 import axios from 'axios'
 
-
 // Create a instance of axios to use the same base url.
-axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*'
 const n2AxiosAPI = axios.create({
-  baseURL: ENV_N2FREEVAS_API_DOMAIN,
-  headers: {
-    'authorization': ENV_N2FREEVAS_API_KEY,
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*'
-  },
+    baseURL: ENV_N2FREEVAS_API_DOMAIN,
+    headers: {
+        authorization: ENV_N2FREEVAS_API_KEY,
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+    }
 })
 
 const normalAxiosAPI = axios.create({
-  headers: {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*'
-  },
+    headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+    }
 })
 // implement a method to execute all the request from here.
 // ヘッダを共通化したいので，axiosAPIを包むapiRequest関数を定義．ヘッダがいらないとなったらこの関数は不要．
@@ -32,39 +31,37 @@ const normalAxiosAPI = axios.create({
 //   })
 //     .then((res) => {
 //       return Promise.resolve(res.data)
-      
+
 //     })
 //     .catch((err) => {
 //       return Promise.reject(err)
 //     })
 // }
 
-
 const get = async (url, request?) => {
-  const res = await n2AxiosAPI.get(url, { params: request })
-  return res.data
+    const res = await n2AxiosAPI.get(url, { params: request })
+    return res.data
 }
 
 const post = async (url, request) => {
-  const res = await n2AxiosAPI.post(url, request)
-  return res.data
+    const res = await n2AxiosAPI.post(url, request)
+    return res.data
 }
 
 const n_get = async (url, request?) => {
-  const res = await normalAxiosAPI.get(url, { params: request })
-  return res.data
+    const res = await normalAxiosAPI.get(url, { params: request })
+    return res.data
 }
 
 const n_post = async (url, request) => {
-  const res = await normalAxiosAPI.post(url, request)
-  return res.data
+    const res = await normalAxiosAPI.post(url, request)
+    return res.data
 }
 
-
 const Api = {
-  get,
-  post,
-  n_get,
-  n_post
+    get,
+    post,
+    n_get,
+    n_post
 }
 export default Api

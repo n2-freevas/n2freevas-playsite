@@ -1,6 +1,7 @@
 <script lang="ts">
     import { SvelteToast } from '@zerodevx/svelte-toast'
 </script>
+
 <div class="toast_wrap">
     <SvelteToast />
 </div>
@@ -19,5 +20,4 @@
         --toastMaxWidth: 500px;
         --toastMinHeight: 1.5rem;
     }
-    
 </style>

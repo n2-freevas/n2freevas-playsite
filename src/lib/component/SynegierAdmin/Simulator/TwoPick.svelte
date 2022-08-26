@@ -1,63 +1,67 @@
 <script lang="ts">
     import Card from '$lib/component/SynegierAdmin/Card.svelte'
-    import easytoast from '$lib/component/toast/summon';
+    import easytoast from '$lib/component/toast/summon'
     import type { SynegierCard } from '$lib/model/app/SynegierAdmin'
-    import { sleep } from '$lib/util/time';
-    import { onMount } from 'svelte';
-    import In2pickAmination from '../CardAnimationComponent.svelte/In2pickAmination.svelte';
-    import DeckSummary from './deckSummary.svelte';
-    
+    import { sleep } from '$lib/util/time'
+    import { onMount } from 'svelte'
+    import In2pickAmination from '../CardAnimationComponent.svelte/In2pickAmination.svelte'
+    import DeckSummary from './deckSummary.svelte'
 
     export let cardDatus: SynegierCard[]
     export let soldierDatus = []
-    type phaseOf2pickList = "prepare" | "processing" | "end"
-    let nowPhaseOf2pick: phaseOf2pickList = "prepare"
+    type phaseOf2pickList = 'prepare' | 'processing' | 'end'
+    let nowPhaseOf2pick: phaseOf2pickList = 'prepare'
 
+    // === prepare ===
 
-    // === prepare === 
+    let datusDivRarity = { C: [], R: [], SR: [], LE: [] }
+    let datusDivRarityLen = { C: 0, R: 0, SR: 0, LE: 0 }
 
-    let datusDivRarity = { "C": [], "R": [], "SR": [], "LE": [] }
-    let datusDivRarityLen = { "C": 0, "R": 0, "SR": 0, "LE": 0 }
-    
-    function checkDisplayRequirement(width, height){
+    function checkDisplayRequirement(width, height) {
         let requireWidth = 1100
         let requireHeight = 800
-        if (!width || !height){
-            easytoast.toastStay(`Require browser size is ${requireWidth}*${requireHeight}.<br>Resize brouser and reload page.`)
+        if (!width || !height) {
+            easytoast.toastStay(
+                `Require browser size is ${requireWidth}*${requireHeight}.<br>Resize brouser and reload page.`
+            )
         }
-        if(width >= requireWidth && height >= requireHeight){
+        if (width >= requireWidth && height >= requireHeight) {
             pickPrepare()
         } else if (width < requireWidth && height < requireHeight) {
             easytoast.remove()
-            easytoast.toastStay(`Require browser size is ${requireWidth}*${requireHeight}.<br>Resize brouser and reload page.`)
-            
-        } else if (width < requireWidth){
+            easytoast.toastStay(
+                `Require browser size is ${requireWidth}*${requireHeight}.<br>Resize brouser and reload page.`
+            )
+        } else if (width < requireWidth) {
             easytoast.remove()
-            easytoast.toastStay(`Require inner width of browser is ${requireWidth}.<br>Resize brouser and reload page.`)
-        } else if (height < requireHeight){
+            easytoast.toastStay(
+                `Require inner width of browser is ${requireWidth}.<br>Resize brouser and reload page.`
+            )
+        } else if (height < requireHeight) {
             easytoast.remove()
-            easytoast.toastStay(`Require inner height of browser is ${requireHeight}.<br>Resize brouser and reload page.`)
+            easytoast.toastStay(
+                `Require inner height of browser is ${requireHeight}.<br>Resize brouser and reload page.`
+            )
         } else {
             easytoast.remove()
             easytoast.toastStay(`Please reload a page, because UI error.`)
         }
-        
     }
 
-    function pickPrepare(){
-        datusDivRarity.C = cardDatus.filter(card=>card.rarity == "C")
+    function pickPrepare() {
+        datusDivRarity.C = cardDatus.filter((card) => card.rarity == 'C')
         datusDivRarityLen.C = datusDivRarity.C.length
-        datusDivRarity.R = cardDatus.filter(card=>card.rarity == "R")
+        datusDivRarity.R = cardDatus.filter((card) => card.rarity == 'R')
         datusDivRarityLen.R = datusDivRarity.R.length
-        datusDivRarity.SR = cardDatus.filter(card=>card.rarity == "SR")
+        datusDivRarity.SR = cardDatus.filter((card) => card.rarity == 'SR')
         datusDivRarityLen.SR = datusDivRarity.SR.length
-        datusDivRarity.LE = cardDatus.filter(card=>card.rarity == "LE")
+        datusDivRarity.LE = cardDatus.filter((card) => card.rarity == 'LE')
         datusDivRarityLen.LE = datusDivRarity.LE.length
         nowPhaseOf2pick = 'processing'
         pickupCards()
     }
 
-    // === processing === 
+    // === processing ===
 
     let leftCard: SynegierCard = undefined
     let isAppearLeftCard = false
@@ -70,230 +74,259 @@
     let pickedCards: SynegierCard[] = []
     let countOfPicked = 0
     const numberOfPickedCard = 16
-    let countCardPerRarity = { "C": 0, "R": 0, "SR": 0, "LE": 0 }
+    let countCardPerRarity = { C: 0, R: 0, SR: 0, LE: 0 }
 
     function getRandomInt(max) {
-        return Math.floor(Math.random() * max);
+        return Math.floor(Math.random() * max)
     }
-    function pickupCardHelperFindUnduplicatedIndex(len1, len2=undefined, len3=undefined):number[]{
+    function pickupCardHelperFindUnduplicatedIndex(
+        len1,
+        len2 = undefined,
+        len3 = undefined
+    ): number[] {
         let result = []
         let leftChoise1 = getRandomInt(len1)
         let rightChoise1 = leftChoise1
-        while(rightChoise1==leftChoise1){
-            rightChoise1=getRandomInt(len1)
+        while (rightChoise1 == leftChoise1) {
+            rightChoise1 = getRandomInt(len1)
         }
         result.push(leftChoise1)
         result.push(rightChoise1)
-        if(len2){
-            let leftChoise2=getRandomInt(len2)
-            let rightChoise2=leftChoise2
-            while(rightChoise2==leftChoise2){
-                rightChoise2=getRandomInt(len2)
+        if (len2) {
+            let leftChoise2 = getRandomInt(len2)
+            let rightChoise2 = leftChoise2
+            while (rightChoise2 == leftChoise2) {
+                rightChoise2 = getRandomInt(len2)
             }
             result.push(leftChoise2)
             result.push(rightChoise2)
         }
-        if(len3){
-            let leftChoise3=getRandomInt(len3)
-            let rightChoise3=leftChoise3
-            while(rightChoise3==leftChoise3){
-                rightChoise3=getRandomInt(len3)
+        if (len3) {
+            let leftChoise3 = getRandomInt(len3)
+            let rightChoise3 = leftChoise3
+            while (rightChoise3 == leftChoise3) {
+                rightChoise3 = getRandomInt(len3)
             }
             result.push(leftChoise3)
             result.push(rightChoise3)
         }
         return result
     }
-    function pickupCards(){
-        if(countOfPicked < 7){
+    function pickupCards() {
+        if (countOfPicked < 7) {
             console.log('C R pick')
             // 01-07回目 C:   90%, R:  10%
-            let nums = pickupCardHelperFindUnduplicatedIndex(datusDivRarityLen.C, datusDivRarityLen.R)
+            let nums = pickupCardHelperFindUnduplicatedIndex(
+                datusDivRarityLen.C,
+                datusDivRarityLen.R
+            )
             let ZeroToNine = getRandomInt(10)
-            if (ZeroToNine < 9){leftCard = datusDivRarity.C[nums[0]]}
-            else {leftCard = datusDivRarity.R[nums[2]]}
+            if (ZeroToNine < 9) {
+                leftCard = datusDivRarity.C[nums[0]]
+            } else {
+                leftCard = datusDivRarity.R[nums[2]]
+            }
             ZeroToNine = getRandomInt(10)
-            if (ZeroToNine < 9){rightCard = datusDivRarity.C[nums[1]]}
-            else {rightCard = datusDivRarity.R[nums[3]]}
-        }
-        else if(countOfPicked < 12){
+            if (ZeroToNine < 9) {
+                rightCard = datusDivRarity.C[nums[1]]
+            } else {
+                rightCard = datusDivRarity.R[nums[3]]
+            }
+        } else if (countOfPicked < 12) {
             console.log('C R SR pick')
             //　08-12回目 C:   30%, R:  60%, SR: 10%
-            let nums = pickupCardHelperFindUnduplicatedIndex(datusDivRarityLen.C, datusDivRarityLen.R, datusDivRarityLen.SR)
+            let nums = pickupCardHelperFindUnduplicatedIndex(
+                datusDivRarityLen.C,
+                datusDivRarityLen.R,
+                datusDivRarityLen.SR
+            )
             let ZeroToNine = getRandomInt(10)
-            if (ZeroToNine < 3){leftCard = datusDivRarity.C[nums[0]]}
-            else if(ZeroToNine < 9){leftCard = datusDivRarity.R[nums[2]]}
-            else {leftCard = datusDivRarity.SR[nums[4]]}
+            if (ZeroToNine < 3) {
+                leftCard = datusDivRarity.C[nums[0]]
+            } else if (ZeroToNine < 9) {
+                leftCard = datusDivRarity.R[nums[2]]
+            } else {
+                leftCard = datusDivRarity.SR[nums[4]]
+            }
             ZeroToNine = getRandomInt(10)
-            if (ZeroToNine < 3){rightCard = datusDivRarity.C[nums[1]]}
-            else if(ZeroToNine < 9){rightCard = datusDivRarity.R[nums[3]]}
-            else {rightCard = datusDivRarity.SR[nums[5]]}
-        }
-        else if(countOfPicked < 15){
+            if (ZeroToNine < 3) {
+                rightCard = datusDivRarity.C[nums[1]]
+            } else if (ZeroToNine < 9) {
+                rightCard = datusDivRarity.R[nums[3]]
+            } else {
+                rightCard = datusDivRarity.SR[nums[5]]
+            }
+        } else if (countOfPicked < 15) {
             console.log('SR LE pick')
             //　13-15回目 SR:  90%, LE:  10%
-            let nums = pickupCardHelperFindUnduplicatedIndex(datusDivRarityLen.SR, datusDivRarityLen.LE)
+            let nums = pickupCardHelperFindUnduplicatedIndex(
+                datusDivRarityLen.SR,
+                datusDivRarityLen.LE
+            )
             let ZeroToNine = getRandomInt(10)
-            if (ZeroToNine < 9){leftCard = datusDivRarity.SR[nums[0]]}
-            else {leftCard = datusDivRarity.LE[nums[2]]}
+            if (ZeroToNine < 9) {
+                leftCard = datusDivRarity.SR[nums[0]]
+            } else {
+                leftCard = datusDivRarity.LE[nums[2]]
+            }
             ZeroToNine = getRandomInt(10)
-            if (ZeroToNine < 9){rightCard = datusDivRarity.SR[nums[1]]}
-            else {rightCard = datusDivRarity.LE[nums[3]]}
-        }
-        else{
+            if (ZeroToNine < 9) {
+                rightCard = datusDivRarity.SR[nums[1]]
+            } else {
+                rightCard = datusDivRarity.LE[nums[3]]
+            }
+        } else {
             console.log('LE pick')
-            //　16回目 LE: 100% 
+            //　16回目 LE: 100%
             let nums = pickupCardHelperFindUnduplicatedIndex(datusDivRarityLen.LE)
             leftCard = datusDivRarity.LE[nums[0]]
             rightCard = datusDivRarity.LE[nums[1]]
-            
         }
         countOfPicked += 1
         isAppearLeftCard = true
         isAppearRightCard = true
     }
 
-    function pickedProcess(choise: SynegierCard){
-        
+    function pickedProcess(choise: SynegierCard) {
         pickedCards.push(choise)
         pickedCards = pickedCards
         // アニメーション終了タイミングで全て引っ込める
-        window.setTimeout(()=>{
+        window.setTimeout(() => {
             isUnChoiseLeftCard = true
             isUnChoiseRightCard = true
-            
-            window.setTimeout(()=>{    
+
+            window.setTimeout(() => {
                 isChoiseLeftCard = false
                 isUnChoiseLeftCard = false
                 isChoiseRightCard = false
                 isUnChoiseRightCard = false
                 isAppearLeftCard = false
                 isAppearRightCard = false
-                if(countOfPicked == numberOfPickedCard){
-                    nowPhaseOf2pick = "end"
+                if (countOfPicked == numberOfPickedCard) {
+                    nowPhaseOf2pick = 'end'
                 } else {
                     pickupCards()
                 }
-                
-            },1000)
+            }, 1000)
         }, 700)
-        
     }
 
+    // === end ===
 
-    // === end === 
-
-    function pickEnd(){
+    function pickEnd() {
         // カードの一覧を見せる
     }
-    async function delay(i){
-        await sleep(i*100)
+    async function delay(i) {
+        await sleep(i * 100)
         return true
     }
-    onMount(()=>{
+    onMount(() => {
         // pickedCards = cardDatus.slice(0,16)
         // nowPhaseOf2pick = "end"
         checkDisplayRequirement(window.innerWidth, window.innerHeight)
     })
 </script>
 
-<svelte:window></svelte:window>
+<svelte:window />
 
 <section>
-{#if nowPhaseOf2pick == "prepare"}
-    <div>prepare</div>
-{:else if nowPhaseOf2pick == "processing"}
-    <div>processing</div>
-    <div id="pickProcessingField">
-        <div class="leftCard" on:click={()=>{
-                isChoiseLeftCard=true;
-                isUnChoiseRightCard=true;
-                pickedProcess(leftCard);
-            }}>
-            <In2pickAmination
-                bind:onAppear={isAppearLeftCard}
-                bind:onChoised={isChoiseLeftCard}
-                bind:onUnChoised={isUnChoiseLeftCard}
-            >
-                <Card model={leftCard} scale={0.4}></Card>
-            </In2pickAmination>
+    {#if nowPhaseOf2pick == 'prepare'}
+        <div>prepare</div>
+    {:else if nowPhaseOf2pick == 'processing'}
+        <div>processing</div>
+        <div id="pickProcessingField">
+            <div
+                class="leftCard"
+                on:click={() => {
+                    isChoiseLeftCard = true
+                    isUnChoiseRightCard = true
+                    pickedProcess(leftCard)
+                }}>
+                <In2pickAmination
+                    bind:onAppear={isAppearLeftCard}
+                    bind:onChoised={isChoiseLeftCard}
+                    bind:onUnChoised={isUnChoiseLeftCard}>
+                    <Card model={leftCard} scale={0.4} />
+                </In2pickAmination>
+            </div>
+            <div
+                class="rightCard"
+                on:click={() => {
+                    isChoiseRightCard = true
+                    isUnChoiseLeftCard = true
+                    pickedProcess(rightCard)
+                }}>
+                <In2pickAmination
+                    bind:onAppear={isAppearRightCard}
+                    bind:onChoised={isChoiseRightCard}
+                    bind:onUnChoised={isUnChoiseRightCard}>
+                    <Card model={rightCard} scale={0.4} />
+                </In2pickAmination>
+            </div>
         </div>
-        <div class="rightCard" on:click={()=>{
-                isChoiseRightCard=true;
-                isUnChoiseLeftCard=true;
-                pickedProcess(rightCard)
-            }}>
-            <In2pickAmination
-                bind:onAppear={isAppearRightCard}
-                bind:onChoised={isChoiseRightCard}
-                bind:onUnChoised={isUnChoiseRightCard}
-            >
-                <Card model={rightCard} scale={0.4}></Card>
-            </In2pickAmination>
+    {:else if nowPhaseOf2pick == 'end'}
+        <div>end</div>
+        <div id="pickEndField">
+            <div class="list">
+                {#each pickedCards as c, i}
+                    <In2pickAmination onAppear={true} delay={i * 0.1}>
+                        <Card model={c} scale={0.3} />
+                    </In2pickAmination>
+                {/each}
+            </div>
         </div>
-    </div>
-{:else if nowPhaseOf2pick == "end"}
-    <div>end</div>
-    <div id='pickEndField'>
-        <div class="list">
-        {#each pickedCards as c,i}
-            <In2pickAmination onAppear={true} delay={i*0.1}>
-                <Card model={c} scale={0.3}></Card>
-            </In2pickAmination>
-        {/each}
-        </div>
-    </div>
-{:else}
-    <div>?</div>
-{/if}
+    {:else}
+        <div>?</div>
+    {/if}
     <div id="pickingInfo">
-        <DeckSummary bind:deckCards={pickedCards}></DeckSummary>
+        <DeckSummary bind:deckCards={pickedCards} />
     </div>
 </section>
 
-
 <style lang="scss">
-    .list{
+    .list {
         width: inherit;
-        height:400px;
+        height: 400px;
         display: flex;
         flex-wrap: wrap;
         justify-content: space-around;
     }
-    #pickProcessingField, #pickEndField{
+    #pickProcessingField,
+    #pickEndField {
         position: absolute;
         background: radial-gradient(closest-side, rgba(#555555, 0.8), rgba(#000000, 0));
-        top:50%;
-        left:50%;
+        top: 50%;
+        left: 50%;
         transform: translate(-50%, -50%);
     }
-    #pickProcessingField{
-        width:600px;
-        height:400px;
-        .leftCard, .rightCard{
+    #pickProcessingField {
+        width: 600px;
+        height: 400px;
+        .leftCard,
+        .rightCard {
             position: absolute;
             cursor: pointer;
         }
-        .leftCard{
-            top:50px;
-            left:50px
+        .leftCard {
+            top: 50px;
+            left: 50px;
         }
-        .rightCard{
-            top:50px;
-            right:50px
+        .rightCard {
+            top: 50px;
+            right: 50px;
         }
     }
 
-    #pickEndField{
-        width:1000px;
-        height:600px;
+    #pickEndField {
+        width: 1000px;
+        height: 600px;
     }
-    #pickingInfo{
+    #pickingInfo {
         position: fixed;
-        width:1000px;
-        height:250px;
-        bottom:0;
-        left:50%;
+        width: 1000px;
+        height: 250px;
+        bottom: 0;
+        left: 50%;
         transform: translate(-50%, 0);
     }
 </style>

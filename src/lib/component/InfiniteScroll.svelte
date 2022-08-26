@@ -1,49 +1,49 @@
 <script>
-    import { onDestroy, createEventDispatcher } from "svelte";
-  
-    export let threshold = 0;
-    export let horizontal = false;
-    let elementScroll; //exportをはずした
-    export let hasMore = true;
-  
-    const dispatch = createEventDispatcher();
-    let isLoadMore = false;
-    let component;
-  
+    import { onDestroy, createEventDispatcher } from 'svelte'
+
+    export let threshold = 0
+    export let horizontal = false
+    let elementScroll //exportをはずした
+    export let hasMore = true
+
+    const dispatch = createEventDispatcher()
+    let isLoadMore = false
+    let component
+
     $: {
-      if (component || elementScroll) {
-        const element = elementScroll ? elementScroll : component.parentNode;
-  
-        element.addEventListener("scroll", onScroll);
-        element.addEventListener("resize", onScroll);
-      }
-    }
-  
-    const onScroll = e => {
-      const element = e.target;
-  
-      const offset = horizontal
-        ? e.target.scrollWidth - e.target.clientWidth - e.target.scrollLeft
-        : e.target.scrollHeight - e.target.clientHeight - e.target.scrollTop;
-  
-      if (offset <= threshold) {
-        if (!isLoadMore && hasMore) {
-          dispatch("loadMore");
+        if (component || elementScroll) {
+            const element = elementScroll ? elementScroll : component.parentNode
+
+            element.addEventListener('scroll', onScroll)
+            element.addEventListener('resize', onScroll)
         }
-        isLoadMore = true;
-      } else {
-        isLoadMore = false;
-      }
-    };
-  
+    }
+
+    const onScroll = (e) => {
+        const element = e.target
+
+        const offset = horizontal
+            ? e.target.scrollWidth - e.target.clientWidth - e.target.scrollLeft
+            : e.target.scrollHeight - e.target.clientHeight - e.target.scrollTop
+
+        if (offset <= threshold) {
+            if (!isLoadMore && hasMore) {
+                dispatch('loadMore')
+            }
+            isLoadMore = true
+        } else {
+            isLoadMore = false
+        }
+    }
+
     onDestroy(() => {
-      if (component || elementScroll) {
-        const element = elementScroll ? elementScroll : component.parentNode;
-  
-        element.removeEventListener("scroll", null);
-        element.removeEventListener("resize", null);
-      }
-    });
-  </script>
-  
-  <div bind:this={component} style="width:0px" />
+        if (component || elementScroll) {
+            const element = elementScroll ? elementScroll : component.parentNode
+
+            element.removeEventListener('scroll', null)
+            element.removeEventListener('resize', null)
+        }
+    })
+</script>
+
+<div bind:this={component} style="width:0px" />

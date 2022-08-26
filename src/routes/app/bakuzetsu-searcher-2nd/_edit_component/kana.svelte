@@ -1,26 +1,27 @@
 <script lang="ts">
     import { kanaStore } from '$lib/store/app/bs2ndStore'
-    
-    function kanaClickHandler(kanaId){
-        for (let i=0; i<$kanaStore.length; i++){
-            if ($kanaStore[i].id == kanaId){
-                $kanaStore[i].active = $kanaStore[i].active? false:true
+
+    function kanaClickHandler(kanaId) {
+        for (let i = 0; i < $kanaStore.length; i++) {
+            if ($kanaStore[i].id == kanaId) {
+                $kanaStore[i].active = $kanaStore[i].active ? false : true
                 break
             }
         }
     }
 </script>
 
-<article id='kana-filter-box'>
-    <section id='kana-box'>
+<article id="kana-filter-box">
+    <section id="kana-box">
         {#each $kanaStore as k}
-            {#if k.kanas[0] != ""}
-                <div class='kana {k.active ? "active":""}'
+            {#if k.kanas[0] != ''}
+                <div
+                    class="kana {k.active ? 'active' : ''}"
                     on:click={() => kanaClickHandler(k.id)}>
                     {k.kanas[0]}
                 </div>
             {:else}
-                <div class='kana-blank'></div>
+                <div class="kana-blank" />
             {/if}
         {/each}
     </section>
@@ -28,36 +29,37 @@
 </article>
 
 <style lang="scss">
-    #kana-filter-box{
-        width:100%;
+    #kana-filter-box {
+        width: 100%;
         font-family: 'Kosugi Maru', sans-serif;
-        p{
-            margin:10px 0 0 0;
+        p {
+            margin: 10px 0 0 0;
             font-size: 10px;
         }
     }
-    #kana-box{
+    #kana-box {
         display: flex;
         justify-content: space-around;
         flex-wrap: wrap;
         --kana-box-size: 38px;
-        .kana{
+        .kana {
             cursor: pointer;
-            border:solid 1px white;
+            border: solid 1px white;
             border-radius: 3px;
-            width:var(--kana-box-size);height:var(--kana-box-size);
-            margin:2px 5px;
+            width: var(--kana-box-size);
+            height: var(--kana-box-size);
+            margin: 2px 5px;
             line-height: var(--kana-box-size);
             text-align: center;
-            &.active{
+            &.active {
                 border-color: var(--active-yellow);
-                color:var(--active-yellow);
+                color: var(--active-yellow);
             }
         }
-        .kana-blank{
-            width:var(--kana-box-size);height:var(--kana-box-size);
-            margin:2px;
+        .kana-blank {
+            width: var(--kana-box-size);
+            height: var(--kana-box-size);
+            margin: 2px;
         }
     }
-
 </style>

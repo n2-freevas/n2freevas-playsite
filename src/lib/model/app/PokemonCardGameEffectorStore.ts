@@ -4,11 +4,9 @@ export interface BaseEffector {
     y: number
 }
 
-
 export interface DamageKan extends BaseEffector {
     counter: number
 }
-
 
 export interface PoisonKan extends BaseEffector {
     damage: number
@@ -20,6 +18,4 @@ export interface BurnKan extends BaseEffector {
     active: boolean
 }
 
-export interface UserKan extends BaseEffector{
-
-}
+export interface UserKan extends BaseEffector {}
