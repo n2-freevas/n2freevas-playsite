@@ -5,7 +5,7 @@
     import SynegierText from './_SynegierText.svelte'
     export let model: SynegierCard
     export let scale: number = 1
-    import {cardDetail} from '$lib/store/app/synegierAdmin'
+    import {cardDetailLeft, cardDetailRight} from '$lib/store/app/synegierAdmin'
 
     let showText: boolean = true
     let isMouseOver: boolean = false
@@ -15,22 +15,20 @@
     if (scale != 1) {
         showText = false
     }
-    onMount(()=>{
+    onMount(()=>{        
         sideOfShowDetail = window.innerWidth / 2 < selfElement.getBoundingClientRect().x ? "left": "right"  
     })
     
     function rightClickHandler(event){
         let _event: PointerEvent = event
-        // $cardDetail = model
-        if(isShowDetail){
-            isShowDetail = false
+        if($cardDetailLeft || $cardDetailRight){
+            cardDetailHide()
         } else{
             try{
                 sideOfShowDetail = window.innerWidth / 2 < _event.x ? "left": "right"
+                cardDetailShow()
             } catch {
                 return null
-            } finally {
-                isShowDetail = true
             }
         }
     }
@@ -42,9 +40,23 @@
         isMouseOver = false
         window.setTimeout(()=>{
             if(!isMouseOver){
-                isShowDetail = false
+                cardDetailHide()
             }
         },200)
+    }
+    function cardDetailShow(){
+        if(sideOfShowDetail == "left"){
+            $cardDetailLeft = model
+        } else {
+            $cardDetailRight = model
+        }
+    }
+    function cardDetailHide(){
+        if(sideOfShowDetail == "left"){
+            $cardDetailLeft = undefined
+        } else {
+            $cardDetailRight = undefined
+        }
     }
 
 </script>
@@ -254,81 +266,5 @@
             padding: var(--cardSpacing15) var(--cardSpacing05);
         }
     
-    }
-    
-    .cardDetail{
-        z-index:90;
-        --cardDetailWidth: 500px;
-        --cardDetailLeftWidth: 150px;
-        --cardDetailRightWidth: calc( var(--cardDetailWidth) - var(--cardDetailLeftWidth) );
-        --cardDetailHeight: 300px;
-        font-size: 10px;
-        padding: 0 20px 0 0;
-        position: fixed;
-        display: flex;
-        align-items: flex-start;
-        width: var(--cardDetailWidth);
-        background: rgba(#333333, 0.9);
-        top: calc( 50% - (var(--cardDetailHeight) / 2 ) );
-        opacity: 0;
-        transition: 0.2s;
-        &.left{
-            left: -100%;
-        }
-        &.right{
-            right: -100%;
-        }
-        &.show{
-            opacity: 1;
-            &.left{
-                left:50px;
-            }
-            &.right{
-                right:50px;
-            }
-        }
-        .cardDetailLeft{
-            width:150px;
-            padding: 20px 10px;
-            img{
-                width:100%;
-                margin:0 auto;
-            }
-        }
-        .cardDetailRight{
-            
-            width: calc( var(--cardDetailWidth) - 150px );
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            .cardDetailName{
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                width: 100%;
-                padding:15px 0;
-                .cost{
-                    span{
-                        font-size: 14px;
-                    }
-                }
-                .name{
-                    font-size: 14px;
-                }
-            }
-            .cardBottomInfo{
-                width: 100%;
-                height: 100%;
-                padding: 15px 0;
-                margin: 0;
-                background: none;
-                justify-content: center;
-                .textInfo{
-                    width: 200px;
-                }
-            }
-        }
     }
 </style>

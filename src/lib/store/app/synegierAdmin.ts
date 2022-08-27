@@ -3,5 +3,6 @@ import { writable } from 'svelte/store'
 
 export const synegierAdminAccessToken = writable<string>("")
 
-export const cardDetail = writable<SynegierCard>(undefined)
+export const cardDetailLeft = writable<SynegierCard>(undefined)
+export const cardDetailRight = writable<SynegierCard>(undefined)
 

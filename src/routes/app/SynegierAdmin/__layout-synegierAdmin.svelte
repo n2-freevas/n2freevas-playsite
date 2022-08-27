@@ -13,7 +13,7 @@
     import { ENV, ENV_SYNEGIER_ADMIN_ACCESS_TOKEN } from '$lib/K/env'
     import ToastArea from '$lib/component/toast/ToastArea.svelte'
     import { healthCheck, tryPassingAuth } from '$lib/api/app/synegierAdmin'
-    import { synegierAdminAccessToken, cardDetail } from '$lib/store/app/synegierAdmin'
+    import { synegierAdminAccessToken, cardDetailLeft, cardDetailRight } from '$lib/store/app/synegierAdmin'
     import easytoast from '$lib/component/toast/summon';
     import RoundFloweringLoader from '$lib/component/Loader/roundFloweringLoader.svelte'
     import { sleep } from '$lib/util/time';
@@ -151,7 +151,8 @@ import CardDetail from '$lib/component/SynegierAdmin/CardDetail.svelte';
             <div id="slot">
                 <slot />
             </div>
-            <CardDetail model={$cardDetail}></CardDetail>
+            <CardDetail model={$cardDetailLeft} sideOfShowDetail="left" isShowDetail={$cardDetailLeft? true:false}></CardDetail>
+            <CardDetail model={$cardDetailRight} sideOfShowDetail="right" isShowDetail={$cardDetailRight? true:false}></CardDetail>
         {/if}
     {/if}
 </article>
