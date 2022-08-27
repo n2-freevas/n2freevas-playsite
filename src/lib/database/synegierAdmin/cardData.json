@@ -1,0 +1,1074 @@
+[
+    {
+        "name": "Wild Fist",
+        "img": "https://i.gyazo.com/2cb52c3a5c0b41b832b47c4b521c42b7.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "v",
+                "text": "+8 ATK in this turn"
+            },
+            {
+                "color": "red",
+                "type": "s",
+                "text": "the closest opponent player"
+            }
+        ],
+        "text": "When Battle, you and the opponent ignore DEF each other.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "name": "Warp gate",
+        "img": "https://i.gyazo.com/fd5d7719bd9dc401af61656c57c9dcc2.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "yellow",
+                "type": "v",
+                "text": "get Flow(1)"
+            }
+        ],
+        "text": "After Battle, you back to the position where you were at the start of this turn.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 3
+            },
+            {
+                "v": 0,
+                "h": -3
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "name": "Ambush",
+        "img": "https://i.gyazo.com/bdfccc5c9d3364173ea2282a311adc98.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "+5 DEF until the start of your next turn"
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": "the opponent within 2D"
+            }
+        ],
+        "text": "When Battle, you ignore DEF of opponent.",
+        "movement": [
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": 0,
+                "h": -2
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "name": "Untouchable spell book",
+        "img": "https://i.gyazo.com/79cf08bd6e6a549985a1dda6b11874b9.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "take 10 damage"
+            }
+        ],
+        "text": "Deal 5 damage to you. Deal 5 damage to all opponent within 2D",
+        "movement": [
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "name": "Forbidden scroll",
+        "img": "https://i.gyazo.com/2a7d6213ccf7c66c2a3653cb39e886ac.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "s",
+                "text": "all player in your around"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "-3 DEF during this turn"
+            }
+        ],
+        "text": "Draw 1 card and discard 1 cards.",
+        "movement": [
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "name": "Tactics for next",
+        "img": "https://i.gyazo.com/eca23aa3add9133406d8c9df7981e14e.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "yellow",
+                "type": "s",
+                "text": "you"
+            }
+        ],
+        "text": "May choose a card in your hand. Put the card on your deck top.",
+        "movement": [
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "name": "Samurai slash",
+        "img": "https://i.gyazo.com/9474300b629486fe73031070e34128b5.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "discard 1 card from one's hand"
+            }
+        ],
+        "text": "Deal 5 damage to a opponent within 2D",
+        "movement": [
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "name": "Dark Souls",
+        "img": "https://i.gyazo.com/e3c2d4ced79bf4c318210f49c43574b9.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "yellow",
+                "type": "v",
+                "text": "+2 ATK in this game"
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": "the closest opponents"
+            }
+        ],
+        "text": "You choose a player within 3D. Deal 4 damage to the player. If you want, thats ATK +1 and DEF -1 in this game.",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "name": "Pull out Excalibur",
+        "img": "https://i.gyazo.com/6e629a993303b0616fdf766c0965e4c2.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "-3 ATK during this turn"
+            }
+        ],
+        "text": "Roll a dice.<br><br>5:+3 ATK during this turn<br><br>6:+7 ATK during this turn",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "name": "Frost Blast",
+        "img": "https://i.gyazo.com/c4ce0f17df88f493ffc501f519eb0db8.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "+6 DEF during this turn"
+            },
+            {
+                "color": "green",
+                "type": "s",
+                "text": "you"
+            }
+        ],
+        "text": "Deal (2*N) damage to all opponents within 2D.<br><br>(N is number of opponent within 2D)",
+        "movement": [
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": -1
+            },
+            {
+                "v": 1,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": -1
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "name": "Thunderbolt",
+        "img": "https://i.gyazo.com/1fa32894c837281cd466f8bb14994860.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "s",
+                "text": "a player"
+            },
+            {
+                "color": "yellow",
+                "type": "v",
+                "text": "take 7 damage"
+            }
+        ],
+        "text": "Deal 5 damage to a player within 3D.",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": 1,
+                "h": 1
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "name": "Cascade wave",
+        "img": "https://i.gyazo.com/f05f0413ac95c938a0f576b56a4cc7d6.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "discard 1 cards from top of the deck"
+            }
+        ],
+        "text": "Deal 2 damage to all opponents on the red tiles",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "redTiles": [
+            {
+                "v": -3,
+                "h": 3
+            },
+            {
+                "v": -2,
+                "h": 3
+            },
+            {
+                "v": -1,
+                "h": 3
+            },
+            {
+                "v": 0,
+                "h": 3
+            },
+            {
+                "v": 1,
+                "h": 3
+            },
+            {
+                "v": 2,
+                "h": 3
+            },
+            {
+                "v": 3,
+                "h": 3
+            },
+            {
+                "v": -3,
+                "h": 2
+            },
+            {
+                "v": -2,
+                "h": 2
+            },
+            {
+                "v": -1,
+                "h": 2
+            },
+            {
+                "v": 0,
+                "h": 2
+            },
+            {
+                "v": 1,
+                "h": 2
+            },
+            {
+                "v": 2,
+                "h": 2
+            },
+            {
+                "v": 3,
+                "h": 2
+            },
+            {
+                "v": -3,
+                "h": 1
+            },
+            {
+                "v": -2,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
+            },
+            {
+                "v": 2,
+                "h": 1
+            },
+            {
+                "v": 3,
+                "h": 1
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "name": "Spread fire bomb",
+        "img": "https://i.gyazo.com/69c06978b06c063c24722ee55b741674.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "yellow",
+                "type": "s",
+                "text": "the closest opponent player"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "take 5 damage"
+            }
+        ],
+        "text": "Deal 4 damage to the closest opponent.<br>If the opponent is in your 2MD, you and the opponent take 4 damage.",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": 2
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "name": "Unexpected Discovery",
+        "img": "https://i.gyazo.com/8da364d9397b2d77f251d259a7302f8b.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "v",
+                "text": "get Grow(1)"
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": "the farthest opponent"
+            }
+        ],
+        "text": "May you discard 1 cards from your hand. Then you gain 1 MP now.",
+        "movement": [],
+        "rarity": "R"
+    },
+    {
+        "name": "Edge of Excalibur",
+        "img": "https://i.gyazo.com/338fc64e476a6a24d7a5e20e6c2b5352.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "yellow",
+                "type": "v",
+                "text": ""
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": ""
+            }
+        ],
+        "text": "Roll a dice.<br>3,4: Deal 5 damage to the closest enemy.<br>5: heal 5 HP<br>6: your ATK +10 during this turn",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": 1,
+                "h": -1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": -1
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "name": "Glory armor",
+        "img": "https://i.gyazo.com/c0967bc4b3780e08ac6c22b20aabcd26.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "v",
+                "text": "get Shield(1)"
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": "the closest enemies"
+            }
+        ],
+        "text": "Heal 5 HP, and remove all your Debuff.",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "name": "Stone fall",
+        "img": "https://i.gyazo.com/29cb3df9ef07ef81fd3dd67792baba64.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "+4 DEF during this turn"
+            },
+            {
+                "color": "yellow",
+                "type": "s",
+                "text": "you and all opponents within 3D"
+            }
+        ],
+        "text": "Deal 3 damage and attach Shock(3) to a opponent within 2D",
+        "movement": [
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "name": "Scratchy wind",
+        "img": "https://i.gyazo.com/1b66766a833debc5c794393c3484ff9b.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "v",
+                "text": "get 2 coin"
+            },
+            {
+                "color": "yellow",
+                "type": "s",
+                "text": "you and the closest enemy"
+            }
+        ],
+        "text": "you choose opponents within 2D.<br>Deal 3 damage to all opponents around it.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "name": "The jump",
+        "img": "https://i.gyazo.com/e11c9025a10c4c7ead9f9b130b2efc58.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "After Battle, back to the position when this turn start."
+            },
+            {
+                "color": "yellow",
+                "type": "s",
+                "text": "a opponent within 2D"
+            }
+        ],
+        "text": "When before Battle, there is a fact you moved using only this card, your ATK +6 during this turn.",
+        "movement": [
+            {
+                "v": -3,
+                "h": 3
+            },
+            {
+                "v": 2,
+                "h": 3
+            },
+            {
+                "v": -2,
+                "h": -3
+            },
+            {
+                "v": 3,
+                "h": -3
+            }
+        ],
+        "rarity": "SR"
+    },
+    {
+        "name": "Transform to Dracula",
+        "img": "https://i.gyazo.com/d91e63e3d5cec6450fe000f6e1b5ddd9.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "yellow",
+                "type": "s",
+                "text": "a player within 2D"
+            },
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "get Rejection(2) and take 1 damage"
+            }
+        ],
+        "text": "If you beat opponent player in Battle of this turn, your level +1.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "SR"
+    },
+    {
+        "name": "Amazing Defence",
+        "img": "https://i.gyazo.com/f75583bea151234dd6244f16517ad81d.png",
+        "cost": 3,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "+8 DEF until the start of your next turn"
+            },
+            {
+                "color": "red",
+                "type": "s",
+                "text": "a opponent within 2D"
+            }
+        ],
+        "text": "your DEF +1 in this game.<br>Until your next turn start, your ATK value replace DEF value in Battle. ",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": 1,
+                "h": -1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": -1
+            },
+            {
+                "v": 0,
+                "h": -2
+            },
+            {
+                "v": 0,
+                "h": 2
+            }
+        ],
+        "rarity": "SR"
+    },
+    {
+        "name": "Queens baptism",
+        "img": "https://i.gyazo.com/0dead3e8bf405889fee07e0dec17acfb.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "red",
+                "type": "v",
+                "text": "get Fear(2)"
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": "all opponent players within 2D"
+            }
+        ],
+        "text": "Choose a opponent player who has Debuff, Move to around of the player and deal 7 damage to the player.",
+        "movement": [
+            {
+                "v": 1,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "SR"
+    },
+    {
+        "name": "Awake of the true force",
+        "img": "https://i.gyazo.com/bd5ad1fe48d7aff928bf4b4ba11a79fe.png",
+        "cost": 2,
+        "synegierText": [
+            {
+                "color": "yellow",
+                "type": "v",
+                "text": "level up"
+            }
+        ],
+        "text": "If your Level is the lowest among all opponent players, you level up.",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": 1,
+                "h": -1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": -1
+            },
+            {
+                "v": 0,
+                "h": -2
+            },
+            {
+                "v": 0,
+                "h": 2
+            },
+            {
+                "v": 2,
+                "h": 0
+            },
+            {
+                "v": -2,
+                "h": 0
+            }
+        ],
+        "rarity": "SR"
+    },
+    {
+        "name": "Space Psycho Shock",
+        "img": "https://i.gyazo.com/c4b639eecd6bd5f3588d0a7211bed837.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "green",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "yellow",
+                "type": "s",
+                "text": "a randomly opponent"
+            },
+            {
+                "color": "red",
+                "type": "s",
+                "text": "the farthest opponent"
+            },
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "take 7 damage"
+            }
+        ],
+        "text": "You can’t move during this turn.",
+        "movement": [],
+        "rarity": "LE"
+    },
+    {
+        "name": "Disaster bringer",
+        "img": "https://i.gyazo.com/f105e9fd8fd57516bb6ad339d8672f0f.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "yellow",
+                "type": "s",
+                "text": "opponents within 3D"
+            },
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "get Shock(9)"
+            }
+        ],
+        "text": "Deal 6 damage to everybody.",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": -1
+            }
+        ],
+        "rarity": "LE"
+    },
+    {
+        "name": "Meteor",
+        "img": "https://i.gyazo.com/29a8d39255f83a7e979a200b3c050ed4.png",
+        "cost": 3,
+        "synegierText": [
+            {
+                "color": "yellow",
+                "type": "v",
+                "text": "soldier: take 15 damage<br>enemy: take  8 damage"
+            },
+            {
+                "color": "red",
+                "type": "s",
+                "text": "everybody in Center Area"
+            }
+        ],
+        "text": "you choose a opponent within 2D. Deal 9 damage to soldier around of that opponent. Deal 5 damage to enemy around of that opponent",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": 1,
+                "h": -1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": -1
+            }
+        ],
+        "rarity": "LE"
+    }
+]

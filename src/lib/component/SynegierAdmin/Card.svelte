@@ -1,56 +1,104 @@
 <script lang="ts">
     import type { SynegierCard } from '$lib/model/app/SynegierAdmin'
-    import { MovementMap } from '$lib/model/app/SynegierAdmin'
+    import { onMount } from 'svelte'
+    import Movement from './_Movement.svelte'
+    import SynegierText from './_SynegierText.svelte'
     export let model: SynegierCard
     export let scale: number = 1
     let showText: boolean = true
+    let isMouseOver: boolean = false
+    let isShowDetail: boolean = false
+    let sideOfShowDetail: "left" | "right" = "left"
+    let selfElement: HTMLDivElement
     if (scale != 1) {
         showText = false
     }
+    onMount(()=>{
+        sideOfShowDetail = window.innerWidth / 2 < selfElement.getBoundingClientRect().x ? "left": "right"  
+    })
+    
+    function rightClickHandler(event){
+        let _event: PointerEvent = event
+        if(isShowDetail){
+            isShowDetail = false
+        } else{
+            try{
+                sideOfShowDetail = window.innerWidth / 2 < _event.x ? "left": "right"
+            } catch {
+                return null
+            } finally {
+                isShowDetail = true
+            }
+        }
+    }
+    function mouseEnterHandler(){
+        isMouseOver = true
+    }
+    
+    function mouseLeaveHandler(){
+        isMouseOver = false
+        window.setTimeout(()=>{
+            if(!isMouseOver){
+                isShowDetail = false
+            }
+        },200)
+    }
+
 </script>
 
-<div class="cardBody" style="--scale:{scale}">
-    <div class="backgroundFrame {model.rarity}" />
-    <img src={model.img} alt="" />
-    <div class="cardInfo">
-        <div class="cardTopInfo">
-            <div class="cost {model.rarity}">
-                {model.cost}
-            </div>
-            <div class="name">
-                {#if showText}{model.name}{/if}
-            </div>
-        </div>
-        <div class="synegierTextInfo">
-            {#each model.synegierText as st}
-                <div class="{st.type} {st.color}">
-                    {#if showText}{st.text}{/if}
+
+<div class="card" style="--scale:{scale}"
+    on:contextmenu|preventDefault={rightClickHandler}
+    on:mouseleave={mouseLeaveHandler}
+    on:mouseenter={mouseEnterHandler}
+>
+    <div class="cardBody {isMouseOver? "hover":""}" bind:this={selfElement}>
+
+        <div class="backgroundFrame {model.rarity}" />
+        <img class="inCardBody" src={model.img} alt="" />
+        <div class="cardInfo">
+            <div class="cardTopInfo">
+                <div class="cost {model.rarity}">
+                    {model.cost}
                 </div>
-            {/each}
-        </div>
-        <div class="cardBottomInfo">
-            <div class="textInfo">
-                {#if showText}{@html model.text}{/if}
+                <div class="name">
+                    {#if showText}{model.name}{/if}
+                </div>
             </div>
-            <div class="movementInfo">
-                {#each MovementMap as mm}
-                    {#if mm.v == 0 && mm.h == 0}
-                        <div class="center" />
-                    {:else if model.movement.find((m) => m.v == mm.v && m.h == mm.h)}
-                        <div class="active" />
-                    {:else if model.redTiles?.find((m) => m.v == mm.v && m.h == mm.h)}
-                        <div class="red" />
-                    {:else}
-                        <div />
-                    {/if}
-                {/each}
+            <SynegierText synegierText={model.synegierText} showText={showText} scale={scale}/>
+            <div class="cardBottomInfo">
+                <div class="textInfo">
+                    {#if showText}{@html model.text}{/if}
+                </div>
+                <Movement movement={model.movement} redTiles={model.redTiles} scale={scale}></Movement>
+            </div>
+        </div>
+    </div>
+    <div class="cardDetail {isShowDetail? "show":""} {sideOfShowDetail}">
+        <div class="cardDetailLeft">
+            <img src={model.img} alt=""/>
+        </div>
+        <div class="cardDetailRight">
+            <div class="cardDetailName">
+                <div class="name">{model.name}</div>
+                <div class="cost"><span>{model.cost}</span>cost</div>
+            </div>
+            <SynegierText synegierText={model.synegierText} showText={true}
+                savingShow={true}/>
+            <div class="cardBottomInfo">
+                <div class="textInfo">
+                    {@html model.text}
+                </div>
+                <Movement movement={model.movement} redTiles={model.redTiles} scale={1}
+                    showBlankTile={true}/>
             </div>
         </div>
     </div>
 </div>
 
 <style lang="scss">
-    .cardBody {
+    .card{
+        user-select: none;
         --C_colorRule: linear-gradient(0, #b8b8b8, #e2e2e2);
         --R_colorRule: linear-gradient(0, #89c6ff, #bc9cff);
         --SR_colorRule: linear-gradient(0, #ffc700, #ffe600);
@@ -91,13 +139,11 @@
         --basicTextWidth: calc(340px * var(--scale));
         --basicTextHeight: calc(140px * var(--scale));
         --basicTextPadding: calc(10px * var(--scale));
+        //Movement.svelteコンポーネントと共用なので注意
         --movementBoxWidth: calc(120px * var(--scale));
-        --movementBoxHeight: calc(120px * var(--scale));
-        --movementCellMargin: calc(2px * var(--scale));
-        --movementCellWidth: calc((var(--movementBoxWidth) - (var(--movementCellMargin) * 14)) / 7);
-        --movementCellHeight: calc(
-            (var(--movementBoxHeight) - (var(--movementCellMargin) * 14)) / 7
-        );
+    }
+    .cardBody {
+        
         font-size: var(--fontsize);
         // transform: scale(var(--scale));
 
@@ -106,10 +152,30 @@
         width: var(--w);
         height: var(--h);
         font-family: 'Press Start 2P', cursive;
+
+        &::before{
+            content: "";
+            z-index: 0;
+            position: absolute;
+            top:-3%;
+            left:-4%;
+            width:108%;
+            height:106%;
+            opacity: 0;
+            transition: 0.2s;
+            border-radius: 3%;
+        }
+        &.hover{
+            &::before{
+                opacity: 1;
+                background: radial-gradient(rgba(#bbbbbb,0.8), rgba(#eeeeee,0.2));
+            }
+        }
     }
     .backgroundFrame {
         position: absolute;
         width: inherit;
+        z-index: 2;
         height: inherit;
         &.C {
             background: var(--C_colorRule);
@@ -124,17 +190,21 @@
             background: var(--LR_colorRule_frame);
         }
     }
-    img {
-        position: absolute;
-        border-radius: calc(var(--b) * 2);
-        width: calc(var(--w) - (var(--b) * 2));
-        height: calc(var(--h) - (var(--b) * 2));
-        top: var(--b);
-        left: var(--b);
+    img{
+        &.inCardBody{
+            position: absolute;
+            z-index: 2;
+            border-radius: calc(var(--b) * 2);
+            width: calc(var(--w) - (var(--b) * 2));
+            height: calc(var(--h) - (var(--b) * 2));
+            top: var(--b);
+            left: var(--b);
+        }
         image-rendering: pixelated;
     }
     .cardInfo {
         position: absolute;
+        z-index: 3;
         top: 0;
         left: 0;
         width: inherit;
@@ -181,119 +251,99 @@
                 line-height: var(--nameHeight);
             }
         }
-        .synegierTextInfo {
-            position: relative;
-            width: inherit;
-            height: calc(var(--synegierTextMargin) * 4 + var(--synegierTextHeight));
-            div {
-                position: absolute;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: var(--synegierTextWidth);
-                height: var(--synegierTextHeight);
-                background: rgba($color: #000000, $alpha: 0.6);
-                padding: 0 var(--cardSpacing20);
-                align-items: center;
-                &::before {
-                    position: absolute;
-                    content: '';
-                    width: var(--synegierTextRibbonWidth);
-                    height: var(--synegierTextHeight);
-                }
-                &.blue {
-                    &::before {
-                        background: #0085ff;
-                    }
-                    top: 0;
-                }
-                &.green {
-                    &::before {
-                        background: #00c036;
-                    }
-                    top: var(--synegierTextMargin);
-                }
-                &.yellow {
-                    &::before {
-                        background: #ffc700;
-                    }
-                    top: calc(var(--synegierTextMargin) * 2);
-                }
-                &.red {
-                    &::before {
-                        background: #e40000;
-                    }
-                    top: calc(var(--synegierTextMargin) * 3);
-                }
-                &.purple {
-                    &::before {
-                        background: #c600e6;
-                    }
-                    top: calc(var(--synegierTextMargin) * 4);
-                }
-                &.s,
-                &.subject {
-                    right: 0;
-                    &::before {
-                        left: calc(-1 * var(--synegierTextRibbonWidth));
-                    }
-                }
-                &.v,
-                &.verbus {
-                    left: 0;
-                    &::before {
-                        right: calc(-1 * var(--synegierTextRibbonWidth));
-                    }
-                }
+        
+    }
+    .cardBottomInfo {
+        display: flex;
+        width: var(--basicTextWidth);
+        height: var(--basicTextHeight);
+        background: rgba($color: #000000, $alpha: 0.4);
+        margin: var(--cardSpacing25) auto;
+        align-items: center;
+        justify-content: right;
+        padding: 0 var(--basicTextPadding);
+        .textInfo {
+            display: flex;
+            align-items: center;
+            width: calc(
+                var(--basicTextWidth) - var(--movementBoxWidth) - (var(--basicTextPadding) * 2)
+            );
+            padding: var(--cardSpacing15) var(--cardSpacing05);
+        }
+    
+    }
+    
+    .cardDetail{
+        z-index:90;
+        --cardDetailWidth: 500px;
+        --cardDetailLeftWidth: 150px;
+        --cardDetailRightWidth: calc( var(--cardDetailWidth) - var(--cardDetailLeftWidth) );
+        --cardDetailHeight: 300px;
+        font-size: 10px;
+        padding: 0 20px 0 0;
+        position: fixed;
+        display: flex;
+        align-items: flex-start;
+        width: var(--cardDetailWidth);
+        background: rgba(#333333, 0.9);
+        top: calc( 50% - (var(--cardDetailHeight) / 2 ) );
+        opacity: 0;
+        transition: 0.2s;
+        &.left{
+            left: -100%;
+        }
+        &.right{
+            right: -100%;
+        }
+        &.show{
+            opacity: 1;
+            &.left{
+                left:50px;
+            }
+            &.right{
+                right:50px;
             }
         }
-        .cardBottomInfo {
-            display: flex;
-            width: var(--basicTextWidth);
-            height: var(--basicTextHeight);
-            background: rgba($color: #000000, $alpha: 0.4);
-            margin: var(--cardSpacing25) auto;
-            align-items: center;
-            padding: 0 var(--basicTextPadding);
-            .textInfo {
-                display: flex;
-                align-items: center;
-                width: calc(
-                    var(--basicTextWidth) - var(--movementBoxWidth) - (var(--basicTextPadding) * 2)
-                );
-                padding: var(--cardSpacing15) var(--cardSpacing05);
+        .cardDetailLeft{
+            width:150px;
+            padding: 20px 10px;
+            img{
+                width:100%;
+                margin:0 auto;
             }
-            .movementInfo {
-                width: var(--movementBoxWidth);
-                height: var(--movementBoxHeight);
+        }
+        .cardDetailRight{
+            
+            width: calc( var(--cardDetailWidth) - 150px );
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            .cardDetailName{
                 display: flex;
-                flex-wrap: wrap;
-                justify-content: space-around;
-                div {
-                    width: var(--movementCellWidth);
-                    height: var(--movementCellHeight);
-
-                    margin: var(--movementCellMargin);
-                    &.center {
-                        position: relative;
-                        background: white;
-                        &::before {
-                            content: '';
-                            position: absolute;
-                            width: calc(var(--movementCellWidth) * 0.6);
-                            height: calc(var(--movementCellHeight) * 0.6);
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%);
-                            background: #444444;
-                        }
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+                padding:15px 0;
+                .cost{
+                    span{
+                        font-size: 14px;
                     }
-                    &.active {
-                        background: white;
-                    }
-                    &.red {
-                        background: red;
-                    }
+                }
+                .name{
+                    font-size: 14px;
+                }
+            }
+            .cardBottomInfo{
+                width: 100%;
+                height: 100%;
+                padding: 15px 0;
+                margin: 0;
+                background: none;
+                justify-content: center;
+                .textInfo{
+                    width: 200px;
                 }
             }
         }

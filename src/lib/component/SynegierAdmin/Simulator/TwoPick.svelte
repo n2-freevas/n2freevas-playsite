@@ -17,37 +17,6 @@
     let datusDivRarity = { C: [], R: [], SR: [], LE: [] }
     let datusDivRarityLen = { C: 0, R: 0, SR: 0, LE: 0 }
 
-    function checkDisplayRequirement(width, height) {
-        let requireWidth = 1100
-        let requireHeight = 800
-        if (!width || !height) {
-            easytoast.toastStay(
-                `Require browser size is ${requireWidth}*${requireHeight}.<br>Resize brouser and reload page.`
-            )
-        }
-        if (width >= requireWidth && height >= requireHeight) {
-            pickPrepare()
-        } else if (width < requireWidth && height < requireHeight) {
-            easytoast.remove()
-            easytoast.toastStay(
-                `Require browser size is ${requireWidth}*${requireHeight}.<br>Resize brouser and reload page.`
-            )
-        } else if (width < requireWidth) {
-            easytoast.remove()
-            easytoast.toastStay(
-                `Require inner width of browser is ${requireWidth}.<br>Resize brouser and reload page.`
-            )
-        } else if (height < requireHeight) {
-            easytoast.remove()
-            easytoast.toastStay(
-                `Require inner height of browser is ${requireHeight}.<br>Resize brouser and reload page.`
-            )
-        } else {
-            easytoast.remove()
-            easytoast.toastStay(`Please reload a page, because UI error.`)
-        }
-    }
-
     function pickPrepare() {
         datusDivRarity.C = cardDatus.filter((card) => card.rarity == 'C')
         datusDivRarityLen.C = datusDivRarity.C.length
@@ -223,65 +192,58 @@
     onMount(() => {
         // pickedCards = cardDatus.slice(0,16)
         // nowPhaseOf2pick = "end"
-        checkDisplayRequirement(window.innerWidth, window.innerHeight)
+        pickPrepare()
     })
 </script>
 
-<svelte:window />
-
-<section>
-    {#if nowPhaseOf2pick == 'prepare'}
-        <div>prepare</div>
-    {:else if nowPhaseOf2pick == 'processing'}
-        <div>processing</div>
-        <div id="pickProcessingField">
-            <div
-                class="leftCard"
-                on:click={() => {
-                    isChoiseLeftCard = true
-                    isUnChoiseRightCard = true
-                    pickedProcess(leftCard)
-                }}>
-                <In2pickAmination
-                    bind:onAppear={isAppearLeftCard}
-                    bind:onChoised={isChoiseLeftCard}
-                    bind:onUnChoised={isUnChoiseLeftCard}>
-                    <Card model={leftCard} scale={0.4} />
-                </In2pickAmination>
-            </div>
-            <div
-                class="rightCard"
-                on:click={() => {
-                    isChoiseRightCard = true
-                    isUnChoiseLeftCard = true
-                    pickedProcess(rightCard)
-                }}>
-                <In2pickAmination
-                    bind:onAppear={isAppearRightCard}
-                    bind:onChoised={isChoiseRightCard}
-                    bind:onUnChoised={isUnChoiseRightCard}>
-                    <Card model={rightCard} scale={0.4} />
-                </In2pickAmination>
-            </div>
+{#if nowPhaseOf2pick == 'processing'}
+    <div id="pickProcessingField">
+        <div
+            class="leftCard"
+            on:click={() => {
+                isChoiseLeftCard = true
+                isUnChoiseRightCard = true
+                pickedProcess(leftCard)
+            }}>
+            <In2pickAmination
+                bind:onAppear={isAppearLeftCard}
+                bind:onChoised={isChoiseLeftCard}
+                bind:onUnChoised={isUnChoiseLeftCard}>
+                <Card model={leftCard} scale={0.4} />
+            </In2pickAmination>
         </div>
-    {:else if nowPhaseOf2pick == 'end'}
-        <div>end</div>
-        <div id="pickEndField">
-            <div class="list">
-                {#each pickedCards as c, i}
-                    <In2pickAmination onAppear={true} delay={i * 0.1}>
-                        <Card model={c} scale={0.3} />
-                    </In2pickAmination>
-                {/each}
-            </div>
+        <div
+            class="rightCard"
+            on:click={() => {
+                isChoiseRightCard = true
+                isUnChoiseLeftCard = true
+                pickedProcess(rightCard)
+            }}>
+            <In2pickAmination
+                bind:onAppear={isAppearRightCard}
+                bind:onChoised={isChoiseRightCard}
+                bind:onUnChoised={isUnChoiseRightCard}>
+                <Card model={rightCard} scale={0.4} />
+            </In2pickAmination>
         </div>
-    {:else}
-        <div>?</div>
-    {/if}
-    <div id="pickingInfo">
-        <DeckSummary bind:deckCards={pickedCards} />
     </div>
-</section>
+{:else if nowPhaseOf2pick == 'end'}
+    <div id="pickEndField">
+        <div class="list">
+            {#each pickedCards as c, i}
+                <In2pickAmination onAppear={true} delay={i * 0.1}>
+                    <Card model={c} scale={0.3} />
+                </In2pickAmination>
+            {/each}
+        </div>
+    </div>
+{:else}
+    <div>?</div>
+{/if}
+<div id="pickingInfo">
+    <DeckSummary bind:deckCards={pickedCards} />
+</div>
+
 
 <style lang="scss">
     .list {
@@ -294,6 +256,7 @@
     #pickProcessingField,
     #pickEndField {
         position: absolute;
+        overflow: hidden;
         background: radial-gradient(closest-side, rgba(#555555, 0.8), rgba(#000000, 0));
         top: 50%;
         left: 50%;
