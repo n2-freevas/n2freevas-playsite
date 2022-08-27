@@ -5,6 +5,8 @@
     import SynegierText from './_SynegierText.svelte'
     export let model: SynegierCard
     export let scale: number = 1
+    import {cardDetail} from '$lib/store/app/synegierAdmin'
+
     let showText: boolean = true
     let isMouseOver: boolean = false
     let isShowDetail: boolean = false
@@ -19,6 +21,7 @@
     
     function rightClickHandler(event){
         let _event: PointerEvent = event
+        // $cardDetail = model
         if(isShowDetail){
             isShowDetail = false
         } else{
@@ -71,26 +74,6 @@
                     {#if showText}{@html model.text}{/if}
                 </div>
                 <Movement movement={model.movement} redTiles={model.redTiles} scale={scale}></Movement>
-            </div>
-        </div>
-    </div>
-    <div class="cardDetail {isShowDetail? "show":""} {sideOfShowDetail}">
-        <div class="cardDetailLeft">
-            <img src={model.img} alt=""/>
-        </div>
-        <div class="cardDetailRight">
-            <div class="cardDetailName">
-                <div class="name">{model.name}</div>
-                <div class="cost"><span>{model.cost}</span>cost</div>
-            </div>
-            <SynegierText synegierText={model.synegierText} showText={true}
-                savingShow={true}/>
-            <div class="cardBottomInfo">
-                <div class="textInfo">
-                    {@html model.text}
-                </div>
-                <Movement movement={model.movement} redTiles={model.redTiles} scale={1}
-                    showBlankTile={true}/>
             </div>
         </div>
     </div>

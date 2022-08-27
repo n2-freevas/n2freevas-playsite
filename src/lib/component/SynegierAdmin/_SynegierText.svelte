@@ -9,11 +9,13 @@
 
 
 <div class="synegierTextInfo {savingShow?"savingShow":""}" style="--scale:{scale}">
+    {#if synegierText}
     {#each synegierText as st}
         <div class="{st.type} {st.color}">
             {#if showText}{st.text}{/if}
         </div>
     {/each}
+    {/if}
 </div>
 
 

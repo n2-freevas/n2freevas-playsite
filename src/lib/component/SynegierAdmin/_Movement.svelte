@@ -13,7 +13,7 @@
     {#each MovementMap as mm}
         {#if mm.v == 0 && mm.h == 0}
             <div class="center" />
-        {:else if movement.find((m) => m.v == mm.v && m.h == mm.h)}
+        {:else if movement?.find((m) => m.v == mm.v && m.h == mm.h)}
             <div class="active" />
         {:else if redTiles?.find((m) => m.v == mm.v && m.h == mm.h)}
             <div class="red" />
