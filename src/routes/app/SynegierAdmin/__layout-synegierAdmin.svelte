@@ -1,57 +1,63 @@
 <script lang="ts" context="module">
-    export function showLoading(win: Window){
-        win.document.getElementById("loading").classList.add("show")
+    export function showLoading(win: Window) {
+        win.document.getElementById('loading').classList.add('show')
     }
-    export function hideLoading(win: Window){
-        win.document.getElementById("loading").classList.remove("show")
+    export function hideLoading(win: Window) {
+        win.document.getElementById('loading').classList.remove('show')
     }
 </script>
 
 <script lang="ts">
     import { goto } from '$app/navigation'
-    import { onMount } from 'svelte';
+    import { onMount } from 'svelte'
     import { ENV, ENV_SYNEGIER_ADMIN_ACCESS_TOKEN } from '$lib/K/env'
     import ToastArea from '$lib/component/toast/ToastArea.svelte'
     import { healthCheck, tryPassingAuth } from '$lib/api/app/synegierAdmin'
-    import { synegierAdminAccessToken, cardDetailLeft, cardDetailRight } from '$lib/store/app/synegierAdmin'
-    import easytoast from '$lib/component/toast/summon';
+    import {
+        synegierAdminAccessToken,
+        cardDetailLeft,
+        cardDetailRight
+    } from '$lib/store/app/synegierAdmin'
+    import easytoast from '$lib/component/toast/summon'
     import RoundFloweringLoader from '$lib/component/Loader/roundFloweringLoader.svelte'
-    import { sleep } from '$lib/util/time';
-import CardDetail from '$lib/component/SynegierAdmin/CardDetail.svelte';
-    
+    import { sleep } from '$lib/util/time'
+    import CardDetail from '$lib/component/SynegierAdmin/CardDetail.svelte'
+
     // Require : Size of parent element is width:1100px height:800px.
     let requireWidth = 1100
     let requireHeight = 800
     let isShowPasswordUI = true
-    let accessToken = ""
+    let accessToken = ''
     let isCheckingPassword = false
-    if (ENV == 'dev'){
+    if (ENV == 'dev') {
         isShowPasswordUI = false
         accessToken = ENV_SYNEGIER_ADMIN_ACCESS_TOKEN
         $synegierAdminAccessToken = ENV_SYNEGIER_ADMIN_ACCESS_TOKEN
-        console.info("Development Mode")
+        console.info('Development Mode')
     }
     let isShowAll = false
-    
-    $:{
-        if(accessToken != $synegierAdminAccessToken){
+
+    $: {
+        if (accessToken != $synegierAdminAccessToken) {
             isShowPasswordUI = true
         }
     }
-    
-    onMount(async ()=>{
+
+    onMount(async () => {
         isShowAll = checkDisplayRequirement(window.innerWidth, window.innerHeight)
-        if(isShowAll){
-            try{
+        if (isShowAll) {
+            try {
                 await healthCheck()
                 hideLoading(window)
             } catch {
-                easytoast.errorToastStaying(`システムが停止している可能性があります。開発者に問い合わせてください。<br>発生時刻： ${new Date().toISOString()}`)
+                easytoast.errorToastStaying(
+                    `システムが停止している可能性があります。開発者に問い合わせてください。<br>発生時刻： ${new Date().toISOString()}`
+                )
             }
         }
     })
-    
-    function checkDisplayRequirement(width, height): boolean {    
+
+    function checkDisplayRequirement(width, height): boolean {
         if (!width || !height) {
             easytoast.toastStay(
                 `Require browser size is ${requireWidth}*${requireHeight}.<br>Resize brouser and reload page.`
@@ -86,18 +92,18 @@ import CardDetail from '$lib/component/SynegierAdmin/CardDetail.svelte';
         }
     }
 
-    async function enteredPassword(event: KeyboardEvent){
-        if(event.code == "Enter") {
-            try{
+    async function enteredPassword(event: KeyboardEvent) {
+        if (event.code == 'Enter') {
+            try {
                 isCheckingPassword = true
                 await sleep(1000)
                 await tryPassingAuth(accessToken)
-                
+
                 $synegierAdminAccessToken = accessToken
                 isShowPasswordUI = false
-            } catch(e) {
+            } catch (e) {
                 isShowPasswordUI = true
-                easytoast.errorToastPush("Invalid accessToken")
+                easytoast.errorToastPush('Invalid accessToken')
             } finally {
                 isCheckingPassword = false
             }
@@ -106,6 +112,14 @@ import CardDetail from '$lib/component/SynegierAdmin/CardDetail.svelte';
 </script>
 
 <svelte:window on:contextmenu|preventDefault />
+
+<svelte:head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+        rel="stylesheet" />
+</svelte:head>
 
 <article id="synegierAdminLayout">
     <header>
@@ -140,19 +154,29 @@ import CardDetail from '$lib/component/SynegierAdmin/CardDetail.svelte';
             synegier admin
         </div>
         {#if isShowPasswordUI}
-            <div id="passwordUI" class={isShowPasswordUI? "show":""}>
+            <div id="passwordUI" class={isShowPasswordUI ? 'show' : ''}>
                 Are you member?
-                <input bind:value={accessToken} placeholder="Enter the accessToken" maxlength={55} on:keydown={enteredPassword}/>
+                <input
+                    bind:value={accessToken}
+                    placeholder="Enter the accessToken"
+                    maxlength={55}
+                    on:keydown={enteredPassword} />
                 {#if isCheckingPassword}
-                <RoundFloweringLoader small_round_size={20} large_round_size={30}/>
+                    <RoundFloweringLoader small_round_size={20} large_round_size={30} />
                 {/if}
             </div>
         {:else}
             <div id="slot">
                 <slot />
             </div>
-            <CardDetail model={$cardDetailLeft} sideOfShowDetail="left" isShowDetail={$cardDetailLeft? true:false}></CardDetail>
-            <CardDetail model={$cardDetailRight} sideOfShowDetail="right" isShowDetail={$cardDetailRight? true:false}></CardDetail>
+            <CardDetail
+                model={$cardDetailLeft}
+                sideOfShowDetail="left"
+                isShowDetail={$cardDetailLeft ? true : false} />
+            <CardDetail
+                model={$cardDetailRight}
+                sideOfShowDetail="right"
+                isShowDetail={$cardDetailRight ? true : false} />
         {/if}
     {/if}
 </article>
@@ -202,17 +226,17 @@ import CardDetail from '$lib/component/SynegierAdmin/CardDetail.svelte';
         z-index: 0;
         padding-top: 100px;
     }
-    #passwordUI{
+    #passwordUI {
         position: fixed;
         --passwordUIWidth: 600px;
         --passwordUIHeight: 400px;
         width: var(--passwordUIWidth);
         height: var(--passwordUIHeight);
-        top: calc( 50% - ( var(--passwordUIHeight) / 2 ) );
-        left: calc( 50% - ( var(--passwordUIWidth) / 2 ) );
+        top: calc(50% - (var(--passwordUIHeight) / 2));
+        left: calc(50% - (var(--passwordUIWidth) / 2));
         background: rgba($color: #555555, $alpha: 0.3);
         padding: 10px;
-        display:flex;
+        display: flex;
         flex-direction: column;
         justify-content: center;
         text-align: center;
@@ -220,7 +244,7 @@ import CardDetail from '$lib/component/SynegierAdmin/CardDetail.svelte';
             margin: 20px 10px;
             background: rgba($color: #555555, $alpha: 0.3);
             border: none;
-            color:white;
+            color: white;
             text-align: center;
             padding: 10px;
             font-size: 13px;
@@ -235,8 +259,8 @@ import CardDetail from '$lib/component/SynegierAdmin/CardDetail.svelte';
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: radial-gradient(rgba(#111111,1),rgba(#111111,0.8),rgba(#111111,0.1));
-        &.show{
+        background: radial-gradient(rgba(#111111, 1), rgba(#111111, 0.8), rgba(#111111, 0.1));
+        &.show {
             display: block;
         }
     }
