@@ -2,22 +2,20 @@
     import type { SynegierText } from '$lib/model/app/SynegierAdmin'
 
     export let synegierText: SynegierText[]
-    export let showText:boolean
+    export let showText: boolean
     export let savingShow: boolean = false
     export let scale: number = 1
 </script>
 
-
-<div class="synegierTextInfo {savingShow?"savingShow":""}" style="--scale:{scale}">
+<div class="synegierTextInfo {savingShow ? 'savingShow' : ''}" style="--scale:{scale}">
     {#if synegierText}
-    {#each synegierText as st}
-        <div class="{st.type} {st.color}">
-            {#if showText}{st.text}{/if}
-        </div>
-    {/each}
+        {#each synegierText as st}
+            <div class="{st.type} {st.color}">
+                {#if showText}{@html st.text}{/if}
+            </div>
+        {/each}
     {/if}
 </div>
-
 
 <style lang="scss">
     .synegierTextInfo {
@@ -38,7 +36,7 @@
             width: var(--synegierTextWidth);
             height: var(--synegierTextHeight);
             background: rgba($color: #000000, $alpha: 0.6);
-            padding: 0 var(--cardSpacing20);
+            padding: 0 30px;
             align-items: center;
             &::before {
                 position: absolute;
@@ -91,26 +89,27 @@
                 }
             }
         }
-        &.savingShow{
+        &.savingShow {
             height: auto;
             width: var(--synegierTextWidth);
-            --synegierTextRibbonWidth2: calc( var(--synegierTextRibbonWidth) / 2 );
-            div{
+            --synegierTextRibbonWidth2: calc(var(--synegierTextRibbonWidth) / 2);
+            div {
                 position: static;
                 margin: 5px 0;
-                &::before{
+                &::before {
                     width: var(--synegierTextRibbonWidth2);
                 }
-                &.s,&.subject {
-                    &::before{
-                        left: calc( -1 * ( var(--synegierTextRibbonWidth2) / 2 ));
+                &.s,
+                &.subject {
+                    &::before {
+                        left: 0;
                     }
                 }
-                &.v,&.verbus {
-                    &::before{
-                        right: calc( -1 * ( var(--synegierTextRibbonWidth2) / 2 ));;
+                &.v,
+                &.verbus {
+                    &::before {
+                        right: 0;
                     }
-                    
                 }
             }
         }

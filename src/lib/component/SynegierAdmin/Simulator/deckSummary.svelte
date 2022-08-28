@@ -1,17 +1,14 @@
 <script lang="ts">
     import Card from '$lib/component/SynegierAdmin/Card.svelte'
     import type {
-        SynegierCard,
-        SynegierTextColor,
-        SynegierTextType
+        SynegierCard
     } from '$lib/model/app/SynegierAdmin'
-    import { onMount } from 'svelte'
     import In2pickAmination from '../CardAnimationComponent.svelte/In2pickAmination.svelte'
 
     // Require : Size of parent element is width:1000px height:250px.
 
     export let deckCards: SynegierCard[]
-
+    export let isCardsHide: boolean = false
     let costSummary = [0, 0, 0, 0]
     let stColorSummary = {
         blue: { s: 0, v: 0 },
@@ -74,7 +71,7 @@
             {/each}
         </div>
     </div>
-    <div class="deckList">
+    <div class="deckList {isCardsHide ? 'hide' : ''}">
         {#each deckCards as c}
             <div class="card">
                 <In2pickAmination onAppear={true}>
@@ -232,8 +229,13 @@
             height: 100px;
             justify-content: flex-start;
             align-items: center;
+            transition: 0.2s;
+            opacity: 1;
             .card {
                 margin: 0 2px;
+            }
+            &.hide {
+                opacity: 0;
             }
         }
     }

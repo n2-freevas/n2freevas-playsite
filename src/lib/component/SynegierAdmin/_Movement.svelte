@@ -1,7 +1,7 @@
-<script lang='ts'>
+<script lang="ts">
     import { MovementMap } from '$lib/model/app/SynegierAdmin'
     import type { Movement } from '$lib/model/app/SynegierAdmin'
-    
+
     export let movement: Movement[]
     export let redTiles: Movement[]
     export let scale: number = 1
@@ -18,7 +18,7 @@
         {:else if redTiles?.find((m) => m.v == mm.v && m.h == mm.h)}
             <div class="red" />
         {:else}
-            <div class="{showBlankTile ? "blank":""}"/>
+            <div class={showBlankTile ? 'blank' : ''} />
         {/if}
     {/each}
 </div>
@@ -62,10 +62,9 @@
             &.red {
                 background: red;
             }
-            &.blank{
+            &.blank {
                 border: solid 1px #444444;
             }
         }
     }
-    
 </style>

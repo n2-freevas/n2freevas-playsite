@@ -5,70 +5,69 @@
     import SynegierText from './_SynegierText.svelte'
     export let model: SynegierCard
     export let scale: number = 1
-    import {cardDetailLeft, cardDetailRight} from '$lib/store/app/synegierAdmin'
+    import { cardDetailLeft, cardDetailRight } from '$lib/store/app/synegierAdmin'
 
     let showText: boolean = true
     let isMouseOver: boolean = false
     let isShowDetail: boolean = false
-    let sideOfShowDetail: "left" | "right" = "left"
+    let sideOfShowDetail: 'left' | 'right' = 'left'
     let selfElement: HTMLDivElement
     if (scale != 1) {
         showText = false
     }
-    onMount(()=>{        
-        sideOfShowDetail = window.innerWidth / 2 < selfElement.getBoundingClientRect().x ? "left": "right"  
+    onMount(() => {
+        sideOfShowDetail =
+            window.innerWidth / 2 < selfElement.getBoundingClientRect().x ? 'left' : 'right'
     })
-    
-    function rightClickHandler(event){
+
+    function rightClickHandler(event) {
         let _event: PointerEvent = event
-        if($cardDetailLeft || $cardDetailRight){
+        if ($cardDetailLeft || $cardDetailRight) {
             cardDetailHide()
-        } else{
-            try{
-                sideOfShowDetail = window.innerWidth / 2 < _event.x ? "left": "right"
+        } else {
+            try {
+                sideOfShowDetail = window.innerWidth / 2 < _event.x ? 'left' : 'right'
                 cardDetailShow()
             } catch {
                 return null
             }
         }
     }
-    function mouseEnterHandler(){
+    function mouseEnterHandler() {
         isMouseOver = true
     }
-    
-    function mouseLeaveHandler(){
+
+    function mouseLeaveHandler() {
         isMouseOver = false
-        window.setTimeout(()=>{
-            if(!isMouseOver){
+        window.setTimeout(() => {
+            if (!isMouseOver) {
                 cardDetailHide()
             }
-        },200)
+        }, 200)
     }
-    function cardDetailShow(){
-        if(sideOfShowDetail == "left"){
+    function cardDetailShow() {
+        if (sideOfShowDetail == 'left') {
             $cardDetailLeft = model
         } else {
             $cardDetailRight = model
         }
     }
-    function cardDetailHide(){
-        if(sideOfShowDetail == "left"){
+    function cardDetailHide() {
+        if (sideOfShowDetail == 'left') {
             $cardDetailLeft = undefined
         } else {
             $cardDetailRight = undefined
         }
     }
-
 </script>
 
-
-<div class="card" style="--scale:{scale}"
+<div
+    class="card"
+    style="--scale:{scale}"
     on:contextmenu|preventDefault={rightClickHandler}
     on:mouseleave={mouseLeaveHandler}
-    on:mouseenter={mouseEnterHandler}
->
-    <div class="cardBody {isMouseOver? "hover":""}" bind:this={selfElement}>
-
+    on:mouseenter={mouseEnterHandler}>
+    <div class="cardBody {isMouseOver ? 'hover' : ''}" bind:this={selfElement}>
         <div class="backgroundFrame {model.rarity}" />
         <img class="inCardBody" src={model.img} alt="" />
         <div class="cardInfo">
@@ -80,19 +79,19 @@
                     {#if showText}{model.name}{/if}
                 </div>
             </div>
-            <SynegierText synegierText={model.synegierText} showText={showText} scale={scale}/>
+            <SynegierText synegierText={model.synegierText} showText={showText} scale={scale} />
             <div class="cardBottomInfo">
                 <div class="textInfo">
                     {#if showText}{@html model.text}{/if}
                 </div>
-                <Movement movement={model.movement} redTiles={model.redTiles} scale={scale}></Movement>
+                <Movement movement={model.movement} redTiles={model.redTiles} scale={scale} />
             </div>
         </div>
     </div>
 </div>
 
 <style lang="scss">
-    .card{
+    .card {
         user-select: none;
         --C_colorRule: linear-gradient(0, #b8b8b8, #e2e2e2);
         --R_colorRule: linear-gradient(0, #89c6ff, #bc9cff);
@@ -125,7 +124,7 @@
         --synegierTextMargin: calc((20px * var(--scale)) + var(--synegierTextHeight));
         --fontsize: calc(10px * var(--scale));
         --costFontSize: calc(32px * var(--scale));
-        --nameBarWidth: calc(var(--w) * 0.634);
+        --nameBarWidth: calc(var(--w) * 0.67);
         --cardSpacing25: calc(var(--h) / 24);
         --cardSpacing20: calc(var(--h) / 30);
         --cardSpacing15: calc(var(--h) * 0.025);
@@ -138,7 +137,6 @@
         --movementBoxWidth: calc(120px * var(--scale));
     }
     .cardBody {
-        
         font-size: var(--fontsize);
         // transform: scale(var(--scale));
 
@@ -148,22 +146,22 @@
         height: var(--h);
         font-family: 'Press Start 2P', cursive;
 
-        &::before{
-            content: "";
+        &::before {
+            content: '';
             z-index: 0;
             position: absolute;
-            top:-3%;
-            left:-4%;
-            width:108%;
-            height:106%;
+            top: -3%;
+            left: -4%;
+            width: 108%;
+            height: 106%;
             opacity: 0;
             transition: 0.2s;
             border-radius: 3%;
         }
-        &.hover{
-            &::before{
+        &.hover {
+            &::before {
                 opacity: 1;
-                background: radial-gradient(rgba(#bbbbbb,0.8), rgba(#eeeeee,0.2));
+                background: radial-gradient(rgba(#bbbbbb, 0.8), rgba(#eeeeee, 0.2));
             }
         }
     }
@@ -185,8 +183,8 @@
             background: var(--LR_colorRule_frame);
         }
     }
-    img{
-        &.inCardBody{
+    img {
+        &.inCardBody {
             position: absolute;
             z-index: 2;
             border-radius: calc(var(--b) * 2);
@@ -246,7 +244,6 @@
                 line-height: var(--nameHeight);
             }
         }
-        
     }
     .cardBottomInfo {
         display: flex;
@@ -265,6 +262,5 @@
             );
             padding: var(--cardSpacing15) var(--cardSpacing05);
         }
-    
     }
 </style>
