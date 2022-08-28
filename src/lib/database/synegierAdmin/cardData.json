@@ -719,6 +719,7 @@
         "rarity": "R"
     },
     {
+        "id": "SR_1",
         "name": "The jump",
         "img": "https://i.gyazo.com/e11c9025a10c4c7ead9f9b130b2efc58.png",
         "cost": 1,
@@ -734,7 +735,7 @@
                 "text": "a opponent within 2D"
             }
         ],
-        "text": "When before Battle, there is a fact you moved using only this card, your ATK +6 during this turn.",
+        "text": "Before Battle, if you moved by only this card movement, your ATK +6 during Battle",
         "movement": [
             {
                 "v": -3,
@@ -756,6 +757,7 @@
         "rarity": "SR"
     },
     {
+        "id": "SR_2",
         "name": "Transform to Dracula",
         "img": "https://i.gyazo.com/d91e63e3d5cec6450fe000f6e1b5ddd9.png",
         "cost": 0,
@@ -771,7 +773,7 @@
                 "text": "get Rejection(2) and take 1 damage"
             }
         ],
-        "text": "If you beat opponent player in Battle of this turn, your level +1.",
+        "text": "If you beat opponent soldier in Battle of this turn, your level +1.",
         "movement": [
             {
                 "v": 0,
@@ -785,9 +787,10 @@
         "rarity": "SR"
     },
     {
+        "id": "SR_3",
         "name": "Amazing Defence",
         "img": "https://i.gyazo.com/f75583bea151234dd6244f16517ad81d.png",
-        "cost": 3,
+        "cost": 2,
         "synegierText": [
             {
                 "color": "blue",
@@ -800,7 +803,7 @@
                 "text": "a opponent within 2D"
             }
         ],
-        "text": "your DEF +1 in this game.<br>Until your next turn start, your ATK value replace DEF value in Battle. ",
+        "text": "Your DEF +3 in this game.<br>Until your next turn start, your ATK value replace DEF value in Battle.",
         "movement": [
             {
                 "v": -1,
@@ -821,6 +824,10 @@
             {
                 "v": 1,
                 "h": -1
+            },
+            {
+                "v": 1,
+                "h": 1
             },
             {
                 "v": -1,
@@ -846,6 +853,7 @@
         "rarity": "SR"
     },
     {
+        "id": "SR_4",
         "name": "Queens baptism",
         "img": "https://i.gyazo.com/0dead3e8bf405889fee07e0dec17acfb.png",
         "cost": 1,
@@ -858,10 +866,10 @@
             {
                 "color": "purple",
                 "type": "s",
-                "text": "all opponent players within 2D"
+                "text": "all opponent soldiers within 2D"
             }
         ],
-        "text": "Choose a opponent player who has Debuff, Move to around of the player and deal 7 damage to the player.",
+        "text": "Choose a opponent soldier who has Debuff, move to around of the player and deal 10 damage to the soldier.",
         "movement": [
             {
                 "v": 1,
@@ -875,6 +883,7 @@
         "rarity": "SR"
     },
     {
+        "id": "SR_5",
         "name": "Awake of the true force",
         "img": "https://i.gyazo.com/bd5ad1fe48d7aff928bf4b4ba11a79fe.png",
         "cost": 2,
@@ -885,7 +894,7 @@
                 "text": "level up"
             }
         ],
-        "text": "If your Level is the lowest among all opponent players, you level up.",
+        "text": "If your Level is the lowest among all opponent soldiers, you level up.",
         "movement": [
             {
                 "v": -1,
@@ -913,6 +922,10 @@
             },
             {
                 "v": -1,
+                "h": 1
+            },
+            {
+                "v": 1,
                 "h": 1
             },
             {
@@ -939,6 +952,467 @@
         "rarity": "SR"
     },
     {
+        "id": "SR_6",
+        "name": "Hero Statue",
+        "img": "https://i.gyazo.com/14240086aaec8d781ec306e738c6e47f.png",
+        "cost": 2,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "+10 ATK and +10 DEF until your next turn start"
+            },
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "-20 ATK until your next turn start"
+            }
+        ],
+        "text": "Roll a dice.<br>[3,4,5]: Your ATK +5 and DEF +4<br>[6]: Your ATK +8 and DEF +7",
+        "movement": [
+            {
+                "v": 0,
+                "h": 2
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": -2,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 2,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": 0,
+                "h": -2
+            }
+        ],
+        "rarity": "SR"
+    },
+    {
+        "id": "SR_7",
+        "name": "Bright Arrow",
+        "img": "https://i.gyazo.com/885508865eed13404bd5129eaaabcd1e.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "can do Battle with a opponent wwithin 2D"
+            },
+            {
+                "color": "green",
+                "type": "s",
+                "text": "you"
+            }
+        ],
+        "text": "Deal 5 damage to a opponent within 3D.<br>Deal 4 damage to a enemy within 2D.",
+        "movement": [
+            {
+                "v": -2,
+                "h": 0
+            },
+            {
+                "v": 2,
+                "h": 0
+            }
+        ],
+        "rarity": "SR"
+    },
+    {
+        "id": "SR_8",
+        "name": "Sword Wave",
+        "img": "https://i.gyazo.com/9c3a6f48e3a8a9943fa6727c457b9772.png",
+        "cost": 2,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "green",
+                "type": "v",
+                "text": "+10 ATK and +8 DEF"
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": "all enemies"
+            }
+        ],
+        "text": "Before Battle, deal 6 damage N times to the closest opponent.<br>(N: Number of cards in your hand)",
+        "movement": [
+            {
+                "v": -1,
+                "h": 2
+            },
+            {
+                "v": 1,
+                "h": 2
+            },
+            {
+                "v": -2,
+                "h": 1
+            },
+            {
+                "v": 2,
+                "h": 1
+            },
+            {
+                "v": -2,
+                "h": -1
+            },
+            {
+                "v": 2,
+                "h": -1
+            },
+            {
+                "v": -1,
+                "h": -2
+            },
+            {
+                "v": 1,
+                "h": -2
+            }
+        ],
+        "rarity": "SR"
+    },
+    {
+        "id": "SR_9",
+        "name": "Dead and Alive",
+        "img": "https://i.gyazo.com/5a6423c0a7358688250e4254cd887c6a.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "+15 ATK"
+            },
+            {
+                "color": "yellow",
+                "type": "v",
+                "text": "take 18 damage"
+            },
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "-15 ATK"
+            }
+        ],
+        "text": "Take 10 damage.",
+        "movement": [
+            {
+                "v": -2,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
+            },
+            {
+                "v": 2,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "SR"
+    },
+    {
+        "id": "SR_10",
+        "name": "Satan's Retual",
+        "img": "https://i.gyazo.com/7d83277c93e9a907fb4bc98a35211844.png",
+        "cost": 3,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "take 5 damage and ATK +20"
+            },
+            {
+                "color": "yellow",
+                "type": "v",
+                "text": "take 20 damage and get Fear(1)"
+            },
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "heal 30 HP and DEF -12"
+            }
+        ],
+        "text": "Take 10 damage.<br>When this turn end, deal N*8 damage and attach Shock(N) to the closest opponent.<br>(N: number of 0 cost cards you play in this game)",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "SR"
+    },
+    {
+        "id": "SR_11",
+        "name": "Ruiner Enhancement",
+        "img": "https://i.gyazo.com/b4cd414f322f0aae0ac8753feed4f03a.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "+15 DEF and -5 ATK until one's next turn end"
+            },
+            {
+                "color": "green",
+                "type": "v",
+                "text": "+15 DEF and -5 ATK until one's next tuen end"
+            }
+        ],
+        "text": "Your ATK +20 and your DEF -20 until your next turn end.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 2
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": -2,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 2,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": 0,
+                "h": -2
+            }
+        ],
+        "rarity": "SR"
+    },
+    {
+        "id": "SR_12",
+        "name": "Optimagical Mixing",
+        "img": "https://i.gyazo.com/53471c0d2e4625ed12578850a957ea3d.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "get Flow(1)"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "get Rejection(1)"
+            }
+        ],
+        "text": "When this turn end, deal N*3 damage to all opponents in red tiles.<br>(N: Number of red or blue Synegier Effect you created)",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "redTiles": [
+            {
+                "v": 0,
+                "h": 3
+            },
+            {
+                "v": -1,
+                "h": 2
+            },
+            {
+                "v": 0,
+                "h": 2
+            },
+            {
+                "v": 1,
+                "h": 2
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
+            }
+        ],
+        "rarity": "SR"
+    },
+    {
+        "id": "SR_13",
+        "name": "Rebellion Thunder",
+        "img": "https://i.gyazo.com/1f49451c7b69f5bd6fe9b6a7c7c1d257.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "get Flow(1)"
+            },
+            {
+                "color": "green",
+                "type": "v",
+                "text": "+12 ATK if have Buffs/Debuffs"
+            },
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "get Shock(6)"
+            }
+        ],
+        "text": "You choose a soldier within 2D.<br>If you never do Battle with the soldier, deal 15 damage to that.<br>Else, deal 9 damage to that",
+        "movement": [
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": -1
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": 1,
+                "h": -1
+            }
+        ],
+        "rarity": "SR"
+    },
+    {
+        "id": "SR_14",
+        "name": "Abysmagical Prominence",
+        "img": "https://i.gyazo.com/46022f3bc53ae2de6cba01834c412f17.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "yellow",
+                "type": "v",
+                "text": "take 12 damage"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "take 10 damage"
+            }
+        ],
+        "text": "Deal 4*N damage to the closest opponent.<br>(N: Relative D between you and the closest opponent)",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": -2,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 2,
+                "h": 0
+            }
+        ],
+        "rarity": "SR"
+    },
+    {
+        "id": "SR_15",
         "name": "Space Psycho Shock",
         "img": "https://i.gyazo.com/c4b639eecd6bd5f3588d0a7211bed837.png",
         "cost": 0,
@@ -966,12 +1440,12 @@
             {
                 "color": "purple",
                 "type": "v",
-                "text": "take 7 damage"
+                "text": "take 15 damage"
             }
         ],
-        "text": "You can’t move during this turn.",
+        "text": "Get 3 MP.<br>You can't move during this turn.",
         "movement": [],
-        "rarity": "LE"
+        "rarity": "SR"
     },
     {
         "name": "Disaster bringer",
