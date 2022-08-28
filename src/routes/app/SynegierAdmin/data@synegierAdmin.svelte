@@ -6,8 +6,8 @@
     import type { SynegierCard } from '$lib/model/app/SynegierAdmin'
     import easytoast from '$lib/component/toast/summon'
     import { showLoading, hideLoading } from './__layout-synegierAdmin.svelte'
-    import { synegierAdminAccessToken} from '$lib/store/app/synegierAdmin'
-    import { sleep } from '$lib/util/time';
+    import { synegierAdminAccessToken } from '$lib/store/app/synegierAdmin'
+    import { sleep } from '$lib/util/time'
 
     let isSysterError = false
     let datus: SynegierCard[] = []
@@ -27,9 +27,9 @@
             datusDivRarity.R = datus.filter((card) => card.rarity == 'R')
             datusDivRarity.SR = datus.filter((card) => card.rarity == 'SR')
             datusDivRarity.LE = datus.filter((card) => card.rarity == 'LE')
-        } catch (e){
+        } catch (e) {
             console.error(`In Data: ${e}`)
-            if(e == N2API_ERROR_CODE.ACCESS_INVALID){
+            if (e == N2API_ERROR_CODE.ACCESS_INVALID) {
                 $synegierAdminAccessToken = new Date().toISOString()
             }
             isSysterError = true
@@ -49,16 +49,16 @@
         <div id="synegierDataCardList" class="com_scroll-y">
             {#each Object.entries(datusDivRarity) as [rarity, ds]}
                 {#if ds.length != 0}
-                <div class="rarityBox">
-                    <h1>{rarity}</h1>
-                    <div class="list">
-                        {#each ds as d}
-                            <div class="card">
-                                <Card model={d} scale={0.25} />
-                            </div>
-                        {/each}
+                    <div class="rarityBox">
+                        <h1>{rarity}</h1>
+                        <div class="list">
+                            {#each ds as d}
+                                <div class="card">
+                                    <Card model={d} scale={0.25} />
+                                </div>
+                            {/each}
+                        </div>
                     </div>
-                </div>
                 {/if}
             {/each}
         </div>

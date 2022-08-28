@@ -7,8 +7,8 @@ axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*'
 const n2AxiosInstance = axios.create({
     baseURL: ENV_N2FREEVAS_API_DOMAIN,
     headers: {
-        'authorization': ENV_N2FREEVAS_API_KEY,
-        'other-authorization': "",
+        authorization: ENV_N2FREEVAS_API_KEY,
+        'other-authorization': '',
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
     }
@@ -40,12 +40,12 @@ const normalAxiosInstance = axios.create({
 // }
 n2AxiosInstance.interceptors.response.use(
     function (response) {
-      // 成功時200系
-      return response
+        // 成功時200系
+        return response
     },
     function (error) {
-      // 400, 422, それ以外(500)はこっち
-      switch (error.response?.status) {
+        // 400, 422, それ以外(500)はこっち
+        switch (error.response?.status) {
             case 400:
                 //案1 レスポンス内容を投げて,.svelteファイルにやらせる
                 // throw error.response?
@@ -66,16 +66,16 @@ n2AxiosInstance.interceptors.response.use(
         }
         throw error.response?.data.detail
     }
-  )
+)
 
 export const N2API_ERROR_CODE = {
-    ACCESS_INVALID: "ACCESS_INVALID"
+    ACCESS_INVALID: 'ACCESS_INVALID'
 }
 
-const get = async (url, request?, other_authorization?:string) => {
-    if(other_authorization){
-        n2AxiosInstance.defaults.headers["other-authorization"] = other_authorization
-    }    
+const get = async (url, request?, other_authorization?: string) => {
+    if (other_authorization) {
+        n2AxiosInstance.defaults.headers['other-authorization'] = other_authorization
+    }
     const res = await n2AxiosInstance.get(url, { params: request })
     return res.data
 }

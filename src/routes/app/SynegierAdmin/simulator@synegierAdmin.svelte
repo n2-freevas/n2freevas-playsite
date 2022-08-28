@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getCardDatus} from '$lib/api/app/synegierAdmin'
+    import { getCardDatus } from '$lib/api/app/synegierAdmin'
     import { N2API_ERROR_CODE } from '$lib/api/api'
     import { onMount } from 'svelte'
     import type { SynegierCard } from '$lib/model/app/SynegierAdmin'
@@ -12,7 +12,7 @@
     let isSysterError = false
     let datus: SynegierCard[] = []
 
-    type phaseList = '2pick' | 'sweep' | 'boss' |''
+    type phaseList = '2pick' | 'sweep' | 'boss' | ''
     let nowPhase: phaseList = ''
 
     onMount(async () => {
@@ -21,9 +21,9 @@
             datus = await getCardDatus($synegierAdminAccessToken)
             await sleep(1000)
             nowPhase = '2pick'
-        } catch (e){
+        } catch (e) {
             console.error(`In Simulator: ${e}`)
-            if(e == N2API_ERROR_CODE.ACCESS_INVALID){
+            if (e == N2API_ERROR_CODE.ACCESS_INVALID) {
                 $synegierAdminAccessToken = new Date().toISOString()
             }
             isSysterError = true
@@ -36,10 +36,8 @@
     })
 </script>
 
-
 {#if isSysterError}
     <div>System Error, try again?</div>
 {:else if nowPhase == '2pick'}
     <TwoPick cardDatus={datus} />
 {/if}
-
