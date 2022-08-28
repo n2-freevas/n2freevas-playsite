@@ -1,8 +1,7 @@
 <script lang="ts">
     import Card from '$lib/component/SynegierAdmin/Card.svelte'
-    import easytoast from '$lib/component/toast/summon'
     import type { SynegierCard } from '$lib/model/app/SynegierAdmin'
-    import { sleep } from '$lib/util/time'
+    import { deckStore } from '$lib/store/app/synegierAdmin'
     import { onMount } from 'svelte'
     import In2pickAmination from '../CardAnimationComponent.svelte/In2pickAmination.svelte'
     import DeckSummary from './deckSummary.svelte'
@@ -43,7 +42,6 @@
     let pickedCards: SynegierCard[] = []
     let countOfPicked = 0
     const numberOfPickedCard = 16
-    let countCardPerRarity = { C: 0, R: 0, SR: 0, LE: 0 }
 
     function getRandomInt(max) {
         return Math.floor(Math.random() * max)
@@ -173,6 +171,7 @@
                 isAppearRightCard = false
                 if (countOfPicked == numberOfPickedCard) {
                     nowPhaseOf2pick = 'end'
+                    pickEnd()
                 } else {
                     pickupCards()
                 }
@@ -181,14 +180,13 @@
     }
 
     // === end ===
-
+    let isCardsHide = false
     function pickEnd() {
-        // カードの一覧を見せる
+        // カードの一覧をストアに格納する。
+        $deckStore = pickedCards
+        isCardsHide = true
     }
-    async function delay(i) {
-        await sleep(i * 100)
-        return true
-    }
+
     onMount(() => {
         // pickedCards = cardDatus.slice(0,16)
         // nowPhaseOf2pick = "end"
@@ -241,9 +239,8 @@
     <div>?</div>
 {/if}
 <div id="pickingInfo">
-    <DeckSummary bind:deckCards={pickedCards} />
+    <DeckSummary bind:deckCards={pickedCards} bind:isCardsHide />
 </div>
-
 
 <style lang="scss">
     .list {
