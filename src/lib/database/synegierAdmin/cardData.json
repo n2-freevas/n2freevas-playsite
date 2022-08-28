@@ -971,9 +971,11 @@
         ],
         "text": "You can’t move during this turn.",
         "movement": [],
-        "rarity": "LE"
+        "rarity": "SR"
     },
+
     {
+        "id": "LE_1",
         "name": "Disaster bringer",
         "img": "https://i.gyazo.com/f105e9fd8fd57516bb6ad339d8672f0f.png",
         "cost": 1,
@@ -989,7 +991,7 @@
                 "text": "get Shock(9)"
             }
         ],
-        "text": "Deal 6 damage to everybody.",
+        "text": "Deal 8 damage to everybody.",
         "movement": [
             {
                 "v": -1,
@@ -1008,7 +1010,7 @@
                 "h": -1
             },
             {
-                "v": -1,
+                "v": 1,
                 "h": 1
             },
             {
@@ -1019,6 +1021,7 @@
         "rarity": "LE"
     },
     {
+        "id": "LE_2",
         "name": "Meteor",
         "img": "https://i.gyazo.com/29a8d39255f83a7e979a200b3c050ed4.png",
         "cost": 3,
@@ -1026,7 +1029,7 @@
             {
                 "color": "yellow",
                 "type": "v",
-                "text": "soldier: take 15 damage<br>enemy: take  8 damage"
+                "text": "soldier: take 24 damage<br>enemy: take 15 damage"
             },
             {
                 "color": "red",
@@ -1034,7 +1037,7 @@
                 "text": "everybody in Center Area"
             }
         ],
-        "text": "you choose a opponent within 2D. Deal 9 damage to soldier around of that opponent. Deal 5 damage to enemy around of that opponent",
+        "text": "You choose a opponent within 2D.<br>Deal 9 damage to soldier around of that opponent.<br>Deal 5 damage to enemies around of that opponent.",
         "movement": [
             {
                 "v": -1,
@@ -1067,6 +1070,148 @@
             {
                 "v": -1,
                 "h": -1
+            },
+            {
+                "v": 1,
+                "h": 1
+            }
+        ],
+        "rarity": "LE"
+    },
+    {
+        "id": "LE_3",
+        "name": "Optimagical Lazer",
+        "img": "https://i.gyazo.com/e488530db6347f2f556c779a26bd1dea.png",
+        "cost": 2,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "+12 ATK and +12 DEF"
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": "the farthest soldier"
+            }
+        ],
+        "text": "Choose a enemy within 6D.<br>Deal N*6 damage to that enemy.<br>(N: Relative D between you and the enemy)",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": 1,
+                "h": -1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": -1
+            },
+            {
+                "v": 1,
+                "h": 1
+            }
+        ],
+        "rarity": "LE"
+    },
+    {
+        "id": "LE_4",
+        "name": "Double-strand Spell",
+        "img": "https://i.gyazo.com/e488530db6347f2f556c779a26bd1dea.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "v",
+                "text": "+15 ATK and -8 DEF"
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": "all opponents"
+            }
+        ],
+        "text": "When your turn end, deal N*8 damage to the closest opponents.<br>(N: number of Green or Purple Synegier Effect you created.)",
+        "movement": [],
+        "rarity": "LE"
+    },
+    {
+        "id": "LE_5",
+        "name": "Angelic Assult",
+        "img": "https://i.gyazo.com/e488530db6347f2f556c779a26bd1dea.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "green",
+                "type": "v",
+                "text": "+4 HP in this game and reset all Debuffs"
+            },
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "-2 DEF during this game and reset all Buffs"
+            }
+        ],
+        "text": "All damage to you replace to 1 damage until the start of your next turn.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 2
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
             }
         ],
         "rarity": "LE"
