@@ -2,7 +2,7 @@ export type SynegierTextType = 's' | 'v' // subject or verbus
 
 export type SynegierTextColor = 'blue' | 'green' | 'yellow' | 'red' | 'purple'
 
-export type CardCost = 'C' | 'R' | 'SR' | 'LE'
+export type CardCost = 0 | 1 | 2 | 3
 
 export type CardRarity = 'C' | 'R' | 'SR' | 'LE'
 
@@ -78,4 +78,11 @@ export interface SynegierCard {
     movement: Movement[]
     redTiles: Movement[]
     rarity: CardRarity
+}
+
+export interface keywordDescription {
+    keyword: string
+    regExp: string
+    description: string
+    image?: string
 }

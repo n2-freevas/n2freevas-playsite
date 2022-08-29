@@ -22,6 +22,7 @@
 
     function rightClickHandler(event) {
         let _event: PointerEvent = event
+
         if ($cardDetailLeft || $cardDetailRight) {
             cardDetailHide()
         } else {
@@ -53,11 +54,8 @@
         }
     }
     function cardDetailHide() {
-        if (sideOfShowDetail == 'left') {
-            $cardDetailLeft = undefined
-        } else {
-            $cardDetailRight = undefined
-        }
+        $cardDetailLeft = undefined
+        $cardDetailRight = undefined
     }
 </script>
 
@@ -65,7 +63,6 @@
     class="card"
     style="--scale:{scale}"
     on:contextmenu|preventDefault={rightClickHandler}
-    on:mouseleave={mouseLeaveHandler}
     on:mouseenter={mouseEnterHandler}>
     <div class="cardBody {isMouseOver ? 'hover' : ''}" bind:this={selfElement}>
         <div class="backgroundFrame {model.rarity}" />

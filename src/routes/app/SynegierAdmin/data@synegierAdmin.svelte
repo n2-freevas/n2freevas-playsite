@@ -6,7 +6,7 @@
     import type { SynegierCard } from '$lib/model/app/SynegierAdmin'
     import easytoast from '$lib/component/toast/summon'
     import { showLoading, hideLoading } from './__layout-synegierAdmin.svelte'
-    import { synegierAdminAccessToken } from '$lib/store/app/synegierAdmin'
+    import { synegierAdminAccessToken, cardDatus } from '$lib/store/app/synegierAdmin'
     import { sleep } from '$lib/util/time'
 
     let isSysterError = false
@@ -21,7 +21,9 @@
     onMount(async () => {
         try {
             showLoading(window)
+
             datus = await getCardDatus($synegierAdminAccessToken)
+
             await sleep(1000)
             datusDivRarity.C = datus.filter((card) => card.rarity == 'C')
             datusDivRarity.R = datus.filter((card) => card.rarity == 'R')
