@@ -7,3 +7,5 @@ export const cardDetailLeft = writable<SynegierCard>(undefined)
 export const cardDetailRight = writable<SynegierCard>(undefined)
 
 export const deckStore = writable<SynegierCard[]>([])
+
+export const cardDatus = writable<SynegierCard[]>([])

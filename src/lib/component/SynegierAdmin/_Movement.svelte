@@ -6,7 +6,6 @@
     export let redTiles: Movement[]
     export let scale: number = 1
     export let showBlankTile: boolean = false
-    console.log(movement, redTiles)
 </script>
 
 <div class="movementInfo" style="--scale:{scale}">
@@ -63,7 +62,7 @@
                 background: red;
             }
             &.blank {
-                border: solid 1px #444444;
+                border: solid 1px #555555;
             }
         }
     }

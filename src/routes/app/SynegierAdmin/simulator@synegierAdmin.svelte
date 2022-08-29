@@ -7,7 +7,7 @@
     import easytoast from '$lib/component/toast/summon'
     import { showLoading, hideLoading } from './__layout-synegierAdmin.svelte'
     import TwoPick from '$lib/component/SynegierAdmin/Simulator/TwoPick.svelte'
-    import { synegierAdminAccessToken } from '$lib/store/app/synegierAdmin'
+    import { synegierAdminAccessToken, cardDatus } from '$lib/store/app/synegierAdmin'
 
     let isSysterError = false
     let datus: SynegierCard[] = []
@@ -19,6 +19,7 @@
         try {
             showLoading(window)
             datus = await getCardDatus($synegierAdminAccessToken)
+
             await sleep(1000)
             nowPhase = '2pick'
         } catch (e) {

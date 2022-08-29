@@ -204,6 +204,7 @@
         background: black;
         border-radius: 10px;
         background: rgba($color: #222222, $alpha: 0.9);
+        font-size: 13px;
         div {
             padding: 0 20px;
             cursor: pointer;
