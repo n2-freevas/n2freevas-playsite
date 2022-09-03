@@ -243,6 +243,7 @@
         "rarity": "C"
     },
     {
+        "id": "R_1",
         "name": "Dark Souls",
         "img": "https://i.gyazo.com/e3c2d4ced79bf4c318210f49c43574b9.png",
         "cost": 1,
@@ -258,7 +259,7 @@
                 "text": "the closest opponents"
             }
         ],
-        "text": "You choose a player within 3D. Deal 4 damage to the player. If you want, thats ATK +1 and DEF -1 in this game.",
+        "text": "You choose a soldier within 3D. Deal 5 damage to the that. If you want, thats ATK +1 and DEF -1 in this game.",
         "movement": [
             {
                 "v": -1,
@@ -280,6 +281,7 @@
         "rarity": "R"
     },
     {
+        "id": "R_2",
         "name": "Pull out Excalibur",
         "img": "https://i.gyazo.com/6e629a993303b0616fdf766c0965e4c2.png",
         "cost": 0,
@@ -292,10 +294,10 @@
             {
                 "color": "red",
                 "type": "v",
-                "text": "-3 ATK during this turn"
+                "text": "-6 ATK"
             }
         ],
-        "text": "Roll a dice.<br><br>5:+3 ATK during this turn<br><br>6:+7 ATK during this turn",
+        "text": "Roll a dice.<br><br>5:+15 ATK<br><br>6:+20 ATK",
         "movement": [
             {
                 "v": -1,
@@ -313,6 +315,7 @@
         "rarity": "R"
     },
     {
+        "id": "R_3",
         "name": "Frost Blast",
         "img": "https://i.gyazo.com/c4ce0f17df88f493ffc501f519eb0db8.png",
         "cost": 1,
@@ -320,7 +323,7 @@
             {
                 "color": "blue",
                 "type": "v",
-                "text": "+6 DEF during this turn"
+                "text": "+10 DEF"
             },
             {
                 "color": "green",
@@ -328,7 +331,7 @@
                 "text": "you"
             }
         ],
-        "text": "Deal (2*N) damage to all opponents within 2D.<br><br>(N is number of opponent within 2D)",
+        "text": "Deal (3*N) damage to all opponents within 2D.<br>(N is number of opponents within 2D)",
         "movement": [
             {
                 "v": -1,
@@ -350,6 +353,7 @@
         "rarity": "R"
     },
     {
+        "id": "R_4",
         "name": "Thunderbolt",
         "img": "https://i.gyazo.com/1fa32894c837281cd466f8bb14994860.png",
         "cost": 1,
@@ -357,7 +361,7 @@
             {
                 "color": "green",
                 "type": "s",
-                "text": "a player"
+                "text": "soldier you choose"
             },
             {
                 "color": "yellow",
@@ -391,6 +395,7 @@
         "rarity": "R"
     },
     {
+        "id": "R_5",
         "name": "Cascade wave",
         "img": "https://i.gyazo.com/f05f0413ac95c938a0f576b56a4cc7d6.png",
         "cost": 1,
@@ -403,10 +408,10 @@
             {
                 "color": "red",
                 "type": "v",
-                "text": "discard 1 cards from top of the deck"
+                "text": "discard 1 card from top of the deck"
             }
         ],
-        "text": "Deal 2 damage to all opponents on the red tiles",
+        "text": "Deal 3 damage to all opponents on the red tiles",
         "movement": [
             {
                 "v": -1,
@@ -514,6 +519,7 @@
         "rarity": "R"
     },
     {
+        "id": "R_6",
         "name": "Spread fire bomb",
         "img": "https://i.gyazo.com/69c06978b06c063c24722ee55b741674.png",
         "cost": 1,
@@ -521,15 +527,15 @@
             {
                 "color": "yellow",
                 "type": "s",
-                "text": "the closest opponent player"
+                "text": "the closest opponent soldier"
             },
             {
                 "color": "red",
                 "type": "v",
-                "text": "take 5 damage"
+                "text": "take 9 damage"
             }
         ],
-        "text": "Deal 4 damage to the closest opponent.<br>If the opponent is in your 2MD, you and the opponent take 4 damage.",
+        "text": "Deal 8 damage to the closest opponent.<br>If the opponent is within 2D, you and the opponent take 8 damage.",
         "movement": [
             {
                 "v": -1,
@@ -555,6 +561,7 @@
         "rarity": "R"
     },
     {
+        "id": "R_7",
         "name": "Unexpected Discovery",
         "img": "https://i.gyazo.com/8da364d9397b2d77f251d259a7302f8b.png",
         "cost": 0,
@@ -570,27 +577,28 @@
                 "text": "the farthest opponent"
             }
         ],
-        "text": "May you discard 1 cards from your hand. Then you gain 1 MP now.",
+        "text": "May you discard 1 card from your hand. Then you gain 1 MP now.",
         "movement": [],
         "rarity": "R"
     },
     {
+        "id": "R_8",
         "name": "Edge of Excalibur",
         "img": "https://i.gyazo.com/338fc64e476a6a24d7a5e20e6c2b5352.png",
         "cost": 1,
         "synegierText": [
             {
                 "color": "yellow",
-                "type": "v",
-                "text": ""
+                "type": "s",
+                "text": "all enemies"
             },
             {
                 "color": "purple",
-                "type": "s",
-                "text": ""
+                "type": "v",
+                "text": "take 21 damage when your HP is 7 or less"
             }
         ],
-        "text": "Roll a dice.<br>3,4: Deal 5 damage to the closest enemy.<br>5: heal 5 HP<br>6: your ATK +10 during this turn",
+        "text": "Roll a dice.<br>3,4: Deal 9 damage to the closest enemy.<br>5: heal 9 HP<br>6: your ATK +10 during this turn",
         "movement": [
             {
                 "v": -1,
@@ -628,6 +636,7 @@
         "rarity": "R"
     },
     {
+        "id": "R_9",
         "name": "Glory armor",
         "img": "https://i.gyazo.com/c0967bc4b3780e08ac6c22b20aabcd26.png",
         "cost": 1,
@@ -643,7 +652,7 @@
                 "text": "the closest enemies"
             }
         ],
-        "text": "Heal 5 HP, and remove all your Debuff.",
+        "text": "Heal 10 HP, and remove all your Debuff.",
         "movement": [
             {
                 "v": -1,
@@ -665,6 +674,7 @@
         "rarity": "R"
     },
     {
+        "id": "R_10",
         "name": "Stone fall",
         "img": "https://i.gyazo.com/29cb3df9ef07ef81fd3dd67792baba64.png",
         "cost": 0,
@@ -672,7 +682,7 @@
             {
                 "color": "blue",
                 "type": "v",
-                "text": "+4 DEF during this turn"
+                "text": "+6 DEF"
             },
             {
                 "color": "yellow",
@@ -680,7 +690,7 @@
                 "text": "you and all opponents within 3D"
             }
         ],
-        "text": "Deal 3 damage and attach Shock(3) to a opponent within 2D",
+        "text": "Deal 4 damage and attach Shock(3) to a opponent within 2D",
         "movement": [
             {
                 "v": 0,
@@ -690,6 +700,7 @@
         "rarity": "R"
     },
     {
+        "id": "R_11",
         "name": "Scratchy wind",
         "img": "https://i.gyazo.com/1b66766a833debc5c794393c3484ff9b.png",
         "cost": 0,
@@ -705,7 +716,7 @@
                 "text": "you and the closest enemy"
             }
         ],
-        "text": "you choose opponents within 2D.<br>Deal 3 damage to all opponents around it.",
+        "text": "you choose a opponent within 2D.<br>Deal 4 damage to all opponents around it.",
         "movement": [
             {
                 "v": 0,
@@ -714,6 +725,608 @@
             {
                 "v": 0,
                 "h": -1
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "id": "R_12",
+        "name": "Ruin and Thunder",
+        "img": "https://i.gyazo.com/624087ea098c3a27e17c6d6ad67b7c73.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "s",
+                "text": "all soldiers"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "take 7 damage"
+            }
+        ],
+        "text": "Deal 7 damage to the closest soldier",
+        "movement": [
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+            
+        ],
+        "rarity": "R"
+    },
+    {
+        "id": "R_13",
+        "name": "Rift in Abyss",
+        "img": "https://i.gyazo.com/f8612ca84879a9aff23c7468b4804851.png",
+        "cost": 2,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "+18 DEF"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "-18 ATK"
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": "the furthest soldier"
+            }
+        ],
+        "text": "Choose two from players and enemies (except Boss).<br>They do Battle each other.",
+        "movement": [
+            {
+                "v": -2,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 2,
+                "h": 0
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "id": "R_14",
+        "name": "Picked-up Revolver",
+        "img": "",
+        "cost": 2,
+        "synegierText": [
+            {
+                "color": "yellow",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "take 4*N damage to the closest opponent.<br>(N: pips of the dice)"
+            }
+        ],
+        "text": "Choose two from players and enemies (except Boss).<br>They do Battle each other.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 2
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 2,
+                "h": 0
+            },
+            {
+                "v": -2,
+                "h": 0
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "id": "R_15",
+        "name": "Dragon Thread",
+        "img": "https://i.gyazo.com/f4dd46e6c80b735447ae232880db8574.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "red",
+                "type": "s",
+                "text": "all soldier within 2D"
+            },
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "get Fear(2)"
+            }
+        ],
+        "text": "Deal 7 damage to all soldier within 2D.<br>Those soldiers can`t do Battle with you until the start of your next turn.",
+        "movement": [
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+            
+        ],
+        "rarity": "R"
+    },
+    {
+        "id": "R_16",
+        "name": "Volcanic Eruption",
+        "img": "https://i.gyazo.com/458fec3ad1ffe04f8d42d264d2c88970.png",
+        "cost": 2,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "s",
+                "text": "you and your partner"
+            },
+            {
+                "color": "yellow",
+                "type": "s",
+                "text": "everybody"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "take (4*N) damage"
+            }
+        ],
+        "text": "Roll a dice.<br>All opponent soldiers get Panic(2*N).<br>(N: pips of the dice)",
+        "movement": [
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
+            },
+            {
+                "v": -2,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 2,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": 0,
+                "h": -2
+            }
+            
+        ],
+        "rarity": "R"
+    },
+    {
+        "id": "R_17",
+        "name": "Abysmagical Lazer",
+        "img": "https://i.gyazo.com/e050a78a767d362e0bb6eb4ab7a4e424.png",
+        "cost": 2,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "v",
+                "text": "+20 ATK and get Panic(3)"
+            },
+            {
+                "color": "yellow",
+                "type": "s",
+                "text": "someone on the chosen tile"
+            }
+        ],
+        "text": "Choose a tile.<br>Deal 8 damge to the opponent on the tile.<br>Attach Panic(4) to the opponents around the tile.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 2
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
+            },
+            {
+                "v": -2,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 2,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": 0,
+                "h": -2
+            }
+            
+        ],
+        "rarity": "R"
+    },
+    {
+        "id": "R_18",
+        "name": "Adabana",
+        "img": "https://i.gyazo.com/c4400a62befedfb3b6bd1c0b1b07073b.png",
+        "cost": 2,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "s",
+                "text": "you and your partner"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "get Fear(N)<br>(N: the nunber of soldiers who have Shock)"
+            }
+        ],
+        "text": "Deal 10 damage to the closest enemy.<br>Attach Shock(7) to all players around the enemy.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": -2,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 2,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+            
+        ],
+        "rarity": "R"
+    },
+    {
+        "id": "R_19",
+        "name": "Dragon Riding",
+        "img": "https://i.gyazo.com/f5a5a1d8d6a3e619800ae93fc91bce06.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "+7 DEF until one's next tuen start"
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": "all opponent soldiers within 2D"
+            }
+        ],
+        "text": "Remove all Shock and Panic.<br>Deal 8 damage and attach Fear(1) to a opponent in the red tile.",
+        "movement": [
+            {
+                "v": -2,
+                "h": 2
+            },
+            {
+                "v": 2,
+                "h": 2
+            },
+            {
+                "v": -2,
+                "h": -2
+            },
+            {
+                "v": 2,
+                "h": -2
+            }
+        ],
+        "redTiles": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "id": "R_20",
+        "name": "Fallens Avenge",
+        "img": "https://i.gyazo.com/f4624103585f7abf9e9205ac327af090.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "+1 ATK in this game"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "get Shock(4)"
+            }
+        ],
+        "text": "+4 ATK.<br>If you were dead in your preveous turn, your ATK +3 in this game.",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "id": "R_21",
+        "name": "Unbalance Great Axe",
+        "img": "https://i.gyazo.com/16f5528df736316454517eba6c9265b5.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "take 20 damage"
+            }
+        ],
+        "text": "When you create Synegier Effect other than purple one, deal 7 damage to you and this turn end.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 2
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "id": "R_22",
+        "name": "Lunar Knife",
+        "img": "https://i.gyazo.com/40153ec1cf3ca90eeccee82163ffc20c.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "+4 ATK"
+            },
+            {
+                "color": "yellow",
+                "type": "s",
+                "text": "opponents within 1D"
+            }
+        ],
+        "text": "Deal 7 damage to a enemy within 1D.<br>Deal 10 damage to Boss within 1D.",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "id": "R_23",
+        "name": "Red Spiral",
+        "img": "https://i.gyazo.com/49cb107218edc629dc5c42ec43aa89ae.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "s",
+                "text": "you and your partner"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "take 5 damage"
+            }
+        ],
+        "text": "your ATK +(3*N).<br>(N: number of soldiers in Center Area)",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": 1,
+                "h": 0
+            }
+        ],
+        "rarity": "R"
+    },
+    {
+        "id": "R_24",
+        "name": "Stream Reverse",
+        "img": "https://i.gyazo.com/8b9bf77fa334a9dbbb8ca01e028ef491.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "get Flow(1)"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "discard 1 carf from top of the deck"
+            }
+        ],
+        "text": "You choose a card in trash.<br>Discard a card from top of your deck and put the chosen card on top of your deck.",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
             }
         ],
         "rarity": "R"
