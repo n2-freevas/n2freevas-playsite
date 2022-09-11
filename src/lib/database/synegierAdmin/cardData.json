@@ -297,7 +297,7 @@
                 "text": "-6 ATK"
             }
         ],
-        "text": "Roll a dice.<br><br>5:+15 ATK<br><br>6:+20 ATK",
+        "text": "Roll a dice.<br><br>5:+15 ATK<br>6:+20 ATK",
         "movement": [
             {
                 "v": -1,
@@ -396,7 +396,7 @@
     },
     {
         "id": "R_5",
-        "name": "Cascade wave",
+        "name": "Cascade Wave",
         "img": "https://i.gyazo.com/f05f0413ac95c938a0f576b56a4cc7d6.png",
         "cost": 1,
         "synegierText": [
@@ -411,7 +411,7 @@
                 "text": "discard 1 card from top of the deck"
             }
         ],
-        "text": "Deal 3 damage to all opponents on the red tiles",
+        "text": "Deal 3 damage to all opponents on the red tiles.",
         "movement": [
             {
                 "v": -1,
@@ -520,7 +520,7 @@
     },
     {
         "id": "R_6",
-        "name": "Spread fire bomb",
+        "name": "Spread Fire Bomb",
         "img": "https://i.gyazo.com/69c06978b06c063c24722ee55b741674.png",
         "cost": 1,
         "synegierText": [
@@ -637,7 +637,7 @@
     },
     {
         "id": "R_9",
-        "name": "Glory armor",
+        "name": "Glory Armor",
         "img": "https://i.gyazo.com/c0967bc4b3780e08ac6c22b20aabcd26.png",
         "cost": 1,
         "synegierText": [
@@ -675,7 +675,7 @@
     },
     {
         "id": "R_10",
-        "name": "Stone fall",
+        "name": "Stone Fall",
         "img": "https://i.gyazo.com/29cb3df9ef07ef81fd3dd67792baba64.png",
         "cost": 0,
         "synegierText": [
@@ -690,7 +690,7 @@
                 "text": "you and all opponents within 3D"
             }
         ],
-        "text": "Deal 4 damage and attach Shock(3) to a opponent within 2D",
+        "text": "Deal 4 damage and attach Shock(3) to a opponent within 2D.",
         "movement": [
             {
                 "v": 0,
@@ -701,7 +701,7 @@
     },
     {
         "id": "R_11",
-        "name": "Scratchy wind",
+        "name": "Scratchy Wind",
         "img": "https://i.gyazo.com/1b66766a833debc5c794393c3484ff9b.png",
         "cost": 0,
         "synegierText": [
@@ -746,7 +746,7 @@
                 "text": "take 7 damage"
             }
         ],
-        "text": "Deal 7 damage to the closest soldier",
+        "text": "Deal 7 damage to the closest soldier.",
         "movement": [
             {
                 "v": -1,
