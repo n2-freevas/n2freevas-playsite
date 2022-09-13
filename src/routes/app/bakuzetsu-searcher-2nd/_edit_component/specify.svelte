@@ -73,7 +73,8 @@
         font-family: 'Kosugi Maru', sans-serif;
     }
     h3 {
-        margin: 10px 0 0 0;
+        font-size: 13px;
+        margin: 5px 0 5px 0;
     }
     #elem-box,
     #tribe-box,

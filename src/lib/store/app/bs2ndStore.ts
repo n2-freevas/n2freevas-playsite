@@ -109,7 +109,9 @@ export const gimmickStore = writable<KotodamanGimmickModel[]>([
     { id: 5, gimmick: 'ウォールブレイカー', active: false },
     { id: 6, gimmick: 'ビリビリガード', active: false },
     { id: 7, gimmick: 'ヒールブレイカー', active: false },
-    { id: 8, gimmick: 'コピーガード', active: false }
+    { id: 8, gimmick: 'コピーガード', active: false },
+    { id: 9, gimmick: '地雷ガード', active: false },
+    { id: 10, gimmick: 'フリーズブレイカー', active: false }
 ])
 
 export const isDeckFullStore = writable<boolean>(false)

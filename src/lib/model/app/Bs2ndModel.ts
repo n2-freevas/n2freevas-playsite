@@ -9,6 +9,8 @@ export type gimmick =
     | 'ビリビリガード'
     | 'ヒールブレイカー'
     | 'コピーガード'
+    | '地雷ガード'
+    | 'フリーズブレイカー'
 
 export const ElemEngDict = {
     火: 'fire',
@@ -36,7 +38,9 @@ export const GimmickEngDict = {
     ウォールブレイカー: 'wall',
     ビリビリガード: 'biribiri',
     ヒールブレイカー: 'heal',
-    コピーガード: 'copy'
+    コピーガード: 'copy',
+    地雷ガード: 'zirai',
+    フリーズブレイカー: 'freeze'
 }
 export const AdventNumDict = {
     0: '-',

@@ -80,9 +80,28 @@ export interface SynegierCard {
     rarity: CardRarity
 }
 
+export interface SynegierCardAndPosition extends SynegierCard {
+    objectId: number
+    x: number
+    y: number
+    z: number
+    rotate: number
+    flip: boolean
+    scale: number
+}
+
 export interface keywordDescription {
     keyword: string
     regExp: string
     description: string
     image?: string
+}
+
+export interface cardMoveEvent {
+    objectId: number
+    pre_x: number
+    pre_y: number
+    now_x: number
+    now_y: number
+    mouseEvent: MouseEvent
 }

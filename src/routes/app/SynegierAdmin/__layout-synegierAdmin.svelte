@@ -1,4 +1,6 @@
 <script lang="ts" context="module">
+    export const slotPadding = 100
+
     export function showLoading(win: Window) {
         win.document.getElementById('loading').classList.add('show')
     }
@@ -166,7 +168,7 @@
                 {/if}
             </div>
         {:else}
-            <div id="slot">
+            <div id="slot" style="padding-top:{slotPadding}px">
                 <slot />
             </div>
             <CardDetail
@@ -225,7 +227,6 @@
     }
     #slot {
         z-index: 0;
-        padding-top: 100px;
     }
     #passwordUI {
         position: fixed;

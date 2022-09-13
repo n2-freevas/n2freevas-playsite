@@ -1,7 +1,7 @@
 <script lang="ts">
     import Card from '$lib/component/SynegierAdmin/Card.svelte'
     import type { SynegierCard } from '$lib/model/app/SynegierAdmin'
-    import In2pickAmination from '../CardAnimationComponent.svelte/In2pickAmination.svelte'
+    import In2pickAmination from '$lib/component/SynegierAdmin/CardAnimationComponent/In2pickAmination.svelte'
 
     // Require : Size of parent element is width:1000px height:250px.
 

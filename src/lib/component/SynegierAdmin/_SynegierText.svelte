@@ -22,6 +22,7 @@
         --synegierTextWidth: calc(320px * var(--scale));
         --synegierTextHeight: calc(45px * var(--scale));
         --synegierTextRibbonWidth: calc(22px * var(--scale));
+        --synegierTextPadding: calc(30px * var(--scale));
         --synegierTextMargin: calc((20px * var(--scale)) + var(--synegierTextHeight));
         --fontsize: calc(10px * var(--scale));
         // --cardSpacing20: calc(var(--h) / 30);
@@ -36,7 +37,7 @@
             width: var(--synegierTextWidth);
             height: var(--synegierTextHeight);
             background: rgba($color: #000000, $alpha: 0.6);
-            padding: 0 30px;
+            padding: 0 var(--synegierTextPadding);
             align-items: center;
             &::before {
                 position: absolute;

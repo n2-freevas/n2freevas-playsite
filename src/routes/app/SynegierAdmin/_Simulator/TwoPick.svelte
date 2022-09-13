@@ -2,9 +2,12 @@
     import Card from '$lib/component/SynegierAdmin/Card.svelte'
     import type { SynegierCard } from '$lib/model/app/SynegierAdmin'
     import { deckStore } from '$lib/store/app/synegierAdmin'
-    import { onMount } from 'svelte'
-    import In2pickAmination from '../CardAnimationComponent.svelte/In2pickAmination.svelte'
+    import { onMount, createEventDispatcher } from 'svelte'
+    import In2pickAmination from '$lib/component/SynegierAdmin/CardAnimationComponent/In2pickAmination.svelte'
     import DeckSummary from './deckSummary.svelte'
+    import Button from '$lib/component/SynegierAdmin/UI/Button.svelte'
+
+    const dispatcher = createEventDispatcher()
 
     export let cardDatus: SynegierCard[]
     // export let soldierDatus = []
@@ -188,9 +191,10 @@
     }
 
     onMount(() => {
-        // pickedCards = cardDatus.slice(0,16)
-        // nowPhaseOf2pick = "end"
-        pickPrepare()
+        pickedCards = cardDatus.slice(0, 16)
+        $deckStore = pickedCards
+        nowPhaseOf2pick = 'end'
+        // pickPrepare()
     })
 </script>
 
@@ -229,10 +233,17 @@
     <div id="pickEndField">
         <div class="list">
             {#each pickedCards as c, i}
-                <In2pickAmination onAppear={true} delay={i * 0.1}>
+                <In2pickAmination onAppear={true} delay={i * 0.05}>
                     <Card model={c} scale={0.3} />
                 </In2pickAmination>
             {/each}
+        </div>
+        <div class="finishButton">
+            <Button
+                text="><br>next"
+                on:click={() => {
+                    dispatcher('finish')
+                }} />
         </div>
     </div>
 {:else}
@@ -253,11 +264,21 @@
     #pickProcessingField,
     #pickEndField {
         position: absolute;
-        overflow: hidden;
         background: radial-gradient(closest-side, rgba(#555555, 0.8), rgba(#000000, 0));
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        width: 1000px;
+        height: 400px;
+        transform: translate(-50%, -65%);
+        .finishButton {
+            position: absolute;
+            width: 80px;
+            height: 50px;
+            top: 50%;
+            right: -120px;
+            transform: translate(0, -50%);
+            text-align: center;
+        }
     }
     #pickProcessingField {
         width: 600px;
@@ -275,11 +296,6 @@
             top: 50px;
             right: 50px;
         }
-    }
-
-    #pickEndField {
-        width: 1000px;
-        height: 600px;
     }
     #pickingInfo {
         position: fixed;

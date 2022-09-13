@@ -406,6 +406,9 @@
             right: -250px;
             border: solid 2px white;
             border-radius: 20px 0 0 20px;
+            &.open {
+                right: -5px;
+            }
         }
         #bs2nd-deck-select-panel {
             border: solid 2px white;
