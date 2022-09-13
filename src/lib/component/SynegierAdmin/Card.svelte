@@ -3,13 +3,15 @@
     import { onMount } from 'svelte'
     import Movement from './_Movement.svelte'
     import SynegierText from './_SynegierText.svelte'
+    import { cardDetailLeft, cardDetailRight } from '$lib/store/app/synegierAdmin'
+
     export let model: SynegierCard
     export let scale: number = 1
-    import { cardDetailLeft, cardDetailRight } from '$lib/store/app/synegierAdmin'
+    export let isFlip: boolean = false
 
     let showText: boolean = true
     let isMouseOver: boolean = false
-    let isShowDetail: boolean = false
+
     let sideOfShowDetail: 'left' | 'right' = 'left'
     let selfElement: HTMLDivElement
     if (scale != 1) {
@@ -40,11 +42,11 @@
 
     function mouseLeaveHandler() {
         isMouseOver = false
-        window.setTimeout(() => {
-            if (!isMouseOver) {
-                cardDetailHide()
-            }
-        }, 200)
+        // window.setTimeout(() => {
+        //     if (!isMouseOver) {
+        //         cardDetailHide()
+        //     }
+        // }, 200)
     }
     function cardDetailShow() {
         if (sideOfShowDetail == 'left') {
@@ -63,26 +65,32 @@
     class="card"
     style="--scale:{scale}"
     on:contextmenu|preventDefault={rightClickHandler}
-    on:mouseenter={mouseEnterHandler}>
+    on:mouseenter={mouseEnterHandler}
+    on:mouseleave={mouseLeaveHandler}>
     <div class="cardBody {isMouseOver ? 'hover' : ''}" bind:this={selfElement}>
-        <div class="backgroundFrame {model.rarity}" />
-        <img class="inCardBody" src={model.img} alt="" />
-        <div class="cardInfo">
-            <div class="cardTopInfo">
-                <div class="cost {model.rarity}">
-                    {model.cost}
+        <div class="cardFront {isFlip ? 'flip' : ''}">
+            <div class="backgroundFrame {model.rarity}" />
+            <img class="inCardBody" src={model.img} alt="" />
+            <div class="cardInfo">
+                <div class="cardTopInfo">
+                    <div class="cost {model.rarity}">
+                        {#if scale >= 0.2}{model.cost}{/if}
+                    </div>
+                    <div class="name">
+                        {#if showText}{model.name}{/if}
+                    </div>
                 </div>
-                <div class="name">
-                    {#if showText}{model.name}{/if}
+                <SynegierText synegierText={model.synegierText} showText={showText} scale={scale} />
+                <div class="cardBottomInfo">
+                    <div class="textInfo">
+                        {#if showText}{@html model.text}{/if}
+                    </div>
+                    <Movement movement={model.movement} redTiles={model.redTiles} scale={scale} />
                 </div>
             </div>
-            <SynegierText synegierText={model.synegierText} showText={showText} scale={scale} />
-            <div class="cardBottomInfo">
-                <div class="textInfo">
-                    {#if showText}{@html model.text}{/if}
-                </div>
-                <Movement movement={model.movement} redTiles={model.redTiles} scale={scale} />
-            </div>
+        </div>
+        <div class="cardBack {isFlip ? 'flip' : ''}">
+            <img src="/img/SynegierAdmin/basic_sleeve.png" alt="" />
         </div>
     </div>
 </div>
@@ -161,7 +169,41 @@
                 background: radial-gradient(rgba(#bbbbbb, 0.8), rgba(#eeeeee, 0.2));
             }
         }
+
+        -moz-perspective: 500;
+        -webkit-perspective: 500;
+        -o-perspective: 500;
+        -ms-perspective: 500;
+        perspective: 500;
+
+        .cardFront,
+        .cardBack {
+            position: absolute;
+            width: inherit;
+            height: inherit;
+            z-index: 100;
+            transition: 0.2s;
+            transform: rotateY(0deg);
+        }
+        .cardFront {
+            &.flip {
+                transform: rotateY(180deg);
+            }
+        }
+        .cardBack {
+            transform: rotateY(-180deg);
+            backface-visibility: hidden;
+            img {
+                width: inherit;
+                image-rendering: pixelated;
+                -webkit-user-drag: none;
+            }
+            &.flip {
+                transform: rotateY(0deg);
+            }
+        }
     }
+
     .backgroundFrame {
         position: absolute;
         width: inherit;

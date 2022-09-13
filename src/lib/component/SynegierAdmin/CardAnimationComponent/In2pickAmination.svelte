@@ -34,13 +34,13 @@
 <style lang="scss">
     .anime {
         position: relative;
-        top: 0;
+        top: 20px;
         opacity: 0;
         transition: 0.3s;
         &.onAppear {
             animation: appear ease-in-out forwards 0.3s var(--delay);
             &:hover {
-                top: -20px;
+                top: 0px;
             }
         }
         &.onChoised {
