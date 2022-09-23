@@ -69,6 +69,8 @@ export const MovementMap: Movement[] = [
     { v: 3, h: -3 }
 ]
 
+// Card
+
 export interface SynegierCard {
     name: string
     img: string
@@ -104,4 +106,25 @@ export interface cardMoveEvent {
     now_x: number
     now_y: number
     mouseEvent: MouseEvent
+}
+
+// Soldier
+export interface Status {
+    HP: number
+    ATK: number
+    DEF: number
+}
+
+export interface SoldierLevelUpRule extends Status {
+    level: number
+}
+
+export interface SoldierCard {
+    name: string
+    aka: string
+    img: string
+    synegierText: SynegierText[]
+    initStatus: Status
+    levelUpRule: SoldierLevelUpRule[]
+    ability: string
 }

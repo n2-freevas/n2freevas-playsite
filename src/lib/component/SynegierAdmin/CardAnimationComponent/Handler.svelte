@@ -12,7 +12,7 @@
     let pre_y: number = 0
     let isMoving: boolean = false
 
-    function onMouseDown(event) {
+    function onMouseDown() {
         if (!isMoving) {
             pre_x = x
             pre_y = y
@@ -27,7 +27,7 @@
         }
     }
 
-    function onMouseUp(e) {
+    function onMouseUp(e: MouseEvent) {
         if (isMoving) {
             isMoving = false
             const eventDetail: cardMoveEvent = {
@@ -58,9 +58,6 @@
         transition: 0.2s;
         &.disableTransition {
             transition: none;
-        }
-        .cardBack {
-            width: 100%;
         }
     }
 </style>

@@ -4,15 +4,17 @@
     const dispatcher = createEventDispatcher()
     export let img: string = undefined
     export let text: string
+    export let size: number = 100
     let isHover: boolean = false
 </script>
 
 <div
     class="button"
+    style="width:{size}px; height:{size}px;"
     on:click={() => {
         dispatcher('click')
     }}>
-    <div class="buttonBg {isHover ? 'hover' : ''}" />
+    <div class="buttonBg {isHover ? 'hover' : ''}" style="width:{size}px; height:{size}px;" />
     <div class="buttonBody">
         {#if img}<img src={img} alt="" />{/if}
         <p>{@html text}</p>
@@ -30,13 +32,8 @@
 <style lang="scss">
     .button {
         position: relative;
-        width: 100px;
-        height: 100px;
         .buttonBg {
             position: absolute;
-            content: '';
-            width: 100px;
-            height: 100px;
             opacity: 0.9;
             background: rgba($color: #444444, $alpha: 0.8);
             transform: rotate(45deg);

@@ -7,3 +7,4 @@ trashed_memo
 .vercel_build_output
 .env.production
 .env.development
+firebase.json

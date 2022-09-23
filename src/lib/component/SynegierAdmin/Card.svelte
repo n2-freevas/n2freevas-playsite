@@ -14,8 +14,12 @@
 
     let sideOfShowDetail: 'left' | 'right' = 'left'
     let selfElement: HTMLDivElement
-    if (scale != 1) {
-        showText = false
+    $: {
+        if (scale != 1) {
+            showText = false
+        } else {
+            showText = true
+        }
     }
     onMount(() => {
         sideOfShowDetail =

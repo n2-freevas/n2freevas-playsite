@@ -74,7 +74,7 @@
             isInfiniteScrollLoading = true
             $adventFilterConditionStore.offset += $adventFilterConditionStore.limit
             let list = undefined
-            if ($adventFilterConditionStore.elem == []) {
+            if ($adventFilterConditionStore.elem.length == 0) {
                 list = await getAdvents(
                     $adventFilterConditionStore.offset,
                     $adventFilterConditionStore.limit
