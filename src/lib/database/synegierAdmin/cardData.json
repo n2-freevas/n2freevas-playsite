@@ -1,5 +1,6 @@
 [
     {
+        "id": "C_1",
         "name": "Wild Fist",
         "img": "https://i.gyazo.com/2cb52c3a5c0b41b832b47c4b521c42b7.png",
         "cost": 0,
@@ -7,12 +8,12 @@
             {
                 "color": "green",
                 "type": "v",
-                "text": "+8 ATK in this turn"
+                "text": "+6 ATK in this turn"
             },
             {
                 "color": "red",
                 "type": "s",
-                "text": "the closest opponent player"
+                "text": "the closest opponent soldier"
             }
         ],
         "text": "When Battle, you and the opponent ignore DEF each other.",
@@ -37,7 +38,8 @@
         "rarity": "C"
     },
     {
-        "name": "Warp gate",
+        "id": "C_2",
+        "name": "Warp Gate",
         "img": "https://i.gyazo.com/fd5d7719bd9dc401af61656c57c9dcc2.png",
         "cost": 1,
         "synegierText": [
@@ -66,6 +68,7 @@
         "rarity": "C"
     },
     {
+        "id": "C_3",
         "name": "Ambush",
         "img": "https://i.gyazo.com/bdfccc5c9d3364173ea2282a311adc98.png",
         "cost": 1,
@@ -95,7 +98,8 @@
         "rarity": "C"
     },
     {
-        "name": "Untouchable spell book",
+        "id": "C_4",
+        "name": "Untouchable Spell Book",
         "img": "https://i.gyazo.com/79cf08bd6e6a549985a1dda6b11874b9.png",
         "cost": 1,
         "synegierText": [
@@ -110,7 +114,7 @@
                 "text": "take 10 damage"
             }
         ],
-        "text": "Deal 5 damage to you. Deal 5 damage to all opponent within 2D",
+        "text": "Take 5 damage. Deal 5 damage to all opponents within 2D",
         "movement": [
             {
                 "v": -1,
@@ -140,22 +144,23 @@
         "rarity": "C"
     },
     {
-        "name": "Forbidden scroll",
+        "id": "C_5",
+        "name": "Forbidden Scroll",
         "img": "https://i.gyazo.com/2a7d6213ccf7c66c2a3653cb39e886ac.png",
         "cost": 0,
         "synegierText": [
             {
                 "color": "green",
                 "type": "s",
-                "text": "all player in your around"
+                "text": "all soldiers in your around"
             },
             {
                 "color": "red",
                 "type": "v",
-                "text": "-3 DEF during this turn"
+                "text": "-3 DEF"
             }
         ],
-        "text": "Draw 1 card and discard 1 cards.",
+        "text": "Draw 1 card. Then, discard 1 card from your hand.",
         "movement": [
             {
                 "v": 1,
@@ -169,7 +174,8 @@
         "rarity": "C"
     },
     {
-        "name": "Tactics for next",
+        "id": "C_6",
+        "name": "Tactics for Next",
         "img": "https://i.gyazo.com/eca23aa3add9133406d8c9df7981e14e.png",
         "cost": 0,
         "synegierText": [
@@ -184,7 +190,7 @@
                 "text": "you"
             }
         ],
-        "text": "May choose a card in your hand. Put the card on your deck top.",
+        "text": "May choose 1 card in your hand. Put the card on your deck top.",
         "movement": [
             {
                 "v": 1,
@@ -198,7 +204,8 @@
         "rarity": "C"
     },
     {
-        "name": "Samurai slash",
+        "id": "C_7",
+        "name": "Samurai Slash",
         "img": "https://i.gyazo.com/9474300b629486fe73031070e34128b5.png",
         "cost": 1,
         "synegierText": [
@@ -213,7 +220,7 @@
                 "text": "discard 1 card from one's hand"
             }
         ],
-        "text": "Deal 5 damage to a opponent within 2D",
+        "text": "Deal 6 damage to a opponent within 2D.",
         "movement": [
             {
                 "v": -1,
@@ -233,6 +240,970 @@
             },
             {
                 "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_8",
+        "name": "Ruthless Blade",
+        "img": "https://i.gyazo.com/973b60ceb338dd391de4cddcb229bf4f.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "+1 ATK until during this game"
+            },
+            {
+                "color": "red",
+                "type": "s",
+                "text": "the closest opponent"
+            }
+        ],
+        "text": "Deal 6 damage to opponent soldeirs whose HP is 6 or less.",
+        "movement": [
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_9",
+        "name": "Patriot Spear",
+        "img": "https://i.gyazo.com/55f0d64e9d292c9e44ea3f4dacdd05d0.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "take 4 damage"
+            }
+        ],
+        "text": "When a opponent is on the red tiles, your ATK +12.",
+        "movement": [
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "redTiles": [
+            {
+                "v": 0,
+                "h": 2
+            },
+            {
+                "v": -2,
+                "h": 0
+            },
+            {
+                "v": 2,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -2
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_10",
+        "name": "Quick Arrows",
+        "img": "https://i.gyazo.com/ec459927d8ddea592ac758f0afd10656.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "red",
+                "type": "s",
+                "text": "all enemies within 3D"
+            },
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "take 5 damage"
+            }
+        ],
+        "text": "Deal 2 damage 3 times to the closest enemy.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_11",
+        "name": "Sharpened Slash",
+        "img": "https://i.gyazo.com/1fd74f7c7087f1626adc10bcc717fc97.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "-5 DEF"
+            }
+        ],
+        "text": "Your ATK +3.<br>Deal 5 damage to a opponent  within 1D.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_12",
+        "name": "Migawari no Jutsu",
+        "img": "https://i.gyazo.com/163604c837c0178346e9f2a279fc5bee.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "v",
+                "text": "get Sheild(1)"
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": "the highest level opponent soldier"
+            }
+        ],
+        "text": "Your DEF +5.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_13",
+        "name": "Insight",
+        "img": "https://i.gyazo.com/df377e2f5a8513e76a70ef4a41ff7780.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "take 2 damage 3 times"
+            }
+        ],
+        "text": "The damage dealt by Effect or SynegierEffect increase by 1 during this turn.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_14",
+        "name": "Dragon Speat",
+        "img": "https://i.gyazo.com/8a71a2f0c7b75b6240ff63af07f3056f.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "+3 ATK"
+            },
+            {
+                "color": "green",
+                "type": "s",
+                "text": "you"
+            }
+        ],
+        "text": "Your ATK +1 for per 1D movement during this turn.",
+        "rarity": "C"
+    },
+    {
+        "id": "C_15",
+        "name": "Rod of Planet",
+        "img": "https://i.gyazo.com/56f33d2984b094e1aa8d0e8c6a50eac6.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "v",
+                "text": "take 2 damage"
+            },
+            {
+                "color": "yellow",
+                "type": "v",
+                "text": "take 4 damage"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "take 6 damage"
+            }
+        ],
+        "text": "When your turn end, deal (3*N) damage to the closest opponent soldier.<br>(N: number of SynegierEffect you created during this turn)",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": -2,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 2,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_16",
+        "name": "Tornado Legs",
+        "img": "https://i.gyazo.com/79b45fab3149f324bddac66077992722.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "v",
+                "text": "+3 ATK and +4 DEF"
+            },
+            {
+                "color": "red",
+                "type": "s",
+                "text": "a opponent within 2D"
+            }
+        ],
+        "text": "When 2 or more opponents are on the red tiles, deal 6 damage to all opponents within 2D.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "redTiles": [
+            {
+                "v": 0,
+                "h": 2
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
+            },
+            {
+                "v": -2,
+                "h": 0
+            },
+            {
+                "v": 2,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": -1
+            },
+            {
+                "v": 1,
+                "h": -1
+            },
+            {
+                "v": 0,
+                "h": -2
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_17",
+        "name": "Roundly Moon Fist",
+        "img": "https://i.gyazo.com/7ae9e92c92999c36584cd33771813f20.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "take 3 damage and -2 DEF"
+            }
+        ],
+        "text": "When 2 or more opponents are on the red tiles, deal 6 damage to all opponents within 2D.",
+        "movement": [
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            }
+        ],
+        "redTiles": [
+            {
+                "v": 0,
+                "h": 3
+            },
+            {
+                "v": -1,
+                "h": 2
+            },
+            {
+                "v": 0,
+                "h": 2
+            },
+            {
+                "v": 1,
+                "h": 2
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_18",
+        "name": "Fatal Scratching",
+        "img": "https://i.gyazo.com/22ab5e4e272461725cf65ba4e70e0049.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "red",
+                "type": "s",
+                "text": "the closest opponent"
+            },
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "take 6 damage"
+            }
+        ],
+        "text": "Deal 2 damage 2 times to all opponents within 2D",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": -1
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": 1,
+                "h": -1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_19",
+        "name": "Fanfare",
+        "img": "https://i.gyazo.com/289dd0d5a1d9fb0b881e06574d21ef74.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "bule",
+                "type": "v",
+                "text": "+ 10 DEF"
+            },
+            {
+                "color": "green",
+                "type": "v",
+                "text": "+10 ATK"
+            }
+        ],
+        "text": "Your ATK +5.<br>Heal 7 HP.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 0
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_20",
+        "name": "Blade Strike",
+        "img": "https://i.gyazo.com/31556b0166270cd95e7af8d19e660b66.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "v",
+                "text": "+10 ATK"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "Take 6 damage"
+            }
+        ],
+        "text": "Deal 6 damage to the closest opponent soldier.<br>Then, deal 4 damage to all opponents in 1D of the soldier.",
+        "movement": [
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1 
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_21",
+        "name": "Wind Disc",
+        "img": "https://i.gyazo.com/98db1451a213c5a99e8c1a90c5eff72d.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "v",
+                "text": "+8 ATK"
+            },
+            {
+                "color": "yellow",
+                "type": "s",
+                "text": "You and the furthest opponent"
+            }
+        ],
+        "text": "Deal 4 damage to the furthest opponent.<br>Deal 3 damage to the second furthest opponent.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 2
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0 
+            },
+            {
+                "v": -1,
+                "h": 0 
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_22",
+        "name": "Roar",
+        "img": "https://i.gyazo.com/bd17fee8f836f880336c1e4593406dac.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "+8 ATK"
+            },
+            {
+                "color": "red",
+                "type": "s",
+                "text": "all opponents within 2D"
+            }
+        ],
+        "text": "Deal 3 damage to all opponents within 2D.<br>DEF of all opponents within 2D -2 until the end of my next turn.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_23",
+        "name": "Heavy Strike",
+        "img": "https://i.gyazo.com/6ec3fed16195213974fa448df04708e6.png",
+        "cost": 2,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "v",
+                "text": "+12 DEF"
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": "the closest player"
+            }
+        ],
+        "text": "During Battle, deal additional 18 damage.<br>DEF of the closest opponent soldier -5 until the start of my next turn.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 2
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0 
+            },
+            {
+                "v": -1,
+                "h": 0 
+            },
+            {
+                "v": 0,
+                "h": -1 
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_24",
+        "name": "Ghost Splash",
+        "img": "https://i.gyazo.com/04f82518c9da1f3f8ef2f1643ff20339.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "s",
+                "text": "you and the closest soldier"
+            },
+            {
+                "color": "yellow",
+                "type": "v",
+                "text": "-6 DEF"
+            }
+        ],
+        "text": "the highest level opponent soldier gets Fear(1)",
+        "movement": [
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_25",
+        "name": "Edge of Wranthly Fire",
+        "img": "https://i.gyazo.com/43145e5cd9e185b22f03cb38811b817b.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "yellow",
+                "type": "s",
+                "text": "all opponents within 1D"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "get Shock(5)"
+            }
+        ],
+        "text": "Deal 9 damage to all opponents within 1D.<br>If soldiers who beat you in past are within 1D, deal 10 additional damage to those players.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_26",
+        "name": "Commer from Multiverse",
+        "img": "https://i.gyazo.com/8580d7b024d8e006ebfe4899cdb7c807.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "take 6 damage"
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": "the closest enemies"
+            }
+        ],
+        "text": "If Center Area has a empty Tile, Spawn next enemy.<br>All soldiers within 2D get Panic(3).",
+        "movement": [
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            },
+            {
+                "v": 1,
+                "h": -1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": -1,
+                "h": -1
+            },
+            {
+                "v": 1,
+                "h": 1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_27",
+        "name": "You Already Died",
+        "img": "https://i.gyazo.com/381d1574178211e625a098c840cc59e3.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "yellow",
+                "type": "v",
+                "text": "take 6 damage"
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": "the closest opponent"
+            }
+        ],
+        "text": "Deal 2 damage to the closest opponent.<br>If that opponent's HP is 10 or less, that opponent is dead.",
+        "movement": [
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_28",
+        "name": "Awake from Loseless",
+        "img": "https://i.gyazo.com/a9a85bc0102c10cc03eeeea181131408.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "s",
+                "text": "you and your partner"
+            },
+            {
+                "color": "green",
+                "type": "s",
+                "text": "you and your partner"
+            }
+        ],
+        "text": "Your DEF +6.<br>If you were dead in previous turn, your HP +5 in this game",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_29",
+        "name": "Aura Gathering",
+        "img": "https://i.gyazo.com/8b4f082d60b04ab9667df27e2226b8cf.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "s",
+                "text": "you and your partner"
+            },
+            {
+                "color": "red",
+                "type": "v",
+                "text": "get Immunity(1)"
+            }
+        ],
+        "text": "Your ATK +5.<br>If there are 3 soldiers within 2D, your ATK +15",
+        "movement": [
+            {
+                "v": -1,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": -1,
+                "h": 0
+            },
+            {
+                "v": 0,
+                "h": -1
+            }
+        ],
+        "rarity": "C"
+    },
+    {
+        "id": "C_30",
+        "name": "Forestly Barrier",
+        "img": "https://i.gyazo.com/130c1b1bb704d7f2b97d6bd9f67f1d7f.png",
+        "cost": 0,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "v",
+                "text": "get Immunity(1)"
+            },
+            {
+                "color": "purple",
+                "type": "v",
+                "text": "get Laziness(1)"
+            }
+        ],
+        "text": "Get Immunity(1)",
+        "rarity": "C"
+    },
+    {
+        "id": "C_31",
+        "name": "Storm Avoidance",
+        "img": "https://i.gyazo.com/f01899e29055cbc683155705603d13f4.png",
+        "cost": 1,
+        "synegierText": [
+            {
+                "color": "green",
+                "type": "s",
+                "text": "all soldiers"
+            },
+            {
+                "color": "yellow",
+                "type": "v",
+                "text": "take 6 damage"
+            }
+        ],
+        "text": "All soldiers return to the starting Tile and get Shock(5)",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            },
+            {
+                "v": 1,
+                "h": 0
+            },
+            {
+                "v": -1,
                 "h": 0
             },
             {
@@ -631,6 +1602,10 @@
             {
                 "v": -1,
                 "h": -1
+            },
+            {
+                "v": 1,
+                "h": 1
             }
         ],
         "rarity": "R"
