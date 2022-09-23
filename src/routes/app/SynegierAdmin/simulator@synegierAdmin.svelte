@@ -23,7 +23,7 @@
             showLoading(window)
             datus = await getCardDatus($synegierAdminAccessToken)
 
-            $deckStore = datus.slice(0, 16)
+            $deckStore = datus.slice(0, 4)
             nowPhase = 'sweep'
             // await sleep(1000)
             // nowPhase = '2pick'

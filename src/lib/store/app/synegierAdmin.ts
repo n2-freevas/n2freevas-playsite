@@ -8,6 +8,4 @@ export const cardDetailRight = writable<SynegierCard>(undefined)
 
 export const deckStore = writable<SynegierCard[]>([])
 
-export const cardInDuelStore = writable<SynegierCardAndPosition[]>([])
-
 export const cardDatus = writable<SynegierCard[]>([])

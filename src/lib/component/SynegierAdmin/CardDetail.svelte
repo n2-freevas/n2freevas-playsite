@@ -91,7 +91,7 @@
 
 <style lang="scss">
     .cardDetail {
-        z-index: 90;
+        z-index: 20000;
         --cardDetailWidth: 500px;
         --cardDetailLeftWidth: 150px;
         --cardDetailRightWidth: calc(var(--cardDetailWidth) - var(--cardDetailLeftWidth));
