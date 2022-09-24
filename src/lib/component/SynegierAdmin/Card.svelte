@@ -16,7 +16,7 @@
     let sideOfShowDetail: 'left' | 'right' = 'left'
     let selfElement: HTMLDivElement
     $: {
-        if (scale < 0.5) {
+        if (scale < 0.45) {
             showText = false
         } else {
             showText = true

@@ -10,9 +10,11 @@
     let datus: SynegierCard[] = []
     let soldiers: SoldierCard[] = []
     let flip: boolean = false
+    let cardSizeMargin: number = 0
 
     onMount(async () => {
-        datus = await (await getCardDatus($synegierAdminAccessToken)).slice(0, 10)
+        datus = await (await getCardDatus($synegierAdminAccessToken)).slice(0, 20)
+        cardSizeMargin = 1 / datus.length
         soldiers = await (await getSoldierDatus($synegierAdminAccessToken)).slice(0, 1)
     })
 </script>
@@ -33,7 +35,7 @@
 
 <div class="list">
     {#each datus as d, i}
-        <Card model={d} scale={0.10 * (i + 1)} bind:isFlip={flip} />
+        <Card model={d} scale={cardSizeMargin * (i + 1)} bind:isFlip={flip} />
     {/each}
 </div>
 

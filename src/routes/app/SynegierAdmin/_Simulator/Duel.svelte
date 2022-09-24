@@ -91,12 +91,12 @@
         trashList.forEach((cInT) => {
             cardsInDuel.forEach((cInD) => {
                 if (cInD.objectId == cInT.objectId) {
-                    ;(cInD.x = boardRect.width - 50),
-                        (cInD.y = boardRect.height - estimateCardHeight * 1.25),
-                        (cInD.z = z_index_handler),
-                        (cInD.rotate = 135),
-                        (cInD.flip = true),
-                        (cInD.scale = defaultCardScale)
+                    cInD.x = boardRect.width - 50
+                    cInD.y = boardRect.height - estimateCardHeight * 1.25 - 300
+                    cInD.z = z_index_handler
+                    cInD.rotate = 135
+                    cInD.flip = true
+                    cInD.scale = defaultCardScale
                     z_index_handler += 1
                 }
             })

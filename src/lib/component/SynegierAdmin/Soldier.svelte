@@ -218,7 +218,6 @@
         }        
         .soldierSynegierText{
             width:inherit;
-            
             transform: scale(0.8);
         }
     }
