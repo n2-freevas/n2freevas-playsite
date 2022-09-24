@@ -191,10 +191,10 @@
     }
 
     onMount(() => {
-        pickedCards = cardDatus.slice(0, 16)
-        $deckStore = pickedCards
-        nowPhaseOf2pick = 'end'
-        // pickPrepare()
+        // pickedCards = cardDatus.slice(0, 16)
+        // $deckStore = pickedCards
+        // nowPhaseOf2pick = 'end'
+        pickPrepare()
     })
 </script>
 
