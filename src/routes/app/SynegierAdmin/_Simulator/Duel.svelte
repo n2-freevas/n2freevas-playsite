@@ -124,7 +124,7 @@
         const handAreaMargin = _handAreaMargin > 200 ? 200 : _handAreaMargin
 
         let index = 0
-        
+
         handList.forEach((c) => {
             if (handListObjectIds.includes(c.objectId)) {
                 c.x = handAreaRect.left + index * handAreaMargin
@@ -166,7 +166,7 @@
 
     function cardMovedEventHandler(event: CustomEvent) {
         const moveEvent: cardMoveEvent = event.detail
-        
+
         // playAreaに入ったか判定
         if (
             judgeCursorInTheRect(
@@ -195,7 +195,7 @@
                     }
                 }
             })
-            
+
             cardsInDuel.forEach((c) => {
                 if (c.objectId == moveEvent.objectId) {
                     if (handList.filter((c) => c.objectId == moveEvent.objectId).length == 0) {

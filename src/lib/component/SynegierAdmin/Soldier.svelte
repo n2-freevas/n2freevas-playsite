@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { SoldierCard } from '$lib/model/app/SynegierAdmin'
     import SynegierText from './_SynegierText.svelte'
-    
+
     export let model: SoldierCard
     export let scale: 'small' | 'middle' | 'full'
 </script>
@@ -66,17 +66,17 @@
             {/if}
         </div>
     </div>
-    {#if scale=='full'}
-    <div class="synegierTextPart">
-        <!-- <div class="synegierEffectBg">
+    {#if scale == 'full'}
+        <div class="synegierTextPart">
+            <!-- <div class="synegierEffectBg">
             <svg width="215" height="128" viewBox="0 0 215 128" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M172 64L108 0L44 64L108 128L172 64ZM128.919 63.9555L107.955 42.9921L86.9921 63.9555L107.955 84.919L128.919 63.9555ZM35 45L16.2863 63.5L35 82V45ZM0 63.8453L12.9556 76.653V51.0376L0 63.8453ZM180 82L198.714 63.5L180 45V82ZM215 63.8453L202.044 51.0376L202.044 76.653L215 63.8453Z" fill="#303030"/>
             </svg>
         </div> -->
-        <div class="soldierSynegierText">
-            <SynegierText synegierText={model.synegierText} showText={true}></SynegierText>
+            <div class="soldierSynegierText">
+                <SynegierText synegierText={model.synegierText} showText={true} />
+            </div>
         </div>
-    </div>    
     {/if}
 </div>
 
@@ -87,16 +87,15 @@
         padding: 10px;
         display: flex;
         border-radius: 10px;
-        &.small{
-            width:250px;
+        &.small {
+            width: 250px;
         }
-        &.middle{
-            width:490px;
+        &.middle {
+            width: 490px;
         }
-        &.full{
-            width:800px;
+        &.full {
+            width: 800px;
         }
-        
     }
     .topPart {
         display: flex;
@@ -110,7 +109,7 @@
         &.small {
             border-radius: 20px;
             width: 90px;
-            height:120px;
+            height: 120px;
         }
         &.middle {
             width: 150px;
@@ -206,20 +205,19 @@
     .abilityBox {
         padding: 20px 15px;
     }
-    .synegierTextPart{
+    .synegierTextPart {
         position: relative;
-        width:360px;
+        width: 360px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        .synegierEffectBg{
+        .synegierEffectBg {
             position: absolute;
-        }        
-        .soldierSynegierText{
-            width:inherit;
+        }
+        .soldierSynegierText {
+            width: inherit;
             transform: scale(0.8);
         }
     }
-    
 </style>

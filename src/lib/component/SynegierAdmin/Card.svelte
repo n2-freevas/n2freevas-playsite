@@ -95,13 +95,17 @@
                         {#if scale >= 0.2}{model.cost}{/if}
                     </div>
                     <div class="name">
-                        <p class="wrap">{#if showText}{model.name}{/if}</p>
+                        <p class="wrap">
+                            {#if showText}{model.name}{/if}
+                        </p>
                     </div>
                 </div>
                 <SynegierText synegierText={model.synegierText} showText={showText} scale={scale} />
                 <div class="cardBottomInfo">
                     <div class="textInfo">
-                        <p>{#if showText}{@html model.text}{/if}</p>
+                        <p>
+                            {#if showText}{@html model.text}{/if}
+                        </p>
                     </div>
                     <Movement movement={model.movement} redTiles={model.redTiles} scale={scale} />
                 </div>
@@ -324,13 +328,13 @@
             padding: var(--cardSpacing15) var(--cardSpacing05);
         }
     }
-    p{
-        &.wrap{
+    p {
+        &.wrap {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
         }
-        
+
         // display: block;
         // transform: scale(var(--scale));
         transform-origin: 0 0;
