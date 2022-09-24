@@ -11,7 +11,7 @@
     {#if synegierText}
         {#each synegierText as st}
             <div class="{st.type} {st.color}">
-                {#if showText}{@html st.text}{/if}
+                <p>{#if showText}{@html st.text}{/if}</p>
             </div>
         {/each}
     {/if}
@@ -114,5 +114,8 @@
                 }
             }
         }
+    }
+    p{
+        transform: scale(var(--scale));
     }
 </style>

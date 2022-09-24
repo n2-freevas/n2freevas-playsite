@@ -33,7 +33,7 @@
 
 <div class="list">
     {#each datus as d, i}
-        <Card model={d} scale={0.2 * (i + 1)} bind:isFlip={flip} />
+        <Card model={d} scale={0.20 * (i + 1)} bind:isFlip={flip} />
     {/each}
 </div>
 

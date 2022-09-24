@@ -15,13 +15,13 @@
 
     let sideOfShowDetail: 'left' | 'right' = 'left'
     let selfElement: HTMLDivElement
-    $: {
-        if (scale != 1) {
-            showText = false
-        } else {
-            showText = true
-        }
-    }
+    // $: {
+    //     if (scale != 1) {
+    //         showText = false
+    //     } else {
+    //         showText = true
+    //     }
+    // }
     onMount(() => {
         sideOfShowDetail =
             window.innerWidth / 2 < selfElement.getBoundingClientRect().x ? 'left' : 'right'
@@ -95,13 +95,13 @@
                         {#if scale >= 0.2}{model.cost}{/if}
                     </div>
                     <div class="name">
-                        {#if showText}{model.name}{/if}
+                        <p class="wrap">{#if showText}{model.name}{/if}</p>
                     </div>
                 </div>
                 <SynegierText synegierText={model.synegierText} showText={showText} scale={scale} />
                 <div class="cardBottomInfo">
                     <div class="textInfo">
-                        {#if showText}{@html model.text}{/if}
+                        <p>{#if showText}{@html model.text}{/if}</p>
                     </div>
                     <Movement movement={model.movement} redTiles={model.redTiles} scale={scale} />
                 </div>
@@ -319,5 +319,14 @@
             );
             padding: var(--cardSpacing15) var(--cardSpacing05);
         }
+    }
+    p{
+        &.wrap{
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        display: block;
+        transform: scale(var(--scale));
     }
 </style>
