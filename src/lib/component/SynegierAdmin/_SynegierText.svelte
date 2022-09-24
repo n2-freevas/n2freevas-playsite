@@ -11,7 +11,7 @@
     {#if synegierText}
         {#each synegierText as st}
             <div class="{st.type} {st.color}">
-                <p>{#if showText}{@html st.text}{/if}</p>
+                {#if showText}{@html st.text}{/if}
             </div>
         {/each}
     {/if}
@@ -19,12 +19,12 @@
 
 <style lang="scss">
     .synegierTextInfo {
-        --synegierTextWidth: calc(320px * var(--scale));
-        --synegierTextHeight: calc(45px * var(--scale));
-        --synegierTextRibbonWidth: calc(22px * var(--scale));
-        --synegierTextPadding: calc(30px * var(--scale));
-        --synegierTextMargin: calc((20px * var(--scale)) + var(--synegierTextHeight));
-        --fontsize: calc(10px * var(--scale));
+        --synegierTextWidth: calc(320px);
+        --synegierTextHeight: calc(45px);
+        --synegierTextRibbonWidth: calc(22px);
+        --synegierTextPadding: calc(30px);
+        --synegierTextMargin: calc((20px) + var(--synegierTextHeight));
+        --fontsize: calc(10px);
         // --cardSpacing20: calc(var(--h) / 30);
         position: relative;
         width: inherit;
@@ -114,8 +114,5 @@
                 }
             }
         }
-    }
-    p{
-        transform: scale(var(--scale));
     }
 </style>

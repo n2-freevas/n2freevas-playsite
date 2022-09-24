@@ -30,7 +30,7 @@
     let z_index_handler = 0
 
     let boardRect: DOMRect
-    let tryAreaRect: DOMRect
+    let handAreaRect: DOMRect
     let playAreaRect: DOMRect
 
     let cardsInDuel: SynegierCardAndPosition[] = []
@@ -39,16 +39,16 @@
     let handList: SynegierCardAndPosition[] = []
     let trashList: SynegierCardAndPosition[] = []
     let isTrashAreaOpen: boolean = false
-    let tryList: SynegierCardAndPosition[] = []
     let playList: SynegierCardAndPosition[] = []
 
     // const
-    const defalutScale = 0.2
+    const defaultCardScale = 0.2
     const estimateCardHeight = 120
-
-    const handsAreaWidth = 350
-    const tryAreaWidth = 700
-    const tryAreaHeight = 175
+    const handAreaCardScale = 0.5
+    const estimateHandCardHeight = 300
+    const handAreaWidth = 1100
+    const handAreaHeight = 310
+    const playAreaCardScale = 0.1
     const playAreaWidth = 700
     const playAreaHeight = 400
     const trashAreaWidth = 200
@@ -56,10 +56,10 @@
 
     onMount(() => {
         boardRect = document.getElementById('board').getBoundingClientRect()
-        tryAreaRect = document.getElementById('tryArea').getBoundingClientRect()
+        handAreaRect = document.getElementById('handArea').getBoundingClientRect()
         playAreaRect = document.getElementById('playArea').getBoundingClientRect()
         console.log('boardRect', boardRect)
-        console.log('tryAreaRect', tryAreaRect)
+        console.log('handAreaRect', handAreaRect)
         console.log('playAreaRect', playAreaRect)
         resetDeck()
     })
@@ -73,11 +73,11 @@
                 ...card,
                 objectId: objectIdManager,
                 x: boardRect.width - 50,
-                y: boardRect.height - estimateCardHeight * 1.25,
+                y: boardRect.height - estimateCardHeight * 1.25 - 300,
                 z: z_index_handler,
                 rotate: 135,
                 flip: true,
-                scale: defalutScale
+                scale: defaultCardScale
             })
             z_index_handler += 1
             objectIdManager += 1
@@ -96,7 +96,7 @@
                         (cInD.z = z_index_handler),
                         (cInD.rotate = 135),
                         (cInD.flip = true),
-                        (cInD.scale = defalutScale)
+                        (cInD.scale = defaultCardScale)
                     z_index_handler += 1
                 }
             })
@@ -118,27 +118,22 @@
         }
     }
 
-    function alignHand(concatTryArea: boolean = false) {
-        if (concatTryArea) {
-            tryList.forEach((card) => {
-                handList.push(card)
-            })
-            tryList = []
-        }
+    function alignHand() {
         const handListObjectIds = handList.map((hand) => hand.objectId)
-        const _handAreaMargin = handsAreaWidth / handListObjectIds.length
-        const handAreaMargin = _handAreaMargin > 100 ? 100 : _handAreaMargin
+        const _handAreaMargin = handAreaWidth / handListObjectIds.length
+        const handAreaMargin = _handAreaMargin > 200 ? 200 : _handAreaMargin
 
         let index = 0
+        
         handList.forEach((c) => {
             if (handListObjectIds.includes(c.objectId)) {
-                c.x = boardRect.width / 2 + index * handAreaMargin
-                c.y = boardRect.height - estimateCardHeight
+                c.x = handAreaRect.left + index * handAreaMargin
+                c.y = boardRect.height - estimateHandCardHeight - 30
                 c.rotate = 0
                 c.flip = false
                 c.z = index
                 index += 1
-                c.scale = defalutScale
+                c.scale = handAreaCardScale
             }
         })
         cardsInDuel = cardsInDuel
@@ -162,7 +157,7 @@
                 c.rotate = 0
                 c.flip = false
                 c.z = index
-                c.scale = 0.1
+                c.scale = playAreaCardScale
                 index += 1
             }
         })
@@ -171,29 +166,9 @@
 
     function cardMovedEventHandler(event: CustomEvent) {
         const moveEvent: cardMoveEvent = event.detail
-        // tryAreaに入ったか判定
-        if (
-            judgeCursorInTheRect(
-                moveEvent.mouseEvent.clientX,
-                moveEvent.mouseEvent.clientY,
-                tryAreaRect
-            )
-        ) {
-            const _top = (tryAreaHeight - estimateCardHeight * 1.25) / 2 - slotPadding
-            cardsInDuel.forEach((c) => {
-                if (c.objectId == moveEvent.objectId) {
-                    if (tryList.filter((c) => c.objectId == moveEvent.objectId).length == 0) {
-                        tryList.push(c)
-                        handList = handList.filter((c) => c.objectId != moveEvent.objectId)
-                    }
-                    c.y = tryAreaRect.top + _top
-                    c.scale = 0.25
-                }
-            })
-            cardsInDuel = cardsInDuel
-        }
+        
         // playAreaに入ったか判定
-        else if (
+        if (
             judgeCursorInTheRect(
                 moveEvent.mouseEvent.clientX,
                 moveEvent.mouseEvent.clientY,
@@ -205,7 +180,6 @@
                     if (playList.filter((c) => c.objectId == moveEvent.objectId).length == 0) {
                         playList.push(c)
                         handList = handList.filter((c) => c.objectId != moveEvent.objectId)
-                        tryList = tryList.filter((c) => c.objectId != moveEvent.objectId)
                         // Detailモーダルを出す
                         $cardDetailLeft = Object.assign({}, c)
                     }
@@ -218,11 +192,22 @@
                     if (handList.filter((c) => c.objectId == moveEvent.objectId).length == 0) {
                         handList.push(c)
                         playList = playList.filter((c) => c.objectId != moveEvent.objectId)
-                        tryList = tryList.filter((c) => c.objectId != moveEvent.objectId)
                     }
                 }
             })
-            alignHand()
+            
+            cardsInDuel.forEach((c) => {
+                if (c.objectId == moveEvent.objectId) {
+                    if (handList.filter((c) => c.objectId == moveEvent.objectId).length == 0) {
+                        handList.push(c)
+                        playList = playList.filter((c) => c.objectId != moveEvent.objectId)
+                    }
+                    c.y = boardRect.height - estimateHandCardHeight - 30
+                    c.scale = handAreaCardScale
+                }
+            })
+            cardsInDuel = cardsInDuel
+            // alignHand()
         }
     }
 
@@ -235,11 +220,12 @@
         trashList = trashList
         cardsInDuel = cardsInDuel
         playList = []
+        $cardDetailLeft = undefined
     }
 </script>
 
 <section id="board">
-    <div id="tryArea" style="width:{tryAreaWidth}px; height:{tryAreaHeight}px;" />
+    <div id="handArea" style="width:{handAreaWidth}px; height:{handAreaHeight}px;" />
     <div id="playArea" style="width:{playAreaWidth}px; height:{playAreaHeight}px;" />
     <div
         id="trashArea"
@@ -281,7 +267,7 @@
                 size={80}
                 text="align"
                 on:click={() => {
-                    alignHand(true)
+                    alignHand()
                 }} />
         </div>
     </div>
@@ -321,14 +307,14 @@
         height: calc(100vh - 100px);
         overflow: hidden;
     }
-    #tryArea {
+    #handArea {
         position: absolute;
-        bottom: 150px;
-        left: 50%;
-        transform: translate(-50%, 0);
+        bottom: 20px;
+        left: 50px;
+        // transform: translate(-50%, 0);
         border-top: solid white 2px;
         border-bottom: solid white 2px;
-        border-radius: 10px;
+        border-radius: 7px;
     }
     #playArea {
         position: absolute;
@@ -377,7 +363,7 @@
     #handUI {
         z-index: 10001;
         position: absolute;
-        bottom: 225px;
+        bottom: 500px;
         right: 250px;
         #drawButton {
             position: absolute;
@@ -391,7 +377,7 @@
     #deckUI {
         z-index: 10000;
         position: absolute;
-        bottom: 0;
+        bottom: 300px;
         right: 0;
         width: 200px;
         height: 300px;
@@ -399,7 +385,7 @@
     #turnManagerUI {
         z-index: 10002;
         position: absolute;
-        bottom: 300px;
+        bottom: 460px;
         right: 20px;
         #battleButton {
             position: absolute;
