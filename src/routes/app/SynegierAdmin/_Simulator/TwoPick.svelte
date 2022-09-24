@@ -1,7 +1,7 @@
 <script lang="ts">
     import Card from '$lib/component/SynegierAdmin/Card.svelte'
     import type { SynegierCard } from '$lib/model/app/SynegierAdmin'
-    import { deckStore } from '$lib/store/app/synegierAdmin'
+    import { deckStore, cardDetailLeft, cardDetailRight } from '$lib/store/app/synegierAdmin'
     import { onMount, createEventDispatcher } from 'svelte'
     import In2pickAmination from '$lib/component/SynegierAdmin/CardAnimationComponent/In2pickAmination.svelte'
     import DeckSummary from './deckSummary.svelte'
@@ -49,6 +49,7 @@
     function getRandomInt(max) {
         return Math.floor(Math.random() * max)
     }
+
     function pickupCardHelperFindUnduplicatedIndex(
         len1,
         len2 = undefined,
@@ -82,6 +83,7 @@
         }
         return result
     }
+
     function pickupCards() {
         if (countOfPicked < 7) {
             console.log('C R pick')
@@ -160,6 +162,11 @@
     function pickedProcess(choise: SynegierCard) {
         pickedCards.push(choise)
         pickedCards = pickedCards
+
+        // cardDetailが出ていたら消す
+        $cardDetailLeft = undefined
+        $cardDetailRight = undefined
+
         // アニメーション終了タイミングで全て引っ込める
         window.setTimeout(() => {
             isUnChoiseLeftCard = true
@@ -191,10 +198,10 @@
     }
 
     onMount(() => {
-        // pickedCards = cardDatus.slice(0, 16)
-        // $deckStore = pickedCards
-        // nowPhaseOf2pick = 'end'
-        pickPrepare()
+        pickedCards = cardDatus.slice(0, 16)
+        $deckStore = pickedCards
+        nowPhaseOf2pick = 'end'
+        // pickPrepare()
     })
 </script>
 

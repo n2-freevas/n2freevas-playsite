@@ -269,7 +269,7 @@
             bind:z={card.z}
             bind:rotate={card.rotate}
             on:moved={cardMovedEventHandler}>
-            <Card model={card} scale={card.scale} isFlip={card.flip} />
+            <Card model={card} scale={card.scale} isFlip={card.flip} fixedSideOfShowDetail="left" />
         </Handler>
     {/each}
     <div id="handUI">

@@ -8,6 +8,7 @@
     export let model: SynegierCard
     export let scale: number = 1
     export let isFlip: boolean = false
+    export let fixedSideOfShowDetail: 'left' | 'right' | undefined = undefined
 
     let showText: boolean = true
     let isMouseOver: boolean = false
@@ -28,16 +29,23 @@
 
     function rightClickHandler(event) {
         let _event: PointerEvent = event
-
-        if ($cardDetailLeft || $cardDetailRight) {
-            cardDetailHide()
-        } else {
-            try {
-                sideOfShowDetail = window.innerWidth / 2 < _event.x ? 'left' : 'right'
-                cardDetailShow()
-            } catch {
+        if ($cardDetailLeft) {
+            if ($cardDetailLeft.name == model.name) {
+                cardDetailHide()
                 return null
             }
+        } else if ($cardDetailRight) {
+            if ($cardDetailRight.name == model.name) {
+                cardDetailHide()
+                return null
+            }
+        }
+        try {
+            sideOfShowDetail = window.innerWidth / 2 < _event.x ? 'left' : 'right'
+            cardDetailShow()
+        } catch (e) {
+            console.log(e)
+            return null
         }
     }
     function mouseEnterHandler() {
@@ -53,10 +61,16 @@
         // }, 200)
     }
     function cardDetailShow() {
-        if (sideOfShowDetail == 'left') {
+        if (fixedSideOfShowDetail == 'left') {
             $cardDetailLeft = model
-        } else {
+        } else if (fixedSideOfShowDetail == 'right') {
             $cardDetailRight = model
+        } else {
+            if (sideOfShowDetail == 'left') {
+                $cardDetailLeft = model
+            } else {
+                $cardDetailRight = model
+            }
         }
     }
     function cardDetailHide() {
