@@ -16,7 +16,7 @@
     let sideOfShowDetail: 'left' | 'right' = 'left'
     let selfElement: HTMLDivElement
     $: {
-        if (scale != 1) {
+        if (scale < 0.5) {
             showText = false
         } else {
             showText = true
@@ -95,13 +95,13 @@
                         {#if scale >= 0.2}{model.cost}{/if}
                     </div>
                     <div class="name">
-                        {#if showText}{model.name}{/if}
+                        <p class="wrap">{#if showText}{model.name}{/if}</p>
                     </div>
                 </div>
                 <SynegierText synegierText={model.synegierText} showText={showText} scale={scale} />
                 <div class="cardBottomInfo">
                     <div class="textInfo">
-                        {#if showText}{@html model.text}{/if}
+                        <p>{#if showText}{@html model.text}{/if}</p>
                     </div>
                     <Movement movement={model.movement} redTiles={model.redTiles} scale={scale} />
                 </div>
@@ -137,29 +137,33 @@
             #31ffce 71%,
             #5b7dff 100%
         );
-        --w: calc(378px * var(--scale));
-        --h: calc(600px * var(--scale));
-        --b: calc(9px * var(--scale));
-        --c: calc(70px * var(--scale));
-        --synegierTextWidth: calc(320px * var(--scale));
-        --synegierTextHeight: calc(45px * var(--scale));
-        --synegierTextRibbonWidth: calc(22px * var(--scale));
-        --synegierTextMargin: calc((20px * var(--scale)) + var(--synegierTextHeight));
-        --fontsize: calc(10px * var(--scale));
-        --costFontSize: calc(32px * var(--scale));
+        --w: 378px;
+        --h: 600px;
+        width: calc(var(--w) * var(--scale));
+        height: calc(var(--h) * var(--scale));
+        --b: 9px;
+        --c: 70px;
+        --synegierTextWidth: 320px;
+        --synegierTextHeight: 45px;
+        --synegierTextRibbonWidth: 22px;
+        --synegierTextMargin: calc((20px) + var(--synegierTextHeight));
+        --fontsize: 10px;
+        --costFontSize: 32px;
         --nameBarWidth: calc(var(--w) * 0.67);
         --cardSpacing25: calc(var(--h) / 24);
         --cardSpacing20: calc(var(--h) / 30);
         --cardSpacing15: calc(var(--h) * 0.025);
         --cardSpacing10: calc(var(--h) / 60);
         --cardSpacing05: calc(var(--h) / 120);
-        --basicTextWidth: calc(340px * var(--scale));
-        --basicTextHeight: calc(140px * var(--scale));
-        --basicTextPadding: calc(10px * var(--scale));
+        --basicTextWidth: 340px;
+        --basicTextHeight: 140px;
+        --basicTextPadding: 10px;
         //Movement.svelteコンポーネントと共用なので注意
-        --movementBoxWidth: calc(120px * var(--scale));
+        --movementBoxWidth: 120px;
     }
     .cardBody {
+        transform: scale(var(--scale));
+        transform-origin: 0 0;
         font-size: var(--fontsize);
         // transform: scale(var(--scale));
 
@@ -319,5 +323,16 @@
             );
             padding: var(--cardSpacing15) var(--cardSpacing05);
         }
+    }
+    p{
+        &.wrap{
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        
+        // display: block;
+        // transform: scale(var(--scale));
+        transform-origin: 0 0;
     }
 </style>

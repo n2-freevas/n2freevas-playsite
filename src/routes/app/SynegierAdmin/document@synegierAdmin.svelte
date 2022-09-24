@@ -12,7 +12,7 @@
     let flip: boolean = false
 
     onMount(async () => {
-        datus = await (await getCardDatus($synegierAdminAccessToken)).slice(0, 5)
+        datus = await (await getCardDatus($synegierAdminAccessToken)).slice(0, 10)
         soldiers = await (await getSoldierDatus($synegierAdminAccessToken)).slice(0, 1)
     })
 </script>
@@ -33,7 +33,7 @@
 
 <div class="list">
     {#each datus as d, i}
-        <Card model={d} scale={0.2 * (i + 1)} bind:isFlip={flip} />
+        <Card model={d} scale={0.10 * (i + 1)} bind:isFlip={flip} />
     {/each}
 </div>
 

@@ -24,9 +24,9 @@
 
 <style lang="scss">
     .movementInfo {
-        --movementBoxWidth: calc(120px * var(--scale)); //Card.svelteコンポーネントと共用なので注意
-        --movementBoxHeight: calc(120px * var(--scale));
-        --movementCellMargin: calc(2px * var(--scale));
+        --movementBoxWidth: 120px; //Card.svelteコンポーネントと共用なので注意
+        --movementBoxHeight: 120px;
+        --movementCellMargin: 2px;
         --movementCellWidth: calc((var(--movementBoxWidth) - (var(--movementCellMargin) * 14)) / 7);
         --movementCellHeight: calc(
             (var(--movementBoxHeight) - (var(--movementCellMargin) * 14)) / 7
