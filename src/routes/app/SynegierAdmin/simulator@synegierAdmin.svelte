@@ -23,10 +23,10 @@
             showLoading(window)
             datus = await getCardDatus($synegierAdminAccessToken)
 
-            // $deckStore = datus.slice(0, 4)
-            // nowPhase = 'sweep'
-            await sleep(1000)
-            nowPhase = '2pick'
+            $deckStore = datus.slice(0, 4)
+            nowPhase = 'sweep'
+            // await sleep(1000)
+            // nowPhase = '2pick'
         } catch (e) {
             console.error(`In Simulator: ${e}`)
             if (e == N2API_ERROR_CODE.ACCESS_INVALID) {
