@@ -13,9 +13,7 @@
 </script>
 
 <div
-    class="homebutton-box {isFocus && model.active ? 'focus' : ''} {model.active
-        ? ''
-        : 'disactive'}"
+    class="homebutton-box {isFocus && model.active ? 'focus' : ''} {model.active ? '' : 'disactive'}"
     style="width:{size}px; height:{size}px; --topval: {size / 10}px;">
     <a href={model.active ? model.path : ''}>
         <div class="homebutton_background {isFocus && model.active ? 'focus' : ''}" />
@@ -23,10 +21,7 @@
             <img src={model.img} alt="{model.explain}ボタン" />
             <h1>{model.name}</h1>
         </div>
-        <div
-            class="hover_area"
-            on:mouseenter={focusInteractionON}
-            on:mouseleave={focusInteractionOFF} />
+        <div class="hover_area" on:mouseenter={focusInteractionON} on:mouseleave={focusInteractionOFF} />
     </a>
     {#if !model.active}
         <p>comming soon</p>

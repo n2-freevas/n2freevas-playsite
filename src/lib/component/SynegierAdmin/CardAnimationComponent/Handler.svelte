@@ -1,19 +1,21 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte'
-    import type { cardMoveEvent } from '$lib/model/app/SynegierAdmin'
+    import type { cardMoveEvent, InArea } from '$lib/model/app/SynegierAdmin'
 
     const dispatcher = createEventDispatcher()
     export let objectId: number
+    export let inArea: InArea
     export let x: number
     export let y: number
     export let z: number
     export let rotate: number = 0
+    export let lock: boolean = false
     let pre_x: number = 0
     let pre_y: number = 0
     let isMoving: boolean = false
 
     function onMouseDown() {
-        if (!isMoving) {
+        if (!isMoving && !lock) {
             pre_x = x
             pre_y = y
             isMoving = true
@@ -36,7 +38,8 @@
                 pre_y: pre_y,
                 now_x: x,
                 now_y: y,
-                mouseEvent: e
+                mouseEvent: e,
+                inArea: inArea
             }
             dispatcher('moved', eventDetail)
         }

@@ -61,11 +61,7 @@ export const getPages = async (database_id, request?) => {
         }
     }
     try {
-        let res = await Api.post(
-            notionDatabaseUrl + database_id + '/query',
-            default_request,
-            api_header
-        )
+        let res = await Api.post(notionDatabaseUrl + database_id + '/query', default_request, api_header)
         return thinOutNotionPagesColumn(res)
     } catch (error) {
         throw error

@@ -82,6 +82,8 @@ export interface SynegierCard {
     rarity: CardRarity
 }
 
+export type InArea = 'deck' | 'hand' | 'play' | 'trash'
+
 export interface SynegierCardAndPosition extends SynegierCard {
     objectId: number
     x: number
@@ -90,6 +92,7 @@ export interface SynegierCardAndPosition extends SynegierCard {
     rotate: number
     flip: boolean
     scale: number
+    inArea: InArea
 }
 
 export interface keywordDescription {
@@ -106,6 +109,7 @@ export interface cardMoveEvent {
     now_x: number
     now_y: number
     mouseEvent: MouseEvent
+    inArea: InArea
 }
 
 // Soldier
@@ -127,4 +131,24 @@ export interface SoldierCard {
     initStatus: Status
     levelUpRule: SoldierLevelUpRule[]
     ability: string
+}
+
+export interface Coordinate {
+    x: number
+    y: number
+}
+
+export type TileType = 'normal' | 'safe' | 'red'
+
+export interface Tile extends Coordinate {
+    type?: TileType
+}
+
+export interface BattleField {
+    name: string
+    width: number
+    height: number
+    tiles: Tile[]
+    initGateKeeperPosition: Coordinate
+    respawnTile: Coordinate[]
 }

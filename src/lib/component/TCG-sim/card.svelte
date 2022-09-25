@@ -1,11 +1,5 @@
 <script lang="ts">
-    import {
-        boardAreaInfoStore,
-        handAreaInfoStore,
-        deckAreaInfoStore,
-        boardListStore,
-        movingStore
-    } from '$lib/store/app/TCGsimStore'
+    import { boardAreaInfoStore, handAreaInfoStore, deckAreaInfoStore, boardListStore, movingStore } from '$lib/store/app/TCGsimStore'
     import type { OnAreaModel } from '$lib/model/app/TCGsimModel'
     import { createEventDispatcher } from 'svelte'
     const dispatch = createEventDispatcher()
@@ -47,12 +41,7 @@
     function onMouseUp(e) {
         if (moving) {
             //盤面に突入しているか判定する。
-            if (
-                $boardAreaInfoStore.left + 100 < e.x &&
-                e.x < $boardAreaInfoStore.right &&
-                $boardAreaInfoStore.top < e.y &&
-                e.y < $boardAreaInfoStore.bottom
-            ) {
+            if ($boardAreaInfoStore.left + 100 < e.x && e.x < $boardAreaInfoStore.right && $boardAreaInfoStore.top < e.y && e.y < $boardAreaInfoStore.bottom) {
                 //ボード上の移動でないなら、外部からのボードへの移動であるので、
                 //dispatchによって上位要素にイベントを伝搬する。
                 if (onArea != 'board') {
@@ -80,12 +69,7 @@
                 }
             }
             //手札エリアに突入しているか判定する。
-            else if (
-                $handAreaInfoStore.left < e.x &&
-                e.x < $handAreaInfoStore.right &&
-                $handAreaInfoStore.top < e.y &&
-                e.y < $handAreaInfoStore.bottom
-            ) {
+            else if ($handAreaInfoStore.left < e.x && e.x < $handAreaInfoStore.right && $handAreaInfoStore.top < e.y && e.y < $handAreaInfoStore.bottom) {
                 if (onArea != 'hand') {
                     console.log('[cardComponent] handIn: card_id > ', id)
                     dispatch('handIn', {
@@ -96,19 +80,11 @@
                 }
             }
             //デッキエリアに突入しているか判定する。
-            else if (
-                $deckAreaInfoStore.left < e.x &&
-                e.x < $deckAreaInfoStore.right &&
-                $deckAreaInfoStore.top < e.y &&
-                e.y < $deckAreaInfoStore.bottom
-            ) {
+            else if ($deckAreaInfoStore.left < e.x && e.x < $deckAreaInfoStore.right && $deckAreaInfoStore.top < e.y && e.y < $deckAreaInfoStore.bottom) {
                 if (onArea != 'deck') {
                     const postPosition = e.y - $deckAreaInfoStore.top
                     // デッキの上か下、どちらに挿入するか判定する
-                    const to =
-                        postPosition <= ($deckAreaInfoStore.bottom - $deckAreaInfoStore.top) / 2
-                            ? 'top'
-                            : 'bottom'
+                    const to = postPosition <= ($deckAreaInfoStore.bottom - $deckAreaInfoStore.top) / 2 ? 'top' : 'bottom'
                     console.log('[cardComponent] deckIn: card_id > ', id)
                     dispatch('deckIn', {
                         id: id,
@@ -173,10 +149,7 @@
 <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
 
 <section
-    class="card-id-{id} card-body {moving ? 'movin' : ''} {noGuide ? 'noGuide' : ''} {onArea !=
-    'board'
-        ? 'noBoard'
-        : ''}"
+    class="card-id-{id} card-body {moving ? 'movin' : ''} {noGuide ? 'noGuide' : ''} {onArea != 'board' ? 'noBoard' : ''}"
     style="--pos_x:{pos_x}px; --pos_y:{pos_y}px; --img:{img_url}; --rotate:{rotate}deg; z-index:{pos_z}"
     on:mouseenter={onMouseOver}
     on:mouseleave={onMouseLeave}>

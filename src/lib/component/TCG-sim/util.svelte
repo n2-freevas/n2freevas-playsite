@@ -1,10 +1,5 @@
 <script context="module" lang="ts">
-    import type {
-        cardModel,
-        boardCardModel,
-        deckCardModel,
-        handCardModel
-    } from '$lib/model/app/TCGsimModel'
+    import type { cardModel, boardCardModel, deckCardModel, handCardModel } from '$lib/model/app/TCGsimModel'
 
     export function cardInAnywhere(
         card: boardCardModel | deckCardModel | handCardModel,

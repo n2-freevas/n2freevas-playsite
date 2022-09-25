@@ -40,22 +40,16 @@
     }
 </script>
 
-<div
-    class="loader"
-    style="--loader_height:{`${large_petal_stroke * 2 + large_round_size}px`}; --color:{color};">
+<div class="loader" style="--loader_height:{`${large_petal_stroke * 2 + large_round_size}px`}; --color:{color};">
     <div class="fulcrum">
-        <div
-            class="petals {is_animate ? 'animate' : ''}"
-            style="--size:{`${small_round_size}px`}; --speed:{small_round_spin_speed}">
+        <div class="petals {is_animate ? 'animate' : ''}" style="--size:{`${small_round_size}px`}; --speed:{small_round_spin_speed}">
             {#each small_flowering_args as arg}
                 <div
                     class="petal {is_animate ? 'animate' : ''}"
                     style="--size:{`${small_round_size}px`}; --move_x:{arg.flower_petal_x}; --move_y:{arg.flower_petal_y}; --delay:{`${small_stroke_delay}s`}" />
             {/each}
         </div>
-        <div
-            class="petals {is_animate ? 'animate' : ''}"
-            style="--size:{`${large_round_size}px`}; --speed:{large_round_spin_speed}">
+        <div class="petals {is_animate ? 'animate' : ''}" style="--size:{`${large_round_size}px`}; --speed:{large_round_spin_speed}">
             {#each large_flowering_args as arg}
                 <div
                     class="petal {is_animate ? 'animate' : ''}"

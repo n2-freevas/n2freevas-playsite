@@ -34,11 +34,7 @@
 </script>
 
 <div class="loader">
-    <div
-        class="board"
-        style="--color:{color}; --dot_area_width:{Math.floor(
-            100 / input_tostr.length
-        )}%; --dot_size:{`${dot_size}px`}">
+    <div class="board" style="--color:{color}; --dot_area_width:{Math.floor(100 / input_tostr.length)}%; --dot_size:{`${dot_size}px`}">
         {#each dot_args as args}
             <div class="dot_area">
                 {#each args.dots as dot}

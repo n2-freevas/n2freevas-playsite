@@ -2,7 +2,7 @@
     import { N2API_ERROR_CODE } from '$lib/api/api'
     import { getCardDatus } from '$lib/api/app/synegierAdmin'
     import { onMount } from 'svelte'
-    import Card from '$lib/component/SynegierAdmin/Card.svelte'
+    import Card from '$lib/component/SynegierAdmin/Card/Card.svelte'
     import type { SynegierCard } from '$lib/model/app/SynegierAdmin'
     import easytoast from '$lib/component/toast/summon'
     import { showLoading, hideLoading } from './__layout-synegierAdmin.svelte'
@@ -35,9 +35,7 @@
                 $synegierAdminAccessToken = new Date().toISOString()
             }
             isSysterError = true
-            easytoast.errorToastPush(
-                'システムエラー中です。<br>必要であれば管理者に問い合わせてください。'
-            )
+            easytoast.errorToastPush('システムエラー中です。<br>必要であれば管理者に問い合わせてください。')
         } finally {
             hideLoading(window)
         }

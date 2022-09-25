@@ -2,7 +2,8 @@ import Api from '../api'
 
 import cardData from '$lib/database/synegierAdmin/cardData.json'
 import soldierData from '$lib/database/synegierAdmin/soldierData.json'
-import type { SoldierCard, SynegierCard } from '$lib/model/app/SynegierAdmin'
+import battleFieldData from '$lib/database/synegierAdmin/battleFieldData.json'
+import type { SoldierCard, SynegierCard, BattleField } from '$lib/model/app/SynegierAdmin'
 
 const synegierAdminUrl = '/synegier-admin'
 const synegierAdminUrlAuth = synegierAdminUrl + '/auth'
@@ -27,4 +28,9 @@ export const getCardDatus = async (password: string): Promise<SynegierCard[]> =>
 export const getSoldierDatus = async (password: string): Promise<SoldierCard[]> => {
     //@ts-ignore
     return soldierData
+}
+
+export const getBattleFieldDatus = async (password: string): Promise<BattleField[]> => {
+    //@ts-ignore
+    return battleFieldData
 }

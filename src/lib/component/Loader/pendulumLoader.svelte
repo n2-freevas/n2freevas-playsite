@@ -29,11 +29,7 @@
     }
 </script>
 
-<div
-    class="loader"
-    style="--loader-height: {`${
-        initial_length + increase_length * numof_pendulum + initial_size
-    }px`};">
+<div class="loader" style="--loader-height: {`${initial_length + increase_length * numof_pendulum + initial_size}px`};">
     <div class="fulcrum">
         {#each pendulums_args as args}
             <!-- Pendulum Part -->

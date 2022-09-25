@@ -28,9 +28,7 @@
         --movementBoxHeight: 120px;
         --movementCellMargin: 2px;
         --movementCellWidth: calc((var(--movementBoxWidth) - (var(--movementCellMargin) * 14)) / 7);
-        --movementCellHeight: calc(
-            (var(--movementBoxHeight) - (var(--movementCellMargin) * 14)) / 7
-        );
+        --movementCellHeight: calc((var(--movementBoxHeight) - (var(--movementCellMargin) * 14)) / 7);
         width: var(--movementBoxWidth);
         height: var(--movementBoxHeight);
         display: flex;

@@ -15,18 +15,14 @@
     import { ENV, ENV_SYNEGIER_ADMIN_ACCESS_TOKEN } from '$lib/K/env'
     import ToastArea from '$lib/component/toast/ToastArea.svelte'
     import { healthCheck, tryPassingAuth } from '$lib/api/app/synegierAdmin'
-    import {
-        synegierAdminAccessToken,
-        cardDetailLeft,
-        cardDetailRight
-    } from '$lib/store/app/synegierAdmin'
+    import { synegierAdminAccessToken, cardDetailLeft, cardDetailRight } from '$lib/store/app/synegierAdmin'
     import easytoast from '$lib/component/toast/summon'
     import RoundFloweringLoader from '$lib/component/Loader/roundFloweringLoader.svelte'
     import { sleep } from '$lib/util/time'
-    import CardDetail from '$lib/component/SynegierAdmin/CardDetail.svelte'
+    import CardDetail from '$lib/component/SynegierAdmin/Card/CardDetail.svelte'
 
-    // Require : Size of parent element is width:1100px height:800px.
-    let requireWidth = 1100
+    // Require : Size of parent element is width:1400px height:800px.
+    let requireWidth = 1400
     let requireHeight = 800
     let isShowPasswordUI = true
     let accessToken = ''
@@ -52,26 +48,20 @@
                 await healthCheck()
                 hideLoading(window)
             } catch {
-                easytoast.errorToastStaying(
-                    `システムが停止している可能性があります。開発者に問い合わせてください。<br>発生時刻： ${new Date().toISOString()}`
-                )
+                easytoast.errorToastStaying(`システムが停止している可能性があります。開発者に問い合わせてください。<br>発生時刻： ${new Date().toISOString()}`)
             }
         }
     })
 
     function checkDisplayRequirement(width, height): boolean {
         if (!width || !height) {
-            easytoast.toastStay(
-                `Require browser size is ${requireWidth}*${requireHeight}.<br>Resize brouser and reload page.`
-            )
+            easytoast.toastStay(`Require browser size is ${requireWidth}*${requireHeight}.<br>Resize brouser and reload page.`)
         }
         if (width >= requireWidth && height >= requireHeight) {
             return true
         } else if (width < requireWidth && height < requireHeight) {
             easytoast.remove()
-            easytoast.toastStay(
-                `Require browser size is ${requireWidth}*${requireHeight}.<br>Resize brouser and reload page.`
-            )
+            easytoast.toastStay(`Require browser size is ${requireWidth}*${requireHeight}.<br>Resize brouser and reload page.`)
             return false
         } else if (width < requireWidth) {
             easytoast.remove()
@@ -118,9 +108,7 @@
 <svelte:head>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
 </svelte:head>
 
 <article id="synegierAdminLayout">
@@ -158,11 +146,7 @@
         {#if isShowPasswordUI}
             <div id="passwordUI" class={isShowPasswordUI ? 'show' : ''}>
                 Are you member?
-                <input
-                    bind:value={accessToken}
-                    placeholder="Enter the accessToken"
-                    maxlength={55}
-                    on:keydown={enteredPassword} />
+                <input bind:value={accessToken} placeholder="Enter the accessToken" maxlength={55} on:keydown={enteredPassword} />
                 {#if isCheckingPassword}
                     <RoundFloweringLoader small_round_size={20} large_round_size={30} />
                 {/if}
@@ -171,14 +155,8 @@
             <div id="slot" style="padding-top:{slotPadding}px">
                 <slot />
             </div>
-            <CardDetail
-                model={$cardDetailLeft}
-                sideOfShowDetail="left"
-                isShowDetail={$cardDetailLeft ? true : false} />
-            <CardDetail
-                model={$cardDetailRight}
-                sideOfShowDetail="right"
-                isShowDetail={$cardDetailRight ? true : false} />
+            <CardDetail model={$cardDetailLeft} sideOfShowDetail="left" isShowDetail={$cardDetailLeft ? true : false} />
+            <CardDetail model={$cardDetailRight} sideOfShowDetail="right" isShowDetail={$cardDetailRight ? true : false} />
         {/if}
     {/if}
 </article>

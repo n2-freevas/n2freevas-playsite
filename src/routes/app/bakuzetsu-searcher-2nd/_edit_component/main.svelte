@@ -62,14 +62,7 @@
             $isSettingFilterCondition = false
         }
         $filterConditionStore.offset = 0
-        $unitListStore = await getUnitsUsingFilter(
-            $filterConditionStore.offset,
-            $filterConditionStore.limit,
-            word,
-            elem,
-            tribe,
-            gimmick
-        )
+        $unitListStore = await getUnitsUsingFilter($filterConditionStore.offset, $filterConditionStore.limit, word, elem, tribe, gimmick)
         if ($filterConditionStore.limit != $unitListStore.length) {
             console.log('check')
             $isBottomOfScroll = true

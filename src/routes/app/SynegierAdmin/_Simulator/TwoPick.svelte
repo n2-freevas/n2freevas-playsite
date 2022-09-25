@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Card from '$lib/component/SynegierAdmin/Card.svelte'
+    import Card from '$lib/component/SynegierAdmin/Card/Card.svelte'
     import type { SynegierCard } from '$lib/model/app/SynegierAdmin'
     import { deckStore, cardDetailLeft, cardDetailRight } from '$lib/store/app/synegierAdmin'
     import { onMount, createEventDispatcher } from 'svelte'
@@ -50,11 +50,7 @@
         return Math.floor(Math.random() * max)
     }
 
-    function pickupCardHelperFindUnduplicatedIndex(
-        len1,
-        len2 = undefined,
-        len3 = undefined
-    ): number[] {
+    function pickupCardHelperFindUnduplicatedIndex(len1, len2 = undefined, len3 = undefined): number[] {
         let result = []
         let leftChoise1 = getRandomInt(len1)
         let rightChoise1 = leftChoise1
@@ -88,10 +84,7 @@
         if (countOfPicked < 7) {
             console.log('C R pick')
             // 01-07回目 C:   90%, R:  10%
-            let nums = pickupCardHelperFindUnduplicatedIndex(
-                datusDivRarityLen.C,
-                datusDivRarityLen.R
-            )
+            let nums = pickupCardHelperFindUnduplicatedIndex(datusDivRarityLen.C, datusDivRarityLen.R)
             let ZeroToNine = getRandomInt(10)
             if (ZeroToNine < 9) {
                 leftCard = datusDivRarity.C[nums[0]]
@@ -107,11 +100,7 @@
         } else if (countOfPicked < 12) {
             console.log('C R SR pick')
             //　08-12回目 C:   30%, R:  60%, SR: 10%
-            let nums = pickupCardHelperFindUnduplicatedIndex(
-                datusDivRarityLen.C,
-                datusDivRarityLen.R,
-                datusDivRarityLen.SR
-            )
+            let nums = pickupCardHelperFindUnduplicatedIndex(datusDivRarityLen.C, datusDivRarityLen.R, datusDivRarityLen.SR)
             let ZeroToNine = getRandomInt(10)
             if (ZeroToNine < 3) {
                 leftCard = datusDivRarity.C[nums[0]]
@@ -131,10 +120,7 @@
         } else if (countOfPicked < 15) {
             console.log('SR LE pick')
             //　13-15回目 SR:  90%, LE:  10%
-            let nums = pickupCardHelperFindUnduplicatedIndex(
-                datusDivRarityLen.SR,
-                datusDivRarityLen.LE
-            )
+            let nums = pickupCardHelperFindUnduplicatedIndex(datusDivRarityLen.SR, datusDivRarityLen.LE)
             let ZeroToNine = getRandomInt(10)
             if (ZeroToNine < 9) {
                 leftCard = datusDivRarity.SR[nums[0]]
@@ -198,10 +184,10 @@
     }
 
     onMount(() => {
-        // pickedCards = cardDatus.slice(0, 16)
-        // $deckStore = pickedCards
-        // nowPhaseOf2pick = 'end'
-        pickPrepare()
+        pickedCards = cardDatus.slice(0, 16)
+        $deckStore = pickedCards
+        nowPhaseOf2pick = 'end'
+        // pickPrepare()
     })
 </script>
 
@@ -214,10 +200,7 @@
                 isUnChoiseRightCard = true
                 pickedProcess(leftCard)
             }}>
-            <In2pickAmination
-                bind:onAppear={isAppearLeftCard}
-                bind:onChoised={isChoiseLeftCard}
-                bind:onUnChoised={isUnChoiseLeftCard}>
+            <In2pickAmination bind:onAppear={isAppearLeftCard} bind:onChoised={isChoiseLeftCard} bind:onUnChoised={isUnChoiseLeftCard}>
                 <Card model={leftCard} scale={0.4} />
             </In2pickAmination>
         </div>
@@ -228,10 +211,7 @@
                 isUnChoiseLeftCard = true
                 pickedProcess(rightCard)
             }}>
-            <In2pickAmination
-                bind:onAppear={isAppearRightCard}
-                bind:onChoised={isChoiseRightCard}
-                bind:onUnChoised={isUnChoiseRightCard}>
+            <In2pickAmination bind:onAppear={isAppearRightCard} bind:onChoised={isChoiseRightCard} bind:onUnChoised={isUnChoiseRightCard}>
                 <Card model={rightCard} scale={0.4} />
             </In2pickAmination>
         </div>

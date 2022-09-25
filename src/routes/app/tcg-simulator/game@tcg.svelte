@@ -152,9 +152,7 @@
                     <div class="height">
                         {`${window_height_require}px`}<span>{` ( ${window_height}px )`}</span>
                     </div>
-                    <img
-                        src="/img/tcg-sim/require_device.svg"
-                        alt="縦:横 = 400px:700px の端末でご利用ください" />
+                    <img src="/img/tcg-sim/require_device.svg" alt="縦:横 = 400px:700px の端末でご利用ください" />
                 </div>
             </div>
         </div>
@@ -170,12 +168,7 @@
         transform: rotateX(7deg);
         border-radius: 30px;
         position: relative;
-        background: radial-gradient(
-            ellipse,
-            rgba(255, 255, 255, 0.6) 0%,
-            rgba(255, 255, 255, 0.4) 70%,
-            rgba(255, 255, 255, 0.1) 100%
-        );
+        background: radial-gradient(ellipse, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.4) 70%, rgba(255, 255, 255, 0.1) 100%);
     }
     #myDeckAndHand {
         position: fixed;

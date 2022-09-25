@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Card from '$lib/component/SynegierAdmin/Card.svelte'
+    import Card from '$lib/component/SynegierAdmin/Card/Card.svelte'
     import type { SynegierCard } from '$lib/model/app/SynegierAdmin'
     import In2pickAmination from '$lib/component/SynegierAdmin/CardAnimationComponent/In2pickAmination.svelte'
 
@@ -57,13 +57,9 @@
             {#each Object.entries(stColorSummary) as [color, typeAndCount]}
                 <div class="stColorItem">
                     <div class="stSubjectCount">{typeAndCount.s}</div>
-                    <div
-                        class="stSubjectBar {color}"
-                        style="--width:{typeAndCount.s < 11 ? typeAndCount.s * 20 : 200}px" />
+                    <div class="stSubjectBar {color}" style="--width:{typeAndCount.s < 11 ? typeAndCount.s * 20 : 200}px" />
                     <div class="stColorRect">{color}</div>
-                    <div
-                        class="stVerbusBar {color}"
-                        style="--width:{typeAndCount.v < 11 ? typeAndCount.v * 20 : 200}px" />
+                    <div class="stVerbusBar {color}" style="--width:{typeAndCount.v < 11 ? typeAndCount.v * 20 : 200}px" />
                     <div class="stVerbusCount">{typeAndCount.v}</div>
                 </div>
             {/each}

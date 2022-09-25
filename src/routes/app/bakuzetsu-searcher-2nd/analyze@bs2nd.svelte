@@ -1,11 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import {
-        getAdvents,
-        getAdventsUsingFilter,
-        getAdventBanmen,
-        getSearchAnswer
-    } from '$lib/api/app/bs2ndApi'
+    import { getAdvents, getAdventsUsingFilter, getAdventBanmen, getSearchAnswer } from '$lib/api/app/bs2ndApi'
     import {
         adventStore,
         adventFilterConditionStore,
@@ -15,14 +10,7 @@
         deckStore,
         mojiLengthConfigStore
     } from '$lib/store/app/bs2ndStore'
-    import {
-        ElemEngDict,
-        AdventNumDict,
-        advent,
-        banmenAnswer,
-        targetKana,
-        answer
-    } from '$lib/model/app/Bs2ndModel'
+    import { ElemEngDict, AdventNumDict, advent, banmenAnswer, targetKana, answer } from '$lib/model/app/Bs2ndModel'
     import Advent from '$lib/component/bs2nd/advent.svelte'
     import InfiniteScroll from '$lib/component/InfiniteScroll.svelte'
     import Bs2ndLoader from '$lib/component/Loader/bs2ndLoader.svelte'
@@ -75,16 +63,9 @@
             $adventFilterConditionStore.offset += $adventFilterConditionStore.limit
             let list = undefined
             if ($adventFilterConditionStore.elem.length == 0) {
-                list = await getAdvents(
-                    $adventFilterConditionStore.offset,
-                    $adventFilterConditionStore.limit
-                )
+                list = await getAdvents($adventFilterConditionStore.offset, $adventFilterConditionStore.limit)
             } else {
-                list = await getAdventsUsingFilter(
-                    $adventFilterConditionStore.offset,
-                    $adventFilterConditionStore.limit,
-                    $adventFilterConditionStore.elem
-                )
+                list = await getAdventsUsingFilter($adventFilterConditionStore.offset, $adventFilterConditionStore.limit, $adventFilterConditionStore.elem)
             }
             $adventStore = $adventStore.concat(list)
             isInfiniteScrollLoading = false
@@ -102,11 +83,7 @@
                 }
             })
             $adventFilterConditionStore.elem = elem
-            $adventStore = await getAdventsUsingFilter(
-                $adventFilterConditionStore.offset,
-                $adventFilterConditionStore.limit,
-                $adventFilterConditionStore.elem
-            )
+            $adventStore = await getAdventsUsingFilter($adventFilterConditionStore.offset, $adventFilterConditionStore.limit, $adventFilterConditionStore.elem)
             isfilterLoading = false
         }
     }
@@ -151,9 +128,7 @@
     function mojiLengthButtonHandler(length) {
         for (let i = 0; i < $mojiLengthConfigStore.length; i++) {
             if ($mojiLengthConfigStore[i].length == length) {
-                $mojiLengthConfigStore[i].active
-                    ? ($mojiLengthConfigStore[i].active = false)
-                    : ($mojiLengthConfigStore[i].active = true)
+                $mojiLengthConfigStore[i].active ? ($mojiLengthConfigStore[i].active = false) : ($mojiLengthConfigStore[i].active = true)
                 break
             }
         }
@@ -165,9 +140,7 @@
             isBanmenSearching = true
             answerCount = 0
             if (target_kana.length == 0) {
-                easytoast.toastPush(
-                    '「EDIT」でデッキ編成すると、<br>素晴らしい機能にアクセスできます'
-                )
+                easytoast.toastPush('「EDIT」でデッキ編成すると、<br>素晴らしい機能にアクセスできます')
                 return null
             }
             isActiveAnswerBox = true
@@ -221,11 +194,7 @@
                 <Bs2ndLoader />
             {:else}
                 {#each $adventStore as as}
-                    <Advent
-                        advent={as}
-                        full={true}
-                        on:pickup={pickUpAdventHandler}
-                        on:pickdown={pickDownAdventHandler} />
+                    <Advent advent={as} full={true} on:pickup={pickUpAdventHandler} on:pickdown={pickDownAdventHandler} />
                     <InfiniteScroll
                         threshold={100}
                         on:loadMore={() => {
@@ -237,9 +206,7 @@
     </section>
     <section id="elem-filter-box">
         {#each $adventElemStore as es, i}
-            <div
-                class="elem {ElemEngDict[es.elem]} {es.active ? 'active' : ''}"
-                on:click={() => elemClickHandler(es.id)}>
+            <div class="elem {ElemEngDict[es.elem]} {es.active ? 'active' : ''}" on:click={() => elemClickHandler(es.id)}>
                 {es.elem}
             </div>
         {/each}
@@ -263,9 +230,7 @@
                 {#if $adventBanmenStore.length != 0}
                     <div id="banmen-moj-length-config-box">
                         {#each $mojiLengthConfigStore as mlcs}
-                            <button
-                                class={mlcs.active ? 'active' : ''}
-                                on:click={() => mojiLengthButtonHandler(mlcs.length)}>
+                            <button class={mlcs.active ? 'active' : ''} on:click={() => mojiLengthButtonHandler(mlcs.length)}>
                                 {mlcs.length}文字
                             </button>
                         {/each}

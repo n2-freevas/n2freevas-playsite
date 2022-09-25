@@ -29,10 +29,7 @@
 
 <div class="kotodaman {!full ? 'no-margin' : ''}" on:click={kotodamanOnClickHandler}>
     <div class="smart-info-box">
-        <img
-            class={kotodaman.disable ? 'disable' : ''}
-            src={kotodaman.figure}
-            alt={kotodaman.name} />
+        <img class={kotodaman.disable ? 'disable' : ''} src={kotodaman.figure} alt={kotodaman.name} />
         {#if full}
             <div class="elems-tribe-box">
                 <div class="tribe-box {kotodaman.disable ? 'disable' : ''}">

@@ -15,9 +15,7 @@
     <section id="kana-box">
         {#each $kanaStore as k}
             {#if k.kanas[0] != ''}
-                <div
-                    class="kana {k.active ? 'active' : ''}"
-                    on:click={() => kanaClickHandler(k.id)}>
+                <div class="kana {k.active ? 'active' : ''}" on:click={() => kanaClickHandler(k.id)}>
                     {k.kanas[0]}
                 </div>
             {:else}

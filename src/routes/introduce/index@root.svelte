@@ -14,12 +14,7 @@
     const myJob = ['Engineer', 'Designer', 'Artist']
     const backgroundIllust = ['']
     const calcElapsedYear = (s, e) =>
-        e.getFullYear() === s.getFullYear()
-            ? 0
-            : e.getFullYear() -
-              s.getFullYear() -
-              1 +
-              (12 - s.getMonth() + (e.getMonth() + 1) >= 13 ? 1 : 0)
+        e.getFullYear() === s.getFullYear() ? 0 : e.getFullYear() - s.getFullYear() - 1 + (12 - s.getMonth() + (e.getMonth() + 1) >= 13 ? 1 : 0)
     onMount(async () => {
         myAgeYear = calcElapsedYear(myBirthDay, new Date())
         let ts = new Date().getTime() - myBirthDay.getTime()
