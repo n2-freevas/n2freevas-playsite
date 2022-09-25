@@ -7,7 +7,7 @@
     "trailingComma": "none",
     "bracketSpacing": true,
     "bracketSameLine": true,
-    "printWidth": 100,
+    "printWidth": 160,
     "svelteStrictMode": false,
     "svelteBracketNewLine": false,
     "svelteAllowShorthand": false,

@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { getCardDatus } from '$lib/api/app/synegierAdmin'
+    import { getCardDatus, getBattleFieldDatus } from '$lib/api/app/synegierAdmin'
     import { N2API_ERROR_CODE } from '$lib/api/api'
     import { onMount } from 'svelte'
-    import type { SynegierCard } from '$lib/model/app/SynegierAdmin'
+    import type { BattleField, SynegierCard } from '$lib/model/app/SynegierAdmin'
     import { sleep } from '$lib/util/time'
     import easytoast from '$lib/component/toast/summon'
     import { showLoading, hideLoading } from './__layout-synegierAdmin.svelte'
@@ -17,25 +17,26 @@
     let nowPhase: phaseList = ''
 
     let isShowScreen: boolean = false
+    let battleFieldModel: BattleField
 
     onMount(async () => {
         try {
             showLoading(window)
             datus = await getCardDatus($synegierAdminAccessToken)
+            let battleFieldDatus = await getBattleFieldDatus($synegierAdminAccessToken)
+            battleFieldModel = battleFieldDatus[Math.floor(Math.random() * battleFieldDatus.length)]
 
-            // $deckStore = datus.slice(0, 6)
-            // nowPhase = 'sweep'
-            await sleep(1000)
-            nowPhase = '2pick'
+            $deckStore = datus.slice(0, 16)
+            nowPhase = 'sweep'
+            // await sleep(1000)
+            // nowPhase = '2pick'
         } catch (e) {
             console.error(`In Simulator: ${e}`)
             if (e == N2API_ERROR_CODE.ACCESS_INVALID) {
                 $synegierAdminAccessToken = new Date().toISOString()
             }
             isSysterError = true
-            easytoast.errorToastStaying(
-                'システムエラー中です。<br>必要であれば管理者に問い合わせてください。'
-            )
+            easytoast.errorToastStaying('システムエラー中です。<br>必要であれば管理者に問い合わせてください。')
         } finally {
             hideLoading(window)
         }
@@ -55,7 +56,7 @@
 {:else if nowPhase == '2pick'}
     <TwoPick cardDatus={datus} on:finish={gotoDuel} />
 {:else if nowPhase == 'sweep'}
-    <Duel />
+    <Duel battleFieldModel={battleFieldModel} />
 {/if}
 <div id="screenAnimation" class={isShowScreen ? 'open' : ''} />
 

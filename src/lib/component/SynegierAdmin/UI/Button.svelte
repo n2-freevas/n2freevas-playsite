@@ -5,19 +5,21 @@
     export let img: string = undefined
     export let text: string
     export let size: number = 100
+    export let fontsize: number = 13
+    export let shape: 'rect' | 'round' = 'rect'
     let isHover: boolean = false
 </script>
 
 <div
     class="button"
     style="width:{size}px; height:{size}px;"
-    on:click={() => {
+    on:click={(event) => {
         dispatcher('click')
     }}>
-    <div class="buttonBg {isHover ? 'hover' : ''}" style="width:{size}px; height:{size}px;" />
+    <div class="buttonBg {isHover ? 'hover' : ''} {shape}" style="width:{size}px; height:{size}px;" />
     <div class="buttonBody">
         {#if img}<img src={img} alt="" />{/if}
-        <p>{@html text}</p>
+        <p style="font-size: {fontsize}px">{@html text}</p>
     </div>
     <div
         class="buttonMask"
@@ -32,12 +34,18 @@
 <style lang="scss">
     .button {
         position: relative;
+        user-select: none;
         .buttonBg {
             position: absolute;
             opacity: 0.9;
             background: rgba($color: #444444, $alpha: 0.8);
-            transform: rotate(45deg);
-            transition: 0.2s;
+            &.rect {
+                transform: rotate(45deg);
+                transition: 0.2s;
+            }
+            &.round {
+                border-radius: 50%;
+            }
             &.hover {
                 background: rgba($color: #555555, $alpha: 1);
             }
@@ -55,7 +63,7 @@
             }
             p {
                 margin: 5px 0;
-                font-size: 13px;
+                text-align: center;
             }
         }
         .buttonMask {

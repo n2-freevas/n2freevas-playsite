@@ -9,17 +9,7 @@ export type NotionPage = {
 
 export type NotionTag = {
     tag_name: string
-    tag_color:
-        | 'default'
-        | 'gray'
-        | 'brown'
-        | 'orange'
-        | 'yellow'
-        | 'green'
-        | 'blue'
-        | 'purple'
-        | 'pink'
-        | 'red'
+    tag_color: 'default' | 'gray' | 'brown' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple' | 'pink' | 'red'
 }
 
 export type NotionBlockText = {

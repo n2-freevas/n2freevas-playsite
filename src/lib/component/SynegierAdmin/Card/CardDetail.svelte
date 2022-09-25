@@ -53,9 +53,7 @@
     }
 </script>
 
-<div
-    class="cardDetail {isShowDetail ? 'show' : ''} {sideOfShowDetail}"
-    on:mouseleave={mouseLeaveHandler}>
+<div class="cardDetail {isShowDetail ? 'show' : ''} {sideOfShowDetail}" on:mouseleave={mouseLeaveHandler}>
     <div class="cardDetailMain">
         <div class="cardDetailLeft">
             <img src={model?.img} alt="" />
@@ -70,11 +68,7 @@
                 <div class="textInfo" on:click={showKeywordDescription}>
                     {@html textIncludeDescription}
                 </div>
-                <Movement
-                    movement={model?.movement}
-                    redTiles={model?.redTiles}
-                    scale={1}
-                    showBlankTile={true} />
+                <Movement movement={model?.movement} redTiles={model?.redTiles} scale={1} showBlankTile={true} />
             </div>
         </div>
     </div>

@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { getCardDatus, getSoldierDatus } from '$lib/api/app/synegierAdmin'
-    import Card from '$lib/component/SynegierAdmin/Card.svelte'
-    import Soldier from '$lib/component/SynegierAdmin/Soldier.svelte'
+    import { getCardDatus, getSoldierDatus, getBattleFieldDatus } from '$lib/api/app/synegierAdmin'
+    import Card from '$lib/component/SynegierAdmin/Card/Card.svelte'
+    import Soldier from '$lib/component/SynegierAdmin/Card/Soldier.svelte'
+    import BattleFieldComponent from '$lib/component/SynegierAdmin/UI/BattleField.svelte'
     import Button from '$lib/component/SynegierAdmin/UI/Button.svelte'
-    import type { SoldierCard, SynegierCard } from '$lib/model/app/SynegierAdmin'
+    import type { BattleField, SoldierCard, SynegierCard } from '$lib/model/app/SynegierAdmin'
     import { synegierAdminAccessToken } from '$lib/store/app/synegierAdmin'
     import { onMount } from 'svelte'
 
@@ -11,11 +12,13 @@
     let soldiers: SoldierCard[] = []
     let flip: boolean = false
     let cardSizeMargin: number = 0
+    let battleFields: BattleField[] = []
 
     onMount(async () => {
         datus = await (await getCardDatus($synegierAdminAccessToken)).slice(0, 20)
         cardSizeMargin = 1 / datus.length
         soldiers = await (await getSoldierDatus($synegierAdminAccessToken)).slice(0, 1)
+        battleFields = await (await getBattleFieldDatus($synegierAdminAccessToken)).slice(0, 2)
     })
 </script>
 
@@ -38,6 +41,12 @@
         <Card model={d} scale={cardSizeMargin * (i + 1)} bind:isFlip={flip} />
     {/each}
 </div>
+
+{#each battleFields as bf}
+    <div style="position:relative; width: 1000px; height:800px;">
+        <BattleFieldComponent model={bf} />
+    </div>
+{/each}
 
 <style lang="scss">
     .list {

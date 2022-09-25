@@ -69,10 +69,7 @@
                 }
                 $unitListStore = $unitListStore.concat(unit)
             } else {
-                $unitListStore = await getUnits(
-                    $filterConditionStore.offset,
-                    $filterConditionStore.limit
-                )
+                $unitListStore = await getUnits($filterConditionStore.offset, $filterConditionStore.limit)
                 if ($filterConditionStore.limit != $unitListStore.length) {
                     $isBottomOfScroll = true
                 }
@@ -220,14 +217,9 @@
                     <div
                         id="bs2nd-units-filter-slider-button"
                         on:click={() => {
-                            isUnitFilterMenuOpen
-                                ? (isUnitFilterMenuOpen = false)
-                                : (isUnitFilterMenuOpen = true)
+                            isUnitFilterMenuOpen ? (isUnitFilterMenuOpen = false) : (isUnitFilterMenuOpen = true)
                         }}>
-                        <img
-                            class={isUnitFilterMenuOpen ? 'open' : ''}
-                            src="/img/arrow-circle-left-solid.svg"
-                            alt="⇦" />
+                        <img class={isUnitFilterMenuOpen ? 'open' : ''} src="/img/arrow-circle-left-solid.svg" alt="⇦" />
                     </div>
                 </section>
             </section>
@@ -261,11 +253,7 @@
                 threshold={100}
                 on:loadMore={() => {
                     $filterConditionStore.offset += DEFAULT_LIMIT
-                    !$isListLoading && !$isBottomOfScroll
-                        ? isSettingFilterCondition
-                            ? handleGetUnitsFilter()
-                            : handleGetUnits()
-                        : null
+                    !$isListLoading && !$isBottomOfScroll ? (isSettingFilterCondition ? handleGetUnitsFilter() : handleGetUnits()) : null
                 }} />
         </section>
     </section>
@@ -281,10 +269,7 @@
                     on:click={() => {
                         isDeckMenuOpen ? (isDeckMenuOpen = false) : (isDeckMenuOpen = true)
                     }}>
-                    <img
-                        class={isDeckMenuOpen ? 'open' : ''}
-                        src="/img/arrow-circle-left-solid.svg"
-                        alt="⇦" />
+                    <img class={isDeckMenuOpen ? 'open' : ''} src="/img/arrow-circle-left-solid.svg" alt="⇦" />
                 </div>
             </section>
             <section id="bs2nd-units-filter-slider" class={isUnitFilterMenuOpen ? 'open' : ''}>
@@ -295,14 +280,9 @@
                 <div
                     id="bs2nd-units-filter-slider-button"
                     on:click={() => {
-                        isUnitFilterMenuOpen
-                            ? (isUnitFilterMenuOpen = false)
-                            : (isUnitFilterMenuOpen = true)
+                        isUnitFilterMenuOpen ? (isUnitFilterMenuOpen = false) : (isUnitFilterMenuOpen = true)
                     }}>
-                    <img
-                        class={isUnitFilterMenuOpen ? 'open' : ''}
-                        src="/img/arrow-circle-left-solid.svg"
-                        alt="⇦" />
+                    <img class={isUnitFilterMenuOpen ? 'open' : ''} src="/img/arrow-circle-left-solid.svg" alt="⇦" />
                 </div>
             </section>
         {/if}</MediaQuery>

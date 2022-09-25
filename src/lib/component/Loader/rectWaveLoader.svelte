@@ -19,9 +19,7 @@
 
     for (let i = 0; i < numof_rectangle; i++) {
         rectangle_args.push({
-            rect_width: `${Math.floor(
-                Math.random() * blur_range_rect_width + base_rect_width - blur_range_rect_width / 2
-            )}px`,
+            rect_width: `${Math.floor(Math.random() * blur_range_rect_width + base_rect_width - blur_range_rect_width / 2)}px`,
             interval_position: `${formation_interval * (numof_rectangle / 2 - i)}px`,
             growth_delay: `${growth_delay_sec * i}s`
         })
@@ -29,9 +27,7 @@
 </script>
 
 <div class="loader" style="--loader-height: {`${77 + max_height}px`};">
-    <div
-        class="fulcrum {is_animate ? 'animate' : ''}"
-        style="--base_width:{`${base_rect_width}px`}; --max_height:{`${max_height}px`};">
+    <div class="fulcrum {is_animate ? 'animate' : ''}" style="--base_width:{`${base_rect_width}px`}; --max_height:{`${max_height}px`};">
         {#each rectangle_args as args}
             <div
                 class="rect {is_animate ? 'animate' : ''}"

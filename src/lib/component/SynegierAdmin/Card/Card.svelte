@@ -23,8 +23,7 @@
         }
     }
     onMount(() => {
-        sideOfShowDetail =
-            window.innerWidth / 2 < selfElement.getBoundingClientRect().x ? 'left' : 'right'
+        sideOfShowDetail = window.innerWidth / 2 < selfElement.getBoundingClientRect().x ? 'left' : 'right'
     })
 
     function rightClickHandler(event) {
@@ -62,13 +61,17 @@
     }
     function cardDetailShow() {
         if (fixedSideOfShowDetail == 'left') {
+            $cardDetailRight = undefined
             $cardDetailLeft = model
         } else if (fixedSideOfShowDetail == 'right') {
+            $cardDetailLeft = undefined
             $cardDetailRight = model
         } else {
             if (sideOfShowDetail == 'left') {
+                $cardDetailRight = undefined
                 $cardDetailLeft = model
             } else {
+                $cardDetailLeft = undefined
                 $cardDetailRight = model
             }
         }
@@ -79,12 +82,7 @@
     }
 </script>
 
-<div
-    class="card"
-    style="--scale:{scale}"
-    on:contextmenu|preventDefault={rightClickHandler}
-    on:mouseenter={mouseEnterHandler}
-    on:mouseleave={mouseLeaveHandler}>
+<div class="card" style="--scale:{scale}" on:contextmenu|preventDefault={rightClickHandler} on:mouseenter={mouseEnterHandler} on:mouseleave={mouseLeaveHandler}>
     <div class="cardBody {isMouseOver ? 'hover' : ''}" bind:this={selfElement}>
         <div class="cardFront {isFlip ? 'flip' : ''}">
             <div class="backgroundFrame {model.rarity}" />
@@ -123,24 +121,8 @@
         --C_colorRule: linear-gradient(0, #b8b8b8, #e2e2e2);
         --R_colorRule: linear-gradient(0, #89c6ff, #bc9cff);
         --SR_colorRule: linear-gradient(0, #ffc700, #ffe600);
-        --LR_colorRule_cost: conic-gradient(
-            from 180deg at 50% 50%,
-            #c750ff 0%,
-            #ff6f6f 10%,
-            #ffe976 34%,
-            #fffb72 53%,
-            #4df4ff 71%,
-            #c750ff 100%
-        );
-        --LR_colorRule_frame: conic-gradient(
-            from 180deg at 50% 50%,
-            #5b7dff 0%,
-            #b157ff 15%,
-            #ff5b5b 42%,
-            #ffd600 60%,
-            #31ffce 71%,
-            #5b7dff 100%
-        );
+        --LR_colorRule_cost: conic-gradient(from 180deg at 50% 50%, #c750ff 0%, #ff6f6f 10%, #ffe976 34%, #fffb72 53%, #4df4ff 71%, #c750ff 100%);
+        --LR_colorRule_frame: conic-gradient(from 180deg at 50% 50%, #5b7dff 0%, #b157ff 15%, #ff5b5b 42%, #ffd600 60%, #31ffce 71%, #5b7dff 100%);
         --w: 378px;
         --h: 600px;
         width: calc(var(--w) * var(--scale));
@@ -322,9 +304,7 @@
         .textInfo {
             display: flex;
             align-items: center;
-            width: calc(
-                var(--basicTextWidth) - var(--movementBoxWidth) - (var(--basicTextPadding) * 2)
-            );
+            width: calc(var(--basicTextWidth) - var(--movementBoxWidth) - (var(--basicTextPadding) * 2));
             padding: var(--cardSpacing15) var(--cardSpacing05);
         }
     }

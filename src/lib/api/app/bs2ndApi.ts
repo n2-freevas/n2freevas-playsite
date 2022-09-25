@@ -1,11 +1,5 @@
 import Api from '../api'
-import type {
-    kotodaman,
-    advent,
-    banmen,
-    targetKana,
-    answerListModel
-} from '$lib/model/app/Bs2ndModel'
+import type { kotodaman, advent, banmen, targetKana, answerListModel } from '$lib/model/app/Bs2ndModel'
 
 const bs2ndUrl = '/bakuzetsu-searcher-2nd'
 const bs2ndGetUnitUrl = bs2ndUrl + '/getunit'
@@ -69,19 +63,12 @@ export const getAdvents = async (offset?: number, limit?: number): Promise<adven
     }
 }
 
-export const getAdventsUsingFilter = async (
-    offset?: number,
-    limit?: number,
-    elem?: string[]
-): Promise<advent[]> => {
+export const getAdventsUsingFilter = async (offset?: number, limit?: number, elem?: string[]): Promise<advent[]> => {
     try {
         // @ts-ignore
-        let data: object[] = await Api.post(
-            `${bs2ndGetAdventsUrl}?offset=${offset}&limit=${limit}`,
-            {
-                elem
-            }
-        )
+        let data: object[] = await Api.post(`${bs2ndGetAdventsUrl}?offset=${offset}&limit=${limit}`, {
+            elem
+        })
         // @ts-ignore
         return data.map((advent) => {
             return { ...advent, disable: false }
@@ -102,11 +89,7 @@ export const getAdventBanmen = async (advent_id: number): Promise<banmen[]> => {
     }
 }
 
-export const getSearchAnswer = async (
-    banmen: string,
-    target_kana: targetKana[],
-    target_length: number[]
-): Promise<answerListModel> => {
+export const getSearchAnswer = async (banmen: string, target_kana: targetKana[], target_length: number[]): Promise<answerListModel> => {
     try {
         // @ts-ignore
         let data = await Api.post(`${bs2ndGetSearchAnswerUrl}`, {

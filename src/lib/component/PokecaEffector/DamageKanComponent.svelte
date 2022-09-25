@@ -89,9 +89,7 @@
     }
 </script>
 
-<svelte:window
-    on:mouseup|stopPropagation={mouseUpHandler}
-    on:mousemove|stopPropagation={mouseMoveHandler} />
+<svelte:window on:mouseup|stopPropagation={mouseUpHandler} on:mousemove|stopPropagation={mouseMoveHandler} />
 
 <div
     class="damage_kan"

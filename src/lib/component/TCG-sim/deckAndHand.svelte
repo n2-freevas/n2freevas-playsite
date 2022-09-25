@@ -49,15 +49,7 @@
 <script lang="ts">
     import Card from './card.svelte'
     import { onMount } from 'svelte'
-    import {
-        deckListStore,
-        modeStore,
-        handListStore,
-        cardWidth,
-        handAreaInfoStore,
-        boardListStore,
-        unshuffleDeckListStore
-    } from '$lib/store/app/TCGsimStore'
+    import { deckListStore, modeStore, handListStore, cardWidth, handAreaInfoStore, boardListStore, unshuffleDeckListStore } from '$lib/store/app/TCGsimStore'
     import type { handCardModel } from '$lib/model/app/TCGsimModel'
     import { cardInAnywhere, cardOutAnywhere } from '$lib/component/TCG-sim/util.svelte'
 
@@ -150,9 +142,7 @@
             const basis_mod = Math.floor(game_width / deck_top_position.width)
             $deckListStore.forEach((item) => {
                 const basic_x_pos = (i % basis_mod) * deck_top_position.width
-                const basic_y_pos =
-                    -1 * deck_top_position.top +
-                    deck_top_position.height * Math.floor(i / basis_mod)
+                const basic_y_pos = -1 * deck_top_position.top + deck_top_position.height * Math.floor(i / basis_mod)
                 item.x = basic_x_pos
                 item.y = basic_y_pos
                 item.flip = false
@@ -184,10 +174,7 @@
             .pop()
 
         $deckListStore = cardOutAnywhere(id, $deckListStore)
-        $boardListStore = cardInAnywhere(
-            { ...target, x: position.top - $cardWidth, y: position.left, z: 0, rotate: 0 },
-            $boardListStore
-        )
+        $boardListStore = cardInAnywhere({ ...target, x: position.top - $cardWidth, y: position.left, z: 0, rotate: 0 }, $boardListStore)
     }
 
     // ドロー

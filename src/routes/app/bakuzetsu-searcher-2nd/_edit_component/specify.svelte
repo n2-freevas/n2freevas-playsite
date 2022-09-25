@@ -32,11 +32,7 @@
     <h3>属性</h3>
     <section id="elem-box">
         {#each $elemStore as es, i}
-            <div
-                class="elem {ElemEngDict[es.elem]} {i < 3 ? 'long' : ''} {es.active
-                    ? 'active'
-                    : ''}"
-                on:click={() => elemClickHandler(es.id)}>
+            <div class="elem {ElemEngDict[es.elem]} {i < 3 ? 'long' : ''} {es.active ? 'active' : ''}" on:click={() => elemClickHandler(es.id)}>
                 {es.elem}
             </div>
         {/each}
@@ -44,9 +40,7 @@
     <h3>種族</h3>
     <section id="tribe-box">
         {#each $tribeStore as ts}
-            <div
-                class="tribe {TribeEngDict[ts.tribe]} {ts.active ? 'active' : ''}"
-                on:click={() => tribeClickHandler(ts.id)}>
+            <div class="tribe {TribeEngDict[ts.tribe]} {ts.active ? 'active' : ''}" on:click={() => tribeClickHandler(ts.id)}>
                 {ts.tribe}
             </div>
         {/each}
@@ -55,9 +49,7 @@
     <h3>ギミック</h3>
     <section id="gimmick-box">
         {#each $gimmickStore as gs}
-            <div
-                class="gimmick {gs.active ? 'active' : ''}"
-                on:click={() => gimmickClickHandler(gs.id)}>
+            <div class="gimmick {gs.active ? 'active' : ''}" on:click={() => gimmickClickHandler(gs.id)}>
                 <img src={`/img/bs2nd/${GimmickEngDict[gs.gimmick]}.svg`} alt={gs.gimmick} />
             </div>
         {/each}

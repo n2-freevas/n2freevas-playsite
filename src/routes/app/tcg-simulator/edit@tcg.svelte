@@ -1,10 +1,5 @@
 <script lang="ts">
-    import {
-        deckListStore,
-        exDeckListStore,
-        unshuffleDeckListStore,
-        unshuffleExDeckListStore
-    } from '$lib/store/app/TCGsimStore'
+    import { deckListStore, exDeckListStore, unshuffleDeckListStore, unshuffleExDeckListStore } from '$lib/store/app/TCGsimStore'
     import type { deckCardModel } from '$lib/model/app/TCGsimModel'
 
     let installComplete = true //fileLoaderが非同期なのでこやつを用いて強制的に同期させる
@@ -151,9 +146,7 @@
     #deck,
     #exdeck {
         display: flex;
-        width: calc(
-            var(--card-width) * var(--wrap_num) + var(--card-margin) * (var(--wrap_num) * 2)
-        );
+        width: calc(var(--card-width) * var(--wrap_num) + var(--card-margin) * (var(--wrap_num) * 2));
         margin: 0 auto;
         flex-wrap: wrap;
     }

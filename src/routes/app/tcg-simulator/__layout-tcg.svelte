@@ -2,14 +2,7 @@
     import ToastArea from '$lib/component/toast/ToastArea.svelte'
     import { modeStore } from '$lib/store/app/TCGsimStore'
     import { deckShuffle } from '$lib/component/TCG-sim/deckAndHand.svelte'
-    import {
-        boardListStore,
-        handListStore,
-        deckListStore,
-        unshuffleDeckListStore,
-        unshuffleExDeckListStore,
-        exDeckListStore
-    } from '$lib/store/app/TCGsimStore'
+    import { boardListStore, handListStore, deckListStore, unshuffleDeckListStore, unshuffleExDeckListStore, exDeckListStore } from '$lib/store/app/TCGsimStore'
     import type { deckCardModel } from '$lib/model/app/TCGsimModel'
 
     async function reset() {
@@ -135,11 +128,7 @@
             -ms-perspective: 500;
             perspective: 500;
             background: rgb(36, 24, 110);
-            background: radial-gradient(
-                circle at bottom,
-                rgba(36, 24, 110, 1) 0%,
-                rgba(0, 0, 0, 1) 100%
-            );
+            background: radial-gradient(circle at bottom, rgba(36, 24, 110, 1) 0%, rgba(0, 0, 0, 1) 100%);
         }
     }
 

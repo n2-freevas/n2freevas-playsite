@@ -11,13 +11,9 @@
     class="fukidashi {active ? 'active' : ''} {left_roll_in ? 'left_roll_in' : ''}">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 566 373"
         ><g fill="none" fill-rule="evenodd"
-            ><path
-                fill="#FFF"
-                d="M76.2 72.5 296.9.8 566 72.5l-93.9 209.1H241.2l-165 90.6 55.7-90.6L0 295.4l62.4-81.3z" /><path
+            ><path fill="#FFF" d="M76.2 72.5 296.9.8 566 72.5l-93.9 209.1H241.2l-165 90.6 55.7-90.6L0 295.4l62.4-81.3z" /><path
                 fill="#000"
-                d="M92 77 298.8 9.8 551 77l-88 196H239L98 348.1l54-75-131.4 12.7 58.4-76z" /><path
-                fill="#FFF"
-                d="M161.4 27.2 527.2 82 414.3 254H79z" /></g
+                d="M92 77 298.8 9.8 551 77l-88 196H239L98 348.1l54-75-131.4 12.7 58.4-76z" /><path fill="#FFF" d="M161.4 27.2 527.2 82 414.3 254H79z" /></g
         ></svg>
     <p><slot /></p>
 </div>

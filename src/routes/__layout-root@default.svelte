@@ -19,11 +19,7 @@
             <div class="menu-row-list">
                 {#each $mainmenus as menu}
                     {#if menu.active}
-                        <HeaderMenuBox
-                            name={menu.name}
-                            path={menu.path}
-                            img={menu.img}
-                            explain={menu.explain} />
+                        <HeaderMenuBox name={menu.name} path={menu.path} img={menu.img} explain={menu.explain} />
                     {/if}
                 {/each}
             </div>
@@ -45,11 +41,7 @@
                 <div class="hamburger-slider {sliderOpen ? 'open' : ''}">
                     {#each $mainmenus as menu}
                         {#if menu.active}
-                            <HambergerMenuBox
-                                name={menu.name}
-                                path={menu.path}
-                                img={menu.img}
-                                explain={menu.explain} />
+                            <HambergerMenuBox name={menu.name} path={menu.path} img={menu.img} explain={menu.explain} />
                         {/if}
                     {/each}
                 </div>

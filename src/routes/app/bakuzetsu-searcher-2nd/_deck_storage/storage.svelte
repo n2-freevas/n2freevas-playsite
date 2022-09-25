@@ -1,11 +1,5 @@
 <script lang="ts">
-    import {
-        decks,
-        deckStore,
-        isDeckFullStore,
-        setDecks,
-        unitListStore
-    } from '$lib/store/app/bs2ndStore'
+    import { decks, deckStore, isDeckFullStore, setDecks, unitListStore } from '$lib/store/app/bs2ndStore'
     import easytoast from '$lib/component/toast/summon'
     import { createEventDispatcher } from 'svelte'
 

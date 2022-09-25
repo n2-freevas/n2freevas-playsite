@@ -18,11 +18,7 @@
     </section>
     <section class="blog_list">
         {#each $notion_pages as page}
-            <ListItem
-                id={page.page_id}
-                title={page.page_title}
-                tags={page.tags}
-                thumbnail={page.thumbnail} />
+            <ListItem id={page.page_id} title={page.page_title} tags={page.tags} thumbnail={page.thumbnail} />
         {/each}
     </section>
 </div>

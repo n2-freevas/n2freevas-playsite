@@ -2,6 +2,15 @@
     --active-yellow: rgb(255, 189, 8);
     --toastWidth: 300px; /* for svelte-toast */
 }
+html::-webkit-scrollbar {
+    width: 5px;
+}
+html::-webkit-scrollbar-track {
+    background-color: #111111;
+}
+html::-webkit-scrollbar-thumb {
+    background-color: #555555;
+}
 body {
     background: black;
     color: white;
