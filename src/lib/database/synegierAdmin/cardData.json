@@ -21,18 +21,6 @@
             {
                 "v": 0,
                 "h": 1
-            },
-            {
-                "v": 1,
-                "h": 0
-            },
-            {
-                "v": -1,
-                "h": 0
-            },
-            {
-                "v": 0,
-                "h": -1
             }
         ],
         "rarity": "C"
@@ -54,15 +42,15 @@
                 "text": "get Flow(1)"
             }
         ],
-        "text": "After Battle, you back to the position where you were at the start of this turn.",
+        "text": "After Battle, you back to the start position.",
         "movement": [
             {
                 "v": 0,
-                "h": 3
+                "h": 1
             },
             {
                 "v": 0,
-                "h": -3
+                "h": -1
             }
         ],
         "rarity": "C"
@@ -91,8 +79,8 @@
                 "h": -1
             },
             {
-                "v": 0,
-                "h": -2
+                "v": 1,
+                "h": 0
             }
         ],
         "rarity": "C"
@@ -117,28 +105,12 @@
         "text": "Take 5 damage. Deal 5 damage to all opponents within 2D",
         "movement": [
             {
-                "v": -1,
-                "h": 1
-            },
-            {
                 "v": 0,
-                "h": 1
-            },
-            {
-                "v": 1,
                 "h": 1
             },
             {
                 "v": -1,
                 "h": 0
-            },
-            {
-                "v": 1,
-                "h": 0
-            },
-            {
-                "v": 0,
-                "h": -1
             }
         ],
         "rarity": "C"
@@ -165,10 +137,6 @@
             {
                 "v": 1,
                 "h": 0
-            },
-            {
-                "v": 0,
-                "h": 1
             }
         ],
         "rarity": "C"
@@ -195,10 +163,6 @@
             {
                 "v": 1,
                 "h": 0
-            },
-            {
-                "v": -1,
-                "h": 0
             }
         ],
         "rarity": "C"
@@ -223,28 +187,12 @@
         "text": "Deal 6 damage to a opponent within 2D.",
         "movement": [
             {
-                "v": -1,
-                "h": 1
-            },
-            {
-                "v": 0,
-                "h": 1
-            },
-            {
-                "v": 1,
-                "h": 1
-            },
-            {
-                "v": -1,
-                "h": 0
-            },
-            {
                 "v": 1,
                 "h": 0
             },
             {
                 "v": 0,
-                "h": -1
+                "h": 1
             }
         ],
         "rarity": "C"
@@ -269,12 +217,8 @@
         "text": "Deal 6 damage to opponent soldeirs whose HP is 6 or less.",
         "movement": [
             {
-                "v": 1,
+                "v": -1,
                 "h": 0
-            },
-            {
-                "v": 0,
-                "h": -1
             }
         ],
         "rarity": "C"
@@ -299,24 +243,12 @@
         "text": "When a opponent is on the red tiles, your ATK +12.",
         "movement": [
             {
-                "v": -1,
-                "h": 1
-            },
-            {
                 "v": 0,
                 "h": 1
             },
             {
                 "v": -1,
                 "h": 0
-            },
-            {
-                "v": 1,
-                "h": 0
-            },
-            {
-                "v": 0,
-                "h": -1
             }
         ],
         "redTiles": [
@@ -327,14 +259,6 @@
             {
                 "v": -2,
                 "h": 0
-            },
-            {
-                "v": 2,
-                "h": 0
-            },
-            {
-                "v": 0,
-                "h": -2
             }
         ],
         "rarity": "C"
@@ -356,12 +280,8 @@
                 "text": "take 5 damage"
             }
         ],
-        "text": "Deal 2 damage 3 times to the closest enemy.",
+        "text": "Deal 3 damage to the closest enemy.<br>Use this effect three times.",
         "movement": [
-            {
-                "v": 0,
-                "h": 1
-            },
             {
                 "v": -1,
                 "h": 0
@@ -369,10 +289,6 @@
             {
                 "v": 1,
                 "h": 0
-            },
-            {
-                "v": 0,
-                "h": -1
             }
         ],
         "rarity": "C"
@@ -397,8 +313,8 @@
         "text": "Your ATK +3.<br>Deal 5 damage to a opponent  within 1D.",
         "movement": [
             {
-                "v": 0,
-                "h": 1
+                "v": -1,
+                "h": 0
             }
         ],
         "rarity": "C"
@@ -424,7 +340,7 @@
         "movement": [
             {
                 "v": 0,
-                "h": 1
+                "h": -1
             }
         ],
         "rarity": "C"
@@ -453,23 +369,15 @@
                 "h": 1
             },
             {
-                "v": -1,
-                "h": 0
-            },
-            {
                 "v": 1,
                 "h": 0
-            },
-            {
-                "v": 0,
-                "h": -1
             }
         ],
         "rarity": "C"
     },
     {
         "id": "C_14",
-        "name": "Dragon Speat",
+        "name": "Dragon Spear",
         "img": "https://i.gyazo.com/8a71a2f0c7b75b6240ff63af07f3056f.png",
         "cost": 0,
         "synegierText": [
@@ -484,7 +392,13 @@
                 "text": "you"
             }
         ],
-        "text": "Your ATK +1 for per 1D movement during this turn.",
+        "movement": [
+            {
+                "v": 0,
+                "h": 1
+            }
+        ],
+        "text": "Your ATK +2 for per 1D movement during this turn.",
         "rarity": "C"
     },
     {
@@ -512,28 +426,12 @@
         "text": "When your turn end, deal (3*N) damage to the closest opponent soldier.<br>(N: number of SynegierEffect you created during this turn)",
         "movement": [
             {
-                "v": 0,
-                "h": 1
-            },
-            {
-                "v": -2,
-                "h": 0
-            },
-            {
                 "v": -1,
                 "h": 0
             },
             {
                 "v": 1,
                 "h": 0
-            },
-            {
-                "v": 2,
-                "h": 0
-            },
-            {
-                "v": 0,
-                "h": -1
             }
         ],
         "rarity": "C"
@@ -555,15 +453,11 @@
                 "text": "a opponent within 2D"
             }
         ],
-        "text": "When 2 or more opponents are on the red tiles, deal 6 damage to all opponents within 2D.",
+        "text": "When 3 or more opponents are on the red tiles,<br>deal 6 damage to all opponents on these tiles.",
         "movement": [
             {
-                "v": 0,
-                "h": 1
-            },
-            {
-                "v": 0,
-                "h": -1
+                "v": 1,
+                "h": 0
             }
         ],
         "redTiles": [
@@ -619,22 +513,14 @@
                 "text": "take 3 damage and -2 DEF"
             }
         ],
-        "text": "When 2 or more opponents are on the red tiles, deal 6 damage to all opponents within 2D.",
+        "text": "When 3 or more opponents are on the red tiles,<br>deal 6 damage to all oppoents on these tiles.",
         "movement": [
             {
-                "v": 1,
-                "h": 0
-            },
-            {
-                "v": -1,
-                "h": 0
+                "v": 0,
+                "h": -1
             }
         ],
         "redTiles": [
-            {
-                "v": 0,
-                "h": 3
-            },
             {
                 "v": -1,
                 "h": 2
@@ -684,22 +570,6 @@
             {
                 "v": -1,
                 "h": 0
-            },
-            {
-                "v": 1,
-                "h": 0
-            },
-            {
-                "v": -1,
-                "h": -1
-            },
-            {
-                "v": 0,
-                "h": -1
-            },
-            {
-                "v": 1,
-                "h": -1
             }
         ],
         "rarity": "C"
@@ -713,7 +583,7 @@
             {
                 "color": "bule",
                 "type": "v",
-                "text": "+ 10 DEF"
+                "text": "+10 DEF"
             },
             {
                 "color": "green",
@@ -725,15 +595,7 @@
         "movement": [
             {
                 "v": 0,
-                "h": 1
-            },
-            {
-                "v": -1,
-                "h": 1
-            },
-            {
-                "v": 1,
-                "h": 1
+                "h": -1
             },
             {
                 "v": -1,
@@ -762,24 +624,12 @@
         "text": "Deal 6 damage to the closest opponent soldier.<br>Then, deal 4 damage to all opponents in 1D of the soldier.",
         "movement": [
             {
-                "v": -1,
-                "h": 1
-            },
-            {
                 "v": 0,
                 "h": 1
-            },
-            {
-                "v": -1,
-                "h": 0
             },
             {
                 "v": 1,
                 "h": 0
-            },
-            {
-                "v": 0,
-                "h": -1
             }
         ],
         "rarity": "C"
@@ -805,27 +655,11 @@
         "movement": [
             {
                 "v": 0,
-                "h": 2
-            },
-            {
-                "v": -1,
-                "h": 1
+                "h": -1
             },
             {
                 "v": 0,
                 "h": 1
-            },
-            {
-                "v": 1,
-                "h": 1
-            },
-            {
-                "v": 1,
-                "h": 0
-            },
-            {
-                "v": -1,
-                "h": 0
             }
         ],
         "rarity": "C"
@@ -856,14 +690,6 @@
             {
                 "v": -1,
                 "h": 0
-            },
-            {
-                "v": 1,
-                "h": 0
-            },
-            {
-                "v": 0,
-                "h": -1
             }
         ],
         "rarity": "C"
@@ -893,27 +719,11 @@
             },
             {
                 "v": -1,
-                "h": 1
-            },
-            {
-                "v": 0,
-                "h": 1
-            },
-            {
-                "v": 1,
-                "h": 1
+                "h": 0
             },
             {
                 "v": 1,
                 "h": 0
-            },
-            {
-                "v": -1,
-                "h": 0
-            },
-            {
-                "v": 0,
-                "h": -1
             }
         ],
         "rarity": "C"
@@ -940,10 +750,6 @@
             {
                 "v": 1,
                 "h": 0
-            },
-            {
-                "v": -1,
-                "h": 0
             }
         ],
         "rarity": "C"
@@ -965,12 +771,8 @@
                 "text": "get Shock(5)"
             }
         ],
-        "text": "Deal 9 damage to all opponents within 1D.<br>If soldiers who beat you in past are within 1D, deal 10 additional damage to those players.",
+        "text": "Deal 8 damage to all opponents within 1D.<br>If soldiers who beat you in past are within 1D, deal 10 additional damage to those players.",
         "movement": [
-            {
-                "v": 0,
-                "h": 1
-            },
             {
                 "v": 1,
                 "h": 0
@@ -986,7 +788,7 @@
         "id": "C_26",
         "name": "Commer from Multiverse",
         "img": "https://i.gyazo.com/8580d7b024d8e006ebfe4899cdb7c807.png",
-        "cost": 1,
+        "cost": 0,
         "synegierText": [
             {
                 "color": "green",
@@ -1004,8 +806,8 @@
                 "text": "the closest enemies"
             }
         ],
-        "text": "If Center Area has a empty Tile, Spawn next enemy.<br>All soldiers within 2D get Panic(3).",
-        "movement": [
+        "text": "Choose one red tile.<br>Spawn a enemy on chosen tile.",
+        "redTiles": [
             {
                 "v": -1,
                 "h": 0
@@ -1023,10 +825,6 @@
                 "h": -1
             },
             {
-                "v": 1,
-                "h": -1
-            },
-            {
                 "v": -1,
                 "h": 1
             },
@@ -1041,6 +839,10 @@
             {
                 "v": 1,
                 "h": 1
+            },
+            {
+                "v": 1,
+                "h": -1
             }
         ],
         "rarity": "C"
@@ -1067,10 +869,6 @@
             {
                 "v": 1,
                 "h": 0
-            },
-            {
-                "v": -1,
-                "h": 0
             }
         ],
         "rarity": "C"
@@ -1095,27 +893,15 @@
         "text": "Your DEF +6.<br>If you were dead in previous turn, your HP +5 in this game",
         "movement": [
             {
-                "v": 0,
-                "h": 1
-            },
-            {
-                "v": 1,
-                "h": 0
-            },
-            {
                 "v": -1,
                 "h": 0
-            },
-            {
-                "v": 0,
-                "h": -1
             }
         ],
         "rarity": "C"
     },
     {
         "id": "C_29",
-        "name": "Aura Gathering",
+        "name": "Resolution",
         "img": "https://i.gyazo.com/8b4f082d60b04ab9667df27e2226b8cf.png",
         "cost": 1,
         "synegierText": [
@@ -1130,27 +916,11 @@
                 "text": "get Immunity(1)"
             }
         ],
-        "text": "Your ATK +5.<br>If there are 3 soldiers within 2D, your ATK +15",
+        "text": "Your ATK +5.<br>If you are in Boss Area, your ATK +7",
         "movement": [
             {
-                "v": -1,
-                "h": 1
-            },
-            {
-                "v": 1,
-                "h": 1
-            },
-            {
-                "v": 1,
-                "h": 0
-            },
-            {
-                "v": -1,
-                "h": 0
-            },
-            {
                 "v": 0,
-                "h": -1
+                "h": 1
             }
         ],
         "rarity": "C"
@@ -1172,6 +942,12 @@
                 "text": "get Laziness(1)"
             }
         ],
+        "movement": [
+            {
+                "v": 1,
+                "h": 0
+            }
+        ],
         "text": "Get Immunity(1)",
         "rarity": "C"
     },
@@ -1179,7 +955,7 @@
         "id": "C_31",
         "name": "Storm Avoidance",
         "img": "https://i.gyazo.com/f01899e29055cbc683155705603d13f4.png",
-        "cost": 1,
+        "cost": 2,
         "synegierText": [
             {
                 "color": "green",
@@ -1189,26 +965,22 @@
             {
                 "color": "yellow",
                 "type": "v",
-                "text": "take 6 damage"
+                "text": "move backward 1D"
             }
         ],
-        "text": "All soldiers return to the starting Tile and get Shock(5)",
+        "text": "All soldiers who are not in Boss Area return to the starting tile and get Shock(2)",
         "movement": [
             {
                 "v": 0,
                 "h": 1
             },
             {
-                "v": 1,
-                "h": 0
-            },
-            {
-                "v": -1,
-                "h": 0
+                "v": 0,
+                "h": -1
             },
             {
                 "v": 0,
-                "h": -1
+                "h": -2
             }
         ],
         "rarity": "C"
@@ -1302,7 +1074,7 @@
                 "text": "you"
             }
         ],
-        "text": "Deal (3*N) damage to all opponents within 2D.<br>(N is number of opponents within 2D)",
+        "text": "Deal (3*N) damage to all opponents within 1D.<br>(N is number of opponents within 2D)",
         "movement": [
             {
                 "v": -1,
@@ -1810,7 +1582,7 @@
                 "text": "take 4*N damage to the closest opponent.<br>(N: pips of the dice)"
             }
         ],
-        "text": "Choose two from players and enemies (except Boss).<br>They do Battle each other.",
+        "text": "Roll a dice.<br>Deal 4*N damage to the closest opponent.<br>(N is the pips of the dice.)",
         "movement": [
             {
                 "v": 0,
@@ -2691,7 +2463,7 @@
             {
                 "color": "yellow",
                 "type": "v",
-                "text": "take 18 damage"
+                "text": "take 5 damage"
             },
             {
                 "color": "purple",
@@ -2961,7 +2733,7 @@
             {
                 "color": "yellow",
                 "type": "v",
-                "text": "take 12 damage"
+                "text": "take 6 damage"
             },
             {
                 "color": "red",
@@ -3045,10 +2817,10 @@
             {
                 "color": "purple",
                 "type": "v",
-                "text": "get Shock(9)"
+                "text": "get Shock(3)"
             }
         ],
-        "text": "Deal 8 damage to everybody.",
+        "text": "Deal 5 damage to everybody.<br>Deal additional 5 damage and attach Shock(2) to all opponents who have Shock",
         "movement": [
             {
                 "v": -1,
@@ -3094,7 +2866,7 @@
                 "text": "everybody in Center Area"
             }
         ],
-        "text": "You choose a opponent within 2D.<br>Deal 9 damage to soldier around of that opponent.<br>Deal 5 damage to enemies around of that opponent.",
+        "text": "You choose a tile within 2D.<br>Deal 30 to the opponent on the tile <br>Deal (20/15) damage to (soldiers/enemies) around the tile.",
         "movement": [
             {
                 "v": -1,
@@ -3139,7 +2911,7 @@
         "id": "LE_3",
         "name": "Optimagical Lazer",
         "img": "https://i.gyazo.com/e488530db6347f2f556c779a26bd1dea.png",
-        "cost": 2,
+        "cost": 1,
         "synegierText": [
             {
                 "color": "blue",
@@ -3152,7 +2924,7 @@
                 "text": "the farthest soldier"
             }
         ],
-        "text": "Choose a enemy within 6D.<br>Deal N*6 damage to that enemy.<br>(N: Relative D between you and the enemy)",
+        "text": "Choose a enemy within 6D.<br>Deal 4*N damage to that enemy.<br>(N: Relative D between you and the enemy)",
         "movement": [
             {
                 "v": -1,
