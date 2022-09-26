@@ -1,3 +1,15 @@
+<script lang="ts" context="module">
+    import { processingMovement, processingEffect } from '$lib/store/app/synegierAdmin'
+    import type { cardModel } from '$lib/model/app/TCGsimModel'
+
+    // カードデータからprocessingEffectStoreにデータを代入する処理
+    export function movementProcess(card: SynegierCard) {
+        processingMovement.set(card.movement)
+    }
+
+    export function movementProcessed(x: number, y: number) {}
+</script>
+
 <script lang="ts">
     import type { SynegierCard } from '$lib/model/app/SynegierAdmin'
     import { onMount } from 'svelte'
@@ -25,7 +37,6 @@
     onMount(() => {
         sideOfShowDetail = window.innerWidth / 2 < selfElement.getBoundingClientRect().x ? 'left' : 'right'
     })
-
     function rightClickHandler(event) {
         let _event: PointerEvent = event
         if ($cardDetailLeft) {
@@ -50,7 +61,6 @@
     function mouseEnterHandler() {
         isMouseOver = true
     }
-
     function mouseLeaveHandler() {
         isMouseOver = false
         // window.setTimeout(() => {

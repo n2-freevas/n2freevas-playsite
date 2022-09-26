@@ -10,14 +10,14 @@
     export let z: number
     export let rotate: number = 0
     export let lock: boolean = false
-    let pre_x: number = 0
-    let pre_y: number = 0
+    let preX: number = 0
+    let preY: number = 0
     let isMoving: boolean = false
 
     function onMouseDown() {
         if (!isMoving && !lock) {
-            pre_x = x
-            pre_y = y
+            preX = x
+            preY = y
             isMoving = true
         }
     }
@@ -34,10 +34,10 @@
             isMoving = false
             const eventDetail: cardMoveEvent = {
                 objectId: objectId,
-                pre_x: pre_x,
-                pre_y: pre_y,
-                now_x: x,
-                now_y: y,
+                preX: preX,
+                preY: preY,
+                nowX: x,
+                nowY: y,
                 mouseEvent: e,
                 inArea: inArea
             }

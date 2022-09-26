@@ -24,24 +24,6 @@
         })
         return result
     }
-</script>
-
-<script lang="ts">
-    import Card from '$lib/component/SynegierAdmin/Card/Card.svelte'
-    import Handler from '$lib/component/SynegierAdmin/CardAnimationComponent/Handler.svelte'
-    import Button from '$lib/component/SynegierAdmin/UI/Button.svelte'
-    import BattleLog from '$lib/component/SynegierAdmin/UI/DuelLog.svelte'
-    import BattleFieldComponent from '$lib/component/SynegierAdmin/UI/BattleField.svelte'
-    import easytoast from '$lib/component/toast/summon'
-    import { slotPadding } from '../__layout-synegierAdmin.svelte'
-    import { deckStore, cardDetailRight } from '$lib/store/app/synegierAdmin'
-    import { getBattleFieldDatus } from '$lib/api/app/synegierAdmin'
-    import type { SynegierCardAndPosition, cardMoveEvent, BattleField } from '$lib/model/app/SynegierAdmin'
-    import { synegierAdminAccessToken } from '$lib/store/app/synegierAdmin'
-    import { sleep } from '$lib/util/time'
-    import { onMount } from 'svelte'
-
-    export let battleFieldModel: BattleField
 
     // const
     const boardWidth = 1400
@@ -72,23 +54,39 @@
     let playAreaRect: DOMRect
     let playAreaRectOrigin: DOMRect
 
-    let cardsInDuel: { [objectId: string]: SynegierCardAndPosition } = {}
+    let turnManager: 'play' | 'battle' | 'turnend' = 'play'
+</script>
+
+<script lang="ts">
+    import Card, { movementProcess } from '$lib/component/SynegierAdmin/Card/Card.svelte'
+    import Handler from '$lib/component/SynegierAdmin/CardAnimationComponent/Handler.svelte'
+    import Button from '$lib/component/SynegierAdmin/UI/Button.svelte'
+    import BattleLog from '$lib/component/SynegierAdmin/UI/DuelLog.svelte'
+    import BattleFieldComponent from '$lib/component/SynegierAdmin/UI/BattleField.svelte'
+    import easytoast from '$lib/component/toast/summon'
+    import { deckStore, cardDetailRight, battleField, processingMovement } from '$lib/store/app/synegierAdmin'
+    import type { SynegierCardInPlay, cardMoveEvent } from '$lib/model/app/SynegierAdmin'
+    import { sleep } from '$lib/util/time'
+    import { onMount } from 'svelte'
+
+    // ViewModel Variant
+    let cardsInDuel: { [objectId: number]: SynegierCardInPlay } = {}
 
     let deckOrder: number[] = []
-    let deckDict: { [objectId: string]: SynegierCardAndPosition } = {}
+    let deckDict: { [objectId: number]: SynegierCardInPlay } = {}
 
     let handOrder: number[] = []
-    let handDict: { [objectId: string]: SynegierCardAndPosition } = {}
+    let handDict: { [objectId: number]: SynegierCardInPlay } = {}
     let isHandAreaOpen: boolean = false
 
     let trashOrder: number[] = []
-    let trashDict: { [objectId: string]: SynegierCardAndPosition } = {}
+    let trashDict: { [objectId: number]: SynegierCardInPlay } = {}
     let isTrashAreaOpen: boolean = false
 
     let playOrder: number[] = []
-    let playDict: { [objectId: string]: SynegierCardAndPosition } = {}
+    let playDict: { [objectId: number]: SynegierCardInPlay } = {}
 
-    let turnManager: 'play' | 'battle' | 'turnend' = 'play'
+    let cardThrownToBattleField: SynegierCardInPlay = undefined
 
     onMount(async () => {
         // 主要なDOMRectの数値を集計
@@ -113,25 +111,25 @@
     })
 
     /* In Area Action */
-    function inHandArea(card: SynegierCardAndPosition) {
+    function inHandArea(card: SynegierCardInPlay) {
         card.inArea = 'hand'
         handOrder.push(card.objectId)
         handDict[card.objectId] = card
         alignHand()
     }
-    function inPlayArea(card: SynegierCardAndPosition) {
+    function inPlayArea(card: SynegierCardInPlay) {
         card.inArea = 'play'
         playOrder.push(card.objectId)
         playDict[card.objectId] = card
         $cardDetailRight = Object.assign({}, card)
-        alignPlayList()
+        alignPlayArea()
     }
-    function inTrashArea(card: SynegierCardAndPosition) {
+    function inTrashArea(card: SynegierCardInPlay) {
         card.inArea = 'trash'
         trashOrder.push(card.objectId)
         trashDict[card.objectId] = card
     }
-    function insertDeckBottom(card: SynegierCardAndPosition) {
+    function insertDeckBottom(card: SynegierCardInPlay) {
         card.inArea = 'deck'
         deckOrder.unshift(card.objectId)
         deckDict[card.objectId] = card
@@ -151,8 +149,13 @@
 
         let index = 0
         if (isHandAreaOpen) {
-            const _handAreaMargin = handAreaWidth / handLen
-            const handAreaMargin = _handAreaMargin > 300 ? 300 : _handAreaMargin
+            let _estimateCardWidth = 190
+            let _uncareMargin = 200
+            console.log(handLen)
+            const _handAreaMargin = (handLen * _estimateCardWidth - handAreaWidth) / (handLen - 1)
+            console.log(_handAreaMargin)
+            const handAreaMargin = _uncareMargin * handLen > handAreaWidth ? _estimateCardWidth - _handAreaMargin : _uncareMargin
+            console.log()
             handOrder.forEach((num) => {
                 let c = handDict[num]
                 c.x = handAreaRect.x + index * handAreaMargin
@@ -181,17 +184,17 @@
         }
         cardsInDuel = cardsInDuel
     }
-    function alignPlayList() {
+    function alignPlayArea() {
         const playLen = Object.keys(playDict).length
         const _playAreaMarginList = []
         for (let i = 0; i < playLen; i++) {
-            _playAreaMarginList.push((250 / (playLen + 1)) * (i + 1) + (playAreaRect.x + 2 + playAreaRect.width) / 2)
+            _playAreaMarginList.push((250 / (playLen + 1)) * (i + 1) + playAreaRect.x / 2)
         }
         let index = 0
         playOrder.forEach((num) => {
             let c = playDict[num]
             c.x = _playAreaMarginList[index]
-            c.y = 30
+            c.y = 10
             c.rotate = 0
             c.flip = false
             c.z = index
@@ -263,12 +266,15 @@
     /* Handler */
     function cardMovedEventHandler(event: CustomEvent) {
         const moveEvent: cardMoveEvent = event.detail
+        console.log(moveEvent)
         if (judgeCursorInTheRect(moveEvent.mouseEvent.clientX, moveEvent.mouseEvent.clientY, playAreaRectOrigin)) {
             // playAreaに入ろうとする場合
             switch (moveEvent.inArea) {
                 case 'hand':
                     inPlayArea(handDict[moveEvent.objectId])
                     handOrder = handOrder.filter((e) => e != moveEvent.objectId)
+                    movementProcess(handDict[moveEvent.objectId])
+                    cardThrownToBattleField = handDict[moveEvent.objectId]
                     delete handDict[moveEvent.objectId]
                     break
             }
@@ -276,11 +282,15 @@
             //　手札に入ろうとする場合
             switch (moveEvent.inArea) {
                 case 'hand': {
-                    let c = handDict[moveEvent.objectId]
-                    c.y = handAreaRect.y
-                    c.z = z_index_handler
-                    z_index_handler += 1
-                    cardsInDuel = cardsInDuel
+                    if (isHandAreaOpen) {
+                        let c = handDict[moveEvent.objectId]
+                        c.y = handAreaRect.y
+                        c.z = z_index_handler
+                        z_index_handler += 1
+                        cardsInDuel = cardsInDuel
+                    } else {
+                        alignHand()
+                    }
                     break
                 }
             }
@@ -365,7 +375,7 @@
 <section id="board" style="width:{boardWidth}px; height:{boardHeight}px;" on:dblclick|stopPropagation={boardClickHandler}>
     <div id="playArea" style="width:{playAreaWidth}px; height:{playAreaHeight}px;" />
     <div id="battleField">
-        <BattleFieldComponent model={battleFieldModel} on:dblclick={boardClickHandler} />
+        <BattleFieldComponent model={$battleField} bind:thrownCard={cardThrownToBattleField} on:dblclick={boardClickHandler} />
     </div>
     <div id="handArea" class={isHandAreaOpen ? 'open' : ''} style="--width:{handAreaWidth}px; --height:{handAreaHeight}px;" />
     <div id="closeHandArea" style="width:{closeHandAreaWidth}px; height:{closeHandAreaHeight}px;" />
@@ -453,15 +463,23 @@
         position: absolute;
         bottom: 20px;
         right: 300px;
+        // pointer-events: none;
         // transform: translate(-50%, 0);
     }
     #handArea {
         transition: 0.1s;
-        border-top: solid white 2px;
-        border-bottom: solid white 2px;
         width: var(--width);
-        height: 20px;
-        background: rgba(#222222, 0.8);
+        height: 40px;
+        &::before {
+            content: '';
+            display: block;
+            margin: 0 auto;
+            width: 95%;
+            height: inherit;
+            background: rgba(#222222, 0.8);
+            border-top: solid #888888 2px;
+            border-bottom: solid #888888 2px;
+        }
         &.open {
             height: var(--height);
         }

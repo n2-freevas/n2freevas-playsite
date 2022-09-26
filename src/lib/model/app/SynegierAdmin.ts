@@ -1,16 +1,26 @@
+// Common
+
 export type SynegierTextType = 's' | 'v' // subject or verbus
 
 export type SynegierTextColor = 'blue' | 'green' | 'yellow' | 'red' | 'purple'
-
-export type CardCost = 0 | 1 | 2 | 3
-
-export type CardRarity = 'C' | 'R' | 'SR' | 'LE'
 
 export interface SynegierText {
     color: SynegierTextColor
     type: SynegierTextType
     text: string
 }
+
+export interface Coordinate {
+    x: number
+    y: number
+}
+
+export type PhaseBorder = 'turnstart' | 'previousbattle' | 'afterbattle' | 'turnend'
+
+// Card
+export type CardRarity = 'C' | 'R' | 'SR' | 'LE'
+
+export type CardCost = 0 | 1 | 2 | 3
 
 export interface Movement {
     v: number
@@ -69,8 +79,6 @@ export const MovementMap: Movement[] = [
     { v: 3, h: -3 }
 ]
 
-// Card
-
 export interface SynegierCard {
     name: string
     img: string
@@ -84,7 +92,7 @@ export interface SynegierCard {
 
 export type InArea = 'deck' | 'hand' | 'play' | 'trash'
 
-export interface SynegierCardAndPosition extends SynegierCard {
+export interface SynegierCardInPlay extends SynegierCard {
     objectId: number
     x: number
     y: number
@@ -104,15 +112,16 @@ export interface keywordDescription {
 
 export interface cardMoveEvent {
     objectId: number
-    pre_x: number
-    pre_y: number
-    now_x: number
-    now_y: number
+    preX: number
+    preY: number
+    nowX: number
+    nowY: number
     mouseEvent: MouseEvent
     inArea: InArea
 }
 
 // Soldier
+
 export interface Status {
     HP: number
     ATK: number
@@ -133,22 +142,26 @@ export interface SoldierCard {
     ability: string
 }
 
-export interface Coordinate {
-    x: number
-    y: number
+export interface SoldierCardInPlay extends SoldierCard {
+    size: number
+    coordinate: Coordinate
 }
+
+// BattleField
 
 export type TileType = 'normal' | 'safe' | 'red'
 
 export interface Tile extends Coordinate {
     type?: TileType
+    active?: boolean
+    emphasis?: boolean
 }
 
 export interface BattleField {
     name: string
     width: number
     height: number
-    tiles: Tile[]
+    tiles: { [tileId: string]: Tile }
     initGateKeeperPosition: Coordinate
     respawnTile: Coordinate[]
 }
