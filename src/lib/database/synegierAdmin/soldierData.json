@@ -1,8 +1,8 @@
 [
     {
         "name": "Parker",
-        "aka": "hoodie hero",
-        "img": "https://i.gyazo.com/f8612ca84879a9aff23c7468b4804851.png",
+        "aka": "Hoodie Hero",
+        "img": "https://i.gyazo.com/d869538e59e9bac646e10992876d1235.png",
         "synegierText": [
             {
                 "color": "blue",
@@ -46,5 +46,89 @@
             }
         ],
         "ability": "Once per a Effect/ Synegier Effect have  some “Roll a dice” text, <br>you can retry roll a dice."
+    },
+    {
+        "name": "Nobody",
+        "aka": "Nameless Soldier",
+        "img": "https://i.gyazo.com/5102e277d8894a5a135f1b185c32037c.png",
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "v",
+                "text": "+3 ATK and +3 DEF"
+            },
+            {
+                "color": "yellow",
+                "type": "s",
+                "text": "the lowest HP enemy"
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": "the lowest HP opponent soldier"
+            }
+        ],
+        "initStatus": {
+            "HP": 40,
+            "ATK": 10,
+            "DEF": 10
+        },
+        "levelUpRule": [
+            {
+                "level": 2,
+                "HP": 0,
+                "ATK": 1,
+                "DEF": 1
+            }
+        ],
+        "ability": "When you Battle with a enemy, my ATK +10 and DEF +10.<br>(Bosses are not included in enemies.) "
+    },
+    {
+        "name": "Glaham",
+        "aka": "Cheef Jump Dragoon",
+        "img": "https://i.gyazo.com/28fb0b1327f63f0a9ea773de2015289d.png",
+        "synegierText": [
+            {
+                "color": "blue",
+                "type": "s",
+                "text": "you"
+            },
+            {
+                "color": "green",
+                "type": "v",
+                "text": "move to tile within 4D<br>(If enemy, move at random)"
+            },
+            {
+                "color": "purple",
+                "type": "s",
+                "text": "all opponents in 3D"
+            }
+        ],
+        "initStatus": {
+            "HP": 28,
+            "ATK": 12,
+            "DEF": 6
+        },
+        "levelUpRule": [
+            {
+                "level": 2,
+                "HP": 0,
+                "ATK": 1,
+                "DEF": 1
+            },
+            {
+                "level": 4,
+                "HP": 1,
+                "ATK": 2,
+                "DEF": 1
+            },
+            {
+                "level": 6,
+                "HP": 2,
+                "ATK": 2,
+                "DEF": 1
+            }
+        ],
+        "ability": "When moved 2D or more in a Movement, ATK +2"
     }
 ]
