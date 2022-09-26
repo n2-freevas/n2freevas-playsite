@@ -82,7 +82,6 @@
 
     function pickupCards() {
         if (countOfPicked < 7) {
-            console.log('C R pick')
             // 01-07回目 C:   90%, R:  10%
             let nums = pickupCardHelperFindUnduplicatedIndex(datusDivRarityLen.C, datusDivRarityLen.R)
             let ZeroToNine = getRandomInt(10)
@@ -98,7 +97,6 @@
                 rightCard = datusDivRarity.R[nums[3]]
             }
         } else if (countOfPicked < 12) {
-            console.log('C R SR pick')
             //　08-12回目 C:   30%, R:  60%, SR: 10%
             let nums = pickupCardHelperFindUnduplicatedIndex(datusDivRarityLen.C, datusDivRarityLen.R, datusDivRarityLen.SR)
             let ZeroToNine = getRandomInt(10)
@@ -118,7 +116,6 @@
                 rightCard = datusDivRarity.SR[nums[5]]
             }
         } else if (countOfPicked < 15) {
-            console.log('SR LE pick')
             //　13-15回目 SR:  90%, LE:  10%
             let nums = pickupCardHelperFindUnduplicatedIndex(datusDivRarityLen.SR, datusDivRarityLen.LE)
             let ZeroToNine = getRandomInt(10)
@@ -134,7 +131,6 @@
                 rightCard = datusDivRarity.LE[nums[3]]
             }
         } else {
-            console.log('LE pick')
             //　16回目 LE: 100%
             let nums = pickupCardHelperFindUnduplicatedIndex(datusDivRarityLen.LE)
             leftCard = datusDivRarity.LE[nums[0]]

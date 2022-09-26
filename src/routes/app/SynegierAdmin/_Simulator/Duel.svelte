@@ -100,12 +100,12 @@
         playAreaRect = DOMRectAdjustFromParent(document.getElementById('playArea').getBoundingClientRect(), boardRect)
         closeHandAreaRect = DOMRectAdjustFromParent(document.getElementById('closeHandArea').getBoundingClientRect(), boardRect)
 
-        console.log('boardRect', boardRect)
-        console.log('handAreaRect', handAreaRect)
-        console.log('playAreaRect', playAreaRect)
-        console.log('handAreaRectOrigin', handAreaRectOrigin)
-        console.log('playAreaRectOrigin', playAreaRectOrigin)
-        console.log('closeHandAreaRect', closeHandAreaRect)
+        console.info('boardRect', boardRect)
+        console.info('handAreaRect', handAreaRect)
+        console.info('playAreaRect', playAreaRect)
+        console.info('handAreaRectOrigin', handAreaRectOrigin)
+        console.info('playAreaRectOrigin', playAreaRectOrigin)
+        console.info('closeHandAreaRect', closeHandAreaRect)
 
         resetDeck()
     })
@@ -151,11 +151,8 @@
         if (isHandAreaOpen) {
             let _estimateCardWidth = 190
             let _uncareMargin = 200
-            console.log(handLen)
             const _handAreaMargin = (handLen * _estimateCardWidth - handAreaWidth) / (handLen - 1)
-            console.log(_handAreaMargin)
             const handAreaMargin = _uncareMargin * handLen > handAreaWidth ? _estimateCardWidth - _handAreaMargin : _uncareMargin
-            console.log()
             handOrder.forEach((num) => {
                 let c = handDict[num]
                 c.x = handAreaRect.x + index * handAreaMargin
@@ -266,7 +263,6 @@
     /* Handler */
     function cardMovedEventHandler(event: CustomEvent) {
         const moveEvent: cardMoveEvent = event.detail
-        console.log(moveEvent)
         if (judgeCursorInTheRect(moveEvent.mouseEvent.clientX, moveEvent.mouseEvent.clientY, playAreaRectOrigin)) {
             // playAreaに入ろうとする場合
             switch (moveEvent.inArea) {
@@ -346,7 +342,6 @@
         if (id == '') {
             return null
         }
-        console.log(id)
         switch (id) {
             case 'closeHandArea':
                 if (isHandAreaOpen) {

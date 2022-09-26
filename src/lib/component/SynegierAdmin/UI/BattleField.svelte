@@ -35,7 +35,6 @@
     $: {
         if (thrownCard) {
             thrownCardHandler()
-            console.log('check!!!!!')
         }
     }
 
@@ -49,9 +48,9 @@
         parentRect = document.getElementById('map').parentElement.getBoundingClientRect()
         mapRect = document.getElementById('map').getBoundingClientRect()
         tilesRect = document.getElementById('tiles').getBoundingClientRect()
-        console.log('BattleField:parent', parentRect)
-        console.log('BattleField:map', mapRect)
-        console.log('BattleField:tiles', tilesRect)
+        console.info('BattleField:parent', parentRect)
+        console.info('BattleField:map', mapRect)
+        console.info('BattleField:tiles', tilesRect)
         tilesWidth = model.width * tileWidth
         tilesHeight = model.height * tileHeight
         y = -1 * (mapRect.height - parentRect.height + 100)
@@ -98,7 +97,6 @@
 
     function selectTileComponent(event) {
         const coordinate: Coordinate = event.detail
-        console.log('click', coordinate)
         if (awaitDidMovement) {
             $soldiersInPlay[1].coordinate.x = coordinate.x
             $soldiersInPlay[1].coordinate.y = coordinate.y
@@ -141,7 +139,6 @@
         estimateCoordinates.forEach((crd) => {
             let tileId = generateTileId(crd.x, crd.y)
             let tile = model.tiles[tileId]
-            console.log(tile, crd.x, crd.y)
             if (tile) {
                 result.push({ x: crd.x, y: crd.y })
             }
