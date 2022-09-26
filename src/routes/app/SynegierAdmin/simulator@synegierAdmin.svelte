@@ -1,14 +1,14 @@
 <script lang="ts">
-    import { getCardDatus, getBattleFieldDatus } from '$lib/api/app/synegierAdmin'
-    import { N2API_ERROR_CODE } from '$lib/api/api'
-    import { onMount } from 'svelte'
-    import type { BattleField, SynegierCard } from '$lib/model/app/SynegierAdmin'
-    import { sleep } from '$lib/util/time'
-    import easytoast from '$lib/component/toast/summon'
-    import { showLoading, hideLoading } from './__layout-synegierAdmin.svelte'
-    import { synegierAdminAccessToken, deckStore } from '$lib/store/app/synegierAdmin'
     import Duel from './_Simulator/Duel.svelte'
     import TwoPick from './_Simulator/TwoPick.svelte'
+    import easytoast from '$lib/component/toast/summon'
+    import { N2API_ERROR_CODE } from '$lib/api/api'
+    import { onMount } from 'svelte'
+    import type { SynegierCard } from '$lib/model/app/SynegierAdmin'
+    import { sleep } from '$lib/util/time'
+    import { showLoading, hideLoading } from './__layout-synegierAdmin.svelte'
+    import { getCardDatus, getBattleFieldDatus, getSoldierDatus } from '$lib/api/app/synegierAdmin'
+    import { synegierAdminAccessToken, deckStore, battleField, soldiersInPlay } from '$lib/store/app/synegierAdmin'
 
     let isSysterError = false
     let datus: SynegierCard[] = []
@@ -17,14 +17,25 @@
     let nowPhase: phaseList = ''
 
     let isShowScreen: boolean = false
-    let battleFieldModel: BattleField
 
     onMount(async () => {
         try {
             showLoading(window)
             datus = await getCardDatus($synegierAdminAccessToken)
+
             let battleFieldDatus = await getBattleFieldDatus($synegierAdminAccessToken)
-            battleFieldModel = battleFieldDatus[Math.floor(Math.random() * battleFieldDatus.length)]
+            $battleField = battleFieldDatus[Math.floor(Math.random() * battleFieldDatus.length)]
+
+            let soldiers = await getSoldierDatus($synegierAdminAccessToken)
+            let index = 1
+            soldiers.forEach((sol) => {
+                $soldiersInPlay[index] = {
+                    ...sol,
+                    size: 60,
+                    coordinate: $battleField.respawnTile[0]
+                }
+                index += 1
+            })
 
             $deckStore = datus.slice(0, 16)
             nowPhase = 'sweep'
@@ -56,7 +67,7 @@
 {:else if nowPhase == '2pick'}
     <TwoPick cardDatus={datus} on:finish={gotoDuel} />
 {:else if nowPhase == 'sweep'}
-    <Duel battleFieldModel={battleFieldModel} />
+    <Duel />
 {/if}
 <div id="screenAnimation" class={isShowScreen ? 'open' : ''} />
 
